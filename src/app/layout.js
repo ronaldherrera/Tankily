@@ -12,12 +12,15 @@ export default function RootLayout({ children }) {
       <body>
         <header>
           <h1>Tankily</h1>
-          <nav>
-            <Link href="/">Feed</Link>
-            <Link href="/aquariums">Mis Acuarios</Link>
+          <nav style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+            <Link href="/">Muro</Link>
+            <Link href="/acuarios">Mis Acuarios</Link>
             <Link href="/wiki">Wiki</Link>
-            <Link href="/marketplace">Marketplace</Link>
-            <Link href="/profile">Perfil</Link>
+            <Link href="/mercado">Mercado</Link>
+            <Link href="/perfil">Mi Perfil</Link>
+            <span style={{ color: '#ccc' }}>|</span>
+            <Link href="/acceder">Entrar</Link>
+            <Link href="/registro" style={{ fontWeight: 'bold' }}>Registro</Link>
           </nav>
         </header>
         <main>{children}</main>
