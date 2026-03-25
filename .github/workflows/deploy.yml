@@ -36,5 +36,5 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT || 21 }}
           local-dir: ./out/
-          server-dir: ./
+          server-dir: 
 
