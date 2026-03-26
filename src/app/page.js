@@ -1,11 +1,27 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
+import Link from "next/link";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("generico");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+  }, []);
 
   return (
     <div>
+      {user && (
+        <div style={{ background: '#f0f0f0', padding: '1rem', marginBottom: '1rem', border: '1px solid black' }}>
+          <p>¡Hola! Has iniciado sesión como <strong>{user.email}</strong>.</p>
+          <Link href="/perfil" style={{ fontWeight: 'bold', textDecoration: 'underline' }}>Ir a mi panel de control →</Link>
+        </div>
+      )}
+
       <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid #ccc', marginBottom: '1rem' }}>
         <button 
           onClick={() => setActiveTab("generico")}
