@@ -1,5 +1,6 @@
 import "./globals.css";
-import Link from "next/link";
+import Header from "@/components/Header";
+import TopBar from "@/components/TopBar";
 
 export const metadata = {
   title: "Tankily - Red Social Acuariofilia",
@@ -9,24 +10,17 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body>
-        <header>
-          <h1>Tankily</h1>
-          <nav style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-            <Link href="/">Muro</Link>
-            <Link href="/acuarios">Mis Acuarios</Link>
-            <Link href="/wiki">Wiki</Link>
-            <Link href="/mercado">Mercado</Link>
-            <Link href="/perfil">Mi Perfil</Link>
-            <span style={{ color: '#ccc' }}>|</span>
-            <Link href="/acceder">Entrar</Link>
-            <Link href="/registro" style={{ fontWeight: 'bold' }}>Registro</Link>
-          </nav>
-        </header>
-        <main>{children}</main>
-        <footer>
-          <p>&copy; 2026 Tankily - Comunidad de Acuariofilia</p>
-        </footer>
+      <body style={{ display: 'flex', minHeight: '100vh', margin: 0 }}>
+        <Header />
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <TopBar />
+          <main style={{ flex: 1, width: '100%', padding: 0, margin: '0 auto' }}>
+            {children}
+          </main>
+          <footer style={{ padding: '2rem', textAlign: 'center', borderTop: '1px solid #eee', fontSize: '0.8rem', color: 'gray' }}>
+            &copy; 2026 Tankily - Comunidad de Acuariofilia
+          </footer>
+        </div>
       </body>
     </html>
   );
