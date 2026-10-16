@@ -3,7 +3,7 @@ import { traducir } from '@/i18n/traducir';
 import { IDIOMAS } from '@/i18n/config';
 import { JsonLd, organizacionYSitio } from '@/lib/datosEstructurados';
 import { wikiTankTree } from '@/lib/wikiData';
-import { especiesWiki } from '@/lib/especiesWiki';
+import { catalogoEspecies } from '@/lib/catalogoEspecies';
 import { HERRAMIENTAS } from '@/lib/herramientas';
 import MuroCliente from './MuroCliente';
 
@@ -16,7 +16,8 @@ export async function generateMetadata({ params }) {
 // Cifras reales para la portada de visitantes, calculadas en el build (no pesan en el navegador)
 const todos = (nodos) => nodos.flatMap((n) => [n, ...todos(n.children || [])]);
 const CIFRAS = {
-  especies: especiesWiki.filter((e) => e.ficha).length,
+  // Las mismas que el catálogo de WikiTank (/wiki/especies/), no solo las fichas técnicas antiguas
+  especies: catalogoEspecies().length,
   articulos: todos(wikiTankTree).filter((n) => n.contentFiles?.length).length,
   calculadoras: HERRAMIENTAS.length,
   idiomas: IDIOMAS.length,

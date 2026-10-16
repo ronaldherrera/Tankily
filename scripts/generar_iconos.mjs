@@ -3,6 +3,7 @@
 //   public/icons/maskable-512.png               → manifest (purpose "maskable", zona segura del 80 %)
 //   public/apple-touch-icon.png                 → pantalla de inicio de iPhone/iPad (180 px, sin transparencia)
 //   src/app/favicon.ico                         → navegadores antiguos (16 y 32 px dentro del .ico)
+//   public/favicon.svg                          → pestaña del navegador (mismo cuadro oscuro que el .ico, nítido a cualquier tamaño)
 // Uso: node scripts/generar_iconos.mjs
 import fs from 'fs';
 import sharp from 'sharp';
@@ -48,6 +49,7 @@ fs.writeFileSync('public/icons/icon-512.png', await png(icono(512, { radio: 112 
 // Maskable: fondo a sangre y el símbolo dentro de la zona segura (círculo del 80 %)
 fs.writeFileSync('public/icons/maskable-512.png', await png(icono(512, { escala: 0.56 })));
 fs.writeFileSync('public/apple-touch-icon.png', await png(icono(180, { escala: 0.7 })));
+fs.writeFileSync('public/favicon.svg', icono(64, { radio: 64 * 0.22, escala: 0.82 }).replace(/\n\s*/g, ''));
 
 // favicon.ico con PNG de 16 y 32 px dentro (formato ICO con imágenes PNG, válido desde Windows Vista)
 const tamanos = [16, 32];
@@ -65,4 +67,4 @@ const entradas = tamanos.map((t, i) => {
 });
 fs.writeFileSync('src/app/favicon.ico', Buffer.concat([cabecera, ...entradas, ...imagenes]));
 
-console.log('Iconos generados: public/icons/*, public/apple-touch-icon.png, src/app/favicon.ico');
+console.log('Iconos generados: public/icons/*, public/apple-touch-icon.png, public/favicon.svg, src/app/favicon.ico');

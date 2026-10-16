@@ -63,6 +63,15 @@
   --lateral: 320px;
   --barra-movil: 68px;
 
+  /* Zonas seguras (barra de estado, notch, isla dinámica, barra de gestos, bordes curvos en horizontal).
+     Con viewport-fit=cover, y sobre todo con la app instalada, la página se dibuja debajo de ellas. */
+  --seg-arriba: env(safe-area-inset-top, 0px);
+  --seg-abajo: env(safe-area-inset-bottom, 0px);
+  --seg-izq: env(safe-area-inset-left, 0px);
+  --seg-der: env(safe-area-inset-right, 0px);
+  /* Lo que ocupa abajo la barra de navegación del móvil, incluida la zona segura */
+  --sobre-barra: calc(var(--barra-movil) + var(--seg-abajo));
+
   --ease-agua: cubic-bezier(0.22, 1, 0.36, 1);
   /* Respuesta al pasar el ratón: corta para que se sienta inmediata */
   --hover: 0.16s ease-out;
@@ -252,12 +261,14 @@ html.refraccion :is(.modal, .ficha-especie).cristal-refracta {
   /* menú + márgenes del contenido (2 × 28) + columna + hueco (32) + lateral */
   max-width: calc(var(--rail) + 56px + var(--columna) + 32px + var(--lateral));
   margin-inline: auto;
+  padding-left: var(--seg-izq);
+  padding-right: var(--seg-der);
 }
 .rail {
   position: sticky;
   top: 0;
   height: 100dvh;
-  padding: 20px 14px;
+  padding: calc(20px + var(--seg-arriba)) 14px calc(20px + var(--seg-abajo));
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -317,14 +328,14 @@ html.refraccion :is(.modal, .ficha-especie).cristal-refracta {
   grid-template-columns: minmax(0, var(--columna)) var(--lateral);
   justify-content: center;
   gap: 32px;
-  padding: 24px 28px 80px;
+  padding: calc(24px + var(--seg-arriba)) 28px calc(80px + var(--seg-abajo));
   align-items: start;
 }
 .contenido.ancho { grid-template-columns: minmax(0, 1080px); }
 .columna { min-width: 0; display: flex; flex-direction: column; gap: 16px; }
-.lateral { position: sticky; top: 24px; display: flex; flex-direction: column; gap: 16px; }
+.lateral { position: sticky; top: calc(24px + var(--seg-arriba)); display: flex; flex-direction: column; gap: 16px; }
 
-.barra-superior, .barra-movil { display: none; }
+.barra-superior, .barra-movil, .velo-barra { display: none; }
 
 @media (max-width: 1180px) {
   .contenido { grid-template-columns: minmax(0, var(--columna)); }
@@ -348,7 +359,7 @@ html.refraccion :is(.modal, .ficha-especie).cristal-refracta {
 @media (max-width: 720px) {
   .shell { display: block; }
   .rail { display: none; }
-  .contenido { padding: 12px 16px calc(var(--barra-movil) + 32px); }
+  .contenido { padding: 12px 16px calc(var(--sobre-barra) + 32px); }
   .barra-superior {
     display: flex;
     position: sticky;
@@ -356,24 +367,74 @@ html.refraccion :is(.modal, .ficha-especie).cristal-refracta {
     z-index: 40;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 16px;
+    padding: calc(10px + var(--seg-arriba)) 16px 10px;
     border-radius: 0;
     border-bottom: 1px solid var(--linea);
   }
   .barra-superior.cristal::before { display: none; }
   .barra-movil {
     display: flex;
+    flex-direction: column;
     position: fixed;
-    left: 12px;
-    right: 12px;
-    bottom: calc(10px + env(safe-area-inset-bottom));
-    height: var(--barra-movil);
+    left: calc(12px + var(--seg-izq));
+    right: calc(12px + var(--seg-der));
+    bottom: calc(10px + var(--seg-abajo));
     z-index: 50;
+    border-radius: 24px;
+    transition: border-radius 0.55s var(--muelle-suave), box-shadow 0.4s ease;
+  }
+  .barra-movil.abierta {
+    border-radius: 28px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 -20px 60px -24px var(--sombra), 0 24px 60px -20px var(--sombra);
+  }
+  /* La barra crece hacia arriba: la fila del panel pasa de 0fr a 1fr con muelle */
+  .barra-movil-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.6s var(--muelle-suave);
+    position: relative;
+    z-index: 2;
+  }
+  .barra-movil.abierta .barra-movil-panel { grid-template-rows: 1fr; transition-duration: 0.55s; }
+  .barra-movil:not(.abierta) .barra-movil-panel { transition: grid-template-rows 0.32s var(--ease-agua); }
+  .barra-movil-panel-interior { min-height: 0; overflow: hidden; }
+  .barra-movil-desplazable {
+    max-height: calc(100dvh - var(--seg-arriba) - var(--sobre-barra) - 48px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 10px 10px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .menu-mas-lista { display: flex; flex-direction: column; gap: 2px; }
+  .menu-mas-unidades { padding: 10px 12px 12px; border-top: 1px solid var(--linea); }
+  /* Las filas brotan una tras otra mientras la barra se estira */
+  .barra-movil.abierta .barra-movil-desplazable [style*='--i'] {
+    animation: brotar 0.45s var(--muelle-suave) backwards;
+    animation-delay: calc(60ms + var(--i) * 22ms);
+  }
+  .barra-movil-pestanas {
+    display: flex;
+    height: var(--barra-movil);
+    flex-shrink: 0;
     justify-content: space-around;
     align-items: center;
-    border-radius: 24px;
+    position: relative;
+    z-index: 2;
   }
-  .barra-movil a {
+  .barra-movil.abierta .barra-movil-pestanas { border-top: 1px solid var(--linea); }
+  .velo-barra {
+    display: block;
+    position: fixed; inset: 0; z-index: 45;
+    background: rgba(var(--c-velo), 0.45);
+    backdrop-filter: blur(3px);
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s;
+  }
+  .velo-barra.visible { opacity: 1; visibility: visible; }
+  .barra-movil-pestanas > :is(a, button) {
+    background: none; border: 0; font: inherit; cursor: pointer;
     display: grid;
     place-items: center;
     gap: 2px;
@@ -382,7 +443,7 @@ html.refraccion :is(.modal, .ficha-especie).cristal-refracta {
     padding: 6px 10px;
     position: relative;
   }
-  .barra-movil a[aria-current='page'] { color: var(--agua); }
+  .barra-movil-pestanas > :is(a, button)[aria-current='page'], .barra-movil-pestanas > button[aria-expanded='true'] { color: var(--agua); }
   .barra-movil .insignia {
     position: absolute; top: 0; right: 4px;
     min-width: 16px; height: 16px; border-radius: 8px;
@@ -564,13 +625,13 @@ select.entrada option { background: var(--superficie); }
   background: rgba(var(--c-velo), 0.6);
   backdrop-filter: blur(6px);
   display: grid; place-items: center;
-  padding: 16px;
+  padding: calc(16px + var(--seg-arriba)) calc(16px + var(--seg-der)) calc(16px + var(--seg-abajo)) calc(16px + var(--seg-izq));
   animation: aparecer 0.2s ease;
 }
 .modal {
   width: 100%;
   max-width: 520px;
-  max-height: calc(100dvh - 32px);
+  max-height: calc(100dvh - 32px - var(--seg-arriba) - var(--seg-abajo));
   overflow-y: auto;
   padding: 24px;
   animation: emerger 0.35s var(--ease-agua);
@@ -581,7 +642,7 @@ select.entrada option { background: var(--superficie); }
 .tostada {
   position: fixed;
   left: 50%;
-  bottom: calc(var(--barra-movil) + 28px);
+  bottom: calc(var(--sobre-barra) + 28px);
   translate: -50% 0;
   z-index: 200;
   padding: 12px 18px;
@@ -628,7 +689,7 @@ select.entrada option { background: var(--superficie); }
   flex-wrap: wrap;
   gap: 8px 18px;
   justify-content: center;
-  padding: 24px 16px calc(var(--barra-movil) + 40px);
+  padding: 24px 16px calc(var(--sobre-barra) + 40px);
 }
 .pie a:hover { color: var(--texto-2); }
 @media (min-width: 721px) { .pie { padding-bottom: 32px; } }
@@ -653,8 +714,36 @@ select.entrada option { background: var(--superficie); }
   animation: emerger 0.4s var(--ease-agua);
 }
 @media (max-width: 720px) {
-  .aviso-cookies { flex-direction: column; align-items: stretch; bottom: calc(var(--barra-movil) + 22px); }
+  .aviso-cookies { flex-direction: column; align-items: stretch; bottom: calc(var(--sobre-barra) + 22px); }
 }
+
+/* Aviso "instálala desde el navegador" (solo móvil y tablet, ver AvisoApp) */
+.aviso-app {
+  position: fixed;
+  z-index: 150;
+  left: 50%;
+  translate: -50% 0;
+  bottom: calc(var(--sobre-barra) + 22px);
+  width: min(480px, calc(100% - 24px));
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+@media (min-width: 721px) { .aviso-app { bottom: calc(20px + var(--seg-abajo)); } }
+.aviso-app-cabecera { display: flex; gap: 12px; align-items: flex-start; }
+.aviso-app-cabecera img { flex-shrink: 0; border-radius: 11px; }
+.aviso-app-titulo { font-family: var(--fuente-titulo); font-weight: 600; margin-bottom: 2px; }
+.aviso-app-pasos { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; counter-reset: paso; }
+.aviso-app-pasos li { display: flex; align-items: center; gap: 10px; counter-increment: paso; }
+.aviso-app-pasos li::before {
+  content: counter(paso);
+  display: grid; place-items: center; flex-shrink: 0;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--agua-tinta); color: var(--agua-texto); font-size: 0.75rem; font-weight: 600;
+}
+.aviso-app-pasos svg { flex-shrink: 0; color: var(--agua-texto); }
+.aviso-app-acciones { display: flex; gap: 8px; justify-content: flex-end; }
 
 /* ---------------------------------------------------------------------
    Muro
@@ -712,7 +801,7 @@ select.entrada option { background: var(--superficie); }
 .compositor-texto { border: 0; background: transparent; padding: 8px 0; min-height: 64px; font-size: 1.05rem; box-shadow: none !important; }
 .compositor-pie { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--linea); padding-top: 12px; position: relative; z-index: 2; }
 
-.pildora-nuevos { position: sticky; top: 16px; z-index: 20; align-self: center; box-shadow: 0 10px 30px -8px var(--agua); }
+.pildora-nuevos { position: sticky; top: calc(16px + var(--seg-arriba)); z-index: 20; align-self: center; box-shadow: 0 10px 30px -8px var(--agua); }
 @media (max-width: 720px) { .pildora-nuevos { top: 70px; } }
 
 /* ---------------------------------------------------------------------
@@ -866,7 +955,7 @@ select.entrada option { background: var(--superficie); }
 @media (max-width: 720px) { .auth { margin: 16px; padding: 22px; } }
 
 /* Mensajes */
-.mensajeria { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 14px; height: calc(100dvh - 48px); }
+.mensajeria { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 14px; height: calc(100dvh - 48px - var(--seg-arriba) - var(--seg-abajo)); }
 .mensajeria-lista, .mensajeria-hilo { overflow: hidden; display: flex; flex-direction: column; }
 .mensajeria-lista { overflow-y: auto; }
 .conversacion { display: flex; gap: 10px; align-items: center; padding: 10px 14px; transition: background 0.2s; }
@@ -878,7 +967,7 @@ select.entrada option { background: var(--superficie); }
 .burbuja.mia { align-self: flex-end; border-radius: 16px 16px 4px 16px; background: color-mix(in oklab, var(--agua) 22%, var(--superficie)); }
 .hilo-escribir { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--linea); }
 @media (max-width: 720px) {
-  .mensajeria { grid-template-columns: 1fr; height: calc(100dvh - 60px - var(--barra-movil) - 40px); }
+  .mensajeria { grid-template-columns: 1fr; height: calc(100dvh - 60px - var(--seg-arriba) - var(--sobre-barra) - 40px); }
   .mensajeria.con-hilo .mensajeria-lista { display: none; }
   .mensajeria:not(.con-hilo) .mensajeria-hilo { display: none; }
 }
@@ -1026,12 +1115,12 @@ select.entrada option { background: var(--superficie); }
 .velo.saliendo .modal { animation: oleadaSale 0.22s var(--sorber) forwards; }
 
 /* Avisos flotantes: una gota que cae desde abajo y rebota */
-.tostada, .aviso-cookies {
+.tostada, .aviso-cookies, .aviso-app {
   transform-origin: 50% 100%;
   --gota-y: 24px;
   animation: gotaForma 0.52s var(--muelle), gotaNitidez 0.2s ease-out;
 }
-.tostada.saliendo, .aviso-cookies.saliendo { animation: gotaSale 0.22s var(--sorber) forwards; pointer-events: none; }
+.tostada.saliendo, .aviso-cookies.saliendo, .aviso-app.saliendo { animation: gotaSale 0.22s var(--sorber) forwards; pointer-events: none; }
 
 /* Botones: al soltar, el muelle devuelve la forma con un pequeño rebote */
 .btn { transition: transform 0.52s var(--muelle), scale 0.52s var(--muelle), background 0.2s, border-color 0.2s, opacity 0.2s; }
@@ -1160,7 +1249,8 @@ select.entrada option { background: var(--superficie); }
    En móvil no existe: se usa la página /mensajes/ a pantalla completa.
    --------------------------------------------------------------------- */
 .chat-flotante {
-  position: fixed; right: 24px; bottom: 0; z-index: 80;
+  position: fixed; right: calc(24px + var(--seg-der)); bottom: 0; z-index: 80;
+  padding-bottom: var(--seg-abajo);
   width: 340px; display: flex; flex-direction: column;
   border-radius: 18px 18px 0 0; overflow: hidden;
   background: rgba(var(--c-superficie), 0.92);

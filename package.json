@@ -10,7 +10,7 @@
     "especies": "node --import ./tests/resolver.mjs scripts/indexar_especies.mjs",
     "especies:validar": "node --import ./tests/resolver.mjs scripts/especies/validar.mjs",
     "especies:fotos": "node --import ./tests/resolver.mjs scripts/especies/fotos.mjs",
-    "prebuild": "node scripts/ads_txt.mjs",
+    "prebuild": "node scripts/ads_txt.mjs && npm run especies",
     "i18n": "node scripts/comprobar_i18n.mjs",
     "test": "node --import ./tests/resolver.mjs --test tests/*.test.mjs",
     "enlaces": "node scripts/comprobar_enlaces.mjs",

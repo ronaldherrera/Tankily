@@ -28,10 +28,11 @@ import * as errores from './textos/errores.js';
 import * as cercania from './textos/cercania.js';
 import * as distancia from './textos/distancia.js';
 import * as catalogo from './textos/catalogo.js';
+import * as instalar from './textos/instalar.js';
 
 const SECCIONES = [comun, muro, tanques, cuenta, foro, mercado, tiendas, legal, wiki];
 // Funciones nuevas con los 8 idiomas en el mismo archivo
-const MULTI = [cuidado, herramientas, chat, traduccion, social, pasos, anadir, logros, estadisticas, guardados, relacionados, bienvenida, seo, conEspecie, invitacion, errores, cercania, distancia, catalogo];
+const MULTI = [cuidado, herramientas, chat, traduccion, social, pasos, anadir, logros, estadisticas, guardados, relacionados, bienvenida, seo, conEspecie, invitacion, errores, cercania, distancia, catalogo, instalar];
 
 export const conMulti = (lang, base) => Object.assign({}, base, ...MULTI.map((s) => s[lang]));
 export const desdeSecciones = (lang) => conMulti(lang, Object.assign({}, ...SECCIONES.map((s) => s[lang])));

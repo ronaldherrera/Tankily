@@ -5,6 +5,7 @@ import { SesionProvider } from '@/lib/sesion';
 import { TostadaProvider } from '@/components/ui';
 import AppShell from '@/components/shell/AppShell';
 import { SCRIPT_TEMA } from '@/lib/scriptTema';
+import { SCRIPT_INSTALAR } from '@/lib/instalarApp';
 import { IDIOMAS, LOCALES, esIdioma } from '@/i18n/config';
 import { IdiomaProvider } from '@/i18n/IdiomaProvider';
 import { traducir } from '@/i18n/traducir';
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }) {
     metadataBase: new URL(URL_SITIO),
     title: { default: t('meta.titulo'), template: '%s · Tankily' },
     description: t('meta.descripcion'),
-    icons: { icon: [{ url: '/icon.svg', type: 'image/svg+xml' }], apple: '/apple-touch-icon.png' },
+    icons: { icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }], apple: '/apple-touch-icon.png' },
     manifest: '/manifest.webmanifest',
     appleWebApp: { capable: true, title: 'Tankily', statusBarStyle: 'black-translucent' },
     keywords: t('meta.palabrasClave'),
@@ -55,6 +56,7 @@ export default async function RootLayout({ children, params }) {
     <html lang={lang} data-tema="oscuro" className={`${geist.variable} ${fredoka.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_INSTALAR }} />
         {/* Casi todas las páginas piden datos a Supabase al cargar: se abre la conexión cuanto antes */}
         {process.env.NEXT_PUBLIC_SUPABASE_URL && <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} crossOrigin="anonymous" />}
       </head>

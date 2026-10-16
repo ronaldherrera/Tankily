@@ -3,7 +3,7 @@
 import { useEffect, useId, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import {
-  Waves, Fish, MessagesSquare, Tag, Store, BookOpen, Calculator, Search, Bell, Mail, Menu, Plus, LogIn, ShieldCheck,
+  Waves, Fish, MessagesSquare, Tag, Store, BookOpen, Calculator, Search, Bell, Mail, Menu, Plus, LogIn, ShieldCheck, X,
 } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
@@ -12,6 +12,8 @@ import { useT } from '@/i18n/IdiomaProvider';
 import { sinIdioma } from '@/i18n/config';
 import { Avatar } from '@/components/ui';
 import AvisoCookies from './AvisoCookies';
+import AvisoApp from './AvisoApp';
+import MenuMas from './MenuMas';
 import ChatFlotante from './ChatFlotante';
 import BotonTema from './BotonTema';
 import SelectorIdioma from './SelectorIdioma';
@@ -115,6 +117,20 @@ export default function AppShell({ children }) {
   const { usuario, perfil } = useSesion();
   const { t } = useT();
   const noLeidos = useNoLeidos(usuario);
+  const [masAbierto, setMasAbierto] = useState(false);
+  const [rutaMenu, setRutaMenu] = useState(pathname);
+
+  // El menú "Más" de la barra inferior se cierra al cambiar de página o con Escape
+  if (rutaMenu !== pathname) {
+    setRutaMenu(pathname);
+    setMasAbierto(false);
+  }
+  useEffect(() => {
+    if (!masAbierto) return;
+    const escape = (e) => e.key === 'Escape' && setMasAbierto(false);
+    document.addEventListener('keydown', escape);
+    return () => document.removeEventListener('keydown', escape);
+  }, [masAbierto]);
 
   useEffect(() => {
     // La refracción con filtros SVG en backdrop-filter solo funciona bien en Chromium
@@ -188,8 +204,8 @@ export default function AppShell({ children }) {
         <div style={{ minWidth: 0 }}>
           <header className="barra-superior cristal cristal-fijo">
             <Link href="/" className="marca marca-barra" aria-label="Tankily"><Marca conNombre /></Link>
+            {/* Sin botón de tema: en el móvil está en el menú "Más" de la barra inferior */}
             <div style={{ display: 'flex', gap: 2 }}>
-              <BotonTema className="btn btn-fantasma btn-icono" />
               <Link href="/explorar/" className="btn btn-fantasma btn-icono" aria-label={t('nav.buscar')}><Search size={20} /></Link>
               {usuario ? (
                 <>
@@ -216,18 +232,40 @@ export default function AppShell({ children }) {
         </div>
       </div>
 
-      <nav className="barra-movil cristal cristal-fijo" aria-label={t('nav.principal')}>
-        <Link href="/" aria-current={pathname === '/' ? 'page' : undefined}><Waves size={22} />{t('nav.muro')}</Link>
-        <Link href="/tanques/" aria-current={activo(pathname, '/tanques/') || pathname.startsWith('/tanque') ? 'page' : undefined}><Fish size={22} />{t('nav.tanques')}</Link>
-        <Link href="/foro/" aria-current={activo(pathname, '/foro/') ? 'page' : undefined}><MessagesSquare size={22} />{t('nav.foro')}</Link>
-        <Link href="/mercado/" aria-current={activo(pathname, '/mercado/') ? 'page' : undefined}><Tag size={22} />{t('nav.mercado')}</Link>
-        <Link href="/mas/" aria-current={activo(pathname, '/mas/') ? 'page' : undefined}>
-          {usuario ? <Avatar perfil={perfil} tamano={24} /> : <Menu size={22} />}{t('nav.mas')}
-        </Link>
+      {/* Barra inferior del móvil. "Más" no abre otra página: la barra crece hacia arriba y muestra el resto
+          de secciones (filas de la rejilla de 0fr a 1fr con curva de muelle). */}
+      <div className={`velo-barra${masAbierto ? ' visible' : ''}`} onClick={() => setMasAbierto(false)} aria-hidden="true" />
+      <nav className={`barra-movil cristal cristal-fijo${masAbierto ? ' abierta' : ''}`} aria-label={t('nav.principal')}>
+        <div className="barra-movil-panel" id="menu-mas" inert={!masAbierto}>
+          <div className="barra-movil-panel-interior">
+            <div className="barra-movil-desplazable">
+              <MenuMas enBarra />
+            </div>
+          </div>
+        </div>
+        <div className="barra-movil-pestanas">
+          <Link href="/" aria-current={pathname === '/' ? 'page' : undefined}><Waves size={22} />{t('nav.muro')}</Link>
+          <Link href="/tanques/" aria-current={activo(pathname, '/tanques/') || pathname.startsWith('/tanque') ? 'page' : undefined}><Fish size={22} />{t('nav.tanques')}</Link>
+          <Link href="/foro/" aria-current={activo(pathname, '/foro/') ? 'page' : undefined}><MessagesSquare size={22} />{t('nav.foro')}</Link>
+          <Link href="/mercado/" aria-current={activo(pathname, '/mercado/') ? 'page' : undefined}><Tag size={22} />{t('nav.mercado')}</Link>
+          <button
+            type="button"
+            onClick={() => setMasAbierto((v) => !v)}
+            aria-expanded={masAbierto}
+            aria-controls="menu-mas"
+            aria-current={!masAbierto && activo(pathname, '/mas/') ? 'page' : undefined}
+          >
+            {masAbierto
+              ? <X size={22} />
+              : (usuario ? <Avatar perfil={perfil} tamano={24} /> : <Menu size={22} />)}
+            {masAbierto ? t('comun.cerrar') : t('nav.mas')}
+          </button>
+        </div>
       </nav>
 
       <ChatFlotante />
       <AvisoCookies />
+      <AvisoApp />
     </>
   );
 }
