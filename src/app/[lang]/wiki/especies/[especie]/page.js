@@ -14,7 +14,6 @@ const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
 
 // Una página por especie de WikiTank (/wiki/especies/amphiprion-ocellaris/), generada en el build desde
 // los Markdown de la wiki. Como el resto de WikiTank, el contenido está en español: se indexa la versión
-// /es/ y las demás llevan noindex con la canónica en español.
 export function generateStaticParams() {
   return catalogoEspecies().map((e) => ({ especie: e.slug }));
 }

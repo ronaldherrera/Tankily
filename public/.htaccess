@@ -3,6 +3,8 @@ ErrorDocument 404 /404.html
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  # Artículos de WikiTank: solo se publican en español
+  RewriteRule ^(en|de|pt|fr|it|nl|pl)/wiki/(explorer/.*)$ /es/wiki/$2 [R=301,L]
   # URLs antiguas sin idioma (p. ej. /foro/) → versión en español
   RewriteCond %{REQUEST_URI} !^/(es|en|de|pt|fr|it|nl|pl)(/|$)
   RewriteCond %{REQUEST_URI} !^/(_next|__next|wiki-media|images|favicon\.ico|ads\.txt|404|index\.(html|txt))

@@ -8,7 +8,6 @@ import { SCRIPT_TEMA } from '@/lib/scriptTema';
 import { IDIOMAS, LOCALES, esIdioma } from '@/i18n/config';
 import { IdiomaProvider } from '@/i18n/IdiomaProvider';
 import { traducir } from '@/i18n/traducir';
-import { diccionarios } from '@/i18n/diccionarios';
 
 const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
 
@@ -60,7 +59,7 @@ export default async function RootLayout({ children, params }) {
         {process.env.NEXT_PUBLIC_SUPABASE_URL && <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} crossOrigin="anonymous" />}
       </head>
       <body>
-        <IdiomaProvider lang={lang} diccionario={diccionarios[lang]}>
+        <IdiomaProvider lang={lang}>
           <SesionProvider>
             <TostadaProvider>
               <AppShell>{children}</AppShell>

@@ -42,13 +42,20 @@ jobs:
       - name: Enlaces internos rotos
         run: npm run enlaces
 
-      - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT || 21 }}
-          local-dir: ./out/
-          server-dir: /
+      # rsync por SSH en lugar de FTP: una sola conexión, sube solo lo que cambia y borra lo que ya no existe.
+      # Con decenas de miles de páginas, el FTP (archivo a archivo) tardaba horas.
+      - name: Deploy to Hostinger via rsync (SSH)
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          DESTINO: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_RUTA }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          # --delete-delay: borra lo viejo al final, cuando ya está subido todo lo nuevo.
+          # .well-known (certificados) no viene del build y no se toca.
+          rsync -rlz --checksum --delete-delay --exclude '.well-known/' \
+            -e "ssh -i ~/.ssh/deploy -p ${{ secrets.SSH_PORT }}" \
+            ./out/ "$DESTINO"
 

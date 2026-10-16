@@ -74,8 +74,13 @@ function resumen(contenido, titulo) {
   return limpio.length > 155 ? `${limpio.slice(0, 152).replace(/\s+\S*$/, '')}…` : limpio;
 }
 
-// Generar todos los caminos posibles para exportación estática
-export async function generateStaticParams() {
+// Generar todos los caminos posibles para exportación estática.
+// Solo en español: el contenido aún no está traducido y generarlo en los 8 idiomas multiplicaba el
+// tamaño del build (los enlaces de otros idiomas van a /es/, ver conIdioma en src/i18n/config.js).
+export async function generateStaticParams({ params }) {
+  const { lang } = await params;
+  // Next exige al menos una ruta por idioma: en los demás, una vacía que da 404 (el .htaccess redirige a /es/)
+  if (lang !== 'es') return [{ path: ['_'] }];
   const paths = [];
 
   function collectPaths(nodes, currentPath = []) {

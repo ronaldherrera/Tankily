@@ -1,15 +1,30 @@
 "use client";
 
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, use, useContext, useMemo } from 'react';
 import { IDIOMA_DEFECTO, LOCALES, conIdioma } from './config';
 import { resolver } from './nucleo';
 import { registrarDiccionario } from './actual';
 
 const IdiomaContext = createContext(null);
 
-// Recibe solo el diccionario del idioma de la página (lo pasa el layout desde el servidor):
-// así el navegador no descarga los textos de los 8 idiomas.
-export function IdiomaProvider({ lang, diccionario, children }) {
+// Cada idioma va en su propio archivo JS: el navegador descarga solo el de la página, una vez, y lo guarda
+// en caché. No se pasa como prop desde el layout porque entonces iría incrustado en el HTML de cada una de
+// las miles de páginas del export estático (el build pasaba de 5 GB).
+const CARGADORES = {
+  es: () => import('./porIdioma/es.js'),
+  en: () => import('./porIdioma/en.js'),
+  de: () => import('./porIdioma/de.js'),
+  pt: () => import('./porIdioma/pt.js'),
+  fr: () => import('./porIdioma/fr.js'),
+  it: () => import('./porIdioma/it.js'),
+  nl: () => import('./porIdioma/nl.js'),
+  pl: () => import('./porIdioma/pl.js'),
+};
+const cargas = {};
+const cargarDiccionario = (lang) => (cargas[lang] ??= (CARGADORES[lang] || CARGADORES[IDIOMA_DEFECTO])().then((m) => m.default));
+
+export function IdiomaProvider({ lang, children }) {
+  const diccionario = use(cargarDiccionario(lang));
   registrarDiccionario(lang, diccionario);
   const valor = useMemo(() => ({
     lang,
