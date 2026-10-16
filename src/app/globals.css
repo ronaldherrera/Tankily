@@ -372,6 +372,17 @@ html.refraccion :is(.modal, .ficha-especie).cristal-refracta {
     border-bottom: 1px solid var(--linea);
   }
   .barra-superior.cristal::before { display: none; }
+  /* App instalada en iPhone con tema claro: iOS pinta la hora y la batería siempre en blanco
+     (barra de estado "black-translucent"), así que bajo ellas va una franja oscura. Fuera de la app
+     instalada la zona segura de arriba mide 0 y la franja no se ve. */
+  :root[data-tema='claro'] .barra-superior::after {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: var(--seg-arriba);
+    background: linear-gradient(180deg, #050b14, #0b2236);
+    pointer-events: none;
+  }
   .barra-movil {
     display: flex;
     flex-direction: column;

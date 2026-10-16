@@ -1,6 +1,9 @@
 # Hostinger (Apache): página 404 del export estático de Next
 ErrorDocument 404 /404.html
 
+# Manifiesto de la app instalable con su tipo correcto (Apache lo servía como text/plain)
+AddType application/manifest+json .webmanifest
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   # Artículos de WikiTank: solo se publican en español

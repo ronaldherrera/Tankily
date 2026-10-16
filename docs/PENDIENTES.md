@@ -23,6 +23,12 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
 
 ## 🟠 Primeras semanas
 
+- [ ] **Donaciones ("invítame a un café")**: la página `/apoyar/` y su enlace en el menú ya están hechos, con el botón en "Muy pronto".
+  1. Crea la cuenta en [ko-fi.com](https://ko-fi.com) (sin comisión en donaciones sueltas; Buy Me a Coffee cobra un 5 %) y conecta PayPal y/o Stripe para cobrar.
+  2. En la página de Ko-fi: moneda en euros, precio del "café" (p. ej. 3 €), activa las donaciones mensuales y, si quieres, una meta ("servidor de este año").
+  3. Pásame el enlace (tipo `ko-fi.com/tankily`) y lo pongo en `src/lib/apoyo.js`.
+  4. Lo que entre cuenta como ingreso de la actividad: coméntalo con tu gestor y menciónalo en el aviso legal.
+
 - [ ] **Acceso con cuentas externas**: guía paso a paso en `docs/acceso-con-cuentas-externas.md`. Empieza por Google (gratis, 15 min). Apple cuesta 99 $/año.
 - [ ] **Traducción de más calidad**: clave gratuita de DeepL API Free y
       `npx supabase secrets set DEEPL_API_KEY=tu_clave --project-ref ivizkgmogzvscygcxepy`

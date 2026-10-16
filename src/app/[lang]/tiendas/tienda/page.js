@@ -80,10 +80,11 @@ function Tienda() {
   async function valorar(e) {
     e.preventDefault();
     if (!puntos) return tostada(t('tiendas.ficha.eligePuntuacion'));
-    const fila = { tienda_id: tienda.id, puntuacion: puntos, texto: texto.trim() || null };
+    const cambios = { puntuacion: puntos, texto: texto.trim() || null };
+    // Al editar solo se mandan puntuación y texto: la tienda de una reseña no se puede cambiar
     const { error } = miResena
-      ? await supabase.from('tienda_resenas').update(fila).eq('tienda_id', tienda.id).eq('usuario_id', usuario.id)
-      : await supabase.from('tienda_resenas').insert(fila);
+      ? await supabase.from('tienda_resenas').update(cambios).eq('tienda_id', tienda.id).eq('usuario_id', usuario.id)
+      : await supabase.from('tienda_resenas').insert({ tienda_id: tienda.id, ...cambios });
     if (error) return tostada(t('tiendas.ficha.errorResena', { error: error.message }));
     tostada(t('tiendas.ficha.gracias'));
     setPuntos(0); setTexto('');

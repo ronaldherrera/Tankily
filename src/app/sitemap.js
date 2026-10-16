@@ -19,9 +19,11 @@ const RUTAS = [
   ...Object.keys(TIPOS_TANQUE).filter((k) => k !== 'otro').map((k) => [`/tanques/${slugTipo(k)}/`, 0.6, 'daily']),
   ['/mercado/', 0.8, 'daily'],
   ['/tiendas/', 0.7, 'weekly'],
+  ['/tiendas/pro/', 0.6, 'monthly'],
   ['/wiki/', 0.8, 'weekly'],
   ['/herramientas/', 0.8, 'monthly'],
   ...HERRAMIENTAS.map((h) => [`/herramientas/${h.clave}/`, 0.7, 'monthly']),
+  ['/apoyar/', 0.3, 'monthly'],
   ...LEGALES.map((d) => [`/legal/${d}/`, 0.2, 'yearly']),
 ];
 

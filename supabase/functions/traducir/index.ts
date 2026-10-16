@@ -101,8 +101,13 @@ Deno.serve(async (req) => {
   const { tabla = '', id, campo = 'contenido', idioma = '' } = peticion;
   if (!CAMPOS[tabla]?.includes(campo) || !Number.isInteger(id) || !DESTINO[idioma]) return responder({ error: 'peticion' }, 400);
 
+  // El original se lee con los permisos de quien pide (RLS): así una publicación de un tanque privado
+  // no se puede leer pidiendo su traducción. La clave de servicio solo se usa para la caché.
+  const lector = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!, {
+    global: { headers: { Authorization: req.headers.get('Authorization') ?? '' } },
+  });
   const sb = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
-  const { data: fila } = await sb.from(tabla).select(`${campo}, idioma`).eq('id', id).maybeSingle();
+  const { data: fila } = await lector.from(tabla).select(`${campo}, idioma`).eq('id', id).maybeSingle();
   const original: string | undefined = fila?.[campo];
   if (!original) return responder({ error: 'no_existe' }, 404);
   if (original.length > 5000) return responder({ error: 'largo' }, 413);

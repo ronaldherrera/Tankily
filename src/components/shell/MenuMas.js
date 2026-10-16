@@ -1,7 +1,7 @@
 "use client";
 
 import Link from '@/components/Enlace';
-import { Store, BookOpen, Calculator, User, Settings, Search, Crown, FileText, LogIn } from 'lucide-react';
+import { Store, BookOpen, Calculator, User, Settings, Search, Crown, FileText, LogIn, Coffee } from 'lucide-react';
 import { useSesion } from '@/lib/sesion';
 import { useT } from '@/i18n/IdiomaProvider';
 import BotonTema from '@/components/shell/BotonTema';
@@ -23,6 +23,7 @@ export default function MenuMas({ enBarra = false }) {
       : [['/acceder/', t('nav.entrarOCrear'), LogIn]]),
     ['/tiendas/pro/', t('nav.paraTiendas'), Crown],
     ['/legal/normas/', t('nav.normas'), FileText],
+    ['/apoyar/', t('apoyar.nav'), Coffee],
   ];
   // En la barra, cada fila entra con un pequeño retraso (--i) mientras la barra crece
   const fila = (i) => ({ position: 'relative', zIndex: 2, '--i': i });

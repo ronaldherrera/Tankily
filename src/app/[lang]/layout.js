@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
     title: { default: t('meta.titulo'), template: '%s · Tankily' },
     description: t('meta.descripcion'),
     icons: { icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }], apple: '/apple-touch-icon.png' },
-    manifest: '/manifest.webmanifest',
+    manifest: `/${lang}/manifest.webmanifest`,
     appleWebApp: { capable: true, title: 'Tankily', statusBarStyle: 'black-translucent' },
     keywords: t('meta.palabrasClave'),
     openGraph: {

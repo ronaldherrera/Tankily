@@ -1,6 +1,7 @@
 // Catálogo de especies de WikiTank (/wiki/especies/) y página de cada especie
 export const es = {
   catalogo: {
+    mostrarMas: 'Mostrar más ({n} restantes)',
     titulo: 'Especies de acuario', corto: 'Especies',
     intro: '{n} especies con su ficha de cuidados: agua, temperatura, pH, litros, dificultad y con quién pueden convivir.',
     buscar: 'Busca por nombre común o científico', agua: 'Agua', dulce: 'Dulce', marina: 'Marina', tipo: 'Tipo', dificultad: 'Dificultad',
@@ -19,6 +20,7 @@ export const es = {
 };
 export const en = {
   catalogo: {
+    mostrarMas: 'Show more ({n} left)',
     titulo: 'Aquarium species', corto: 'Species',
     intro: '{n} species with their care profile: water, temperature, pH, tank size, difficulty and what they can live with.',
     buscar: 'Search by common or scientific name', agua: 'Water', dulce: 'Fresh', marina: 'Marine', tipo: 'Type', dificultad: 'Difficulty',
@@ -37,6 +39,7 @@ export const en = {
 };
 export const de = {
   catalogo: {
+    mostrarMas: 'Mehr anzeigen (noch {n})',
     titulo: 'Aquarienarten', corto: 'Arten',
     intro: '{n} Arten mit Pflegesteckbrief: Wasser, Temperatur, pH, Beckengröße, Schwierigkeit und Verträglichkeit.',
     buscar: 'Nach deutschem oder wissenschaftlichem Namen suchen', agua: 'Wasser', dulce: 'Süß', marina: 'Meer', tipo: 'Typ', dificultad: 'Schwierigkeit',
@@ -55,6 +58,7 @@ export const de = {
 };
 export const pt = {
   catalogo: {
+    mostrarMas: 'Mostrar mais ({n} restantes)',
     titulo: 'Espécies de aquário', corto: 'Espécies',
     intro: '{n} espécies com sua ficha de cuidados: água, temperatura, pH, litragem, dificuldade e com quem podem conviver.',
     buscar: 'Pesquise pelo nome popular ou científico', agua: 'Água', dulce: 'Doce', marina: 'Salgada', tipo: 'Tipo', dificultad: 'Dificuldade',
@@ -73,6 +77,7 @@ export const pt = {
 };
 export const fr = {
   catalogo: {
+    mostrarMas: 'Afficher plus ({n} restantes)',
     titulo: 'Espèces d’aquarium', corto: 'Espèces',
     intro: '{n} espèces avec leur fiche d’entretien : eau, température, pH, volume, difficulté et compatibilités.',
     buscar: 'Rechercher par nom commun ou scientifique', agua: 'Eau', dulce: 'Douce', marina: 'Marine', tipo: 'Type', dificultad: 'Difficulté',
@@ -91,6 +96,7 @@ export const fr = {
 };
 export const it = {
   catalogo: {
+    mostrarMas: 'Mostra altre ({n} rimanenti)',
     titulo: 'Specie da acquario', corto: 'Specie',
     intro: '{n} specie con la loro scheda: acqua, temperatura, pH, litri, difficoltà e compatibilità.',
     buscar: 'Cerca per nome comune o scientifico', agua: 'Acqua', dulce: 'Dolce', marina: 'Marina', tipo: 'Tipo', dificultad: 'Difficoltà',
@@ -109,6 +115,7 @@ export const it = {
 };
 export const nl = {
   catalogo: {
+    mostrarMas: 'Meer tonen (nog {n})',
     titulo: 'Aquariumsoorten', corto: 'Soorten',
     intro: '{n} soorten met hun verzorgingsfiche: water, temperatuur, pH, liters, moeilijkheid en met wie ze samenleven.',
     buscar: 'Zoek op gewone of wetenschappelijke naam', agua: 'Water', dulce: 'Zoet', marina: 'Zout', tipo: 'Soort', dificultad: 'Moeilijkheid',
@@ -127,6 +134,7 @@ export const nl = {
 };
 export const pl = {
   catalogo: {
+    mostrarMas: 'Pokaż więcej (pozostało {n})',
     titulo: 'Gatunki akwariowe', corto: 'Gatunki',
     intro: '{n} gatunków z kartą opieki: woda, temperatura, pH, litraż, trudność i z kim mogą żyć.',
     buscar: 'Szukaj po nazwie zwyczajowej lub naukowej', agua: 'Woda', dulce: 'Słodka', marina: 'Morska', tipo: 'Rodzaj', dificultad: 'Trudność',

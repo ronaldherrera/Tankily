@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Search, Thermometer, Box } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { useT } from '@/i18n/IdiomaProvider';
@@ -15,6 +15,8 @@ const ORDENES = {
   tamano: (a, b) => (a.ficha?.cm ?? 1e9) - (b.ficha?.cm ?? 1e9),
   litros: (a, b) => (a.ficha?.l ?? 1e9) - (b.ficha?.l ?? 1e9),
 };
+// Tarjetas que se pintan de cada vez: con las ~1.850 a la vez el móvil iba lento y la página pesaba MB
+const PASO = 48;
 const normalizar = (s = '') => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 // Catálogo de especies de WikiTank: búsqueda, filtros y orden sobre la lista que llega del servidor
@@ -28,6 +30,16 @@ export default function CatalogoCliente({ especies }) {
   const [pacificas, setPacificas] = useState(false);
   const [orden, setOrden] = useState('cientifico');
   const num = (n) => Number(n).toLocaleString(locale, { maximumFractionDigits: 1 });
+  const [visibles, setVisibles] = useState(PASO);
+  const centinela = useRef(null);
+
+  // Al cambiar la búsqueda, los filtros o el orden se vuelve a empezar por las primeras
+  const firma = [q, agua, categoria, dificultad, reef, pacificas, orden].join('|');
+  const [firmaAnterior, setFirmaAnterior] = useState(firma);
+  if (firma !== firmaAnterior) {
+    setFirmaAnterior(firma);
+    setVisibles(PASO);
+  }
 
   const lista = useMemo(() => {
     const b = normalizar(q.trim());
@@ -42,6 +54,16 @@ export default function CatalogoCliente({ especies }) {
       return true;
     }).sort(ORDENES[orden]);
   }, [especies, q, agua, categoria, dificultad, reef, pacificas, orden]);
+
+  // Al acercarse al final de la lista se cargan más solas (el botón queda por si no hay IntersectionObserver)
+  const quedan = lista.length - visibles;
+  useEffect(() => {
+    const nodo = centinela.current;
+    if (!nodo || quedan <= 0 || !('IntersectionObserver' in window)) return;
+    const obs = new IntersectionObserver(([e]) => e.isIntersecting && setVisibles((v) => v + PASO), { rootMargin: '600px 0px' });
+    obs.observe(nodo);
+    return () => obs.disconnect();
+  }, [quedan]);
 
   const hayFiltros = q || agua || categoria || dificultad || reef || pacificas;
   const limpiar = () => { setQ(''); setAgua(''); setCategoria(''); setDificultad(''); setReef(false); setPacificas(false); };
@@ -99,8 +121,9 @@ export default function CatalogoCliente({ especies }) {
       </div>
 
       {lista.length === 0 ? <p className="pequeno texto-2">{t('catalogo.vacio')}</p> : (
+        <>
         <ul className="catalogo-rejilla">
-          {lista.map((e) => (
+          {lista.slice(0, visibles).map((e) => (
             <li key={e.slug}>
               <Link href={`/wiki/especies/${e.slug}/`} className="tarjeta-especie cristal-suave">
                 <span className="tarjeta-especie-foto">{e.imagen && <img src={encodeURI(e.imagen)} alt="" loading="lazy" />}</span>
@@ -119,6 +142,12 @@ export default function CatalogoCliente({ especies }) {
             </li>
           ))}
         </ul>
+        {quedan > 0 && (
+          <div ref={centinela} style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+            <button type="button" className="btn" onClick={() => setVisibles((v) => v + PASO)}>{t('catalogo.mostrarMas', { n: num(quedan) })}</button>
+          </div>
+        )}
+        </>
       )}
     </div>
   );

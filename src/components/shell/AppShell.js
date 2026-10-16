@@ -3,7 +3,7 @@
 import { useEffect, useId, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import {
-  Waves, Fish, MessagesSquare, Tag, Store, BookOpen, Calculator, Search, Bell, Mail, Menu, Plus, LogIn, ShieldCheck, X,
+  Waves, Fish, MessagesSquare, Tag, Store, BookOpen, Calculator, Search, Bell, Mail, Menu, Plus, LogIn, ShieldCheck, X, Coffee,
 } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
@@ -162,6 +162,9 @@ export default function AppShell({ children }) {
             <Link href="/explorar/" className="nav-item" aria-current={activo(pathname, '/explorar/') ? 'page' : undefined}>
               <Search size={20} /><span>{t('nav.buscar')}</span>
             </Link>
+            <Link href="/apoyar/" className="nav-item" aria-current={activo(pathname, '/apoyar/') ? 'page' : undefined}>
+              <Coffee size={20} /><span>{t('apoyar.nav')}</span>
+            </Link>
             {usuario && (
               <>
                 <Link href="/notificaciones/" className="nav-item" aria-current={activo(pathname, '/notificaciones/') ? 'page' : undefined}>
@@ -276,6 +279,7 @@ function PieLegal() {
     <footer className="pie texto-3 mini">
       <span>© {new Date().getFullYear()} Tankily</span>
       <Link href="/tiendas/pro/">{t('pie.tiendas')}</Link>
+      <Link href="/apoyar/">{t('apoyar.nav')}</Link>
       <Link href="/legal/aviso-legal/">{t('pie.avisoLegal')}</Link>
       <Link href="/legal/privacidad/">{t('pie.privacidad')}</Link>
       <Link href="/legal/cookies/">{t('pie.cookies')}</Link>

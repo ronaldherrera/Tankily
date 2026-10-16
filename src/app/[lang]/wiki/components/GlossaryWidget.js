@@ -7,6 +7,9 @@ import { BookA, Search, X, Loader2 } from 'lucide-react';
 import { useGlossary } from '../context/GlossaryContext';
 import { useT } from '@/i18n/IdiomaProvider';
 
+// El "# GLOSARIO" del Markdown baja a h2: cada página de la wiki ya tiene su propio h1
+const SIN_H1 = { h1: ({ node, ...props }) => <h2 {...props} /> };
+
 export default function GlossaryWidget() {
   const { content, loading, error, isOpen, searchTerm, setSearchTerm, openGlossary, closeGlossary } = useGlossary();
   const { t } = useT();
@@ -73,7 +76,7 @@ export default function GlossaryWidget() {
 
             {!loading && !error && content && (
               filteredContent ? (
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{filteredContent}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} components={SIN_H1}>{filteredContent}</ReactMarkdown>
               ) : (
                 <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
                   <p className="titulo-s">{t('wiki.ningunTermino', { q: searchTerm })}</p>

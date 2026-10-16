@@ -1,12 +1,13 @@
 import Link from '@/components/Enlace';
 import { Check } from 'lucide-react';
 import { traducir } from '@/i18n/traducir';
+import { alternativas } from '@/lib/seo';
 
 const EMAIL = process.env.NEXT_PUBLIC_EMAIL_CONTACTO || 'contacto@tankily.com';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
-  return { title: traducir(lang, 'pro.metaTitulo'), description: traducir(lang, 'pro.metaDescripcion') };
+  return { title: traducir(lang, 'pro.metaTitulo'), description: traducir(lang, 'pro.metaDescripcion'), alternates: alternativas(lang, '/tiendas/pro/') };
 }
 
 export default async function ProPage({ params }) {
