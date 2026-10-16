@@ -1,0 +1,302 @@
+/* =====================================================================
+   WikiTank — la capa de conocimiento de Tankily.
+   Lectura larga en oscuro: texto claro suave, líneas cortas, cristal
+   solo en portadas y paneles. Cada grupo de especies lleva su color de agua.
+   ===================================================================== */
+
+.wiki { max-width: 1120px; margin: 0 auto; padding: 24px 28px 120px; }
+@media (max-width: 720px) { .wiki { padding: 12px 16px calc(var(--barra-movil) + 120px); } }
+
+/* ---------- Índice ---------- */
+.wiki-portada { display: flex; flex-direction: column; gap: 18px; padding: 40px 0 36px; }
+.wiki-logotipo {
+  font-family: var(--fuente-titulo);
+  font-size: clamp(3rem, 8vw, 5.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  padding-bottom: 0.06em;
+  background: linear-gradient(180deg, var(--texto) 10%, color-mix(in oklab, var(--agua) 75%, #2f6fff) 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.wiki-portada p { font-size: 1.12rem; color: var(--texto-2); max-width: 52ch; }
+
+.wiki-buscador { display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 18px; border-radius: 999px; max-width: 560px; }
+.wiki-buscador input { flex: 1; border: 0; background: transparent; outline: none; font-size: 1rem; position: relative; z-index: 2; }
+.wiki-buscador:focus-within { box-shadow: 0 0 0 2px var(--agua), 0 18px 50px -20px var(--sombra); }
+.wiki-resultados { max-width: 560px; padding: 6px; margin-top: 8px; border-radius: 18px; }
+.wiki-resultados a { display: flex; gap: 12px; align-items: center; padding: 8px 10px; border-radius: 12px; position: relative; z-index: 2; }
+.wiki-resultados a:hover, .wiki-resultados a:focus { background: rgba(var(--c-tinta), 0.08); }
+.wiki-resultados img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; }
+
+.wiki-secciones { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.wiki-seccion {
+  position: relative; display: block; height: 230px; border-radius: var(--radio-xl);
+  overflow: hidden; background: var(--superficie); box-shadow: 0 0 0 1px var(--linea);
+  transition: transform var(--hover), box-shadow var(--hover);
+}
+.wiki-seccion > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease-out; }
+.wiki-seccion::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(5, 11, 20, 0.7)); }
+.wiki-seccion:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px color-mix(in oklab, var(--agua) 55%, transparent), 0 24px 50px -24px var(--agua); }
+.wiki-seccion:hover > img { transform: scale(1.05); }
+.wiki-seccion-pie { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2; padding: 14px 16px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.wiki-seccion-pie strong { font-family: var(--fuente-titulo); font-size: 1.35rem; letter-spacing: -0.02em; }
+
+/* ---------- Migas ---------- */
+.wiki-migas {
+  position: sticky; top: 12px; z-index: 30; margin-bottom: 20px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px;
+  padding: 8px 14px; border-radius: 999px; width: fit-content; max-width: 100%;
+  font-size: 0.8rem; color: var(--texto-3);
+}
+.wiki-migas a { position: relative; z-index: 2; padding: 2px 4px; border-radius: 6px; }
+.wiki-migas a:hover { color: var(--texto); }
+.wiki-migas a[aria-current='page'] { color: var(--agua-texto); font-weight: 600; }
+.wiki-migas .sep { opacity: 0.35; }
+@media (max-width: 720px) { .wiki-migas { top: 66px; } }
+
+/* ---------- Cabecera de artículo ---------- */
+.wiki-hero {
+  position: relative; height: clamp(260px, 42vw, 420px); border-radius: var(--radio-xl);
+  overflow: hidden; margin-bottom: 28px; background: var(--superficie);
+  display: flex; align-items: flex-end; padding: 16px;
+}
+.wiki-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.wiki-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(5, 11, 20, 0.6)); pointer-events: none; }
+.wiki-hero-panel { position: relative; z-index: 2; padding: 18px 22px; max-width: 640px; }
+.wiki-hero-panel h1, .wiki-titulo {
+  font-family: var(--fuente-titulo); font-weight: 720; letter-spacing: -0.035em; line-height: 1;
+}
+.wiki-hero-panel h1 { font-size: clamp(1.9rem, 4.6vw, 3.2rem); }
+.wiki-titulo { font-size: clamp(2.4rem, 6vw, 4.2rem); margin: 16px 0 28px; }
+@media (max-width: 720px) { .wiki-hero { padding: 10px; border-radius: var(--radio-l); } .wiki-hero-panel { padding: 14px 16px; } }
+
+/* ---------- Cuerpo del artículo ---------- */
+.wiki-articulo {
+  background: rgba(var(--c-superficie), 0.72);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio-xl);
+  padding: 12px clamp(18px, 5vw, 56px) 44px;
+}
+
+.md { font-size: 1.06rem; line-height: 1.78; color: var(--texto-lectura); overflow-wrap: break-word; }
+.md > * { max-width: 72ch; }
+.md h1, .md h2, .md h3, .md h4 { font-family: var(--fuente-titulo); color: var(--texto); letter-spacing: -0.02em; line-height: 1.15; }
+.md h2 { font-size: 1.65rem; font-weight: 680; margin: 2.6rem 0 1rem; padding-top: 1.4rem; border-top: 1px solid var(--linea); }
+.md h2:first-child { border-top: 0; padding-top: 0; }
+.md h3 { font-size: 1.22rem; font-weight: 650; margin: 2rem 0 0.6rem; }
+.md h4 { font-size: 1.05rem; margin: 1.5rem 0 0.4rem; }
+.md p { margin-bottom: 1.2rem; }
+.md ul, .md ol { margin: 0 0 1.3rem; padding-left: 1.4rem; }
+.md li { margin-bottom: 0.45rem; }
+.md li::marker { color: var(--agua); }
+.md strong { color: var(--texto); font-weight: 650; }
+.md em { color: var(--texto-2); }
+.md hr { border: 0; height: 1px; background: var(--linea); margin: 2.4rem 0; max-width: none; }
+.md blockquote {
+  margin: 1.8rem 0; padding: 14px 20px; border-radius: 0 16px 16px 0;
+  border-left: 3px solid var(--agua); background: linear-gradient(90deg, var(--agua-tinta), transparent);
+  color: var(--texto-2);
+}
+.md blockquote p:last-child { margin-bottom: 0; }
+.md table {
+  width: 100%; max-width: none; border-collapse: separate; border-spacing: 0; margin: 1.8rem 0;
+  font-size: 0.92rem; border: 1px solid var(--linea-fuerte); border-radius: 14px; overflow: hidden;
+  display: block; overflow-x: auto;
+}
+.md th, .md td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--linea); vertical-align: top; }
+.md th { background: var(--agua-tinta); color: var(--agua-texto); font-weight: 650; font-size: 0.82rem; white-space: nowrap; }
+.md tr:last-child td { border-bottom: 0; }
+.md tbody tr:hover td { background: rgba(var(--c-tinta), 0.04); }
+.md code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 0.88em; background: rgba(var(--c-tinta), 0.08); padding: 0.15em 0.45em; border-radius: 6px; }
+.md pre { background: var(--hundido); border: 1px solid var(--linea); padding: 1.2rem; border-radius: 14px; overflow-x: auto; margin: 1.4rem 0; max-width: none; }
+.md pre code { background: transparent; padding: 0; }
+.md a, .wiki-enlace { color: var(--agua-texto); font-weight: 600; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+.md a:hover, .wiki-enlace:hover { border-bottom-color: currentColor; }
+
+.wiki-figura { display: flex; flex-direction: column; gap: 8px; margin: 1.8rem 0; max-width: none; }
+.wiki-figura img { width: 100%; border-radius: 20px; background: var(--superficie); }
+.wiki-figura figcaption, .wiki-figura .pie-figura { font-size: 0.8rem; color: var(--texto-3); text-align: center; }
+
+.termino-glosario {
+  border-bottom: 1.5px dashed color-mix(in oklab, var(--agua) 65%, transparent);
+  cursor: pointer; font-weight: 600; color: inherit; border-radius: 3px; transition: background 0.2s, color 0.2s;
+}
+.termino-glosario:hover, .termino-glosario:focus-visible { color: var(--agua-texto); background: var(--agua-tinta); }
+
+/* ---------- Subsecciones ---------- */
+.wiki-subsecciones { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; margin: 2.4rem 0; }
+.wiki-subseccion {
+  display: flex; align-items: center; gap: 12px; padding: 10px 14px 10px 10px; min-height: 64px;
+  border-radius: 16px; border: 1px solid var(--linea); background: rgba(var(--c-superficie), 0.55);
+  transition: border-color 0.2s, background 0.2s, transform var(--hover);
+}
+.wiki-subseccion:hover { border-color: color-mix(in oklab, var(--agua) 55%, transparent); background: var(--agua-tinta); transform: translateY(-2px); }
+.wiki-subseccion-icono { width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; background: rgba(var(--c-tinta), 0.06) center / cover; display: grid; place-items: center; color: var(--texto-3); }
+.wiki-subseccion strong { font-size: 0.95rem; line-height: 1.25; }
+
+.wiki-algas {
+  display: inline-flex; align-items: center; gap: 14px; margin: 1.6rem 0; padding: 14px 20px 14px 14px;
+  border-radius: 20px; border: 1px solid color-mix(in oklab, #7cdc8c 40%, transparent);
+  background: linear-gradient(110deg, color-mix(in oklab, #7cdc8c 14%, transparent), transparent 80%);
+  transition: transform var(--hover), border-color 0.2s;
+}
+.wiki-algas:hover { transform: translateY(-2px); border-color: #7cdc8c; }
+.wiki-algas-icono { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in oklab, #7cdc8c 20%, transparent); color: color-mix(in oklab, #7cdc8c 60%, var(--texto)); }
+
+/* ---------- Pokédex de especies ---------- */
+.pokedex { margin: 2.8rem 0; max-width: none; }
+.pokedex > h2 { margin-top: 0; }
+.pokedex-grupo { margin-bottom: 1.8rem; }
+.pokedex-grupo-cabecera { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.pokedex-grupo-cabecera h3 { margin: 0; font-size: 1.05rem; }
+.pokedex-grupo-cabecera .cuenta { font-size: 0.8rem; color: var(--texto-3); }
+.pokedex-carrusel { display: flex; gap: 10px; overflow-x: auto; padding: 4px 2px 12px; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: color-mix(in oklab, var(--agua) 40%, transparent) transparent; }
+.pokedex-carrusel::-webkit-scrollbar { height: 6px; }
+.pokedex-carrusel::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--agua) 40%, transparent); border-radius: 6px; }
+.especie {
+  flex: 0 0 136px; scroll-snap-align: start; border: 1px solid var(--linea); border-radius: 18px;
+  background: rgba(var(--c-superficie), 0.6); padding: 0; cursor: pointer; text-align: left; overflow: hidden;
+  display: flex; flex-direction: column; transition: transform var(--hover), border-color var(--hover), box-shadow var(--hover);
+}
+.especie:hover, .especie:focus-visible { transform: translateY(-3px); border-color: color-mix(in oklab, var(--agua) 60%, transparent); box-shadow: 0 16px 30px -18px var(--agua); }
+.especie-foto { aspect-ratio: 1; background: radial-gradient(circle at 50% 40%, var(--agua-tinta), transparent 70%), var(--hundido); display: grid; place-items: center; overflow: hidden; }
+.especie-foto img { width: 100%; height: 100%; object-fit: cover; }
+.especie-texto { padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 1px; }
+.especie-texto strong { font-size: 0.8rem; line-height: 1.2; color: var(--texto); }
+.especie-texto em { font-size: 0.72rem; color: var(--texto-3); line-height: 1.2; }
+
+.ficha-velo { position: fixed; inset: 0; z-index: 120; background: rgba(var(--c-velo), 0.65); backdrop-filter: blur(8px); display: grid; place-items: center; padding: 16px; animation: aparecer 0.2s ease; }
+.ficha-especie { width: 100%; max-width: 820px; max-height: calc(100dvh - 32px); display: flex; flex-direction: column; overflow: hidden; border-radius: var(--radio-xl); animation: emerger 0.35s var(--ease-agua); }
+.ficha-cabecera { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--linea); position: relative; z-index: 2; background: linear-gradient(110deg, color-mix(in oklab, var(--agua) 22%, transparent), transparent 70%); }
+.ficha-cabecera h2 { font-family: var(--fuente-titulo); font-size: 1.35rem; letter-spacing: -0.02em; }
+.ficha-cuerpo { flex: 1; overflow-y: auto; padding: 0 24px 28px; position: relative; z-index: 2; }
+.ficha-imagen { height: 300px; margin: 0 -24px 20px; background: radial-gradient(circle at 50% 50%, var(--agua-tinta), transparent 70%), var(--hundido); }
+.ficha-imagen img { width: 100%; height: 100%; object-fit: contain; }
+.ficha-datos { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2px 24px; margin-top: 18px; padding: 16px 18px; border-radius: 18px; border: 1px solid color-mix(in oklab, var(--agua) 25%, transparent); background: color-mix(in oklab, var(--agua) 6%, transparent); }
+.ficha-datos div { display: flex; flex-direction: column; padding: 8px 0; border-bottom: 1px solid var(--linea); }
+.ficha-datos span { font-size: 0.74rem; color: var(--agua-texto); opacity: 0.85; }
+.ficha-datos strong { font-size: 0.95rem; color: var(--texto); }
+@media (max-width: 720px) { .ficha-imagen { height: 220px; } .ficha-cuerpo { padding: 0 16px 24px; } .ficha-imagen { margin: 0 -16px 16px; } }
+
+/* ---------- Diccionario ---------- */
+.glosario-fab {
+  position: fixed; right: 24px; bottom: 24px; z-index: 90; width: 56px; height: 56px; border-radius: 50%;
+  display: grid; place-items: center; cursor: pointer; border: 0; color: var(--agua-texto);
+  transition: transform var(--hover);
+}
+.glosario-fab:hover { transform: translateY(-3px); }
+@media (max-width: 720px) { .glosario-fab { right: 16px; bottom: calc(var(--barra-movil) + 22px); width: 50px; height: 50px; } }
+.glosario-velo { position: fixed; inset: 0; z-index: 130; background: rgba(var(--c-velo), 0.5); backdrop-filter: blur(4px); transition: opacity 0.35s, visibility 0.35s; }
+.glosario-velo[data-abierto='false'] { opacity: 0; visibility: hidden; }
+.glosario-panel {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(540px, 100%); z-index: 131;
+  display: flex; flex-direction: column; border-radius: var(--radio-xl) 0 0 var(--radio-xl);
+  transition: transform 0.32s var(--ease-agua);
+}
+.glosario-velo[data-abierto='false'] .glosario-panel { transform: translateX(105%); }
+@media (max-width: 560px) { .glosario-panel { border-radius: 0; } }
+.glosario-cabecera { padding: 20px 22px 16px; display: flex; flex-direction: column; gap: 14px; border-bottom: 1px solid var(--linea); position: relative; z-index: 2; }
+.glosario-contenido { flex: 1; overflow-y: auto; padding: 20px 22px 40px; position: relative; z-index: 2; }
+.glosario-contenido.md > * { max-width: none; }
+
+/* ---------- Diagramas ---------- */
+.diagrama {
+  margin: 2.2rem 0; max-width: none; border-radius: var(--radio-xl);
+  background: rgba(var(--c-hundido), 0.55); border: 1px solid var(--linea);
+  overflow-x: auto;
+}
+.diagrama svg { height: auto; max-width: min(100%, 600px); max-height: 72vh; display: block; margin: 0 auto; }
+.diagrama svg text { font-family: var(--fuente-texto), 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif; }
+.diagrama svg text:not([fill]) { fill: var(--texto); }
+.md pre:has(.diagrama) { background: none; border: 0; padding: 0; }
+.md pre:has(.diagrama) code { display: contents; }
+
+/* Diagramas en tema claro: los colores vienen fijados en el SVG (pensados para oscuro)
+   y aquí se reasignan; el CSS manda sobre los atributos de presentación. */
+:root[data-tema='claro'] .diagrama [fill='rgba(170,215,245,0.04)'],
+:root[data-tema='claro'] .diagrama [fill='rgba(170,215,245,0.05)'] { fill: rgba(30, 75, 120, 0.05); }
+:root[data-tema='claro'] .diagrama [stroke='rgba(170,215,245,0.18)'] { stroke: rgba(30, 75, 120, 0.22); }
+:root[data-tema='claro'] .diagrama [fill='#e6f1f7'] { fill: var(--texto); }
+:root[data-tema='claro'] .diagrama [fill='#a9bfce'] { fill: var(--texto-2); }
+:root[data-tema='claro'] .diagrama [fill='#8aa3b5'] { fill: var(--texto-3); }
+:root[data-tema='claro'] .diagrama [fill='#ffe48a'] { fill: #7a5c00; }
+:root[data-tema='claro'] .diagrama [fill='#a9efb4'] { fill: #1f6b31; }
+:root[data-tema='claro'] .diagrama [fill='#9fd0ff'] { fill: #1556a8; }
+:root[data-tema='claro'] .diagrama [stroke='#9fe7f5'] { stroke: #1a7f93; }
+:root[data-tema='claro'] .diagrama [style*='rgba(170,215,245,0.18)'] { background: rgba(30, 75, 120, 0.2) !important; border-color: rgba(30, 75, 120, 0.2) !important; }
+:root[data-tema='claro'] .diagrama [style*='rgba(170,215,245,0.04)'] { background: rgba(30, 75, 120, 0.04) !important; }
+
+/* Ficha: sube como una ola (mismo movimiento que los modales, en globals.css) */
+.ficha-velo { animation: aparecer 0.25s ease-out; }
+.ficha-especie { transform-origin: 50% 100%; animation: oleadaForma 0.52s var(--muelle), aparecer 0.18s ease-out; }
+.ficha-velo.saliendo { animation: desaparecer 0.22s ease-in forwards; pointer-events: none; }
+.ficha-velo.saliendo .ficha-especie { animation: oleadaSale 0.22s var(--sorber) forwards; }
+
+/* Accesos a las herramientas bajo el buscador de la portada de WikiTank */
+.wiki-herramientas { justify-content: flex-start; margin-top: 12px; position: relative; z-index: 2; }
+
+/* ---------------------------------------------------------------------
+   Página de cada especie (/wiki/especies/<especie>/) y catálogo
+   --------------------------------------------------------------------- */
+.ficha-datos dt { font-size: 0.74rem; color: var(--agua-texto); opacity: 0.85; }
+.ficha-datos dd { margin: 0; font-size: 0.95rem; color: var(--texto); font-weight: 600; }
+
+.especie-pagina { display: flex; flex-direction: column; gap: 22px; padding-bottom: 32px; }
+.especie-migas { padding-top: 14px; color: var(--texto-3); }
+.especie-hero {
+  position: relative; min-height: clamp(260px, 40vw, 420px); border-radius: var(--radio-xl); overflow: hidden;
+  background: radial-gradient(circle at 70% 30%, var(--agua-tinta), transparent 60%), var(--superficie);
+  display: flex; align-items: flex-end; padding: 16px;
+}
+.especie-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.especie-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(5, 11, 20, 0.55)); pointer-events: none; }
+.especie-credito { margin-top: -6px; text-align: right; }
+.especie-credito a { color: inherit; }
+.especie-hero-panel { position: relative; z-index: 2; padding: 18px 22px; max-width: 620px; display: flex; flex-direction: column; gap: 4px; }
+.especie-hero-panel h1 { font-family: var(--fuente-titulo); font-weight: 720; letter-spacing: -0.035em; line-height: 1.02; font-size: clamp(1.9rem, 4.6vw, 3.1rem); }
+.especie-cientifico { font-size: 1.1rem; color: var(--texto-2); }
+
+.especie-datos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.especie-datos li { padding: 12px 14px; border-radius: 16px; display: flex; flex-direction: column; gap: 2px; }
+.especie-datos li svg { color: var(--agua-texto); margin-bottom: 4px; }
+.especie-datos strong { font-size: 1rem; }
+
+.especie-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; align-items: start; }
+.especie-ficha { padding: 18px 20px; }
+.especie-ficha .ficha-datos { margin-top: 12px; }
+.especie-lateral { display: flex; flex-direction: column; gap: 14px; }
+@media (max-width: 900px) { .especie-cuerpo { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 720px) { .especie-hero { padding: 10px; border-radius: var(--radio-l); } .especie-hero-panel { padding: 14px 16px; } }
+
+/* Tarjetas de especie (catálogo y relacionadas) */
+.catalogo-rejilla { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+.tarjeta-especie { display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; text-decoration: none; color: inherit; height: 100%; transition: transform var(--hover), border-color var(--hover); }
+.tarjeta-especie:hover { transform: translateY(-2px); }
+.tarjeta-especie-foto { aspect-ratio: 4 / 3; background: radial-gradient(circle at 50% 40%, var(--agua-tinta), transparent 70%), var(--hundido); overflow: hidden; display: block; }
+.tarjeta-especie-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tarjeta-especie-texto { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 2px; }
+.tarjeta-especie-texto strong { font-size: 0.9rem; line-height: 1.2; }
+.tarjeta-especie-texto em { font-size: 0.78rem; color: var(--texto-3); line-height: 1.2; }
+.tarjeta-especie-datos { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-top: 6px; font-size: 0.72rem; color: var(--texto-2); }
+
+/* Catálogo: buscador, filtros y orden */
+.catalogo { display: flex; flex-direction: column; gap: 16px; }
+.catalogo-filtros { padding: 16px; border-radius: var(--radio-l); display: flex; flex-direction: column; gap: 14px; }
+.catalogo-filtros .wiki-buscador { max-width: none; }
+.catalogo-grupos { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+.catalogo-grupos fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.catalogo-pie { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-top: 1px solid var(--linea); padding-top: 12px; }
+.catalogo-orden { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.catalogo-orden .entrada { height: 36px; padding: 0 10px; width: auto; }
+.tarjeta-especie-datos span { display: inline-flex; gap: 3px; align-items: center; }
+
+/* Acceso destacado al catálogo de especies en la portada de WikiTank */
+.wiki-catalogo { display: flex; align-items: center; gap: 18px; padding: 16px 18px; border-radius: var(--radio-l); margin-bottom: 22px; text-decoration: none; color: inherit; flex-wrap: wrap; }
+.wiki-catalogo-fotos { display: flex; flex-shrink: 0; }
+.wiki-catalogo-fotos img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid var(--superficie); margin-left: -14px; }
+.wiki-catalogo-fotos img:first-child { margin-left: 0; }
+.wiki-catalogo-texto { flex: 1 1 260px; display: flex; flex-direction: column; gap: 2px; }
+.wiki-catalogo-texto strong { font-size: 1.1rem; }

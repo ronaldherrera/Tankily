@@ -1,133 +1,1361 @@
-/* Estilos Premium Minimalistas (Blanco y Negro) */
+/* =====================================================================
+   Tankily — sistema visual
+   Oscuro abisal, cristal que refracta y el color del agua de cada tanque
+   como acento. La pieza memorable es el cristal: lo demás, sobrio.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Temas. Oscuro por defecto; claro con data-tema="claro" o, en modo
+   automático (sin atributo), si el sistema lo prefiere.
+   Los --c-* son canales RGB para usar con rgba(var(--c-x), alfa).
+   --------------------------------------------------------------------- */
 :root {
-  --bg: #ffffff;
-  --text: #000000;
-  --text-muted: #666666;
-  --border: #f0f0f0;
-  --border-strong: #000000;
-  --accent: #000000;
-  --hover: #f9f9f9;
-  --transition: all 0.2s ease;
+  --abismo: #050b14;
+  --fondo: #06101d;
+  --fondo-luz: #0d2a44;
+  --superficie: #0a1828;
+  --superficie-2: #0f2135;
+  --hundido: #04101c;
+  --grad-a: #12304d;
+  --grad-b: #071221;
+  --texto: #e6f1f7;
+  --texto-2: #a9bfce;
+  --texto-3: #6f879a;
+  --texto-lectura: #c4d4df;
+  --c-tinta: 170, 215, 245;
+  --c-brillo: 220, 245, 255;
+  --c-superficie: 10, 24, 40;
+  --c-hundido: 3, 10, 18;
+  --c-velo: 2, 6, 12;
+  --cristal-brillo: linear-gradient(180deg, rgba(190, 230, 255, 0.075), rgba(190, 230, 255, 0.025));
+  --cristal-opacidad: 0.62;
+  --vidrio-tarjeta: linear-gradient(180deg, rgba(24, 46, 70, 0.82), rgba(8, 20, 34, 0.86));
+  --linea: rgba(var(--c-tinta), 0.10);
+  --linea-fuerte: rgba(var(--c-tinta), 0.22);
+  --sombra: rgba(0, 0, 0, 0.7);
+  --mezcla-texto: white;
+  /* Cuánto color de agua lleva el texto de acento (en claro, menos, para mantener el contraste) */
+  --peso-agua-texto: 72%;
+  --error-texto: #ffc2c2;
+  --ok-texto: #c9f5d1;
+
+  /* Acento por defecto: agua clara. Las páginas de tanque lo sustituyen. */
+  --agua: #9fe7f5;
+  /* Ola y burbuja del logotipo (manual de marca): fijas, no cambian con el tanque */
+  --marca-ola: #9fe7f5;
+  --marca-ola-fin: #5aa8ff;
+
+  --peligro: #ff7b7b;
+  --aviso: #ffc65c;
+  --ok: #7cdc8c;
+
+  --radio-s: 10px;
+  --radio-m: 16px;
+  --radio-l: 24px;
+  --radio-xl: 32px;
+
+  /* Títulos y texto en Geist: la única pieza tipográfica con carácter es el logotipo (Fredoka) */
+  --fuente-titulo: var(--font-geist), 'Geist', system-ui, sans-serif;
+  --fuente-texto: var(--font-geist), 'Geist', system-ui, sans-serif;
+
+  --rail: 248px;
+  --columna: 640px;
+  --lateral: 320px;
+  --barra-movil: 68px;
+
+  --ease-agua: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Respuesta al pasar el ratón: corta para que se sienta inmediata */
+  --hover: 0.16s ease-out;
+  color-scheme: dark;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Tema claro: agua clara al mediodía. Mismo cristal y mismos colores de agua;
+   el texto de acento se oscurece para mantener el contraste. */
+:root[data-tema='claro'] {
+  --abismo: #e9f1f7;
+  --fondo: #f4f8fb;
+  --fondo-luz: #d4e8f6;
+  --superficie: #ffffff;
+  --superficie-2: #f2f7fb;
+  --hundido: #e6eef5;
+  --grad-a: #cfe3f2;
+  --grad-b: #eef5fa;
+  --texto: #0b2236;
+  --texto-2: #3c566b;
+  --texto-3: #647d91;
+  --texto-lectura: #26405a;
+  --c-tinta: 30, 75, 120;
+  --c-brillo: 255, 255, 255;
+  --c-superficie: 255, 255, 255;
+  --c-hundido: 255, 255, 255;
+  --c-velo: 20, 38, 58;
+  --cristal-brillo: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.35));
+  --cristal-opacidad: 0.66;
+  --vidrio-tarjeta: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(240, 247, 252, 0.88));
+  --sombra: rgba(30, 60, 90, 0.18);
+  --mezcla-texto: #062033;
+  --peso-agua-texto: 40%;
+  --marca-ola: #4fc3e8;
+  --marca-ola-fin: #2f80ff;
+  --error-texto: #a42a2a;
+  --ok-texto: #1f6b31;
+  --peligro: #d64545;
+  --aviso: #b97800;
+  --ok: #2f9a4a;
+  color-scheme: light;
 }
+
+/* Derivados del color de agua: se calculan en cada elemento para que
+   un --agua local (p. ej. en la ficha de un tanque) también los cambie. */
+*, *::before, *::after {
+  --agua-tinta: color-mix(in oklab, var(--agua) 16%, transparent);
+  --agua-texto: color-mix(in oklab, var(--agua) var(--peso-agua-texto), var(--mezcla-texto));
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
 
 body {
-  font-family: 'Inter', -apple-system, system-ui, sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  font-weight: 400;
+  font-family: var(--fuente-texto);
+  font-size: 16px;
+  line-height: 1.55;
+  background: var(--abismo);
+  color: var(--texto);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
 }
 
-header {
-  border-bottom: 1px solid var(--border-strong);
-  padding: 1.5rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button, input, textarea, select { font: inherit; color: inherit; }
+::selection { background: color-mix(in oklab, var(--agua) 40%, transparent); }
+
+:focus-visible {
+  outline: 2px solid var(--agua);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------------------------------------------------------------------
+   Fondo: luz cáustica que se mueve despacio bajo el cristal.
+   --------------------------------------------------------------------- */
+.causticas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 80% at 50% -10%, var(--fondo-luz) 0%, transparent 60%),
+    linear-gradient(180deg, var(--fondo) 0%, var(--abismo) 70%);
+  pointer-events: none;
+  contain: strict;
+}
+.causticas::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(28% 22% at 22% 30%, color-mix(in oklab, var(--agua) 22%, transparent), transparent 70%),
+    radial-gradient(24% 30% at 78% 18%, rgba(80, 140, 255, 0.16), transparent 70%),
+    radial-gradient(30% 24% at 60% 75%, rgba(40, 200, 190, 0.10), transparent 70%);
+}
+
+/* ---------------------------------------------------------------------
+   Cristal. Todos los navegadores: desenfoque + reflejo especular.
+   Chromium (html.refraccion): además, refracción real con un filtro SVG
+   de desplazamiento aplicado a lo que hay detrás.
+   --------------------------------------------------------------------- */
+.cristal {
+  position: relative;
+  background:
+    var(--cristal-brillo),
+    rgba(var(--c-superficie), var(--cristal-opacidad));
+  border-radius: var(--radio-l);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+    0 18px 50px -20px var(--sombra);
+  isolation: isolate;
+}
+/* Borde con gradiente: más brillante arriba a la izquierda, como luz cenital */
+.cristal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, rgba(var(--c-brillo), 0.38), rgba(var(--c-brillo), 0.06) 38%, rgba(var(--c-brillo), 0.02) 62%, color-mix(in oklab, var(--agua) 35%, transparent));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+/* El desenfoque de fondo solo donde se nota: paneles destacados, modales y elementos fijos.
+   En el contenido normal el fondo es casi uniforme y el desenfoque solo costaría rendimiento. */
+.cristal-refracta {
+  backdrop-filter: blur(20px) saturate(160%);
+}
+.cristal-fijo {
+  backdrop-filter: blur(14px) saturate(140%);
+}
+/* Refracción SVG: solo en capas temporales (modales y fichas). En paneles permanentes costaba fps de forma continua. */
+html.refraccion :is(.modal, .ficha-especie).cristal-refracta {
+  backdrop-filter: url(#tk-refraccion) blur(10px) saturate(180%) brightness(1.05);
+}
+
+.cristal-suave {
+  background: rgba(var(--c-superficie), 0.55);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio-m);
+}
+
+.vidrio-tarjeta {
+  position: relative;
+  background: var(--vidrio-tarjeta);
+  border: 1px solid rgba(var(--c-brillo), 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 10px 30px -14px var(--sombra);
+}
+
+/* ---------------------------------------------------------------------
+   Tipografía
+   --------------------------------------------------------------------- */
+.titulo-xl, .titulo-l, .titulo-m, .titulo-s {
+  font-family: var(--fuente-titulo);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+.titulo-xl { font-size: clamp(2.4rem, 6vw, 3.8rem); font-weight: 750; letter-spacing: -0.04em; }
+.titulo-l { font-size: clamp(1.7rem, 3.4vw, 2.3rem); }
+.titulo-m { font-size: 1.35rem; }
+.titulo-s { font-size: 1.08rem; letter-spacing: -0.01em; }
+.texto-2 { color: var(--texto-2); }
+.texto-3 { color: var(--texto-3); }
+.pequeno { font-size: 0.86rem; }
+.mini { font-size: 0.76rem; }
+.cifra { font-family: var(--fuente-titulo); font-variant-numeric: tabular-nums; font-weight: 600; }
+.prosa { max-width: 68ch; white-space: pre-wrap; overflow-wrap: anywhere; }
+.prosa a, a.enlace { color: var(--agua-texto); }
+.prosa a:hover, a.enlace:hover { text-decoration: underline; }
+
+/* ---------------------------------------------------------------------
+   Estructura de la aplicación
+   --------------------------------------------------------------------- */
+/* En pantallas anchas el conjunto (menú + contenido + lateral) se centra, como en X o Threads,
+   en vez de dejar el menú pegado al borde y un hueco hasta el contenido. */
+.shell {
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  min-height: 100dvh;
+  /* menú + márgenes del contenido (2 × 28) + columna + hueco (32) + lateral */
+  max-width: calc(var(--rail) + 56px + var(--columna) + 32px + var(--lateral));
+  margin-inline: auto;
+}
+.rail {
   position: sticky;
   top: 0;
-  background: white;
-  z-index: 100;
+  height: 100dvh;
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
-
-h1 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -1px;
-  text-transform: uppercase;
+.rail-interior {
+  height: 100%;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
-
-nav a {
-  margin-left: 1.5rem;
-  text-decoration: none;
-  font-size: 0.9rem;
+/* Logotipo: la t de ola (SVG) + "ankily" en Fredoka 500. La base de la t
+   (y = 56,5 en su retícula de 64) cae en la línea base del texto. */
+.marca {
+  display: flex;
+  align-items: baseline;
+  padding: 4px 12px 22px;
+  font-family: var(--font-fredoka), 'Fredoka', system-ui, sans-serif;
   font-weight: 500;
-  color: var(--text);
-  transition: var(--transition);
-  opacity: 0.6;
+  font-size: 1.75rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
 }
-
-nav a:hover {
-  opacity: 1;
+.marca-t { flex-shrink: 0; height: 0.94em; width: 0.675em; margin-right: 0.01em; transform: translateY(0.11em); overflow: visible; }
+.marca-barra { padding: 0; font-size: 1.45rem; }
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: var(--texto-2);
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+  position: relative;
 }
-
-main {
-  padding: 3rem 2rem;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-h2 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
+.nav-item:hover { background: rgba(var(--c-tinta), 0.06); color: var(--texto); }
+.nav-item[aria-current='page'] { color: var(--texto); background: var(--agua-tinta); }
+.nav-item[aria-current='page'] svg { color: var(--agua); }
+.nav-item .insignia {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--agua);
+  color: #031019;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  display: grid;
+  place-items: center;
+}
+.rail-pie { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+
+.contenido {
+  display: grid;
+  grid-template-columns: minmax(0, var(--columna)) var(--lateral);
+  justify-content: center;
+  gap: 32px;
+  padding: 24px 28px 80px;
+  align-items: start;
+}
+.contenido.ancho { grid-template-columns: minmax(0, 1080px); }
+.columna { min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.lateral { position: sticky; top: 24px; display: flex; flex-direction: column; gap: 16px; }
+
+.barra-superior, .barra-movil { display: none; }
+
+@media (max-width: 1180px) {
+  .contenido { grid-template-columns: minmax(0, var(--columna)); }
+  .lateral { display: none; }
+}
+@media (max-width: 960px) {
+  .shell { grid-template-columns: 84px minmax(0, 1fr); }
+  /* El menú lateral se queda en iconos; solo él (la página "Más" usa .nav-item con texto) */
+  .rail .nav-item span, .marca span, .rail-pie .ocultable { display: none; }
+  /* Sin relleno lateral: en 84 px de menú, el relleno dejaba el icono en 8 px */
+  .rail .nav-item { justify-content: center; padding: 12px 0; }
+  .rail .nav-item svg { flex-shrink: 0; }
+  .rail-pie .btn { padding: 0; }
+  .rail-pie .btn svg { flex-shrink: 0; }
+  .rail .nav-item .insignia { position: absolute; top: 4px; right: 4px; margin: 0; }
+  .marca { justify-content: center; padding-inline: 0; }
+  .marca .marca-t { margin-right: 0; transform: none; }
+  .marca-barra .marca-nombre { display: inline; }
+  .marca-barra .marca-t { margin-right: 0.01em; transform: translateY(0.11em); }
+}
+@media (max-width: 720px) {
+  .shell { display: block; }
+  .rail { display: none; }
+  .contenido { padding: 12px 16px calc(var(--barra-movil) + 32px); }
+  .barra-superior {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-radius: 0;
+    border-bottom: 1px solid var(--linea);
+  }
+  .barra-superior.cristal::before { display: none; }
+  .barra-movil {
+    display: flex;
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    height: var(--barra-movil);
+    z-index: 50;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 24px;
+  }
+  .barra-movil a {
+    display: grid;
+    place-items: center;
+    gap: 2px;
+    color: var(--texto-3);
+    font-size: 0.68rem;
+    padding: 6px 10px;
+    position: relative;
+  }
+  .barra-movil a[aria-current='page'] { color: var(--agua); }
+  .barra-movil .insignia {
+    position: absolute; top: 0; right: 4px;
+    min-width: 16px; height: 16px; border-radius: 8px;
+    background: var(--agua); color: #031019;
+    font-size: 0.62rem; font-weight: 700; display: grid; place-items: center; padding: 0 4px;
+  }
 }
 
-h3 {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
-}
-
-.card {
-  border: 1px solid var(--border);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  border-radius: 4px;
-  transition: var(--transition);
-}
-
-.card:hover {
-  border-color: var(--border-strong);
-}
-
-button {
-  cursor: pointer;
-  background: black;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border: 1px solid black;
-  font-size: 0.85rem;
+/* ---------------------------------------------------------------------
+   Controles
+   --------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--linea-fuerte);
+  background: rgba(var(--c-tinta), 0.06);
+  color: var(--texto);
   font-weight: 600;
-  transition: var(--transition);
-  border-radius: 4px;
+  font-size: 0.92rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s var(--ease-agua), background 0.2s, border-color 0.2s, opacity 0.2s;
 }
-
-button:active {
-  transform: scale(0.98);
+.btn:hover { background: rgba(var(--c-tinta), 0.12); }
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.btn-primario {
+  background: var(--agua);
+  border-color: transparent;
+  color: #031019;
+  box-shadow: 0 0 0 0 transparent, inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 8px 24px -10px var(--agua);
 }
+.btn-primario:hover { background: color-mix(in oklab, var(--agua) 88%, white); }
+.btn-fantasma { background: transparent; border-color: transparent; color: var(--texto-2); }
+.btn-fantasma:hover { color: var(--texto); background: rgba(var(--c-tinta), 0.06); }
+.btn-peligro { color: var(--peligro); border-color: color-mix(in oklab, var(--peligro) 40%, transparent); background: transparent; }
+.btn-peligro:hover { background: color-mix(in oklab, var(--peligro) 12%, transparent); }
+.btn-s { height: 34px; padding: 0 14px; font-size: 0.85rem; }
+.btn-icono { width: 42px; padding: 0; }
+.btn-icono.btn-s { width: 34px; }
+.btn-bloque { width: 100%; }
 
-button:hover {
-  background: white;
-  color: black;
-}
-
-input, textarea {
+.campo { display: flex; flex-direction: column; gap: 6px; }
+.campo > span, .campo > legend, .compat-herramienta .campo > label { font-size: 0.85rem; font-weight: 600; color: var(--texto-2); }
+.campo > legend { padding: 0; margin-bottom: 6px; }
+.campo > small { color: var(--texto-3); font-size: 0.78rem; }
+.entrada {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--border);
-  margin-bottom: 1rem;
-  font-family: inherit;
-  font-size: 0.95rem;
-  border-radius: 4px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--linea-fuerte);
+  background: rgba(var(--c-hundido), 0.55);
+  color: var(--texto);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.entrada::placeholder { color: var(--texto-3); }
+.entrada:focus { outline: none; border-color: var(--agua); box-shadow: 0 0 0 3px var(--agua-tinta); }
+textarea.entrada { resize: vertical; min-height: 96px; line-height: 1.5; }
+select.entrada { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--texto-3) 50%), linear-gradient(135deg, var(--texto-3) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 36px; }
+select.entrada option { background: var(--superficie); }
+.fila-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+.casilla { display: flex; gap: 10px; align-items: flex-start; font-size: 0.92rem; color: var(--texto-2); cursor: pointer; }
+.casilla input { accent-color: var(--agua); width: 18px; height: 18px; margin-top: 2px; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--linea-fuerte);
+  font-size: 0.82rem;
+  color: var(--texto-2);
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.chip[aria-pressed='true'], .chip[aria-current='page'], .chip.activo { background: var(--agua-tinta); border-color: color-mix(in oklab, var(--agua) 55%, transparent); color: var(--agua-texto); }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chips-desliza { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.chips-desliza::-webkit-scrollbar { display: none; }
+
+.etiqueta-agua {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--agua-texto);
+}
+.etiqueta-agua::before {
+  content: '';
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--agua);
+  box-shadow: 0 0 10px var(--agua);
 }
 
-input:focus, textarea:focus {
-  outline: none;
-  border-color: var(--border-strong);
+/* Pestañas con indicador que se desliza */
+.pestanas {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.pestanas::-webkit-scrollbar { display: none; }
+.pestana {
+  flex: 1;
+  min-width: max-content;
+  height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--texto-3);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s, background 0.25s var(--ease-agua);
+}
+.pestana[aria-selected='true'] { color: var(--texto); background: rgba(var(--c-tinta), 0.10); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  background: linear-gradient(135deg, var(--grad-a), var(--superficie));
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--fuente-titulo);
+  font-weight: 700;
+  color: var(--agua-texto);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--linea-fuerte);
 }
 
-footer {
+.separador { height: 1px; background: var(--linea); border: 0; }
+
+.vacio {
+  padding: 40px 24px;
   text-align: center;
-  padding: 3rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  border-top: 1px solid var(--border);
-  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--texto-2);
 }
+.vacio .titulo-s { color: var(--texto); }
+
+.aviso {
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  border: 1px solid var(--linea-fuerte);
+  background: rgba(var(--c-tinta), 0.05);
+}
+.aviso.error { border-color: color-mix(in oklab, var(--peligro) 45%, transparent); color: var(--error-texto); background: color-mix(in oklab, var(--peligro) 8%, transparent); }
+.aviso.ok { border-color: color-mix(in oklab, var(--ok) 45%, transparent); color: var(--ok-texto); }
+
+.esqueleto {
+  border-radius: var(--radio-m);
+  background: linear-gradient(100deg, rgba(var(--c-tinta), 0.04) 30%, rgba(var(--c-tinta), 0.09) 50%, rgba(var(--c-tinta), 0.04) 70%);
+  background-size: 300% 100%;
+  animation: brillo 1.6s linear infinite;
+}
+@keyframes brillo { to { background-position: -150% 0; } }
+
+/* Modal */
+.velo {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(var(--c-velo), 0.6);
+  backdrop-filter: blur(6px);
+  display: grid; place-items: center;
+  padding: 16px;
+  animation: aparecer 0.2s ease;
+}
+.modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  padding: 24px;
+  animation: emerger 0.35s var(--ease-agua);
+}
+.modal-cabecera { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; gap: 12px; }
+
+/* Aviso flotante */
+.tostada {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--barra-movil) + 28px);
+  translate: -50% 0;
+  z-index: 200;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  animation: emerger 0.3s var(--ease-agua);
+}
+@media (min-width: 721px) { .tostada { bottom: 28px; } }
+
+/* Cuadrículas de imágenes */
+.galeria { display: grid; gap: 4px; border-radius: var(--radio-m); overflow: hidden; }
+.galeria img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; background: var(--superficie); }
+.galeria.n1 img { aspect-ratio: auto; max-height: 560px; }
+.galeria.n2 { grid-template-columns: 1fr 1fr; }
+.galeria.n3 { grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; }
+.galeria.n3 img:first-child { grid-row: span 2; aspect-ratio: auto; height: 100%; }
+.galeria.n4, .galeria.n5, .galeria.n6 { grid-template-columns: 1fr 1fr; }
+
+.rejilla-tarjetas { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+
+/* Publicidad: siempre identificada como tal */
+.publi { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.publi-rotulo { font-size: 0.7rem; color: var(--texto-3); }
+
+.solo-movil { display: none; }
+@media (max-width: 720px) {
+  .solo-movil { display: initial; }
+  .solo-escritorio { display: none !important; }
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* Piezas del armazón */
+.pie {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  justify-content: center;
+  padding: 24px 16px calc(var(--barra-movil) + 40px);
+}
+.pie a:hover { color: var(--texto-2); }
+@media (min-width: 721px) { .pie { padding-bottom: 32px; } }
+.punto-aviso {
+  position: absolute; top: 9px; right: 9px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--agua); box-shadow: 0 0 8px var(--agua);
+}
+.girar { animation: girar 0.9s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+.aviso-cookies {
+  position: fixed;
+  z-index: 150;
+  left: 50%;
+  translate: -50% 0;
+  bottom: 20px;
+  width: min(720px, calc(100% - 24px));
+  padding: 14px 16px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  animation: emerger 0.4s var(--ease-agua);
+}
+@media (max-width: 720px) {
+  .aviso-cookies { flex-direction: column; align-items: stretch; bottom: calc(var(--barra-movil) + 22px); }
+}
+
+/* ---------------------------------------------------------------------
+   Muro
+   --------------------------------------------------------------------- */
+.post { padding: 16px 18px 10px; }
+.post-cabecera { display: flex; gap: 12px; align-items: flex-start; }
+/* Texto, fotos y acciones alineados con el borde izquierdo de la tarjeta (el del avatar) */
+.post-cuerpo { display: flex; flex-direction: column; gap: 12px; margin: 12px 0 4px; }
+/* El botón tiene 10 px de relleno: se compensa para que el primer icono quede en la misma línea */
+.post-acciones { display: flex; gap: 4px; margin-left: -10px; }
+.post-acciones button {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-width: 56px; height: 38px; padding: 0 10px;
+  border: 0; border-radius: 999px; background: transparent;
+  color: var(--texto-3); font-size: 0.85rem; cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+.post-acciones button:hover { color: var(--agua-texto); background: var(--agua-tinta); }
+.post-acciones button.gusta { color: #ff7a9a; }
+.post-acciones button.gusta svg { animation: latido 0.4s var(--ease-agua); }
+@keyframes latido { 40% { transform: scale(1.3); } }
+
+.menu {
+  position: absolute; right: 0; top: 38px; z-index: 30;
+  min-width: 170px; padding: 6px; border-radius: 14px;
+  display: flex; flex-direction: column;
+}
+.menu button, .menu a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border: 0; border-radius: 10px;
+  background: transparent; text-align: left; cursor: pointer; font-size: 0.9rem;
+  position: relative; z-index: 2;
+}
+.menu button:hover, .menu a:hover { background: rgba(var(--c-tinta), 0.08); }
+
+.eco-citado {
+  display: block; padding: 12px 14px; border-radius: var(--radio-m);
+  border: 1px solid var(--linea-fuerte); transition: border-color 0.2s;
+}
+.eco-citado:hover { border-color: var(--agua); }
+.eco-citado .prosa { font-size: 0.95rem; }
+
+.medicion-compartida {
+  padding: 14px 16px; border-radius: var(--radio-m);
+  background: linear-gradient(120deg, var(--agua-tinta), transparent 70%);
+  border: 1px solid color-mix(in oklab, var(--agua) 30%, transparent);
+  font-family: var(--fuente-titulo); font-size: 1.05rem;
+}
+
+.comentarios { display: flex; flex-direction: column; gap: 12px; padding: 12px 0 8px; margin-top: 8px; border-top: 1px solid var(--linea); }
+.comentario { display: flex; gap: 10px; align-items: flex-start; }
+.comentario .prosa { font-size: 0.94rem; }
+
+.compositor { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.compositor-texto { border: 0; background: transparent; padding: 8px 0; min-height: 64px; font-size: 1.05rem; box-shadow: none !important; }
+.compositor-pie { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--linea); padding-top: 12px; position: relative; z-index: 2; }
+
+.pildora-nuevos { position: sticky; top: 16px; z-index: 20; align-self: center; box-shadow: 0 10px 30px -8px var(--agua); }
+@media (max-width: 720px) { .pildora-nuevos { top: 70px; } }
+
+/* ---------------------------------------------------------------------
+   Portada (visitantes)
+   --------------------------------------------------------------------- */
+.portada {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 48px;
+  align-items: center;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 72px 28px 40px;
+}
+.portada-texto { display: flex; flex-direction: column; gap: 22px; }
+.portada .titulo-xl { max-width: 13ch; }
+.ficha-demo { overflow: hidden; transform: rotate(1.5deg); }
+.ficha-foto {
+  height: 180px;
+  background: url('/wiki-media/Acuarios/Acuario%20marino%20%E2%80%94%20arrecife%20de%20coral%20(reef)/Acuario_marino_reef.webp') center / cover;
+  -webkit-mask: linear-gradient(#000 60%, transparent);
+  mask: linear-gradient(#000 60%, transparent);
+}
+.ficha-parametros { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+@media (max-width: 860px) {
+  .portada { grid-template-columns: 1fr; padding: 36px 16px 8px; gap: 28px; }
+  .ficha-demo { transform: none; }
+}
+
+.fila-tanque { display: flex; gap: 10px; align-items: center; padding: 8px; border-radius: 12px; transition: background 0.2s; }
+.fila-tanque:hover { background: var(--agua-tinta); }
+.miniatura-tanque {
+  width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+  background: radial-gradient(circle at 30% 30%, var(--agua), var(--superficie) 75%) center / cover;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+/* ---------------------------------------------------------------------
+   Tanques
+   --------------------------------------------------------------------- */
+.tarjeta-tanque {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3.2;
+  border-radius: var(--radio-l);
+  overflow: hidden;
+  background: var(--superficie);
+  box-shadow: 0 0 0 1px var(--linea);
+  transition: transform var(--hover), box-shadow var(--hover);
+}
+.tarjeta-tanque img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease-out; }
+.tarjeta-tanque:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px color-mix(in oklab, var(--agua) 60%, transparent), 0 20px 40px -20px var(--agua); }
+.tarjeta-tanque:hover img { transform: scale(1.04); }
+.tarjeta-tanque-pie {
+  position: absolute; left: 10px; right: 10px; bottom: 10px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 16px;
+}
+
+.grafica { display: flex; flex-direction: column; gap: 8px; padding: 16px; }
+.tooltip-grafica {
+  position: absolute; top: 0; transform: translate(-50%, -100%);
+  padding: 6px 10px; border-radius: 10px; pointer-events: none;
+  display: flex; flex-direction: column; white-space: nowrap; z-index: 5;
+}
+
+.tanque-hero {
+  position: relative;
+  min-height: 420px;
+  border-radius: var(--radio-xl);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 18px;
+  background: var(--superficie);
+}
+.tanque-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tanque-hero::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 35%, rgba(5, 11, 20, 0.75) 100%),
+              linear-gradient(0deg, color-mix(in oklab, var(--agua) 18%, transparent), transparent 50%);
+  pointer-events: none;
+}
+.tanque-panel { position: relative; z-index: 2; width: 100%; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+.tanque-datos { display: flex; gap: 22px; flex-wrap: wrap; }
+.tanque-datos div { display: flex; flex-direction: column; }
+@media (max-width: 720px) {
+  .tanque-hero { min-height: 340px; border-radius: var(--radio-l); padding: 10px; margin: 0 -6px; }
+  .tanque-panel { padding: 14px; }
+}
+
+.rejilla-parametros { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.parametro {
+  padding: 12px 14px; border-radius: var(--radio-m);
+  border: 1px solid var(--linea); background: rgba(var(--c-superficie), 0.5);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.parametro.fuera { border-color: color-mix(in oklab, var(--aviso) 55%, transparent); }
+.parametro .estado { font-size: 0.72rem; color: var(--aviso); display: flex; gap: 4px; align-items: center; }
+
+.lista-filas { list-style: none; display: flex; flex-direction: column; }
+.lista-filas > li { display: flex; gap: 12px; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--linea); }
+.lista-filas > li:last-child { border-bottom: 0; }
+
+/* Diario del tanque: panel con los eventos agrupados por mes y un icono por tipo sobre la línea */
+.diario { padding: 16px 18px; display: flex; flex-direction: column; gap: 18px; }
+.diario-mes { display: flex; flex-direction: column; gap: 10px; }
+.diario-mes h3 { font-weight: 600; letter-spacing: 0.01em; }
+.linea-tiempo { list-style: none; margin: 0; padding: 0; position: relative; display: flex; flex-direction: column; gap: 12px; }
+.linea-tiempo::before { content: ""; position: absolute; left: 13px; top: 14px; bottom: 14px; width: 2px; background: linear-gradient(var(--agua), transparent); opacity: 0.35; }
+.linea-tiempo li { position: relative; display: flex; gap: 12px; align-items: flex-start; }
+.evento-icono {
+  position: relative; flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--superficie); border: 1.5px solid color-mix(in oklab, var(--agua) 55%, transparent); color: var(--agua-texto);
+}
+.evento-cambio_agua .evento-icono { background: color-mix(in oklab, var(--agua) 18%, var(--superficie)); border-color: var(--agua); }
+.linea-tiempo li > div { padding-top: 4px; }
+
+.selector-tipo { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+.selector-tipo button {
+  display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+  border-radius: 12px; border: 1px solid var(--linea-fuerte); background: transparent;
+  cursor: pointer; text-align: left; font-size: 0.88rem; color: var(--texto-2);
+}
+.selector-tipo button::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--agua); box-shadow: 0 0 8px var(--agua); flex-shrink: 0; }
+.selector-tipo button[aria-pressed='true'] { border-color: var(--agua); background: var(--agua-tinta); color: var(--texto); }
+
+.sugerencias { position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 40; padding: 6px; border-radius: 14px; max-height: 280px; overflow-y: auto; }
+.sugerencias button { width: 100%; display: flex; gap: 10px; align-items: center; padding: 6px 8px; border: 0; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; position: relative; z-index: 2; }
+.sugerencias button:hover, .sugerencias button:focus { background: rgba(var(--c-tinta), 0.08); }
+.sugerencias img { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
+
+.tabla { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.tabla th { text-align: left; font-weight: 600; color: var(--texto-3); font-size: 0.78rem; padding: 6px 8px; border-bottom: 1px solid var(--linea-fuerte); }
+.tabla td { padding: 8px; border-bottom: 1px solid var(--linea); }
+
+/* Perfil */
+.perfil-portada {
+  height: 200px; border-radius: var(--radio-xl);
+  background: radial-gradient(80% 120% at 20% 0%, color-mix(in oklab, var(--agua) 35%, transparent), transparent 60%), linear-gradient(160deg, var(--grad-a), var(--grad-b)) center / cover;
+  box-shadow: inset 0 0 0 1px var(--linea);
+}
+@media (max-width: 720px) { .perfil-portada { height: 140px; border-radius: var(--radio-l); } }
+.perfil-cabecera { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: -48px; padding: 0 16px; }
+.perfil-cabecera .avatar { box-shadow: 0 0 0 4px var(--abismo), 0 0 0 5px var(--linea-fuerte); }
+.estadisticas { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.92rem; color: var(--texto-2); }
+.estadisticas strong { color: var(--texto); font-family: var(--fuente-titulo); }
+
+/* Autenticación */
+.auth { max-width: 420px; margin: 48px auto; padding: 28px; display: flex; flex-direction: column; gap: 18px; }
+@media (max-width: 720px) { .auth { margin: 16px; padding: 22px; } }
+
+/* Mensajes */
+.mensajeria { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 14px; height: calc(100dvh - 48px); }
+.mensajeria-lista, .mensajeria-hilo { overflow: hidden; display: flex; flex-direction: column; }
+.mensajeria-lista { overflow-y: auto; }
+.conversacion { display: flex; gap: 10px; align-items: center; padding: 10px 14px; transition: background 0.2s; }
+.conversacion:hover, .conversacion[aria-current='true'] { background: var(--agua-tinta); }
+.insignia-mensajes { min-width: 20px; height: 20px; border-radius: 10px; background: var(--agua); color: #031019; font-size: 0.72rem; display: grid; place-items: center; padding: 0 6px; }
+.hilo-cabecera { display: flex; gap: 10px; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--linea); }
+.hilo-mensajes { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.burbuja { max-width: 78%; align-self: flex-start; padding: 8px 12px; border-radius: 16px 16px 16px 4px; background: rgba(var(--c-tinta), 0.08); display: flex; flex-direction: column; gap: 2px; }
+.burbuja.mia { align-self: flex-end; border-radius: 16px 16px 4px 16px; background: color-mix(in oklab, var(--agua) 22%, var(--superficie)); }
+.hilo-escribir { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--linea); }
+@media (max-width: 720px) {
+  .mensajeria { grid-template-columns: 1fr; height: calc(100dvh - 60px - var(--barra-movil) - 40px); }
+  .mensajeria.con-hilo .mensajeria-lista { display: none; }
+  .mensajeria:not(.con-hilo) .mensajeria-hilo { display: none; }
+}
+
+.buscador { display: flex; align-items: center; gap: 10px; padding: 0 18px; height: 56px; border-radius: 999px; margin-top: 12px; }
+.buscador input { flex: 1; border: 0; background: transparent; font-size: 1.05rem; outline: none; position: relative; z-index: 2; }
+.buscador:focus-within { box-shadow: 0 0 0 2px var(--agua), 0 18px 50px -20px var(--sombra); }
+
+/* Foro */
+.lista-hilos { list-style: none; display: flex; flex-direction: column; }
+.fila-hilo { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--linea); position: relative; z-index: 2; }
+.fila-hilo:last-child { border-bottom: 0; }
+.fila-hilo-titulo { font-weight: 600; display: inline-flex; gap: 6px; align-items: center; }
+.fila-hilo-titulo:hover { color: var(--agua-texto); }
+.rejilla-categorias { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.categoria-foro { padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; transition: border-color 0.2s, background 0.2s; }
+.categoria-foro:hover { border-color: color-mix(in oklab, var(--agua) 50%, transparent); background: var(--agua-tinta); }
+.respuesta { padding: 16px; display: flex; gap: 14px; }
+.respuesta.solucion { border-color: color-mix(in oklab, var(--ok) 50%, transparent); background: color-mix(in oklab, var(--ok) 6%, rgba(var(--c-superficie), 0.55)); }
+.voto { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.voto button { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--linea-fuerte); background: transparent; color: var(--texto-3); cursor: pointer; display: grid; place-items: center; }
+.voto button:hover:not(:disabled) { color: var(--agua); border-color: var(--agua); }
+.voto button.votado { color: #031019; background: var(--agua); border-color: var(--agua); }
+.voto button:disabled { opacity: 0.4; cursor: default; }
+
+/* Mercado */
+.filtros-mercado { display: flex; gap: 10px; padding: 10px; border-radius: 20px; flex-wrap: wrap; align-items: center; }
+.filtros-mercado > * { position: relative; z-index: 2; }
+.filtros-mercado select.entrada { width: auto; min-width: 170px; flex: 1; }
+.buscador-mini { flex: 2; min-width: 200px; display: flex; align-items: center; gap: 8px; padding: 0 14px; height: 44px; border-radius: 12px; border: 1px solid var(--linea-fuerte); background: rgba(var(--c-hundido), 0.55); }
+.buscador-mini input { flex: 1; border: 0; background: transparent; outline: none; }
+.buscador-mini:focus-within { border-color: var(--agua); }
+.rejilla-anuncios { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+@media (max-width: 520px) { .rejilla-anuncios { grid-template-columns: 1fr 1fr; gap: 8px; } }
+.tarjeta-anuncio { overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.2s, transform var(--hover); }
+.tarjeta-anuncio:hover { border-color: color-mix(in oklab, var(--agua) 50%, transparent); transform: translateY(-2px); }
+.tarjeta-anuncio.destacado { border-color: color-mix(in oklab, var(--aviso) 45%, transparent); }
+.tarjeta-anuncio-foto { position: relative; aspect-ratio: 1; background: var(--superficie); display: grid; place-items: center; }
+.tarjeta-anuncio-foto img { width: 100%; height: 100%; object-fit: cover; }
+.sello { position: absolute; top: 8px; left: 8px; padding: 3px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; background: rgba(5, 11, 20, 0.8); backdrop-filter: blur(8px); }
+.sello-destacado { left: auto; right: 8px; background: var(--aviso); color: #2a1b00; }
+.anuncio-detalle { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(300px, 1fr); gap: 20px; }
+@media (max-width: 860px) { .anuncio-detalle { grid-template-columns: 1fr; } }
+.anuncio-foto-grande { aspect-ratio: 4 / 3; display: grid; place-items: center; overflow: hidden; }
+.anuncio-foto-grande img { width: 100%; height: 100%; object-fit: contain; background: var(--hundido); }
+
+/* Tiendas */
+.tarjeta-tienda { overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.2s, transform var(--hover); }
+.tarjeta-tienda:hover { border-color: color-mix(in oklab, var(--agua) 50%, transparent); transform: translateY(-2px); }
+.tarjeta-tienda.pro { border-color: color-mix(in oklab, var(--agua) 35%, transparent); }
+.tarjeta-tienda-portada { height: 96px; background: linear-gradient(140deg, var(--grad-a), var(--grad-b)) center / cover; }
+.logo-tienda { width: 56px; height: 56px; margin-top: -28px; border-radius: 16px; overflow: hidden; display: grid; place-items: center; background: var(--superficie-2); font-family: var(--fuente-titulo); font-weight: 700; font-size: 1.4rem; color: var(--agua-texto); box-shadow: 0 0 0 3px var(--abismo), 0 0 0 4px var(--linea-fuerte); }
+.logo-tienda img { width: 100%; height: 100%; object-fit: cover; }
+.logo-tienda.grande { width: 104px; height: 104px; margin-top: 0; border-radius: 26px; font-size: 2.6rem; }
+.tienda-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; padding: 0 4px; }
+@media (max-width: 900px) { .tienda-cuerpo { grid-template-columns: 1fr; } }
+.planes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; max-width: 860px; }
+.plan { padding: 26px; display: flex; flex-direction: column; gap: 16px; border-radius: var(--radio-l); }
+.plan.destacado { box-shadow: 0 0 0 1px color-mix(in oklab, var(--agua) 50%, transparent), 0 30px 80px -30px var(--agua); }
+
+/* Menú de idiomas: se abre hacia arriba desde el pie del menú lateral o el pie de página */
+.menu-idiomas { top: auto; bottom: calc(100% + 6px); left: 0; right: auto; min-width: 200px; max-height: 60vh; overflow-y: auto; }
+.menu-idiomas a[aria-current='true'] { color: var(--agua-texto); }
+.menu-idiomas.en-pie { left: 50%; translate: -50% 0; transform-origin: bottom center; }
+
+/* Menús flotantes (opciones de publicación, idiomas): casi opacos para que no se lea
+   lo que hay debajo, con un desenfoque ligero que mantiene el aire de cristal. */
+.menu.cristal {
+  background: rgba(var(--c-superficie), 0.96);
+  backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid var(--linea-fuerte);
+  border-top-color: rgba(var(--c-brillo), 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 18px 44px -12px var(--sombra);
+  z-index: 60;
+}
+/* Sin el borde degradado del cristal: al escalarse en la animación su tramo azul
+   se notaba en el borde inferior. El contorno es un borde real, nítido al escalar. */
+.menu.cristal::before { content: none; }
+.menu-idiomas a { padding: 8px 12px; color: var(--texto-2); }
+.menu-idiomas a:hover, .menu-idiomas a:focus-visible { color: var(--texto); background: rgba(var(--c-tinta), 0.08); }
+.menu-idiomas a[aria-current='true'] { color: var(--agua-texto); font-weight: 600; }
+
+
+/* ---------------------------------------------------------------------
+   Movimiento líquido. Todo lo que aparece lo hace como una gota: nace
+   pequeña y deformada desde su origen, se estira al pasarse de largo y
+   se asienta con un muelle (curvas linear() calculadas a partir de un
+   oscilador amortiguado). Al irse, se aplasta un instante y se recoge.
+   Se anima solo transform/scale/opacity/filter para ir a 60 fps.
+   Las salidas las hace posibles usePresencia (src/lib/presencia.js),
+   que mantiene el elemento montado mientras dura la clase .saliendo.
+   --------------------------------------------------------------------- */
+:root {
+  /* rigidez 320, amortiguación 20: rebote visible (~12 %), 520 ms */
+  --muelle: linear(0, 0.038, 0.135, 0.268, 0.417, 0.566, 0.705, 0.827, 0.927, 1.005, 1.061, 1.096, 1.115, 1.12, 1.115, 1.103, 1.087, 1.069, 1.051, 1.035, 1.02, 1.008, 0.999, 0.993, 0.988, 0.986, 0.986, 0.986, 0.988, 0.99, 0.992, 0.994, 1);
+  /* rigidez 380, amortiguación 32: casi sin rebote, 380 ms */
+  --muelle-suave: linear(0, 0.023, 0.083, 0.164, 0.256, 0.352, 0.447, 0.536, 0.617, 0.69, 0.753, 0.808, 0.853, 0.891, 0.922, 0.946, 0.965, 0.98, 0.991, 0.999, 1.004, 1.008, 1.01, 1.011, 1.011, 1.011, 1.01, 1.009, 1.008, 1.007, 1.006, 1.005, 1);
+  --sorber: cubic-bezier(0.5, 0, 0.75, 0);
+}
+
+/* Entradas: la forma (scale, transform) va con muelle; la opacidad y el
+   desenfoque, rápidos y sin rebote, en una animación aparte. */
+@keyframes gotaForma { from { scale: 0.82 0.5; transform: translateY(var(--gota-y, -8px)); } }
+@keyframes gotaNitidez { from { opacity: 0; filter: blur(6px); } }
+@keyframes oleadaForma { from { scale: 0.9 0.78; transform: translateY(28px); } }
+@keyframes aparecer { from { opacity: 0; } }
+@keyframes emerger { from { opacity: 0; transform: translateY(14px); } }
+
+/* Salidas: se aplasta (anticipación) y se recoge hacia su origen. */
+@keyframes gotaSale {
+  30% { scale: 1.04 0.94; opacity: 1; filter: blur(0); }
+  to { scale: 0.7 0.4; transform: translateY(var(--gota-y, -8px)); opacity: 0; filter: blur(6px); }
+}
+@keyframes oleadaSale {
+  30% { scale: 1.02 0.97; opacity: 1; }
+  to { scale: 0.88 0.7; transform: translateY(36px); opacity: 0; filter: blur(4px); }
+}
+@keyframes desaparecer { to { opacity: 0; } }
+
+/* Menús: brotan del botón que los abre y sus opciones caen detrás en cascada */
+.menu {
+  transform-origin: top right;
+  animation: gotaForma 0.52s var(--muelle), gotaNitidez 0.2s ease-out;
+}
+.menu-idiomas { transform-origin: bottom left; --gota-y: 10px; }
+.menu-idiomas.en-pie { transform-origin: bottom center; }
+/* Las opciones crecen en su sitio (sin desplazarse) para no desbordar el menú,
+   que en idiomas tiene scroll: un desplazamiento haría aparecer la barra. */
+@keyframes brotar { from { opacity: 0; scale: 0.94 0.8; } }
+.menu > * { transform-origin: left center; animation: brotar 0.38s var(--muelle-suave) backwards; }
+.menu > :nth-child(2) { animation-delay: 25ms; }
+.menu > :nth-child(3) { animation-delay: 50ms; }
+.menu > :nth-child(4) { animation-delay: 75ms; }
+.menu > :nth-child(5) { animation-delay: 100ms; }
+.menu > :nth-child(6) { animation-delay: 125ms; }
+.menu > :nth-child(7) { animation-delay: 150ms; }
+.menu > :nth-child(n + 8) { animation-delay: 175ms; }
+.menu.saliendo { animation: gotaSale 0.22s var(--sorber) forwards; pointer-events: none; }
+.menu.saliendo > * { animation: none; }
+
+/* Modales: suben como una ola y se asientan */
+.velo { animation: aparecer 0.25s ease-out; }
+.modal { transform-origin: 50% 100%; animation: oleadaForma 0.52s var(--muelle), aparecer 0.18s ease-out; }
+.velo.saliendo { animation: desaparecer 0.22s ease-in forwards; pointer-events: none; }
+.velo.saliendo .modal { animation: oleadaSale 0.22s var(--sorber) forwards; }
+
+/* Avisos flotantes: una gota que cae desde abajo y rebota */
+.tostada, .aviso-cookies {
+  transform-origin: 50% 100%;
+  --gota-y: 24px;
+  animation: gotaForma 0.52s var(--muelle), gotaNitidez 0.2s ease-out;
+}
+.tostada.saliendo, .aviso-cookies.saliendo { animation: gotaSale 0.22s var(--sorber) forwards; pointer-events: none; }
+
+/* Botones: al soltar, el muelle devuelve la forma con un pequeño rebote */
+.btn { transition: transform 0.52s var(--muelle), scale 0.52s var(--muelle), background 0.2s, border-color 0.2s, opacity 0.2s; }
+.btn:active { transform: none; scale: 0.94 0.9; transition-duration: 0.08s; }
+.btn:disabled { scale: none; }
+
+/* Navegadores sin linear(): curva con algo de sobreimpulso */
+@supports not (transition-timing-function: linear(0, 1)) {
+  :root { --muelle: cubic-bezier(0.34, 1.56, 0.64, 1); --muelle-suave: cubic-bezier(0.22, 1, 0.36, 1); }
+}
+
+/* ---------------------------------------------------------------------
+   Compatibilidad del tanque (pestaña Habitantes) y vista previa al añadir
+   --------------------------------------------------------------------- */
+.compat { padding: 16px; display: flex; flex-direction: column; gap: 12px; border-left: 3px solid var(--compat-color, var(--ok)); }
+.compat-ok { --compat-color: var(--ok); }
+.compat-aviso { --compat-color: var(--aviso); }
+.compat-conflicto { --compat-color: var(--peligro); }
+.compat-cabecera { display: flex; align-items: center; gap: 10px; }
+.compat-cabecera > svg { color: var(--compat-color); flex-shrink: 0; }
+.compat-cabecera h2 { flex: 1; }
+.compat-resumen { font-size: 0.8rem; font-weight: 600; color: var(--compat-color); }
+.compat-avisos { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.compat-avisos li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; line-height: 1.45; color: var(--texto-2); }
+.compat-avisos li > svg { flex-shrink: 0; margin-top: 2px; }
+.compat-avisos li.nivel-conflicto > svg, .compat-avisos li.nivel-conflicto b { color: var(--peligro); }
+.compat-avisos li.nivel-aviso > svg, .compat-avisos li.nivel-aviso b { color: var(--aviso); }
+.compat-avisos b { font-weight: 600; margin-right: 2px; }
+.compat-rangos { display: flex; flex-direction: column; gap: 6px; }
+.compat-rangos .chip { cursor: default; font-variant-numeric: tabular-nums; }
+.encaje { padding: 12px 14px; border-radius: var(--radio-m); display: flex; flex-direction: column; gap: 6px; background: rgba(var(--c-tinta), 0.05); border: 1px solid var(--linea); }
+.encaje.ok { border-color: color-mix(in oklab, var(--ok) 45%, transparent); }
+.encaje.con-avisos { border-color: color-mix(in oklab, var(--aviso) 45%, transparent); }
+.encaje .compat-avisos li { font-size: 0.82rem; }
+.datos-ficha { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.dificultad { display: inline-flex; gap: 3px; }
+.dificultad i { width: 6px; height: 6px; border-radius: 50%; background: rgba(var(--c-tinta), 0.18); }
+.dificultad i.llena { background: var(--agua); }
+
+/* ---------------------------------------------------------------------
+   Mantenimiento: tareas del tanque y panel "Hoy" de la portada
+   --------------------------------------------------------------------- */
+.mantenimiento, .panel-hoy { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.mantenimiento-cabecera, .panel-hoy-cabecera { display: flex; align-items: center; gap: 10px; }
+.mantenimiento-cabecera h2, .panel-hoy-cabecera h2 { flex: 1; }
+.panel-hoy-cabecera > svg { color: var(--agua); flex-shrink: 0; }
+.panel-hoy-cuenta { font-size: 0.8rem; font-weight: 600; color: var(--aviso); }
+.panel-hoy.con-pendientes { box-shadow: inset 3px 0 0 var(--aviso), inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 18px 50px -20px var(--sombra); }
+.lista-tareas { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.tarea { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--linea); }
+.tarea:first-child { border-top: 0; padding-top: 2px; }
+.tarea-icono { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; background: var(--agua-tinta); color: var(--agua-texto); }
+.tarea-texto { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+.tarea-texto strong { font-weight: 600; font-size: 0.95rem; }
+.tarea-estado { font-size: 0.8rem; font-weight: 600; white-space: nowrap; color: var(--texto-3); font-variant-numeric: tabular-nums; }
+.tarea-toca .tarea-estado { color: var(--aviso); }
+.tarea-atrasada .tarea-estado { color: var(--peligro); }
+.tarea-atrasada .tarea-icono { background: color-mix(in oklab, var(--peligro) 16%, transparent); color: var(--peligro); }
+@media (max-width: 520px) {
+  .tarea { flex-wrap: wrap; }
+  .tarea-texto { flex-basis: calc(100% - 46px); }
+  .tarea-estado { margin-left: 46px; flex: 1; }
+}
+
+/* ---------------------------------------------------------------------
+   Calculadoras (/herramientas/)
+   --------------------------------------------------------------------- */
+.calc-cabecera { display: flex; flex-direction: column; gap: 8px; padding-top: 8px; }
+.calc-cabecera p { max-width: 60ch; }
+.lista-herramientas { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.tarjeta-herramienta { display: flex; gap: 14px; align-items: flex-start; padding: 16px; transition: transform var(--hover); }
+.tarjeta-herramienta:hover { transform: translateY(-2px); }
+.tarjeta-herramienta .tarea-icono { width: 40px; height: 40px; border-radius: 12px; }
+.tarjeta-herramienta-texto { display: flex; flex-direction: column; gap: 4px; min-width: 0; position: relative; z-index: 2; }
+.tarjeta-herramienta-texto strong { font-weight: 650; font-size: 1.02rem; }
+.calc-panel { padding: 18px; }
+.calc { display: flex; flex-direction: column; gap: 18px; }
+.calc-campos { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); }
+.calc-entrada { position: relative; display: flex; align-items: center; }
+.calc-entrada .entrada { width: 100%; padding-right: 46px; font-variant-numeric: tabular-nums; }
+.calc-unidad { position: absolute; right: 12px; font-size: 0.82rem; color: var(--texto-3); pointer-events: none; }
+.calc-resultados { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr)); }
+.calc-resultado { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: var(--radio-m); background: rgba(var(--c-tinta), 0.05); border: 1px solid var(--linea); min-width: 0; }
+.calc-resultado.destacado { background: var(--agua-tinta); border-color: color-mix(in oklab, var(--agua) 35%, transparent); }
+.calc-valor { font-size: 1.55rem; font-weight: 650; letter-spacing: -0.02em; line-height: 1.2; overflow-wrap: anywhere; }
+.calc-resultado.destacado .calc-valor { color: var(--agua-texto); }
+.calc-resultado.tono-bajo .calc-valor { color: var(--aviso); }
+.calc-resultado.tono-alto .calc-valor { color: var(--peligro); }
+.calc-resultado.tono-optimo .calc-valor { color: var(--ok); }
+.escala-co2 { display: flex; flex-direction: column; gap: 6px; }
+.escala-co2-barra { position: relative; height: 10px; border-radius: 999px; background: linear-gradient(90deg, var(--aviso) 0 25%, var(--ok) 25% 50%, var(--peligro) 50% 100%); opacity: 0.85; }
+.escala-co2-barra span { position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: var(--texto); border: 3px solid var(--abismo); translate: -50% -50%; transition: left 0.38s var(--muelle-suave); }
+.escala-co2-marcas { position: relative; height: 1rem; font-size: 0.72rem; color: var(--texto-3); font-variant-numeric: tabular-nums; }
+.escala-co2-marcas span { position: absolute; translate: -50% 0; }
+.escala-co2-marcas span:first-child { translate: 0 0; }
+.escala-co2-marcas span:last-child { translate: -100% 0; }
+.calc-explicacion, .calc-otras { display: flex; flex-direction: column; gap: 8px; }
+
+/* Tarjeta de tanque: "Tipo · litros" en una sola línea (con puntos suspensivos si no cabe) */
+.tarjeta-tanque .etiqueta-agua { display: flex; max-width: 100%; white-space: nowrap; }
+.tarjeta-tanque .etiqueta-agua > span { overflow: hidden; text-overflow: ellipsis; }
+.tarjeta-tanque-litros {
+  position: absolute; top: 10px; right: 10px; z-index: 1;
+  padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; color: #e6f1f7;
+  background: rgba(5, 11, 20, 0.55); backdrop-filter: blur(10px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.tarjeta-tanque .etiqueta-agua::before { flex-shrink: 0; }
+
+/* Filas de filtros deslizables: el borde derecho se difumina para indicar que hay más.
+   El relleno final deja que el último filtro salga de la zona difuminada al llegar al final. */
+.chips-desliza {
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent);
+  mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent);
+  padding-right: 48px;
+}
+/* En escritorio no hay gesto natural para deslizar en horizontal: los filtros pasan a varias líneas */
+@media (min-width: 721px) {
+  .chips-desliza { flex-wrap: wrap; overflow: visible; padding-right: 0; -webkit-mask-image: none; mask-image: none; }
+}
+
+/* ---------------------------------------------------------------------
+   Chat flotante de escritorio (abajo a la derecha, al estilo de Facebook).
+   La cabecera siempre está visible; el cuerpo se despliega hacia arriba
+   animando su altura con la curva de muelle.
+   En móvil no existe: se usa la página /mensajes/ a pantalla completa.
+   --------------------------------------------------------------------- */
+.chat-flotante {
+  position: fixed; right: 24px; bottom: 0; z-index: 80;
+  width: 340px; display: flex; flex-direction: column;
+  border-radius: 18px 18px 0 0; overflow: hidden;
+  background: rgba(var(--c-superficie), 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 -12px 40px -16px var(--sombra), 0 0 0 1px var(--linea-fuerte);
+}
+.chat-flotante::before { content: none; }
+.chat-cabecera { display: flex; align-items: center; gap: 6px; padding: 6px 8px 6px 6px; min-height: 52px; position: relative; z-index: 2; }
+.chat-alternar {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px;
+  background: none; border: 0; color: inherit; font: inherit; cursor: pointer; text-align: left;
+  padding: 8px 10px; border-radius: 12px;
+}
+.chat-alternar:hover { background: rgba(var(--c-tinta), 0.06); }
+.chat-alternar > svg { color: var(--agua); flex-shrink: 0; }
+.chat-alternar strong { font-weight: 650; }
+.chat-avatares { display: flex; margin-left: auto; }
+.chat-avatares .avatar { box-shadow: 0 0 0 2px rgba(var(--c-superficie), 1); }
+.chat-avatares .avatar + .avatar { margin-left: -8px; }
+.chat-persona { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.chat-persona strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 650; }
+.chat-cuerpo { position: relative; z-index: 2; }
+.chat-interior { height: 0; overflow: hidden; display: flex; flex-direction: column; border-top: 1px solid transparent; transition: height 0.22s var(--sorber), border-color 0.22s; }
+.chat-flotante.abierto .chat-interior { height: min(460px, calc(100dvh - 140px)); border-top-color: var(--linea); transition: height 0.52s var(--muelle-suave), border-color 0.2s; }
+.chat-lista { overflow-y: auto; flex: 1; padding: 4px 0; }
+.chat-lista .conversacion { width: 100%; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; }
+.chat-lista .conversacion:hover { background: var(--agua-tinta); }
+.chat-vacio { padding: 24px 18px; display: flex; flex-direction: column; gap: 6px; }
+.chat-hilo { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 12px; }
+.chat-hilo .burbuja { max-width: 85%; font-size: 0.92rem; }
+.chat-escribir { display: flex; gap: 8px; padding: 10px; border-top: 1px solid var(--linea); }
+.chat-escribir .entrada { flex: 1; padding: 9px 12px; }
+@media (max-width: 960px) { .chat-flotante { display: none; } }
+/* El botón del glosario de la wiki sube para no quedar debajo de la barra del chat */
+@media (min-width: 961px) { body:has(.chat-flotante) .glosario-fab { bottom: 76px; } }
+
+/* Traducción del contenido de los usuarios */
+.nota-traduccion { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin-top: 6px; color: var(--texto-3); }
+.nota-traduccion > svg { flex-shrink: 0; }
+.boton-traduccion { background: none; border: 0; padding: 0; font: inherit; color: var(--agua-texto); cursor: pointer; font-weight: 600; }
+.boton-traduccion:hover { text-decoration: underline; }
+h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
+
+/* Inicio de sesión: separador "¿Nuevo?" antes del botón de crear cuenta */
+.auth-separador { display: flex; align-items: center; gap: 12px; color: var(--texto-3); font-size: 0.85rem; }
+.auth-separador::before, .auth-separador::after { content: ''; flex: 1; height: 1px; background: var(--linea-fuerte); }
+
+/* Acceso con cuentas externas: botones neutros con el logotipo oficial, como piden las guías de cada marca */
+.acceso-social { display: flex; flex-direction: column; gap: 10px; }
+.boton-social { justify-content: center; gap: 10px; background: rgba(var(--c-tinta), 0.06); border-color: var(--linea-fuerte); font-weight: 600; }
+.boton-social:hover { background: rgba(var(--c-tinta), 0.12); }
+.boton-social svg { flex-shrink: 0; }
+
+/* Primeros pasos (portada de usuarios nuevos) */
+.primeros-pasos { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.primeros-pasos-cabecera { display: flex; align-items: center; gap: 10px; }
+.primeros-pasos-cabecera h2 { flex: 1; }
+.primeros-pasos-barra { height: 6px; border-radius: 999px; background: rgba(var(--c-tinta), 0.1); overflow: hidden; }
+.primeros-pasos-barra span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--marca-ola), var(--marca-ola-fin)); transition: width 0.52s var(--muelle-suave); }
+.lista-pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.lista-pasos li { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 0.92rem; }
+.lista-pasos a { color: var(--texto); font-weight: 500; }
+.lista-pasos a:hover { color: var(--agua-texto); text-decoration: underline; }
+.lista-pasos li.hecho { color: var(--texto-3); text-decoration: line-through; text-decoration-color: rgba(var(--c-tinta), 0.3); }
+.paso-marca { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; border: 1.5px solid var(--linea-fuerte); color: #031019; }
+.lista-pasos li.hecho .paso-marca { background: var(--ok); border-color: var(--ok); }
+
+/* Ficha de especie de WikiTank: "Añadir a mi tanque" */
+.anadir-tanque { margin-top: 18px; padding: 16px; border-radius: var(--radio-l); display: flex; flex-direction: column; gap: 12px; background: var(--agua-tinta); border: 1px solid color-mix(in oklab, var(--agua) 30%, transparent); }
+
+/* Logros del perfil */
+.logros { display: flex; flex-direction: column; gap: 12px; }
+.rejilla-logros { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr)); }
+.logro { display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: var(--radio-m); background: rgba(var(--c-tinta), 0.04); border: 1px solid var(--linea); }
+.logro strong { font-weight: 650; font-size: 0.95rem; }
+.logro-icono { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 4px; background: rgba(var(--c-tinta), 0.08); color: var(--texto-3); }
+.logro.conseguido { border-color: color-mix(in oklab, var(--marca-ola) 40%, transparent); background: color-mix(in oklab, var(--marca-ola) 8%, transparent); }
+.logro.conseguido .logro-icono { color: #031019; background: linear-gradient(135deg, var(--marca-ola), var(--marca-ola-fin)); box-shadow: 0 0 22px -6px var(--marca-ola); }
+.logro:not(.conseguido) strong { color: var(--texto-2); }
+.logro-barra { height: 4px; border-radius: 999px; background: rgba(var(--c-tinta), 0.1); overflow: hidden; margin-top: 6px; }
+.logro-barra span { display: block; height: 100%; background: var(--texto-3); border-radius: inherit; }
+
+/* Estadísticas de la tienda (plan Pro) */
+.estad-tienda { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.estad-cabecera { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.estad-cifras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.estad-cifras > div { display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: var(--radio-m); background: rgba(var(--c-tinta), 0.05); }
+.estad-cifras svg { color: var(--agua); margin-bottom: 4px; }
+.estad-cifras .cifra { font-size: 1.5rem; font-weight: 650; letter-spacing: -0.02em; }
+.estad-barras { display: flex; align-items: flex-end; gap: 3px; height: 96px; padding-top: 4px; }
+.estad-barra { flex: 1; height: max(var(--alto), 3px); border-radius: 4px 4px 2px 2px; background: linear-gradient(180deg, var(--marca-ola), var(--marca-ola-fin)); opacity: 0.85; transition: opacity var(--hover); }
+.estad-barra:hover { opacity: 1; }
+.estad-bloqueada { border: 1px dashed color-mix(in oklab, var(--marca-ola) 40%, transparent); }
+@media (max-width: 520px) { .estad-cifras { grid-template-columns: 1fr; } }
+
+/* Panel de administración */
+.admin-cifras { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); }
+.admin-cifras > div { display: flex; flex-direction: column; gap: 2px; padding: 14px; border-radius: var(--radio-m); background: rgba(var(--c-tinta), 0.05); border: 1px solid var(--linea); }
+.admin-cifras .cifra { font-size: 1.6rem; font-weight: 650; letter-spacing: -0.02em; }
+.admin-cifras > .alerta { border-color: color-mix(in oklab, var(--aviso) 50%, transparent); }
+.admin-cifras > .alerta .cifra { color: var(--aviso); }
+.admin-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.admin-lista > li { padding: 14px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.admin-acciones { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Anuncios guardados: marcador sobre la foto de la tarjeta y en la ficha */
+.tarjeta-anuncio-caja { position: relative; display: flex; }
+.tarjeta-anuncio-caja > .tarjeta-anuncio { flex: 1; min-width: 0; }
+.boton-guardar { display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; font: inherit; }
+.boton-guardar.en-tarjeta {
+  position: absolute; top: 8px; right: 8px; z-index: 3; width: 36px; height: 36px; border-radius: 50%;
+  border: 0; color: #e6f1f7; background: rgba(5, 11, 20, 0.55); backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14); transition: transform var(--hover), background var(--hover);
+}
+.boton-guardar.en-tarjeta:hover { transform: scale(1.08); background: rgba(5, 11, 20, 0.75); }
+.boton-guardar.activo { color: var(--marca-ola); }
+.boton-guardar.activo svg { animation: latido 0.4s var(--ease-agua); }
+/* La etiqueta "Destacado" se aparta para dejar sitio al marcador de guardar */
+.tarjeta-anuncio-caja .sello-destacado { right: 52px; top: 15px; }
+
+/* Hilos relacionados al final de un hilo */
+.relacionados { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+
+/* ---------------------------------------------------------------------
+   Portada (visitantes): confianza y beneficios
+   --------------------------------------------------------------------- */
+.portada-confianza { max-width: 46ch; line-height: 1.55; }
+.portada-confianza strong { color: var(--texto); font-weight: 600; }
+.beneficios { max-width: 1080px; margin: 0 auto; padding: 24px 28px 56px; display: flex; flex-direction: column; gap: 28px; }
+.beneficios .titulo-l { max-width: 22ch; }
+.beneficios-rejilla { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.beneficio { display: flex; flex-direction: column; gap: 8px; padding-top: 16px; border-top: 2px solid var(--marca-ola); }
+.beneficio svg { color: var(--agua-texto); margin-bottom: 4px; }
+.beneficio p { font-size: 0.95rem; line-height: 1.55; }
+.beneficios-cierre { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+@media (max-width: 960px) { .beneficios-rejilla { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) {
+  .beneficios { padding: 16px 16px 40px; }
+  .beneficios-rejilla { grid-template-columns: 1fr; gap: 22px; }
+}
+
+/* WikiTank: tanques de la comunidad con la especie */
+.con-especie { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+.con-especie ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.con-especie img.miniatura-tanque { object-fit: cover; }
+
+/* Quien tiene sesión guardada no ve la portada de visitantes mientras se confirma */
+[data-sesion] .portada, [data-sesion] .beneficios { display: none; }
+
+/* Calculadora de compatibilidad de especies */
+.compat-herramienta { display: flex; flex-direction: column; gap: 16px; }
+.compat-herramienta fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.compat-herramienta legend { padding: 0; margin-bottom: 6px; }
+.compat-elegidas { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.compat-elegidas li { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 12px; background: rgba(var(--c-tinta), 0.04); }
+.compat-elegidas img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+.compat-elegida-nombre { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.compat-elegida-nombre a { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.compat-cantidad { display: flex; align-items: center; gap: 6px; }
+.compat-cantidad .cifra { min-width: 2ch; text-align: center; }
+.compat-cta { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--linea); }
+.compat-cta p { flex: 1 1 260px; }
+/* Dentro de un panel con desenfoque, el cristal anidado no desenfoca: fondo opaco */
+.compat-herramienta .sugerencias { background: var(--superficie-2); box-shadow: 0 18px 40px -16px var(--sombra); }
+.compat-herramienta .sugerencias::before { content: none; }
+
+/* Invitación a registrarse (visitantes en páginas compartidas) */
+.invitacion-registro { display: flex; align-items: center; justify-content: space-between; gap: 12px 16px; flex-wrap: wrap; padding: 12px 16px; border-radius: 14px; border: 1px solid color-mix(in oklab, var(--marca-ola) 45%, transparent); background: color-mix(in oklab, var(--marca-ola) 8%, transparent); }
+.invitacion-registro p { flex: 1 1 260px; }
+.enlace-tipo { color: inherit; text-decoration: none; position: relative; z-index: 2; }
+.enlace-tipo:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+/* Hilos parecidos al escribir uno nuevo */
+.hilos-parecidos { display: flex; flex-direction: column; gap: 6px; margin-top: -8px; }
+/* Campos de las calculadoras: si una etiqueta ocupa dos líneas, las cajas siguen alineadas abajo */
+.calc-campos { align-items: end; }
+/* "Opcional" encima de la etiqueta del campo, para que las etiquetas queden alineadas */
+.campo-opcional { display: block; font-size: 0.72rem; font-weight: 500; color: var(--texto-3); margin-bottom: 1px; }
+/* Ficha del tanque en móvil: los botones bajan bajo el título para que el nombre del dueño se lea entero */
+@media (max-width: 520px) {
+  .tanque-cabecera { flex-wrap: wrap; }
+  .tanque-cabecera > div:last-child { order: 2; }
+}
+
+/* "Anuncios en España · Ver todos los países": filtro automático por el país del usuario */
+.aviso-cercania { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; color: var(--texto-2); margin-top: -6px; }
+.aviso-cercania svg { color: var(--agua-texto); }
+.aviso-cercania .enlace { background: none; border: 0; padding: 0; font: inherit; cursor: pointer; margin-left: 4px; }
+/* Tiendas cerca de ti (columna lateral de la portada) */
+.tiendas-cerca { display: flex; flex-direction: column; gap: 8px; }
+.tiendas-cerca ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.logo-tienda.mini-logo { width: 36px; height: 36px; border-radius: 10px; font-size: 0.9rem; flex-shrink: 0; margin: 0; }
+
+/* Orden "Más cerca" (mercado y tiendas) y distancias en las tarjetas */
+.orden-cercania { display: flex; flex-direction: column; gap: 6px; }
+.orden-cercania .chip { align-self: flex-start; display: inline-flex; gap: 5px; align-items: center; }
+.orden-cercania p { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.orden-cercania .enlace { display: inline-flex; gap: 4px; align-items: center; background: none; border: 0; padding: 0; font: inherit; cursor: pointer; }
+.distancia { display: inline-flex; gap: 3px; align-items: center; color: var(--agua-texto); font-weight: 600; }

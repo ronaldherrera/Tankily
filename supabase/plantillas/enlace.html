@@ -1,0 +1,73 @@
+<!doctype html>
+<!-- Generado por scripts/generar_plantillas_email.mjs: edita textos.json y vuelve a generarlo -->
+<html>
+<body style="margin:0;padding:0;background:#eef6fa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef6fa;padding:32px 16px;">
+<tr><td align="center">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;">
+    <tr><td style="padding:0 8px 16px;">
+      <a href="https://tankily.com" style="text-decoration:none;"><img src="https://tankily.com/icons/icon-192.png" width="40" height="40" alt="Tankily" style="display:block;border:0;border-radius:10px;"></a>
+    </td></tr>
+    <tr><td style="background:#ffffff;border-radius:18px;padding:32px 28px;border-top:4px solid #4fc3e8;">
+    {{ if eq (printf "%v" .Data.idioma) "en" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Sign in to Tankily</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Tap the button to sign in without a password. The link works once and expires in one hour.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Sign in</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">If this wasn’t you, ignore this email: nothing will change.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · The aquarium community</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "de" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Bei Tankily anmelden</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Tippe auf die Schaltfläche, um dich ohne Passwort anzumelden. Der Link funktioniert einmal und ist eine Stunde gültig.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Anmelden</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Wenn du das nicht warst, ignoriere diese E-Mail: Es ändert sich nichts.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · Die Aquarium-Community</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "pt" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Entre no Tankily</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Toque no botão para entrar sem senha. O link funciona uma vez e expira em uma hora.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Entrar</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Se não foi você, ignore este e-mail: nada vai mudar.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · A comunidade dos aquários</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "fr" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Connectez-vous à Tankily</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Appuyez sur le bouton pour vous connecter sans mot de passe. Le lien ne fonctionne qu’une fois et expire dans une heure.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Se connecter</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Si ce n’était pas vous, ignorez cet e-mail : rien ne changera.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · La communauté des aquariums</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "it" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Accedi a Tankily</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Tocca il pulsante per accedere senza password. Il link funziona una sola volta e scade tra un’ora.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Accedi</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Se non sei stato tu, ignora questa email: non cambierà nulla.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · La community degli acquari</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "nl" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Inloggen bij Tankily</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Tik op de knop om zonder wachtwoord in te loggen. De link werkt één keer en verloopt over een uur.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Inloggen</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Was jij dit niet? Negeer deze e-mail: er verandert niets.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · De aquariumcommunity</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "pl" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Zaloguj się do Tankily</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Kliknij przycisk, aby zalogować się bez hasła. Link działa jeden raz i wygasa za godzinę.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Zaloguj się</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Jeśli to nie ty, zignoruj tę wiadomość: nic się nie zmieni.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · Społeczność akwarystów</td></tr>
+    {{ else }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Entra en Tankily</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Pulsa el botón para entrar sin contraseña. El enlace solo sirve una vez y caduca en una hora.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Entrar</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Si no has sido tú, ignora este correo: no cambiará nada.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · La comunidad de los acuarios</td></tr>
+    {{ end }}
+  </table>
+</td></tr>
+</table>
+</body>
+</html>

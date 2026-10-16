@@ -1,0 +1,56 @@
+{
+  "comun": {
+    "es": { "pie": "Si no has sido tú, ignora este correo: no cambiará nada.", "lema": "La comunidad de los acuarios" },
+    "en": { "pie": "If this wasn’t you, ignore this email: nothing will change.", "lema": "The aquarium community" },
+    "de": { "pie": "Wenn du das nicht warst, ignoriere diese E-Mail: Es ändert sich nichts.", "lema": "Die Aquarium-Community" },
+    "pt": { "pie": "Se não foi você, ignore este e-mail: nada vai mudar.", "lema": "A comunidade dos aquários" },
+    "fr": { "pie": "Si ce n’était pas vous, ignorez cet e-mail : rien ne changera.", "lema": "La communauté des aquariums" },
+    "it": { "pie": "Se non sei stato tu, ignora questa email: non cambierà nulla.", "lema": "La community degli acquari" },
+    "nl": { "pie": "Was jij dit niet? Negeer deze e-mail: er verandert niets.", "lema": "De aquariumcommunity" },
+    "pl": { "pie": "Jeśli to nie ty, zignoruj tę wiadomość: nic się nie zmieni.", "lema": "Społeczność akwarystów" }
+  },
+  "confirmacion": {
+    "asunto": "Confirma tu cuenta · Confirm your account — Tankily",
+    "es": { "titulo": "Confirma tu cuenta", "texto": "Hola {{ .Data.nombre }}, solo falta un paso para empezar el diario de tu acuario.", "boton": "Confirmar mi cuenta" },
+    "en": { "titulo": "Confirm your account", "texto": "Hi {{ .Data.nombre }}, one more step and you can start your tank’s logbook.", "boton": "Confirm my account" },
+    "de": { "titulo": "Bestätige dein Konto", "texto": "Hallo {{ .Data.nombre }}, nur noch ein Schritt bis zum Logbuch deines Aquariums.", "boton": "Konto bestätigen" },
+    "pt": { "titulo": "Confirme sua conta", "texto": "Olá {{ .Data.nombre }}, falta só um passo para começar o diário do seu aquário.", "boton": "Confirmar minha conta" },
+    "fr": { "titulo": "Confirmez votre compte", "texto": "Bonjour {{ .Data.nombre }}, encore une étape pour commencer le journal de votre aquarium.", "boton": "Confirmer mon compte" },
+    "it": { "titulo": "Conferma il tuo account", "texto": "Ciao {{ .Data.nombre }}, manca solo un passo per iniziare il diario del tuo acquario.", "boton": "Conferma il mio account" },
+    "nl": { "titulo": "Bevestig je account", "texto": "Hoi {{ .Data.nombre }}, nog één stap en je kunt het logboek van je aquarium beginnen.", "boton": "Account bevestigen" },
+    "pl": { "titulo": "Potwierdź konto", "texto": "Cześć {{ .Data.nombre }}, został jeden krok, aby zacząć dziennik akwarium.", "boton": "Potwierdź konto" }
+  },
+  "recuperacion": {
+    "asunto": "Nueva contraseña · New password — Tankily",
+    "es": { "titulo": "Elige una contraseña nueva", "texto": "Hemos recibido una petición para cambiar la contraseña de tu cuenta. El enlace caduca en una hora.", "boton": "Cambiar contraseña" },
+    "en": { "titulo": "Choose a new password", "texto": "We received a request to change your account password. The link expires in one hour.", "boton": "Change password" },
+    "de": { "titulo": "Wähle ein neues Passwort", "texto": "Wir haben eine Anfrage erhalten, das Passwort deines Kontos zu ändern. Der Link ist eine Stunde gültig.", "boton": "Passwort ändern" },
+    "pt": { "titulo": "Escolha uma senha nova", "texto": "Recebemos um pedido para alterar a senha da sua conta. O link expira em uma hora.", "boton": "Alterar senha" },
+    "fr": { "titulo": "Choisissez un nouveau mot de passe", "texto": "Nous avons reçu une demande de changement du mot de passe de votre compte. Le lien expire dans une heure.", "boton": "Changer le mot de passe" },
+    "it": { "titulo": "Scegli una nuova password", "texto": "Abbiamo ricevuto una richiesta di cambiare la password del tuo account. Il link scade tra un’ora.", "boton": "Cambia password" },
+    "nl": { "titulo": "Kies een nieuw wachtwoord", "texto": "We hebben een verzoek ontvangen om het wachtwoord van je account te wijzigen. De link verloopt over een uur.", "boton": "Wachtwoord wijzigen" },
+    "pl": { "titulo": "Ustaw nowe hasło", "texto": "Otrzymaliśmy prośbę o zmianę hasła do twojego konta. Link wygaśnie za godzinę.", "boton": "Zmień hasło" }
+  },
+  "enlace": {
+    "asunto": "Tu enlace para entrar · Your sign-in link — Tankily",
+    "es": { "titulo": "Entra en Tankily", "texto": "Pulsa el botón para entrar sin contraseña. El enlace solo sirve una vez y caduca en una hora.", "boton": "Entrar" },
+    "en": { "titulo": "Sign in to Tankily", "texto": "Tap the button to sign in without a password. The link works once and expires in one hour.", "boton": "Sign in" },
+    "de": { "titulo": "Bei Tankily anmelden", "texto": "Tippe auf die Schaltfläche, um dich ohne Passwort anzumelden. Der Link funktioniert einmal und ist eine Stunde gültig.", "boton": "Anmelden" },
+    "pt": { "titulo": "Entre no Tankily", "texto": "Toque no botão para entrar sem senha. O link funciona uma vez e expira em uma hora.", "boton": "Entrar" },
+    "fr": { "titulo": "Connectez-vous à Tankily", "texto": "Appuyez sur le bouton pour vous connecter sans mot de passe. Le lien ne fonctionne qu’une fois et expire dans une heure.", "boton": "Se connecter" },
+    "it": { "titulo": "Accedi a Tankily", "texto": "Tocca il pulsante per accedere senza password. Il link funziona una sola volta e scade tra un’ora.", "boton": "Accedi" },
+    "nl": { "titulo": "Inloggen bij Tankily", "texto": "Tik op de knop om zonder wachtwoord in te loggen. De link werkt één keer en verloopt over een uur.", "boton": "Inloggen" },
+    "pl": { "titulo": "Zaloguj się do Tankily", "texto": "Kliknij przycisk, aby zalogować się bez hasła. Link działa jeden raz i wygasa za godzinę.", "boton": "Zaloguj się" }
+  },
+  "cambio_email": {
+    "asunto": "Confirma tu nuevo email · Confirm your new email — Tankily",
+    "es": { "titulo": "Confirma tu nuevo email", "texto": "Para usar {{ .NewEmail }} en tu cuenta de Tankily, confirma el cambio.", "boton": "Confirmar el cambio" },
+    "en": { "titulo": "Confirm your new email", "texto": "To use {{ .NewEmail }} for your Tankily account, confirm the change.", "boton": "Confirm the change" },
+    "de": { "titulo": "Bestätige deine neue E-Mail", "texto": "Um {{ .NewEmail }} für dein Tankily-Konto zu verwenden, bestätige die Änderung.", "boton": "Änderung bestätigen" },
+    "pt": { "titulo": "Confirme seu novo e-mail", "texto": "Para usar {{ .NewEmail }} na sua conta do Tankily, confirme a alteração.", "boton": "Confirmar a alteração" },
+    "fr": { "titulo": "Confirmez votre nouvel e-mail", "texto": "Pour utiliser {{ .NewEmail }} avec votre compte Tankily, confirmez le changement.", "boton": "Confirmer le changement" },
+    "it": { "titulo": "Conferma la nuova email", "texto": "Per usare {{ .NewEmail }} nel tuo account Tankily, conferma la modifica.", "boton": "Conferma la modifica" },
+    "nl": { "titulo": "Bevestig je nieuwe e-mailadres", "texto": "Bevestig de wijziging om {{ .NewEmail }} voor je Tankily-account te gebruiken.", "boton": "Wijziging bevestigen" },
+    "pl": { "titulo": "Potwierdź nowy adres e-mail", "texto": "Aby używać {{ .NewEmail }} w koncie Tankily, potwierdź zmianę.", "boton": "Potwierdź zmianę" }
+  }
+}

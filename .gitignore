@@ -48,3 +48,7 @@ brain/
 implementation_plan.md
 task.md
 walkthrough.md
+public/ads.txt
+
+# (la caché de scripts/especies está ahora en node_modules/.cache)
+scripts/especies/cache/

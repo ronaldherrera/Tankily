@@ -1,87 +1,101 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-import { formatRelativeTime } from "@/lib/formatRelativeTime";
+import { useEffect, useState } from 'react';
+import { Send, Trash2 } from 'lucide-react';
+import { supabase, AUTOR } from '@/lib/supabase';
+import { useSesion } from '@/lib/sesion';
+import { formatRelativeTime } from '@/lib/formatRelativeTime';
+import { Avatar, NombreAutor, useTostada } from '@/components/ui';
+import TextoTraducible from './TextoTraducible';
+import { detectarIdioma } from '@/lib/traduccion';
+import { useT } from '@/i18n/IdiomaProvider';
+import { mensajeError } from '@/lib/errores';
 
-export default function CommentSection({ postId, user }) {
-  const [comentarios, setComentarios] = useState([]);
-  const [nuevoComentario, setNuevoComentario] = useState("");
-  const [loading, setLoading] = useState(true);
+export default function CommentSection({ postId, autorPostId, onCambioTotal }) {
+  const { usuario, perfil } = useSesion();
+  const { t, lang } = useT();
+  const tostada = useTostada();
+  const [comentarios, setComentarios] = useState(null);
+  const [texto, setTexto] = useState('');
+  const [enviando, setEnviando] = useState(false);
 
   useEffect(() => {
-    cargarComentarios();
+    supabase
+      .from('comentarios')
+      .select(`id, contenido, idioma, creado_en, usuario_id, ${AUTOR}`)
+      .eq('publicacion_id', postId)
+      .order('creado_en', { ascending: true })
+      .then(({ data }) => setComentarios(data || []));
   }, [postId]);
 
-  const cargarComentarios = async () => {
-    const { data, error } = await supabase
-      .from('vista_comentarios_posteos')
-      .select('*')
-      .eq('publicacion_id', postId)
-      .order('creado_en', { ascending: true });
-
-    if (!error) {
-      setComentarios(data || []);
-    }
-    setLoading(false);
-  };
-
-  const enviarComentario = async (e) => {
+  async function enviar(e) {
     e.preventDefault();
-    if (!nuevoComentario.trim() || !user) return;
-
-    const { error } = await supabase
+    const contenido = texto.trim();
+    if (!contenido) return;
+    setEnviando(true);
+    const { data, error } = await supabase
       .from('comentarios')
-      .insert([{ 
-        publicacion_id: postId,
-        usuario_id: user.id,
-        contenido: nuevoComentario
-      }]);
-
-    if (!error) {
-      setNuevoComentario("");
-      cargarComentarios();
+      .insert({ publicacion_id: postId, contenido, idioma: await detectarIdioma(contenido, lang) })
+      .select(`id, contenido, idioma, creado_en, usuario_id, ${AUTOR}`)
+      .single();
+    setEnviando(false);
+    if (error) tostada(mensajeError(error, t));
+    else {
+      setComentarios((c) => [...c, data]);
+      setTexto('');
+      onCambioTotal?.(1);
     }
-  };
+  }
+
+  async function borrar(id) {
+    const { error } = await supabase.from('comentarios').delete().eq('id', id);
+    if (!error) {
+      setComentarios((c) => c.filter((x) => x.id !== id));
+      onCambioTotal?.(-1);
+    }
+  }
 
   return (
-    <div style={{ marginTop: '1.5rem', borderLeft: '2px solid #eee', paddingLeft: '1rem' }}>
-      {user && (
-        <form onSubmit={enviarComentario} style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-          <input 
-            placeholder="Escribe tu respuesta..." 
-            value={nuevoComentario}
-            onChange={(e) => setNuevoComentario(e.target.value)}
-            style={{ flex: 1, padding: '0.5rem', border: '1px solid #eee', borderRadius: '4px', fontSize: '0.9rem' }}
-          />
-          <button 
-            type="submit"
-            disabled={!nuevoComentario.trim()}
-            style={{ 
-              background: 'black', color: 'white', border: 'none', 
-              padding: '0.4rem 1rem', borderRadius: '4px', cursor: 'pointer',
-              opacity: !nuevoComentario.trim() ? 0.5 : 1
-            }}
-          >
-            Responder
-          </button>
-        </form>
-      )}
-      
-      {loading ? (
-        <small style={{ color: 'gray' }}>Cargando comentarios...</small>
+    <div className="comentarios">
+      {comentarios === null ? (
+        <p className="texto-3 pequeno">{t('comentarios.cargando')}</p>
       ) : comentarios.length === 0 ? (
-        <small style={{ color: 'gray' }}>Aún no hay respuestas.</small>
+        <p className="texto-3 pequeno">{t('comentarios.ninguno')}</p>
       ) : (
-        comentarios.map(c => (
-          <div key={c.id} style={{ marginBottom: '0.8rem', fontSize: '0.9rem' }}>
-            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-              <strong>@{c.nombre_usuario || 'Acuarista'}</strong>
-              <span style={{ color: 'gray', fontSize: '0.8rem' }}>{formatRelativeTime(c.creado_en)}</span>
+        comentarios.map((c) => (
+          <div key={c.id} className="comentario">
+            <Avatar perfil={c.autor} tamano={30} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'baseline' }}>
+                <NombreAutor perfil={c.autor} conUsuario={false} />
+                <span className="texto-3 mini">{formatRelativeTime(c.creado_en)}</span>
+                {usuario && (usuario.id === c.usuario_id || usuario.id === autorPostId) && (
+                  <button className="btn btn-fantasma btn-icono btn-s" style={{ marginLeft: 'auto', width: 26, height: 26 }} onClick={() => borrar(c.id)} aria-label={t('comentarios.eliminar')}>
+                    <Trash2 size={14} />
+                  </button>
+                )}
+              </div>
+              <TextoTraducible tabla="comentarios" id={c.id} texto={c.contenido} idioma={c.idioma} />
             </div>
-            <p style={{ marginTop: '0.2rem' }}>{c.contenido}</p>
           </div>
         ))
+      )}
+
+      {usuario && (
+        <form onSubmit={enviar} className="comentario" style={{ alignItems: 'center' }}>
+          <Avatar perfil={perfil} tamano={30} />
+          <input
+            className="entrada"
+            placeholder={t('comentarios.escribe')}
+            value={texto}
+            maxLength={1000}
+            onChange={(e) => setTexto(e.target.value)}
+            aria-label={t('comentarios.etiqueta')}
+          />
+          <button className="btn btn-primario btn-icono" disabled={enviando || !texto.trim()} aria-label={t('comentarios.enviar')}>
+            <Send size={16} />
+          </button>
+        </form>
       )}
     </div>
   );

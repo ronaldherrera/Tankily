@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Tankily</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100dvh; display: grid; place-items: center; padding: 24px; background: #06101d; color: #e8f4fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 420px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  img { width: 56px; height: 56px; }
+  h1 { margin: 8px 0 0; font-size: 1.4rem; }
+  p { margin: 0; color: #a9bfcf; line-height: 1.55; }
+  button { margin-top: 8px; border: 0; border-radius: 999px; padding: 12px 22px; font: inherit; font-weight: 600; background: #9fe7f5; color: #06101d; cursor: pointer; }
+  button:focus-visible { outline: 2px solid #9fe7f5; outline-offset: 3px; }
+</style>
+</head>
+<body>
+<main>
+  <img src="/icon.svg" alt="Tankily">
+  <h1 id="titulo">Sin conexión</h1>
+  <p id="texto">No hay conexión a internet. Cuando vuelva, pulsa Reintentar.</p>
+  <button id="boton" type="button" onclick="location.reload()">Reintentar</button>
+</main>
+<script>
+  // Página que muestra el service worker (/sw.js) cuando no se puede abrir una página por falta de red
+  (function () {
+    var T = {
+      es: ['Sin conexión', 'No hay conexión a internet. Cuando vuelva, pulsa Reintentar.', 'Reintentar'],
+      en: ['You’re offline', 'There’s no internet connection. When it’s back, tap Try again.', 'Try again'],
+      de: ['Keine Verbindung', 'Es gibt keine Internetverbindung. Sobald sie zurück ist, tippe auf Erneut versuchen.', 'Erneut versuchen'],
+      pt: ['Sem conexão', 'Não há conexão com a internet. Quando voltar, toque em Tentar de novo.', 'Tentar de novo'],
+      fr: ['Hors ligne', 'Pas de connexion internet. Quand elle revient, appuyez sur Réessayer.', 'Réessayer'],
+      it: ['Sei offline', 'Non c’è connessione a internet. Quando torna, tocca Riprova.', 'Riprova'],
+      nl: ['Geen verbinding', 'Er is geen internetverbinding. Zodra die terug is, tik op Opnieuw proberen.', 'Opnieuw proberen'],
+      pl: ['Brak połączenia', 'Brak połączenia z internetem. Gdy wróci, kliknij Spróbuj ponownie.', 'Spróbuj ponownie']
+    };
+    var m = location.pathname.match(/^\/([a-z]{2})(\/|$)/);
+    var l = m && T[m[1]] ? m[1] : (navigator.language || '').slice(0, 2);
+    if (!T[l]) l = 'es';
+    document.documentElement.lang = l;
+    document.getElementById('titulo').textContent = T[l][0];
+    document.getElementById('texto').textContent = T[l][1];
+    document.getElementById('boton').textContent = T[l][2];
+    // Al recuperar la conexión, se vuelve solo a la página que se quería abrir
+    window.addEventListener('online', function () { location.reload(); });
+  })();
+</script>
+</body>
+</html>

@@ -1,38 +1,27 @@
 "use client";
 
 import React from 'react';
-import Link from 'next/link';
+import Link from '@/components/Enlace';
+import { useT } from '@/i18n/IdiomaProvider';
+
+const legible = (segmento) => {
+  const t = segmento.replace(/-/g, ' ');
+  return t.charAt(0).toUpperCase() + t.slice(1);
+};
 
 export default function Breadcrumbs({ path = [] }) {
+  const { t } = useT();
   return (
-    <nav style={{ 
-      width: '100%',
-      display: 'flex', 
-      gap: '0.3rem', 
-      fontSize: '0.65rem', 
-      color: '#ccc', 
-      marginBottom: 0, 
-      alignItems: 'center', 
-      fontWeight: '500', 
-      textTransform: 'uppercase', 
-      letterSpacing: '0.5px' 
-    }}>
-      <Link href="/wiki" style={{ textDecoration: 'none', color: '#999', transition: 'color 0.2s' }} onMouseEnter={(e) => e.target.style.color = '#000'} onMouseLeave={(e) => e.target.style.color = '#999'}>WIKITANK</Link>
+    <nav className="wiki-migas cristal cristal-fijo" aria-label={t('wiki.ruta')}>
+      <Link href="/wiki">WikiTank</Link>
       {path.map((segment, idx) => (
         <React.Fragment key={idx}>
-          <span style={{ opacity: 0.3 }}>/</span>
-          <Link 
-            href={`/wiki/explorer/${path.slice(0, idx + 1).join('/')}`} 
-            style={{ 
-              textDecoration: 'none', 
-              color: idx === path.length - 1 ? '#000' : '#999',
-              fontWeight: idx === path.length - 1 ? '800' : '600',
-              transition: 'color 0.2s'
-            }}
-            onMouseEnter={(e) => { if (idx !== path.length - 1) e.target.style.color = '#000' }}
-            onMouseLeave={(e) => { if (idx !== path.length - 1) e.target.style.color = '#999' }}
+          <span className="sep" aria-hidden="true">/</span>
+          <Link
+            href={`/wiki/explorer/${path.slice(0, idx + 1).join('/')}`}
+            aria-current={idx === path.length - 1 ? 'page' : undefined}
           >
-            {segment.replace(/-/g, ' ').toUpperCase()}
+            {legible(segment)}
           </Link>
         </React.Fragment>
       ))}

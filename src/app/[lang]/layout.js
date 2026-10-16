@@ -1,26 +1,72 @@
-import "./globals.css";
-import Header from "@/components/Header";
-import TopBar from "@/components/TopBar";
+import { notFound } from 'next/navigation';
+import '../globals.css';
+import { fredoka, geist } from '@/lib/fuentes';
+import { SesionProvider } from '@/lib/sesion';
+import { TostadaProvider } from '@/components/ui';
+import AppShell from '@/components/shell/AppShell';
+import { SCRIPT_TEMA } from '@/lib/scriptTema';
+import { IDIOMAS, LOCALES, esIdioma } from '@/i18n/config';
+import { IdiomaProvider } from '@/i18n/IdiomaProvider';
+import { traducir } from '@/i18n/traducir';
+import { diccionarios } from '@/i18n/diccionarios';
 
-export const metadata = {
-  title: "Tankily - Red Social Acuariofilia",
-  description: "Comunidad para apasionados de los acuarios.",
+const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
+
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return IDIOMAS.map((lang) => ({ lang }));
+}
+
+export async function generateMetadata({ params }) {
+  const { lang } = await params;
+  const t = (clave) => traducir(lang, clave);
+  return {
+    metadataBase: new URL(URL_SITIO),
+    title: { default: t('meta.titulo'), template: '%s · Tankily' },
+    description: t('meta.descripcion'),
+    icons: { icon: [{ url: '/icon.svg', type: 'image/svg+xml' }], apple: '/apple-touch-icon.png' },
+    manifest: '/manifest.webmanifest',
+    appleWebApp: { capable: true, title: 'Tankily', statusBarStyle: 'black-translucent' },
+    keywords: t('meta.palabrasClave'),
+    openGraph: {
+      type: 'website',
+      locale: LOCALES[lang].replace('-', '_'),
+      siteName: 'Tankily',
+      title: t('meta.titulo'),
+      description: t('meta.descripcionCorta'),
+      images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Tankily' }],
+    },
+    twitter: { card: 'summary_large_image', images: ['/og.jpg'] },
+  };
+}
+
+export const viewport = {
+  themeColor: '#050b14',
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children, params }) {
+  const { lang } = await params;
+  if (!esIdioma(lang)) notFound();
+
   return (
-    <html lang="es">
-      <body style={{ display: 'flex', minHeight: '100vh', margin: 0 }}>
-        <Header />
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <TopBar />
-          <main style={{ flex: 1, width: '100%', padding: 0, margin: '0 auto' }}>
-            {children}
-          </main>
-          <footer style={{ padding: '2rem', textAlign: 'center', borderTop: '1px solid #eee', fontSize: '0.8rem', color: 'gray' }}>
-            &copy; 2026 Tankily - Comunidad de Acuariofilia
-          </footer>
-        </div>
+    <html lang={lang} data-tema="oscuro" className={`${geist.variable} ${fredoka.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
+        {/* Casi todas las páginas piden datos a Supabase al cargar: se abre la conexión cuanto antes */}
+        {process.env.NEXT_PUBLIC_SUPABASE_URL && <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} crossOrigin="anonymous" />}
+      </head>
+      <body>
+        <IdiomaProvider lang={lang} diccionario={diccionarios[lang]}>
+          <SesionProvider>
+            <TostadaProvider>
+              <AppShell>{children}</AppShell>
+            </TostadaProvider>
+          </SesionProvider>
+        </IdiomaProvider>
       </body>
     </html>
   );

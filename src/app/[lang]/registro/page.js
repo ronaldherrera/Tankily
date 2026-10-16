@@ -1,89 +1,81 @@
 'use client';
 
 import { useState } from 'react';
+import Link, { useNavegar } from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
+import { Marca } from '@/components/shell/AppShell';
+import { useT } from '@/i18n/IdiomaProvider';
+import AccesoSocial from '@/components/auth/AccesoSocial';
 
 export default function RegistroPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [mensaje, setMensaje] = useState('');
+  const router = useNavegar();
+  const { t, lang } = useT();
+  const [f, setF] = useState({ nombre: '', usuario: '', email: '', password: '' });
+  const [acepta, setAcepta] = useState(false);
+  const [error, setError] = useState('');
+  const [enviado, setEnviado] = useState(false);
   const [cargando, setCargando] = useState(false);
+  const cambiar = (c) => (e) => setF({ ...f, [c]: e.target.value });
 
-  const handleRegistro = async (e) => {
+  async function registrar(e) {
     e.preventDefault();
+    setError('');
+    const usuario = f.usuario.trim().toLowerCase();
+    if (!/^[a-z0-9_]{3,20}$/.test(usuario)) return setError(t('registro.errorUsuario'));
+    if (f.password.length < 8) return setError(t('registro.errorContrasena'));
     setCargando(true);
-    setMensaje('');
+    const { data: ocupado } = await supabase.from('perfiles').select('id').eq('usuario', usuario).maybeSingle();
+    if (ocupado) { setCargando(false); return setError(t('registro.usuarioCogido')); }
 
     const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
+      email: f.email.trim(),
+      password: f.password,
+      options: {
+        // idioma: para enviar los emails de la cuenta en su idioma (plantillas en supabase/plantillas)
+        data: { usuario, nombre: f.nombre.trim(), idioma: lang },
+        emailRedirectTo: `${window.location.origin}/${lang}/`,
+      },
     });
-
-    if (error) {
-      setMensaje(`Error: ${error.message}`);
-    } else {
-      setMensaje('¡Registro exitoso! Revisa tu email para confirmar la cuenta.');
-    }
     setCargando(false);
-  };
+    if (error) return setError(error.message === 'User already registered' ? t('registro.emailExiste') : error.message);
+    if (data.session) router.push('/tanques/nuevo/');
+    else setEnviado(true);
+  }
+
+  if (enviado) {
+    return (
+      <div className="auth cristal cristal-refracta">
+        <Marca tamano={48} />
+        <h1 className="titulo-l">{t('registro.revisaCorreo')}</h1>
+        <p className="texto-2">{t('registro.enlaceEnviado', { email: f.email })}</p>
+        <Link href="/acceder/" className="btn">{t('registro.irAEntrar')}</Link>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ maxWidth: '400px', margin: '4rem auto', padding: '2rem', border: '1px solid black' }}>
-      <h1>Crear Cuenta</h1>
-      <p>Únete a la comunidad de Tankily.</p>
-
-      <form onSubmit={handleRegistro} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <label htmlFor="email">Email</label>
-          <input 
-            id="email"
-            name="email"
-            type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            required 
-            style={{ padding: '0.5rem', border: '1px solid black' }}
-          />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <label htmlFor="password">Contraseña</label>
-          <input 
-            id="password"
-            name="password"
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-            style={{ padding: '0.5rem', border: '1px solid black' }}
-          />
-        </div>
-
-        <button 
-          type="submit" 
-          disabled={cargando}
-          style={{ 
-            padding: '1rem', 
-            background: 'black', 
-            color: 'white', 
-            border: 'none', 
-            cursor: cargando ? 'not-allowed' : 'pointer' 
-          }}
-        >
-          {cargando ? 'Registrando...' : 'Registrarse'}
-        </button>
-      </form>
-
-      {mensaje && (
-        <div style={{ marginTop: '1rem', padding: '1rem', border: '1px solid black', background: mensaje.includes('Error') ? '#fee' : '#efe' }}>
-          {mensaje}
-        </div>
-      )}
-
-      <p style={{ marginTop: '2rem' }}>
-        ¿Ya tienes cuenta? <Link href="/acceder" style={{ fontWeight: 'bold' }}>Inicia sesión aquí</Link>
-      </p>
-    </div>
+    <form className="auth cristal cristal-refracta" onSubmit={registrar}>
+      <Marca tamano={48} />
+      <div>
+        <h1 className="titulo-l">{t('registro.titulo')}</h1>
+        <p className="texto-2">{t('registro.subtitulo')}</p>
+      </div>
+      <AccesoSocial registro />
+      <label className="campo"><span>{t('registro.nombre')}</span><input className="entrada" autoComplete="name" maxLength={50} value={f.nombre} onChange={cambiar('nombre')} /></label>
+      <label className="campo">
+        <span>{t('registro.usuario')}</span>
+        <input className="entrada" required autoCapitalize="none" maxLength={20} value={f.usuario} onChange={cambiar('usuario')} placeholder={t('registro.usuarioEj')} />
+        <small>{t('registro.asiTeMencionaran', { usuario: f.usuario.trim().toLowerCase() || 'usuario' })}</small>
+      </label>
+      <label className="campo"><span>{t('acceso.email')}</span><input className="entrada" type="email" autoComplete="email" required value={f.email} onChange={cambiar('email')} /></label>
+      <label className="campo"><span>{t('acceso.contrasena')}</span><input className="entrada" type="password" autoComplete="new-password" required minLength={8} value={f.password} onChange={cambiar('password')} /><small>{t('registro.minimo')}</small></label>
+      <label className="casilla">
+        <input type="checkbox" required checked={acepta} onChange={(e) => setAcepta(e.target.checked)} />
+        <span>{t('registro.acepto')} <Link className="enlace" href="/legal/normas/" target="_blank">{t('registro.normas')}</Link> {t('registro.yLa')} <Link className="enlace" href="/legal/privacidad/" target="_blank">{t('registro.privacidad')}</Link>.</span>
+      </label>
+      {error && <p className="aviso error" role="alert">{error}</p>}
+      <button className="btn btn-primario" disabled={cargando || !acepta}>{cargando ? t('registro.creando') : t('registro.crear')}</button>
+      <p className="pequeno texto-2">{t('registro.yaTienes')} <Link className="enlace" href="/acceder/">{t('registro.entra')}</Link></p>
+    </form>
   );
 }

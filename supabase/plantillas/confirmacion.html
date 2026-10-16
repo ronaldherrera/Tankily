@@ -1,0 +1,73 @@
+<!doctype html>
+<!-- Generado por scripts/generar_plantillas_email.mjs: edita textos.json y vuelve a generarlo -->
+<html>
+<body style="margin:0;padding:0;background:#eef6fa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef6fa;padding:32px 16px;">
+<tr><td align="center">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;">
+    <tr><td style="padding:0 8px 16px;">
+      <a href="https://tankily.com" style="text-decoration:none;"><img src="https://tankily.com/icons/icon-192.png" width="40" height="40" alt="Tankily" style="display:block;border:0;border-radius:10px;"></a>
+    </td></tr>
+    <tr><td style="background:#ffffff;border-radius:18px;padding:32px 28px;border-top:4px solid #4fc3e8;">
+    {{ if eq (printf "%v" .Data.idioma) "en" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Confirm your account</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Hi {{ .Data.nombre }}, one more step and you can start your tank’s logbook.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Confirm my account</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">If this wasn’t you, ignore this email: nothing will change.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · The aquarium community</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "de" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Bestätige dein Konto</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Hallo {{ .Data.nombre }}, nur noch ein Schritt bis zum Logbuch deines Aquariums.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Konto bestätigen</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Wenn du das nicht warst, ignoriere diese E-Mail: Es ändert sich nichts.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · Die Aquarium-Community</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "pt" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Confirme sua conta</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Olá {{ .Data.nombre }}, falta só um passo para começar o diário do seu aquário.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Confirmar minha conta</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Se não foi você, ignore este e-mail: nada vai mudar.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · A comunidade dos aquários</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "fr" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Confirmez votre compte</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Bonjour {{ .Data.nombre }}, encore une étape pour commencer le journal de votre aquarium.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Confirmer mon compte</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Si ce n’était pas vous, ignorez cet e-mail : rien ne changera.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · La communauté des aquariums</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "it" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Conferma il tuo account</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Ciao {{ .Data.nombre }}, manca solo un passo per iniziare il diario del tuo acquario.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Conferma il mio account</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Se non sei stato tu, ignora questa email: non cambierà nulla.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · La community degli acquari</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "nl" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Bevestig je account</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Hoi {{ .Data.nombre }}, nog één stap en je kunt het logboek van je aquarium beginnen.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Account bevestigen</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Was jij dit niet? Negeer deze e-mail: er verandert niets.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · De aquariumcommunity</td></tr>
+    {{ else if eq (printf "%v" .Data.idioma) "pl" }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Potwierdź konto</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Cześć {{ .Data.nombre }}, został jeden krok, aby zacząć dziennik akwarium.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Potwierdź konto</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Jeśli to nie ty, zignoruj tę wiadomość: nic się nie zmieni.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · Społeczność akwarystów</td></tr>
+    {{ else }}
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:#0b1f33;font-weight:700;">Confirma tu cuenta</h1>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#3c5266;">Hola {{ .Data.nombre }}, solo falta un paso para empezar el diario de tu acuario.</p>
+      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:#0b1f33;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">Confirmar mi cuenta</a></p>
+      <p style="margin:0;font-size:13px;line-height:1.5;color:#7a8fa3;">Si no has sido tú, ignora este correo: no cambiará nada.</p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;color:#7a8fa3;text-align:center;">Tankily · La comunidad de los acuarios</td></tr>
+    {{ end }}
+  </table>
+</td></tr>
+</table>
+</body>
+</html>

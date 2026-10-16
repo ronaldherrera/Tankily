@@ -22,11 +22,25 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Si algo de esto falla, no se publica nada
+      - name: Lint, textos y pruebas
+        run: |
+          npm run lint
+          npm run i18n
+          npm test
+
       - name: Build and Export
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+          NEXT_PUBLIC_EMAIL_CONTACTO: ${{ vars.NEXT_PUBLIC_EMAIL_CONTACTO }}
+          NEXT_PUBLIC_ADSENSE_CLIENT: ${{ vars.NEXT_PUBLIC_ADSENSE_CLIENT }}
+          NEXT_PUBLIC_ADSENSE_SLOT: ${{ vars.NEXT_PUBLIC_ADSENSE_SLOT }}
         run: npm run build
+
+      - name: Enlaces internos rotos
+        run: npm run enlaces
 
       - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5

@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Manual de marca de Tankily: logotipo, versiones, color, tipografía, cristal, movimiento, voz y aplicaciones.">
+<meta name="theme-color" content="#050b14">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%224%202%2056%2056%22%3E%20%3Cstyle%3E%20.t%20%7B%20stroke%3A%20%230b2236%3B%20%7D%20%40media%20(prefers-color-scheme%3A%20dark)%20%7B%20.t%20%7B%20stroke%3A%20%23e6f1f7%3B%20%7D%20%7D%20%3C%2Fstyle%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22ola%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%220%22%3E%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%234fc3e8%22%2F%3E%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%232f80ff%22%2F%3E%20%3C%2FlinearGradient%3E%20%3C%2Fdefs%3E%20%3Cpath%20class%3D%22t%22%20d%3D%22M29%2010V40a12%2012%200%200%200%2012%2012h3%22%20fill%3D%22none%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M14%2026c5-4.2%2010-4.2%2015%200s10%204.2%2015%200%22%20fill%3D%22none%22%20stroke%3D%22url(%23ola)%22%20stroke-width%3D%229.5%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Ccircle%20cx%3D%2251%22%20cy%3D%2213%22%20r%3D%224.6%22%20fill%3D%22%234fc3e8%22%2F%3E%20%3C%2Fsvg%3E">
+<title>Manual de marca Tankily</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: índice fijo a la izquierda + columna de capítulos; cada capítulo alterna texto y láminas de muestra. */
+:root {
+  --abismo: #050b14;
+  --fondo: #06101d;
+  --fondo-luz: #0d2a44;
+  --superficie: #0a1828;
+  --superficie-2: #0f2135;
+  --texto: #e6f1f7;
+  --texto-2: #a9bfce;
+  --texto-3: #6f879a;
+  --linea: rgba(170, 215, 245, 0.10);
+  --linea-fuerte: rgba(170, 215, 245, 0.22);
+  --agua: #9fe7f5;
+  --ola-fin: #5aa8ff;
+  --tinta: #e6f1f7;
+  --mal: #ff7b7b;
+  --bien: #7cdc8c;
+  --fuente: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fuente-logo: 'Fredoka', 'Geist', system-ui, sans-serif;
+  --fuente-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --abismo: #e9f1f7; --fondo: #f4f8fb; --fondo-luz: #d4e8f6; --superficie: #ffffff; --superficie-2: #f2f7fb;
+    --texto: #0b2236; --texto-2: #3c566b; --texto-3: #647d91;
+    --linea: rgba(30, 75, 120, 0.12); --linea-fuerte: rgba(30, 75, 120, 0.24);
+    --agua: #4fc3e8; --ola-fin: #2f80ff; --tinta: #0b2236; --mal: #d64545; --bien: #2f9a4a;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --abismo: #e9f1f7; --fondo: #f4f8fb; --fondo-luz: #d4e8f6; --superficie: #ffffff; --superficie-2: #f2f7fb;
+  --texto: #0b2236; --texto-2: #3c566b; --texto-3: #647d91;
+  --linea: rgba(30, 75, 120, 0.12); --linea-fuerte: rgba(30, 75, 120, 0.24);
+  --agua: #4fc3e8; --ola-fin: #2f80ff; --tinta: #0b2236; --mal: #d64545; --bien: #2f9a4a;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(120% 60% at 50% -10%, var(--fondo-luz), transparent 60%), linear-gradient(180deg, var(--fondo), var(--abismo) 60%);
+  background-color: var(--abismo);
+  color: var(--texto);
+  font: 16px/1.6 var(--fuente);
+  -webkit-font-smoothing: antialiased;
+}
+.marco { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 0 96px; display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 56px; }
+@media (max-width: 900px) { .marco { grid-template-columns: 1fr; gap: 0; } .indice { display: none; } }
+
+/* Índice */
+.indice { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; padding-top: 40px; max-height: 100vh; overflow-y: auto; }
+.indice .marca-mini { display: flex; margin-bottom: 28px; }
+.indice ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: cap; }
+.indice a { display: flex; gap: 10px; padding: 6px 10px; border-radius: 10px; color: var(--texto-3); text-decoration: none; font-size: 0.88rem; }
+.indice a::before { counter-increment: cap; content: counter(cap); width: 1.2em; color: var(--texto-3); font-variant-numeric: tabular-nums; opacity: .7; }
+.indice a:hover, .indice a:focus-visible { color: var(--texto); background: var(--linea); }
+
+/* Tipografía del manual */
+h1, h2, h3 { margin: 0; text-wrap: balance; letter-spacing: -0.03em; }
+h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); font-weight: 750; line-height: 1.05; }
+h3 { font-size: 1.15rem; font-weight: 650; letter-spacing: -0.015em; }
+p { margin: 0; max-width: 64ch; color: var(--texto-2); }
+p strong { color: var(--texto); font-weight: 600; }
+.capitulo { padding-top: 88px; display: grid; gap: 28px; scroll-margin-top: 16px; }
+.capitulo > header { display: grid; gap: 12px; }
+.num { font: 500 0.85rem var(--fuente-mono); color: var(--agua); }
+.bloque { display: grid; gap: 14px; }
+.nota { font-size: 0.82rem; color: var(--texto-3); }
+code, .mono { font-family: var(--fuente-mono); font-size: 0.86em; }
+a { color: var(--agua); }
+:focus-visible { outline: 2px solid var(--agua); outline-offset: 2px; }
+
+/* Láminas */
+.rejilla { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+.rejilla.dos { grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); }
+.lamina { border: 1px solid var(--linea); border-radius: 20px; padding: 24px; min-height: 180px; display: grid; place-items: center; gap: 12px; position: relative; min-width: 0; }
+.lamina .pie { justify-self: start; align-self: end; font-size: 0.78rem; color: var(--texto-3); }
+.l-oscura { background: #06101d; color: #e6f1f7; --agua-l: #9fe7f5; --fin-l: #5aa8ff; }
+.l-oscura .pie { color: #6f879a; }
+.l-clara { background: #f4f8fb; color: #0b2236; border-color: #dbe6ee; --agua-l: #4fc3e8; --fin-l: #2f80ff; }
+.l-clara .pie { color: #647d91; }
+.l-agua { background: #9fe7f5; color: #06101d; border-color: transparent; }
+.l-agua .pie { color: #1d4a63; }
+.l-hondo { background: #2f6fff; color: #ffffff; border-color: transparent; }
+.l-hondo .pie { color: #dbe7ff; }
+
+/* Logotipo */
+.logo { display: inline-flex; align-items: baseline; font: 500 2.6rem/1 var(--fuente-logo); letter-spacing: -0.01em; white-space: nowrap; }
+.logo svg { height: 0.94em; width: 0.675em; margin-right: 0.01em; transform: translateY(0.11em); overflow: visible; flex-shrink: 0; }
+.logo.xl { font-size: clamp(3.6rem, 11vw, 7.5rem); }
+.logo.s { font-size: 1.5rem; }
+svg { overflow: visible; }
+
+/* Portada */
+.portada { padding-top: 72px; display: grid; gap: 28px; }
+.portada .datos { display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 0.88rem; color: var(--texto-3); }
+.portada .datos b { color: var(--texto-2); font-weight: 500; }
+.portada p.lema { font-size: clamp(1.15rem, 2.4vw, 1.45rem); color: var(--texto); max-width: 34ch; line-height: 1.35; letter-spacing: -0.01em; }
+
+/* Personalidad */
+.rasgos { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+.rasgo { border-top: 2px solid var(--agua); padding-top: 14px; display: grid; gap: 6px; }
+.rasgo span { font-size: 0.82rem; color: var(--texto-3); }
+
+/* Construcción */
+.construccion { background: #06101d; color: #e6f1f7; border-radius: 24px; border: 1px solid var(--linea); padding: 28px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: center; }
+@media (max-width: 760px) { .construccion { grid-template-columns: 1fr; } }
+.construccion ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.construccion li { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: start; color: #a9bfce; font-size: 0.92rem; }
+.construccion li b { color: #e6f1f7; font-weight: 600; display: block; }
+.punto { width: 26px; height: 26px; border-radius: 50%; border: 1px solid rgba(159, 231, 245, .5); display: grid; place-items: center; font: 500 0.75rem var(--fuente-mono); color: #9fe7f5; }
+
+/* Incorrectos */
+.mal .lamina { min-height: 150px; }
+.mal .pie { display: flex; gap: 6px; align-items: center; }
+.mal .pie::before { content: ''; width: 14px; height: 14px; flex-shrink: 0; border-radius: 50%; background: var(--mal); -webkit-mask: radial-gradient(circle, #000 0 0); }
+.mal .pie::after { content: none; }
+.cruz { position: absolute; top: 12px; right: 12px; width: 22px; height: 22px; border-radius: 50%; background: var(--mal); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 0.8rem; line-height: 1; }
+
+/* Color */
+.muestras { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); }
+.muestra { border: 1px solid var(--linea); border-radius: 18px; overflow: hidden; background: var(--superficie); display: grid; min-width: 0; }
+.muestra .chip { height: 96px; display: flex; align-items: end; padding: 10px 12px; font-size: 0.75rem; }
+.muestra .info { padding: 12px 14px 14px; display: grid; gap: 2px; }
+.muestra .info b { font-weight: 600; font-size: 0.95rem; }
+.muestra .info span { font-size: 0.8rem; color: var(--texto-3); }
+.copiar { justify-self: start; margin-top: 6px; background: none; border: 1px solid var(--linea-fuerte); color: var(--texto-2); border-radius: 999px; padding: 3px 10px; font: 500 0.78rem var(--fuente-mono); cursor: pointer; }
+.copiar:hover { color: var(--texto); border-color: var(--agua); }
+.aguas { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); }
+.agua-tipo { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 14px; border: 1px solid var(--linea); background: var(--superficie); min-width: 0; }
+.agua-tipo i { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 18px -4px currentColor; }
+.agua-tipo div { display: grid; line-height: 1.25; min-width: 0; }
+.agua-tipo b { font-size: 0.86rem; font-weight: 600; }
+.agua-tipo span { font: 0.75rem var(--fuente-mono); color: var(--texto-3); }
+.proporcion { display: flex; height: 44px; border-radius: 14px; overflow: hidden; border: 1px solid var(--linea); }
+.proporcion div { display: flex; align-items: center; padding-inline: 12px; font-size: 0.75rem; white-space: nowrap; overflow: hidden; }
+
+/* Tipografía */
+.especimen { border: 1px solid var(--linea); border-radius: 20px; background: var(--superficie); padding: 24px; display: grid; gap: 18px; min-width: 0; }
+.especimen .grande { font-size: clamp(3rem, 8vw, 5rem); line-height: 1; letter-spacing: -0.04em; font-weight: 750; }
+.escala { display: grid; gap: 0; }
+.escala > div { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 16px; align-items: baseline; padding-block: 14px; border-top: 1px solid var(--linea); }
+.escala > div > span { font: 0.78rem/1.4 var(--fuente-mono); color: var(--texto-3); }
+@media (max-width: 560px) { .escala > div { grid-template-columns: 1fr; gap: 4px; } }
+.t-xl { font-size: clamp(2.4rem, 6vw, 3.8rem); font-weight: 750; letter-spacing: -0.04em; line-height: 1.05; }
+.t-l { font-size: clamp(1.7rem, 3.4vw, 2.3rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.08; }
+.t-m { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.025em; }
+.t-s { font-size: 1.08rem; font-weight: 700; letter-spacing: -0.01em; }
+.t-cuerpo { font-size: 1rem; color: var(--texto-2); }
+.t-cifra { font-size: 1.8rem; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.t-cifra small { font-size: 0.8rem; color: var(--texto-3); font-weight: 500; margin-left: 4px; }
+
+/* Cristal */
+.acuario { position: relative; border-radius: 24px; overflow: hidden; padding: 36px 24px; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  background: radial-gradient(60% 70% at 25% 20%, rgba(63, 169, 255, .55), transparent 70%), radial-gradient(50% 60% at 80% 80%, rgba(70, 214, 196, .45), transparent 70%), #06101d; color: #e6f1f7; }
+.vidrio { border-radius: 24px; padding: 18px; display: grid; gap: 6px; background: linear-gradient(180deg, rgba(190, 230, 255, .075), rgba(190, 230, 255, .025)), rgba(10, 24, 40, .62);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), inset 0 -1px 0 rgba(255, 255, 255, .03), 0 18px 50px -20px rgba(0, 0, 0, .7); position: relative; isolation: isolate; }
+.vidrio::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: linear-gradient(140deg, rgba(220, 245, 255, .38), rgba(220, 245, 255, .06) 38%, rgba(220, 245, 255, .02) 62%, rgba(159, 231, 245, .35)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+.vidrio.fijo { backdrop-filter: blur(14px) saturate(140%); }
+.vidrio.refracta { backdrop-filter: blur(20px) saturate(160%); }
+.vidrio b { font-weight: 650; }
+.vidrio span { font-size: 0.82rem; color: #a9bfce; }
+.radios { display: flex; flex-wrap: wrap; gap: 14px; align-items: end; }
+.radios div { display: grid; gap: 8px; justify-items: center; font: 0.75rem var(--fuente-mono); color: var(--texto-3); }
+.radios i { display: block; width: 74px; height: 74px; border: 2px solid var(--agua); border-right-color: transparent; border-bottom-color: transparent; }
+
+/* Movimiento */
+.escenario { border: 1px solid var(--linea); border-radius: 20px; background: var(--superficie); padding: 24px; display: grid; gap: 18px; justify-items: start; min-width: 0; }
+.boton { font: 600 0.9rem var(--fuente); border: 0; border-radius: 999px; padding: 10px 18px; background: var(--agua); color: #031019; cursor: pointer; transition: scale .52s var(--muelle); }
+.boton:active { scale: .94 .9; transition-duration: .08s; }
+.demo { display: flex; flex-wrap: wrap; gap: 24px; align-items: start; min-height: 170px; }
+.demo-menu { width: 190px; padding: 6px; border-radius: 14px; background: var(--superficie-2); border: 1px solid var(--linea-fuerte); transform-origin: top left; display: grid; }
+.demo-menu div { padding: 8px 12px; border-radius: 10px; font-size: 0.9rem; color: var(--texto-2); }
+.demo-gota { width: 76px; height: 76px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff9 0 8%, transparent 9%), linear-gradient(180deg, var(--agua), var(--ola-fin)); transform-origin: 50% 100%; }
+.anima .demo-menu { animation: gotaForma .52s var(--muelle), nitidez .2s ease-out; }
+.anima .demo-menu div { animation: brotar .38s var(--muelle-suave) backwards; }
+.anima .demo-menu div:nth-child(2) { animation-delay: 25ms; } .anima .demo-menu div:nth-child(3) { animation-delay: 50ms; } .anima .demo-menu div:nth-child(4) { animation-delay: 75ms; }
+.anima .demo-gota { animation: gotaForma .52s var(--muelle) .1s backwards; }
+:root {
+  --muelle: linear(0, 0.038, 0.135, 0.268, 0.417, 0.566, 0.705, 0.827, 0.927, 1.005, 1.061, 1.096, 1.115, 1.12, 1.115, 1.103, 1.087, 1.069, 1.051, 1.035, 1.02, 1.008, 0.999, 0.993, 0.988, 0.986, 0.986, 0.986, 0.988, 0.99, 0.992, 0.994, 1);
+  --muelle-suave: linear(0, 0.023, 0.083, 0.164, 0.256, 0.352, 0.447, 0.536, 0.617, 0.69, 0.753, 0.808, 0.853, 0.891, 0.922, 0.946, 0.965, 0.98, 0.991, 0.999, 1.004, 1.008, 1.01, 1.011, 1.011, 1.011, 1.01, 1.009, 1.008, 1.007, 1.006, 1.005, 1);
+}
+@keyframes gotaForma { from { scale: 0.82 0.5; transform: translateY(-8px); } }
+@keyframes nitidez { from { opacity: 0; filter: blur(6px); } }
+@keyframes brotar { from { opacity: 0; scale: 0.94 0.8; } }
+.tabla-mov { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.tabla-mov th, .tabla-mov td { text-align: left; padding: 10px 12px; border-top: 1px solid var(--linea); vertical-align: top; }
+.tabla-mov th { color: var(--texto-3); font-weight: 500; font-size: 0.78rem; }
+.tabla-mov td:first-child { color: var(--texto); font-weight: 600; white-space: nowrap; }
+.tabla-mov td { color: var(--texto-2); }
+.desliza { overflow-x: auto; border: 1px solid var(--linea); border-radius: 18px; background: var(--superficie); }
+
+/* Voz */
+.voz { display: grid; gap: 12px; }
+.par { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+@media (max-width: 640px) { .par { grid-template-columns: 1fr; } }
+.ejemplo { border-radius: 16px; padding: 14px 16px; border: 1px solid var(--linea); background: var(--superficie); display: grid; gap: 4px; min-width: 0; }
+.ejemplo small { font-size: 0.75rem; font-weight: 600; }
+.ejemplo.si small { color: var(--bien); }
+.ejemplo.no small { color: var(--mal); }
+.ejemplo span { color: var(--texto); }
+.ejemplo.no span { color: var(--texto-3); text-decoration: line-through; text-decoration-color: color-mix(in oklab, var(--mal) 60%, transparent); }
+
+/* Aplicaciones */
+.icono-app { width: 120px; height: 120px; border-radius: 28px; display: grid; place-items: center; color: #fff; background: radial-gradient(120% 90% at 30% 10%, #15406a, #071425 70%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 20px 40px -18px #000; }
+.avatar { width: 120px; height: 120px; border-radius: 50%; display: grid; place-items: center; background: #06101d; color: #e6f1f7; box-shadow: 0 0 0 1px rgba(170, 215, 245, .2); }
+.pestana { display: flex; align-items: center; gap: 8px; background: #dfe7ee; color: #0b2236; border-radius: 10px 10px 0 0; padding: 8px 14px; font-size: 0.82rem; width: 220px; max-width: 100%; }
+.pestana.os { background: #1d2733; color: #e6f1f7; }
+.banner { width: 100%; aspect-ratio: 1200 / 630; max-width: 100%; border-radius: 18px; overflow: hidden; display: grid; align-content: center; gap: 4%; padding: 6%; color: #e6f1f7;
+  background: radial-gradient(70% 90% at 85% 10%, rgba(63, 169, 255, .5), transparent 60%), radial-gradient(50% 70% at 10% 100%, rgba(70, 214, 196, .35), transparent 60%), #06101d; container-type: inline-size; }
+.banner .logo { font-size: 7cqi; }
+.banner p { color: #a9bfce; font-size: 3.4cqi; max-width: 30ch; line-height: 1.25; }
+
+/* Recursos */
+.recursos { border: 1px solid var(--linea); border-radius: 18px; background: var(--superficie); overflow: hidden; }
+.recursos div { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; padding: 12px 16px; border-top: 1px solid var(--linea); font-size: 0.88rem; }
+.recursos div:first-child { border-top: 0; }
+.recursos code { color: var(--texto); overflow-wrap: anywhere; }
+.recursos span { color: var(--texto-3); }
+@media (max-width: 560px) { .recursos div { grid-template-columns: 1fr; gap: 2px; } }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<!-- Símbolo de Tankily (retícula de 64): la t con una ola por travesaño y una burbuja por punto -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="ola" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="var(--agua-l, var(--agua))"/>
+      <stop offset="1" stop-color="var(--fin-l, var(--ola-fin))"/>
+    </linearGradient>
+    <mask id="corte" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect width="64" height="64" fill="#fff"/>
+      <path d="M14 26c5-4.2 10-4.2 15 0s10 4.2 15 0" fill="none" stroke="#000" stroke-width="15" stroke-linecap="round"/>
+    </mask>
+    <symbol id="t" viewBox="0 0 64 64">
+      <path d="M29 10V40a12 12 0 0 0 12 12h3" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/>
+      <path d="M14 26c5-4.2 10-4.2 15 0s10 4.2 15 0" fill="none" stroke="url(#ola)" stroke-width="8.5" stroke-linecap="round"/>
+      <circle cx="51" cy="13" r="4" fill="var(--agua-l, var(--agua))"/>
+    </symbol>
+    <symbol id="t-tinta" viewBox="0 0 64 64">
+      <path d="M29 10V40a12 12 0 0 0 12 12h3" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" mask="url(#corte)"/>
+      <path d="M14 26c5-4.2 10-4.2 15 0s10 4.2 15 0" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round"/>
+      <circle cx="51" cy="13" r="4" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="marco">
+  <nav class="indice" aria-label="Índice">
+    <span class="logo s marca-mini"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span>
+    <ol>
+      <li><a href="#marca">La marca</a></li>
+      <li><a href="#logotipo">Logotipo</a></li>
+      <li><a href="#versiones">Versiones</a></li>
+      <li><a href="#espacio">Espacio y tamaños</a></li>
+      <li><a href="#incorrectos">Usos incorrectos</a></li>
+      <li><a href="#color">Color</a></li>
+      <li><a href="#tipografia">Tipografía</a></li>
+      <li><a href="#cristal">Cristal y forma</a></li>
+      <li><a href="#movimiento">Movimiento</a></li>
+      <li><a href="#voz">Voz y tono</a></li>
+      <li><a href="#aplicaciones">Aplicaciones</a></li>
+      <li><a href="#recursos">Recursos</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <section class="portada">
+      <span class="logo xl" role="img" aria-label="Tankily"><svg viewBox="9.5 0 46 64" aria-hidden="true"><use href="#t" width="64" height="64"/></svg>ankily</span>
+      <p class="lema">El diario de tu acuario, y la gente que lo entiende.</p>
+      <div class="datos"><span><b>Manual de marca</b></span><span>Versión 1.0</span><span>Octubre de 2026</span></div>
+    </section>
+
+    <!-- 1 -->
+    <section class="capitulo" id="marca">
+      <header><span class="num">1</span><h2>La marca</h2></header>
+      <p><strong>Tankily es la red social de los acuaristas.</strong> Cada persona registra sus acuarios y estanques, con sus habitantes, los parámetros del agua y el diario de mantenimiento. Alrededor de los tanques están el muro, el foro, la compraventa entre aficionados, el directorio de tiendas y la enciclopedia WikiTank. Está pensada para todo el mundo y funciona en ocho idiomas.</p>
+      <p>El nombre une <strong>tank</strong> (tanque, acuario) con un final que suena a algo vivo y cercano. El símbolo cuenta lo mismo: la inicial del nombre lleva el agua dentro y una burbuja que sube.</p>
+      <div class="bloque">
+        <h3>Personalidad</h3>
+        <div class="rasgos">
+          <div class="rasgo"><b>Cercana</b><span>Habla como un aficionado que ya ha pasado por lo mismo, no como una tienda ni como un manual.</span></div>
+          <div class="rasgo"><b>Experta sin presumir</b><span>Datos exactos (unidades, rangos, nombres científicos) explicados con sencillez.</span></div>
+          <div class="rasgo"><b>Viva</b><span>El agua se mueve: color por tipo de tanque, cristal que deja ver el fondo, movimiento con rebote.</span></div>
+          <div class="rasgo"><b>Tranquila</b><span>Fondo abisal, interfaz limpia. El protagonismo es de las fotos de los tanques.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="capitulo" id="logotipo">
+      <header><span class="num">2</span><h2>Logotipo</h2></header>
+      <p>El logotipo es la palabra <strong>tankily</strong> en minúscula, con una t dibujada a medida como inicial. El resto de letras es <strong>Fredoka 500</strong>, elegida porque su trazo redondo y uniforme coincide con el de la t. La t también funciona sola como símbolo.</p>
+      <div class="construccion">
+        <svg viewBox="-6 -6 76 76" role="img" aria-label="Construcción del símbolo sobre una retícula de 64 unidades" style="width:100%;max-width:420px;justify-self:center">
+          <defs><pattern id="reticula" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M4 0H0V4" fill="none" stroke="rgba(170,215,245,.10)" stroke-width=".25"/></pattern></defs>
+          <rect x="0" y="0" width="64" height="64" fill="url(#reticula)" stroke="rgba(170,215,245,.3)" stroke-width=".3"/>
+          <line x1="-4" y1="56.5" x2="68" y2="56.5" stroke="#ff9a7a" stroke-width=".35" stroke-dasharray="1.2 1"/>
+          <line x1="-4" y1="26" x2="68" y2="26" stroke="rgba(159,231,245,.6)" stroke-width=".3" stroke-dasharray="1 1"/>
+          <line x1="29" y1="-4" x2="29" y2="68" stroke="rgba(159,231,245,.6)" stroke-width=".3" stroke-dasharray="1 1"/>
+          <g style="color:#e6f1f7;--agua-l:#9fe7f5;--fin-l:#5aa8ff"><use href="#t" width="64" height="64"/></g>
+          <circle cx="51" cy="13" r="8" fill="none" stroke="rgba(159,231,245,.5)" stroke-width=".3" stroke-dasharray="1 1"/>
+          <g font-family="Geist Mono, monospace" font-size="2.6" fill="#9fe7f5">
+            <circle cx="22" cy="40" r="2.6" fill="#06101d" stroke="#9fe7f5" stroke-width=".3"/><text x="22" y="40.9" text-anchor="middle">1</text>
+            <circle cx="8" cy="20" r="2.6" fill="#06101d" stroke="#9fe7f5" stroke-width=".3"/><text x="8" y="20.9" text-anchor="middle">2</text>
+            <circle cx="60" cy="3" r="2.6" fill="#06101d" stroke="#9fe7f5" stroke-width=".3"/><text x="60" y="3.9" text-anchor="middle">3</text>
+          </g>
+          <text x="66" y="58.5" font-family="Geist Mono, monospace" font-size="2.4" fill="#ff9a7a" text-anchor="end">línea base</text>
+        </svg>
+        <ul>
+          <li><span class="punto">1</span><span><b>Palo y cola</b>Trazo de 9 unidades sobre una retícula de 64, con extremos redondos. La cola gira con un radio de 12 y apoya en la línea base (y = 56,5).</span></li>
+          <li><span class="punto">2</span><span><b>Ola</b>Hace de travesaño: un periodo completo de onda, de 30 unidades de ancho, centrado en el palo y con un trazo de 8,5. Lleva el degradado de la marca, de Agua a Azul ola.</span></li>
+          <li><span class="punto">3</span><span><b>Burbuja</b>Ocupa el lugar del punto de la i en el resto del nombre. Diámetro de 8 unidades: es la medida de referencia (b) del espacio de respeto.</span></li>
+        </ul>
+      </div>
+      <p class="nota">Junto a "ankily", la t se recorta a su caja (viewBox 9,5 0 46 64) y su base cae exactamente en la línea base del texto. No se recompone a mano: usa siempre los archivos originales.</p>
+    </section>
+
+    <!-- 3 -->
+    <section class="capitulo" id="versiones">
+      <header><span class="num">3</span><h2>Versiones</h2></header>
+      <p>Hay dos piezas, el <strong>logotipo</strong> (t + ankily) y el <strong>símbolo</strong> (la t sola), cada una en color y a una tinta. El logotipo va donde hay espacio horizontal. El símbolo, donde el espacio es cuadrado o muy pequeño: icono de app, favicon, avatar, menú plegado.</p>
+      <div class="rejilla dos">
+        <div class="lamina l-oscura"><span class="logo"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="pie">Principal, sobre fondo oscuro</span></div>
+        <div class="lamina l-clara"><span class="logo"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="pie">Principal, sobre fondo claro</span></div>
+      </div>
+      <div class="rejilla">
+        <div class="lamina l-oscura"><svg width="84" height="84"><use href="#t"/></svg><span class="pie">Símbolo en color</span></div>
+        <div class="lamina l-oscura"><svg width="84" height="84"><use href="#t-tinta"/></svg><span class="pie">Símbolo a una tinta, clara</span></div>
+        <div class="lamina l-clara"><svg width="84" height="84"><use href="#t-tinta"/></svg><span class="pie">Símbolo a una tinta, oscura</span></div>
+      </div>
+      <div class="rejilla dos">
+        <div class="lamina l-agua"><span class="logo"><svg viewBox="9.5 0 46 64"><use href="#t-tinta" width="64" height="64"/></svg>ankily</span><span class="pie">Una tinta sobre Agua</span></div>
+        <div class="lamina l-hondo"><span class="logo"><svg viewBox="9.5 0 46 64"><use href="#t-tinta" width="64" height="64"/></svg>ankily</span><span class="pie">Una tinta sobre Azul hondo</span></div>
+      </div>
+      <p>La versión <strong>a una tinta</strong> no usa degradados ni transparencias. La ola pasa por delante del palo gracias a un corte en negativo de 3,25 unidades a cada lado. Es la que se usa para impresión a un color, grabado láser, bordado, sellos y marcas de agua sobre fotos.</p>
+    </section>
+
+    <!-- 4 -->
+    <section class="capitulo" id="espacio">
+      <header><span class="num">4</span><h2>Espacio y tamaños</h2></header>
+      <p>Alrededor del logotipo se deja libre, como mínimo, <strong>dos veces el diámetro de la burbuja (2b)</strong>. En ese espacio no entra texto, otro logo ni el borde del soporte.</p>
+      <div class="rejilla dos">
+        <div class="lamina l-oscura" style="min-height:220px">
+          <div style="position:relative;padding:1.05em;font-size:2.6rem;outline:1px dashed rgba(159,231,245,.55);outline-offset:-1px;line-height:0">
+            <span class="logo" style="font-size:1em;outline:1px solid rgba(159,231,245,.25)"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span>
+            <span style="position:absolute;top:.16em;left:50%;translate:-50% 0;font:500 .75rem var(--fuente-mono);color:#9fe7f5;line-height:1">2b</span>
+            <span style="position:absolute;left:.2em;top:50%;translate:0 -50%;font:500 .75rem var(--fuente-mono);color:#9fe7f5;line-height:1">2b</span>
+          </div>
+          <span class="pie">Espacio de respeto del logotipo</span>
+        </div>
+        <div class="lamina l-oscura" style="min-height:220px">
+          <div style="display:flex;gap:28px;align-items:end;flex-wrap:wrap;justify-content:center">
+            <div style="display:grid;gap:8px;justify-items:center"><span class="logo" style="font-size:1.25rem"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="mono" style="font-size:.75rem;color:#6f879a">72 px · 18 mm</span></div>
+            <div style="display:grid;gap:8px;justify-items:center"><svg width="16" height="16"><use href="#t"/></svg><span class="mono" style="font-size:.75rem;color:#6f879a">16 px · 5 mm</span></div>
+          </div>
+          <span class="pie">Tamaños mínimos: logotipo y símbolo</span>
+        </div>
+      </div>
+      <p>Por debajo de <strong>72 px (18 mm) de ancho</strong> el logotipo pierde legibilidad: usa el símbolo. El símbolo aguanta hasta <strong>16 px (5 mm)</strong>. A esos tamaños, mejor a una tinta si el fondo no es el de la marca.</p>
+    </section>
+
+    <!-- 5 -->
+    <section class="capitulo mal" id="incorrectos">
+      <header><span class="num">5</span><h2>Usos incorrectos</h2></header>
+      <p>El logotipo se usa siempre a partir de los archivos originales, sin modificarlo. Estos son los errores más habituales.</p>
+      <div class="rejilla">
+        <div class="lamina l-oscura"><span class="cruz" aria-hidden="true">×</span><span class="logo" style="transform:scaleX(1.45)"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="pie">No lo deformes</span></div>
+        <div class="lamina l-oscura"><span class="cruz" aria-hidden="true">×</span><span class="logo" style="rotate:-12deg"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="pie">No lo gires</span></div>
+        <div class="lamina l-oscura"><span class="cruz" aria-hidden="true">×</span><span class="logo" style="--agua-l:#ff5a5a;--fin-l:#ffb347"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="pie">No cambies los colores de la ola</span></div>
+        <div class="lamina l-oscura"><span class="cruz" aria-hidden="true">×</span><span class="logo"><svg viewBox="9.5 0 46 64" style="margin-right:.35em"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="pie">No separes la t del resto</span></div>
+        <div class="lamina l-oscura"><span class="cruz" aria-hidden="true">×</span><span class="logo" style="font-family:Georgia,serif;font-weight:700"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="pie">No cambies la tipografía</span></div>
+        <div class="lamina l-oscura"><span class="cruz" aria-hidden="true">×</span><span class="logo" style="filter:drop-shadow(3px 4px 0 #2f6fff)"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="pie">No añadas sombras ni efectos</span></div>
+        <div class="lamina" style="background:repeating-linear-gradient(45deg,#ff86b4 0 14px,#ffc65c 14px 28px,#46d6c4 28px 42px);color:#e6f1f7;border-color:transparent"><span class="cruz" aria-hidden="true">×</span><span class="logo"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="pie" style="color:#06101d">No lo pongas sobre fondos que compitan</span></div>
+        <div class="lamina l-clara"><span class="cruz" aria-hidden="true">×</span><span class="logo" style="color:#c9d6e0"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="pie">No lo uses con poco contraste</span></div>
+        <div class="lamina l-oscura"><span class="cruz" aria-hidden="true">×</span><span class="logo" style="text-transform:uppercase;letter-spacing:.06em"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span><span class="pie">No lo escribas en mayúsculas</span></div>
+      </div>
+      <p class="nota">Sobre fotos, coloca el logotipo en una zona tranquila de la imagen o sobre una placa de cristal (capítulo 8).</p>
+    </section>
+
+    <!-- 6 -->
+    <section class="capitulo" id="color">
+      <header><span class="num">6</span><h2>Color</h2></header>
+      <p>La paleta sale de un acuario de noche: un fondo abisal casi negro con un matiz azul, superficies de cristal y un acento de <strong>Agua</strong>, el celeste de la superficie iluminada. El tema oscuro es el principal; el claro mantiene la misma lógica a mediodía.</p>
+      <div class="bloque">
+        <h3>Colores de marca</h3>
+        <div class="muestras">
+          <div class="muestra"><div class="chip" style="background:#9fe7f5;color:#06101d">Acento</div><div class="info"><b>Agua</b><span>RGB 159 231 245</span><span>Acento, ola y burbuja sobre oscuro</span><button class="copiar" type="button" data-hex="#9FE7F5">#9FE7F5</button></div></div>
+          <div class="muestra"><div class="chip" style="background:#4fc3e8;color:#06101d">Acento claro</div><div class="info"><b>Agua intensa</b><span>RGB 79 195 232</span><span>Ola y burbuja sobre fondos claros</span><button class="copiar" type="button" data-hex="#4FC3E8">#4FC3E8</button></div></div>
+          <div class="muestra"><div class="chip" style="background:#5aa8ff;color:#06101d">Degradado</div><div class="info"><b>Azul ola</b><span>RGB 90 168 255</span><span>Final del degradado de la ola</span><button class="copiar" type="button" data-hex="#5AA8FF">#5AA8FF</button></div></div>
+          <div class="muestra"><div class="chip" style="background:#2f6fff;color:#fff">Profundidad</div><div class="info"><b>Azul hondo</b><span>RGB 47 111 255</span><span>Fondos de color, gráficos</span><button class="copiar" type="button" data-hex="#2F6FFF">#2F6FFF</button></div></div>
+        </div>
+      </div>
+      <div class="bloque">
+        <h3>Neutros del tema oscuro</h3>
+        <div class="muestras">
+          <div class="muestra"><div class="chip" style="background:#050b14;color:#a9bfce;box-shadow:inset 0 0 0 1px rgba(170,215,245,.12)">Fondo</div><div class="info"><b>Abismo</b><span>RGB 5 11 20</span><span>Fondo de página</span><button class="copiar" type="button" data-hex="#050B14">#050B14</button></div></div>
+          <div class="muestra"><div class="chip" style="background:#0a1828;color:#a9bfce">Superficie</div><div class="info"><b>Fondo marino</b><span>RGB 10 24 40</span><span>Tarjetas y cristal (al 62 %)</span><button class="copiar" type="button" data-hex="#0A1828">#0A1828</button></div></div>
+          <div class="muestra"><div class="chip" style="background:#e6f1f7;color:#06101d">Texto</div><div class="info"><b>Espuma</b><span>RGB 230 241 247</span><span>Texto principal y tinta clara</span><button class="copiar" type="button" data-hex="#E6F1F7">#E6F1F7</button></div></div>
+          <div class="muestra"><div class="chip" style="background:#a9bfce;color:#06101d">Texto 2</div><div class="info"><b>Bruma</b><span>RGB 169 191 206</span><span>Texto secundario</span><button class="copiar" type="button" data-hex="#A9BFCE">#A9BFCE</button></div></div>
+        </div>
+      </div>
+      <div class="bloque">
+        <h3>Neutros del tema claro</h3>
+        <div class="muestras">
+          <div class="muestra"><div class="chip" style="background:#f4f8fb;color:#3c566b;box-shadow:inset 0 0 0 1px rgba(30,75,120,.12)">Fondo</div><div class="info"><b>Mediodía</b><span>RGB 244 248 251</span><span>Fondo de página</span><button class="copiar" type="button" data-hex="#F4F8FB">#F4F8FB</button></div></div>
+          <div class="muestra"><div class="chip" style="background:#0b2236;color:#e6f1f7">Texto</div><div class="info"><b>Tinta</b><span>RGB 11 34 54</span><span>Texto principal y tinta oscura</span><button class="copiar" type="button" data-hex="#0B2236">#0B2236</button></div></div>
+          <div class="muestra"><div class="chip" style="background:#3c566b;color:#e6f1f7">Texto 2</div><div class="info"><b>Roca</b><span>RGB 60 86 107</span><span>Texto secundario</span><button class="copiar" type="button" data-hex="#3C566B">#3C566B</button></div></div>
+        </div>
+      </div>
+      <div class="bloque">
+        <h3>Proporción</h3>
+        <div class="proporcion" aria-label="Proporción de uso de los colores">
+          <div style="flex:62;background:#050b14;color:#6f879a">Abismo y fondo marino 62 %</div>
+          <div style="flex:22;background:#e6f1f7;color:#06101d">Espuma 22 %</div>
+          <div style="flex:10;background:#9fe7f5;color:#06101d">Agua 10 %</div>
+          <div style="flex:6;background:#2f6fff;color:#fff">6 %</div>
+        </div>
+        <p class="nota">El acento es escaso a propósito: marca lo que se puede pulsar y lo importante. Si todo es celeste, nada destaca.</p>
+      </div>
+      <div class="bloque">
+        <h3>Colores de agua</h3>
+        <p>Cada tipo de tanque tiene su color de agua. La interfaz de un tanque se tiñe con él (acento, gráficas, brillos), así que un arrecife se ve azul y un plantado, verde. Son colores funcionales: identifican el tipo de tanque y no sustituyen al acento de marca fuera de su ficha.</p>
+        <div class="aguas">
+          <div class="agua-tipo"><i style="background:#3fa9ff;color:#3fa9ff"></i><div><b>Reef</b><span>#3FA9FF</span></div></div>
+          <div class="agua-tipo"><i style="background:#4f8dff;color:#4f8dff"></i><div><b>Marino de peces</b><span>#4F8DFF</span></div></div>
+          <div class="agua-tipo"><i style="background:#6cc4ff;color:#6cc4ff"></i><div><b>Nano marino</b><span>#6CC4FF</span></div></div>
+          <div class="agua-tipo"><i style="background:#46d6c4;color:#46d6c4"></i><div><b>Comunitario</b><span>#46D6C4</span></div></div>
+          <div class="agua-tipo"><i style="background:#7cdc8c;color:#7cdc8c"></i><div><b>Plantado</b><span>#7CDC8C</span></div></div>
+          <div class="agua-tipo"><i style="background:#ff9a7a;color:#ff9a7a"></i><div><b>Gambas</b><span>#FF9A7A</span></div></div>
+          <div class="agua-tipo"><i style="background:#b79cff;color:#b79cff"></i><div><b>Cíclidos</b><span>#B79CFF</span></div></div>
+          <div class="agua-tipo"><i style="background:#ff86b4;color:#ff86b4"></i><div><b>Discos</b><span>#FF86B4</span></div></div>
+          <div class="agua-tipo"><i style="background:#ffc65c;color:#ffc65c"></i><div><b>Agua fría</b><span>#FFC65C</span></div></div>
+          <div class="agua-tipo"><i style="background:#a8d672;color:#a8d672"></i><div><b>Estanque</b><span>#A8D672</span></div></div>
+          <div class="agua-tipo"><i style="background:#d6a76c;color:#d6a76c"></i><div><b>Biotopo</b><span>#D6A76C</span></div></div>
+          <div class="agua-tipo"><i style="background:#8fd6a8;color:#8fd6a8"></i><div><b>Paludario</b><span>#8FD6A8</span></div></div>
+          <div class="agua-tipo"><i style="background:#9fe7f5;color:#9fe7f5"></i><div><b>Otro</b><span>#9FE7F5</span></div></div>
+        </div>
+      </div>
+      <div class="bloque">
+        <h3>Estados</h3>
+        <div class="aguas">
+          <div class="agua-tipo"><i style="background:#7cdc8c;color:#7cdc8c"></i><div><b>Correcto</b><span>#7CDC8C · claro #2F9A4A</span></div></div>
+          <div class="agua-tipo"><i style="background:#ffc65c;color:#ffc65c"></i><div><b>Aviso</b><span>#FFC65C · claro #B97800</span></div></div>
+          <div class="agua-tipo"><i style="background:#ff7b7b;color:#ff7b7b"></i><div><b>Peligro</b><span>#FF7B7B · claro #D64545</span></div></div>
+        </div>
+        <p class="nota">Los estados siempre van con un icono o un texto, nunca solo con el color: un parámetro fuera de rango dice cuál y cuánto.</p>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="capitulo" id="tipografia">
+      <header><span class="num">7</span><h2>Tipografía</h2></header>
+      <p>Dos familias con papeles muy distintos. <strong>Fredoka</strong> solo aparece en el logotipo; toda la interfaz y la comunicación usan <strong>Geist</strong>. Así la única pieza tipográfica con carácter es la marca, y el contenido se lee limpio en cualquier idioma.</p>
+      <div class="rejilla dos">
+        <div class="especimen">
+          <span class="nota">Logotipo</span>
+          <span class="grande" style="font-family:var(--fuente-logo);font-weight:500;letter-spacing:-0.01em">ankily</span>
+          <p><strong>Fredoka 500.</strong> Solo para el nombre junto a la t. No se usa en titulares, botones ni textos.</p>
+        </div>
+        <div class="especimen">
+          <span class="nota">Interfaz y comunicación</span>
+          <span class="grande">Aa Ññ 25,4</span>
+          <p><strong>Geist</strong>, de 400 a 750. Titulares en negrita con el interletrado algo cerrado; texto a 400 con interlineado amplio; cifras tabulares.</p>
+        </div>
+      </div>
+      <div class="escala">
+        <div><span>Titular XL · 750<br>38–61 px · −0,04 em</span><span class="t-xl">El diario de tu acuario</span></div>
+        <div><span>Titular L · 700<br>27–37 px · −0,025 em</span><span class="t-l">Agua dulce tropical</span></div>
+        <div><span>Titular M · 700<br>22 px · −0,025 em</span><span class="t-m">Parámetros del agua</span></div>
+        <div><span>Titular S · 700<br>17 px · −0,01 em</span><span class="t-s">Arrecife del salón</span></div>
+        <div><span>Texto · 400<br>16 px · interlineado 1,55</span><span class="t-cuerpo">Registra tus tanques, apunta los parámetros del agua y compártelos con acuaristas de todo el mundo.</span></div>
+        <div><span>Cifras · 600<br>tabulares</span><span class="t-cifra">25,4<small>°C</small> &nbsp;8,1<small>dKH</small> &nbsp;35<small>ppt</small></span></div>
+      </div>
+      <p class="nota">Unidades siempre en el sistema del lector (métrico o imperial) y con el formato numérico de su idioma: 25,4 °C en español, 77.7 °F en inglés de EE. UU.</p>
+    </section>
+
+    <!-- 8 -->
+    <section class="capitulo" id="cristal">
+      <header><span class="num">8</span><h2>Cristal y forma</h2></header>
+      <p>La interfaz se construye con <strong>cristal</strong>: paneles semitransparentes sobre una luz de cáusticas, como mirar a través del vidrio de un acuario. El cristal tiene un borde de luz degradado y un brillo fino en el canto superior.</p>
+      <div class="acuario">
+        <div class="vidrio"><b>Cristal</b><span>Tarjetas y contenido. Sin desenfoque, para que el scroll vaya fluido.</span></div>
+        <div class="vidrio fijo"><b>Cristal fijo</b><span>Menú lateral, cabecera y avisos. Desenfoque de 14 px.</span></div>
+        <div class="vidrio refracta"><b>Cristal que refracta</b><span>Modales y fichas: desenfoque de 20 px y refracción del fondo.</span></div>
+      </div>
+      <div class="bloque">
+        <h3>Radios</h3>
+        <div class="radios">
+          <div><i style="border-top-left-radius:10px"></i>10 px · chips, menús</div>
+          <div><i style="border-top-left-radius:16px"></i>16 px · campos, avisos</div>
+          <div><i style="border-top-left-radius:24px"></i>24 px · tarjetas</div>
+          <div><i style="border-top-left-radius:32px"></i>32 px · modales, fichas</div>
+          <div><i style="border-top-left-radius:999px"></i>Píldora · botones</div>
+        </div>
+        <p class="nota">El radio crece con el tamaño del objeto: cuanto más grande es la pieza, más redonda. Los botones siempre son píldoras.</p>
+      </div>
+    </section>
+
+    <!-- 9 -->
+    <section class="capitulo" id="movimiento">
+      <header><span class="num">9</span><h2>Movimiento</h2></header>
+      <p>Todo lo que aparece se mueve como <strong>agua</strong>: nace pequeño y deformado desde el botón que lo abre, se estira al pasarse de tamaño y se asienta con un muelle. Al irse, se aplasta un instante y se recoge. Solo se anima <code>transform</code>, <code>scale</code>, opacidad y desenfoque, para ir a 60 fotogramas por segundo.</p>
+      <div class="escenario">
+        <button class="boton" type="button" id="reproducir">Ver el movimiento</button>
+        <div class="demo" id="demo">
+          <div class="demo-menu" aria-hidden="true"><div>Español</div><div>English</div><div>Deutsch</div><div>Português</div></div>
+          <div class="demo-gota" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="desliza">
+        <table class="tabla-mov">
+          <thead><tr><th>Curva</th><th>Duración</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td>Muelle</td><td class="mono">520 ms</td><td>Entradas de menús, modales y avisos. Rigidez 320, amortiguación 20: rebota un 12 %.</td></tr>
+            <tr><td>Muelle suave</td><td class="mono">380 ms</td><td>Opciones de un menú en cascada (25 ms entre cada una). Rigidez 380, amortiguación 32.</td></tr>
+            <tr><td>Sorber</td><td class="mono">220 ms</td><td>Salidas: <span class="mono">cubic-bezier(0.5, 0, 0.75, 0)</span>, con un aplastamiento al 30 %.</td></tr>
+            <tr><td>Respuesta</td><td class="mono">160 ms</td><td>Cambios al pasar el ratón: inmediatos, sin rebote.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="nota">Si el sistema del usuario pide reducir el movimiento, todas las animaciones se desactivan.</p>
+    </section>
+
+    <!-- 10 -->
+    <section class="capitulo" id="voz">
+      <header><span class="num">10</span><h2>Voz y tono</h2></header>
+      <p>Tankily habla como un acuarista con experiencia que te echa una mano: <strong>de tú, claro y concreto</strong>. Explica qué pasa y qué hacer, sin tecnicismos innecesarios y sin exagerar. En cada idioma se adapta a cómo hablan los aficionados de ese país.</p>
+      <div class="voz">
+        <div class="par">
+          <div class="ejemplo si"><small>Sí</small><span>Los nitratos están en 40 mg/l. Un cambio de agua del 30 % los bajará.</span></div>
+          <div class="ejemplo no"><small>No</small><span>¡Atención! Se ha detectado una anomalía en los parámetros.</span></div>
+        </div>
+        <div class="par">
+          <div class="ejemplo si"><small>Sí</small><span>Publicar anuncio → "Anuncio publicado"</span></div>
+          <div class="ejemplo no"><small>No</small><span>Enviar → "Operación realizada con éxito"</span></div>
+        </div>
+        <div class="par">
+          <div class="ejemplo si"><small>Sí</small><span>Aún no tienes tanques. Crea el primero y apunta sus parámetros.</span></div>
+          <div class="ejemplo no"><small>No</small><span>No hay datos disponibles.</span></div>
+        </div>
+        <div class="par">
+          <div class="ejemplo si"><small>Sí</small><span>No se ha podido subir la foto: pesa más de 10 MB. Prueba con una más ligera.</span></div>
+          <div class="ejemplo no"><small>No</small><span>Lo sentimos, ha ocurrido un error inesperado.</span></div>
+        </div>
+      </div>
+      <div class="rasgos">
+        <div class="rasgo"><b>Verbos claros</b><span>Cada botón dice exactamente lo que hace, y el mensaje de después usa la misma palabra.</span></div>
+        <div class="rasgo"><b>Datos con unidades</b><span>Nunca "valor alto": siempre cuánto, en qué unidad y qué rango se recomienda.</span></div>
+        <div class="rasgo"><b>Sin alarmismo</b><span>Los errores explican qué ha pasado y cómo arreglarlo. Sin disculpas ni signos de exclamación.</span></div>
+        <div class="rasgo"><b>Nombres de verdad</b><span>Especies con su nombre común y científico. El nombre científico, en cursiva.</span></div>
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section class="capitulo" id="aplicaciones">
+      <header><span class="num">11</span><h2>Aplicaciones</h2></header>
+      <div class="rejilla">
+        <div class="lamina l-oscura"><div class="icono-app"><svg width="72" height="72" style="--agua-l:#9fe7f5;--fin-l:#5aa8ff"><use href="#t"/></svg></div><span class="pie">Icono de app (iOS, Android)</span></div>
+        <div class="lamina l-oscura"><div class="avatar"><svg width="70" height="70"><use href="#t"/></svg></div><span class="pie">Avatar en redes sociales</span></div>
+        <div class="lamina l-oscura" style="align-content:center">
+          <div class="pestana"><svg width="16" height="16" style="--agua-l:#4fc3e8;--fin-l:#2f80ff;color:#0b2236"><use href="#t"/></svg>Tankily — La comunidad…</div>
+          <div class="pestana os"><svg width="16" height="16"><use href="#t"/></svg>Tankily — La comunidad…</div>
+          <span class="pie">Favicon en pestaña clara y oscura</span>
+        </div>
+      </div>
+      <div class="banner" role="img" aria-label="Ejemplo de imagen para compartir en redes">
+        <span class="logo" style="--agua-l:#9fe7f5;--fin-l:#5aa8ff"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span>
+        <p>El diario de tu acuario, y la gente que lo entiende.</p>
+      </div>
+      <p class="nota">Imagen para compartir enlaces (1200 × 630 px): logotipo a la izquierda, lema en Geist y la luz de agua al fondo. Para un tanque concreto, la luz toma su color de agua.</p>
+    </section>
+
+    <!-- 12 -->
+    <section class="capitulo" id="recursos">
+      <header><span class="num">12</span><h2>Recursos</h2></header>
+      <p>Los originales viven en el repositorio de Tankily. Las referencias de la columna derecha son las que usa la web, así que manual y producto no se separan.</p>
+      <div class="recursos">
+        <div><code>src/components/shell/AppShell.js</code><span>Componente <span class="mono">Marca</span>: símbolo y logotipo en la web</span></div>
+        <div><code>public/icon.svg</code><span>Favicon, se adapta al tema del sistema</span></div>
+        <div><code>src/app/globals.css</code><span>Colores, cristal, radios y movimiento como variables CSS</span></div>
+        <div><code>src/lib/constantes.js</code><span>Colores de agua por tipo de tanque (<span class="mono">TIPOS_TANQUE</span>)</span></div>
+        <div><code>src/lib/fuentes.js</code><span>Geist y Fredoka 500 (Google Fonts, licencia OFL)</span></div>
+        <div><code>marca/manual-de-marca.html</code><span>Este manual</span></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  // Copiar un color al portapapeles; si no se permite, se selecciona el texto
+  document.querySelectorAll('.copiar').forEach((b) => {
+    b.addEventListener('click', () => {
+      const hex = b.dataset.hex;
+      const ok = () => { b.textContent = 'Copiado'; setTimeout(() => { b.textContent = hex; }, 1200); };
+      const seleccionar = () => { const r = document.createRange(); r.selectNodeContents(b); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+      try { navigator.clipboard.writeText(hex).then(ok, seleccionar); } catch { seleccionar(); }
+    });
+  });
+  // Repetir la demostración de movimiento
+  const demo = document.getElementById('demo');
+  document.getElementById('reproducir').addEventListener('click', () => {
+    demo.classList.remove('anima');
+    void demo.offsetWidth;
+    demo.classList.add('anima');
+  });
+</script>
+</body>
+</html>

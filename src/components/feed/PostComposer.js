@@ -1,69 +1,81 @@
 "use client";
 
-import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import { useSesion } from '@/lib/sesion';
+import { colorAgua } from '@/lib/constantes';
+import { Avatar, SubidorImagenes } from '@/components/ui';
+import { SELECT_POST } from './Feed';
+import { useT } from '@/i18n/IdiomaProvider';
+import { detectarIdioma } from '@/lib/traduccion';
+import { mensajeError } from '@/lib/errores';
 
-export default function PostComposer({ user, onPostCreated }) {
-  const [nuevoPost, setNuevoPost] = useState("");
-  const [cargandoEnvio, setCargandoEnvio] = useState(false);
+export default function PostComposer({ onPublicado, tanqueFijo = null }) {
+  const { usuario, perfil } = useSesion();
+  const { t, lang } = useT();
+  const [texto, setTexto] = useState('');
+  const [imagenes, setImagenes] = useState([]);
+  const [tanques, setTanques] = useState([]);
+  const [tanqueId, setTanqueId] = useState(tanqueFijo ? String(tanqueFijo) : '');
+  const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState('');
 
-  const enviarPost = async (e) => {
+  useEffect(() => {
+    if (!usuario || tanqueFijo) return;
+    supabase.from('tanques').select('id, nombre, tipo').eq('usuario_id', usuario.id).order('creado_en')
+      .then(({ data }) => setTanques(data || []));
+  }, [usuario, tanqueFijo]);
+
+  if (!usuario) return null;
+
+  const tanqueElegido = tanques.find((t) => String(t.id) === tanqueId);
+  const puedePublicar = (texto.trim() || imagenes.length) && !enviando;
+
+  async function publicar(e) {
     e.preventDefault();
-    if (!nuevoPost.trim() || !user) return;
-    setCargandoEnvio(true);
-
-    const { error } = await supabase
+    if (!puedePublicar) return;
+    setEnviando(true);
+    setError('');
+    const { data, error } = await supabase
       .from('publicaciones')
-      .insert([{ 
-        usuario_id: user.id, 
-        contenido: nuevoPost 
-      }]);
-
+      .insert({ contenido: texto.trim(), imagenes, tanque_id: tanqueId ? Number(tanqueId) : null, idioma: await detectarIdioma(texto, lang) })
+      .select(SELECT_POST)
+      .single();
+    setEnviando(false);
     if (error) {
-      alert("Error al publicar: " + error.message);
-    } else {
-      setNuevoPost("");
-      if (onPostCreated) onPostCreated();
+      setError(t('compositor.error', { error: mensajeError(error, t) }));
+      return;
     }
-    setCargandoEnvio(false);
-  };
+    setTexto('');
+    setImagenes([]);
+    onPublicado?.(data);
+  }
 
   return (
-    <div className="card" style={{ marginBottom: '2rem' }}>
-      <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>¿Qué tienes en mente para tu tanque?</h3>
-      <form onSubmit={enviarPost}>
-        <textarea 
-          placeholder="¿Qué hay de nuevo en tu acuario? Usa #hashtags o menciona a @alguien..." 
-          value={nuevoPost}
-          onChange={(e) => setNuevoPost(e.target.value)}
-          style={{
-            width: '100%', minHeight: '100px', padding: '1rem', 
-            border: '1px solid #eee', borderRadius: '8px', fontSize: '1rem',
-            resize: 'vertical', fontFamily: 'inherit'
-          }}
-        ></textarea>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
-          <div style={{ color: 'gray', fontSize: '0.8rem' }}>
-            Tip: Comparte tus mediciones desde la página de tu acuario.
-          </div>
-          <button 
-            type="submit" 
-            disabled={cargandoEnvio || !nuevoPost.trim()}
-            style={{
-              background: 'black', 
-              color: 'white', 
-              padding: '0.6rem 2rem', 
-              borderRadius: '20px', 
-              border: 'none', 
-              fontWeight: 'bold',
-              cursor: (cargandoEnvio || !nuevoPost.trim()) ? 'not-allowed' : 'pointer',
-              transition: 'opacity 0.2s'
-            }}
-          >
-            {cargandoEnvio ? 'Publicando...' : 'Publicar'}
-          </button>
-        </div>
-      </form>
-    </div>
+    <form onSubmit={publicar} className="compositor cristal" style={{ '--agua': tanqueElegido ? colorAgua(tanqueElegido.tipo) : undefined }}>
+      <div style={{ display: 'flex', gap: 12 }}>
+        <Avatar perfil={perfil} tamano={42} />
+        <textarea
+          className="entrada compositor-texto"
+          placeholder={tanqueFijo ? t('compositor.placeholderTanque') : t('compositor.placeholder')}
+          value={texto}
+          maxLength={2000}
+          onChange={(e) => setTexto(e.target.value)}
+          aria-label={t('compositor.etiqueta')}
+        />
+      </div>
+      <SubidorImagenes valor={imagenes} onCambio={setImagenes} carpeta="posts" compacto={false} />
+      {error && <p className="aviso error">{error}</p>}
+      <div className="compositor-pie">
+        {!tanqueFijo && tanques.length > 0 && (
+          <select className="entrada" style={{ width: 'auto', minHeight: 36, height: 36, paddingBlock: 0 }} value={tanqueId} onChange={(e) => setTanqueId(e.target.value)} aria-label={t('compositor.tanqueRelacionado')}>
+            <option value="">{t('compositor.sinTanque')}</option>
+            {tanques.map((t) => <option key={t.id} value={t.id}>{t.nombre}</option>)}
+          </select>
+        )}
+        <span className="texto-3 mini" style={{ marginLeft: 'auto' }}>{texto.length > 1800 ? `${2000 - texto.length}` : ''}</span>
+        <button className="btn btn-primario btn-s" disabled={!puedePublicar}>{enviando ? t('comun.publicando') : t('comun.publicar')}</button>
+      </div>
+    </form>
   );
 }

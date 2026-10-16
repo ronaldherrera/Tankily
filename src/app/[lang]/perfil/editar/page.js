@@ -1,108 +1,94 @@
-'use client';
+"use client";
 
+import { useNavegar } from '@/components/Enlace';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { useRouter } from 'next/navigation';
+import { useSesion } from '@/lib/sesion';
+import { subirImagen } from '@/lib/imagenes';
+import { NIVELES } from '@/lib/constantes';
+import { useT } from '@/i18n/IdiomaProvider';
+import SelectorUbicacion from '@/components/SelectorUbicacion';
+import { Avatar, RequiereSesion, useTostada } from '@/components/ui';
 
-export default function EditarPerfilPage() {
-  const [nombreUsuario, setNombreUsuario] = useState('');
-  const [bio, setBio] = useState('');
-  const [cargando, setCargando] = useState(true);
+export default function EditarPerfil() {
+  const { usuario, perfil, cargando, recargarPerfil } = useSesion();
+  const router = useNavegar();
+  const tostada = useTostada();
+  const { t } = useT();
+  const [f, setF] = useState(null);
   const [guardando, setGuardando] = useState(false);
-  const router = useRouter();
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    async function cargarPerfil() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: perfil } = await supabase
-          .from('perfiles')
-          .select('*')
-          .eq('id', user.id)
-          .single();
-        
-        if (perfil) {
-          setNombreUsuario(perfil.nombre_usuario || '');
-          setBio(perfil.biografia || '');
-        }
-      }
-      setCargando(false);
-    }
-    cargarPerfil();
-  }, []);
+    if (perfil && !f) setF({ usuario: perfil.usuario, nombre: perfil.nombre || '', bio: perfil.bio || '', pais: perfil.pais || '', provincia: perfil.provincia || '', nivel: perfil.nivel || '', avatar_url: perfil.avatar_url || '', portada_url: perfil.portada_url || '' });
+  }, [perfil, f]);
 
-  const handleSubmit = async (e) => {
+  if (cargando) return null;
+  if (!usuario) return <div className="contenido"><RequiereSesion /></div>;
+  if (!f) return null;
+
+  const cambiar = (c) => (e) => setF({ ...f, [c]: e.target.value });
+
+  async function subir(campo, e) {
+    const archivo = e.target.files?.[0];
+    if (!archivo) return;
+    try {
+      const url = await subirImagen(archivo, 'perfil', { ladoMaximo: campo === 'avatar_url' ? 512 : 1600 });
+      setF((x) => ({ ...x, [campo]: url }));
+    } catch (err) { setError(err.message); }
+  }
+
+  async function guardar(e) {
     e.preventDefault();
+    setError('');
+    const nombreUsuario = f.usuario.trim().toLowerCase();
+    if (!/^[a-z0-9_]{3,20}$/.test(nombreUsuario)) return setError(t('registro.errorUsuario'));
     setGuardando(true);
-
-    const { data: { user } } = await supabase.auth.getUser();
-
-    const { error } = await supabase
-      .from('perfiles')
-      .upsert({
-        id: user.id,
-        nombre_usuario: nombreUsuario,
-        biografia: bio,
-      });
-
-    if (error) {
-      alert(`Error al guardar: ${error.message}`);
-    } else {
-      router.push('/perfil');
-    }
+    const { error } = await supabase.from('perfiles').update({
+      usuario: nombreUsuario,
+      nombre: f.nombre.trim() || null,
+      bio: f.bio.trim() || null,
+      pais: f.pais || null,
+      provincia: f.provincia || null,
+      nivel: f.nivel || null,
+      avatar_url: f.avatar_url || null,
+      portada_url: f.portada_url || null,
+    }).eq('id', usuario.id);
     setGuardando(false);
-  };
-
-  if (cargando) return <div style={{ padding: '2rem' }}>Cargando datos...</div>;
+    if (error) return setError(error.code === '23505' ? t('registro.usuarioCogido') : error.message);
+    await recargarPerfil();
+    tostada(t('editarPerfil.guardado'));
+    router.push(`/u/?n=${nombreUsuario}`);
+  }
 
   return (
-    <div style={{ maxWidth: '500px', margin: '2rem auto', padding: '2rem', border: '1px solid black' }}>
-      <h1>Editar Mi Perfil</h1>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1rem' }}>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <label>Nombre de Usuario (Único)</label>
-          <input 
-            type="text" 
-            value={nombreUsuario}
-            onChange={(e) => setNombreUsuario(e.target.value)}
-            required
-            style={{ padding: '0.5rem', border: '1px solid black' }}
-          />
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <label>Biografía / Descripción</label>
-          <textarea 
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            style={{ padding: '0.5rem', border: '1px solid black', minHeight: '100px' }}
-            placeholder="Cuéntanos sobre tu afición..."
-          />
-        </div>
-
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <button 
-            type="submit" 
-            disabled={guardando}
-            style={{ 
-              flex: 1,
-              background: 'black', 
-              color: 'white', 
-              padding: '1rem', 
-              border: 'none', 
-              cursor: guardando ? 'not-allowed' : 'pointer' 
-            }}
-          >
-            {guardando ? 'Guardando...' : 'Guardar Cambios'}
-          </button>
-          <button 
-            type="button"
-            onClick={() => router.back()}
-            style={{ padding: '1rem', border: '1px solid black', background: 'white', cursor: 'pointer' }}
-          >
-            Cancelar
-          </button>
-        </div>
+    <div className="contenido">
+      <form className="columna" onSubmit={guardar} style={{ gap: 20 }}>
+        <h1 className="titulo-l" style={{ paddingTop: 12 }}>{t('editarPerfil.titulo')}</h1>
+        <section className="cristal" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+            <Avatar perfil={{ ...perfil, avatar_url: f.avatar_url }} tamano={80} />
+            <label className="btn btn-s" style={{ position: 'relative', zIndex: 2 }}>{t('editarPerfil.cambiarFoto')}<input type="file" accept="image/*" hidden onChange={(e) => subir('avatar_url', e)} /></label>
+            <label className="btn btn-s btn-fantasma" style={{ position: 'relative', zIndex: 2 }}>{t('editarPerfil.cambiarPortada')}<input type="file" accept="image/*" hidden onChange={(e) => subir('portada_url', e)} /></label>
+          </div>
+          <div className="fila-campos">
+            <label className="campo"><span>{t('editarPerfil.nombre')}</span><input className="entrada" maxLength={50} value={f.nombre} onChange={cambiar('nombre')} /></label>
+            <label className="campo"><span>{t('editarPerfil.usuario')}</span><input className="entrada" maxLength={20} value={f.usuario} onChange={cambiar('usuario')} autoCapitalize="none" /></label>
+          </div>
+          <label className="campo"><span>{t('editarPerfil.bio')}</span><textarea className="entrada" maxLength={300} value={f.bio} onChange={cambiar('bio')} placeholder={t('editarPerfil.bioEj')} /><small>{t('editarPerfil.restantes', { n: 300 - f.bio.length })}</small></label>
+          <div className="fila-campos">
+            <SelectorUbicacion pais={f.pais} region={f.provincia} onCambio={({ pais, region }) => setF({ ...f, pais, provincia: region })} />
+            <label className="campo">
+              <span>{t('editarPerfil.experiencia')}</span>
+              <select className="entrada" value={f.nivel} onChange={cambiar('nivel')}>
+                <option value="">{t('comun.sinIndicar')}</option>
+                {NIVELES.map((k) => <option key={k} value={k}>{t(`perfil.niveles.${k}`)}</option>)}
+              </select>
+            </label>
+          </div>
+        </section>
+        {error && <p className="aviso error">{error}</p>}
+        <button className="btn btn-primario" style={{ alignSelf: 'flex-end' }} disabled={guardando}>{guardando ? t('comun.guardando') : t('editarPerfil.guardar')}</button>
       </form>
     </div>
   );

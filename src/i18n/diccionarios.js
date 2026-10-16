@@ -1,0 +1,54 @@
+// Diccionarios por idioma.
+// Español e inglés se escriben por secciones (textos/*.js, objetos es y en, uno junto al otro).
+// El resto de idiomas tiene un archivo completo en idiomas/<código>.js con exactamente las mismas claves
+// (lo comprueba `npm run i18n`).
+import * as comun from './textos/comun.js';
+import * as muro from './textos/muro.js';
+import * as tanques from './textos/tanques.js';
+import * as cuenta from './textos/cuenta.js';
+import * as foro from './textos/foro.js';
+import * as mercado from './textos/mercado.js';
+import * as tiendas from './textos/tiendas.js';
+import * as legal from './textos/legal.js';
+import * as wiki from './textos/wiki.js';
+import * as cuidado from './textos/cuidado.js';
+import * as herramientas from './textos/herramientas.js';
+import * as chat from './textos/chat.js';
+import * as traduccion from './textos/traduccion.js';
+import * as social from './textos/social.js';
+import * as pasos from './textos/pasos.js';
+import * as anadir from './textos/anadir.js';
+import * as logros from './textos/logros.js';
+import * as estadisticas from './textos/estadisticas.js';
+import * as guardados from './textos/guardados.js';
+import * as relacionados from './textos/relacionados.js';
+import * as bienvenida from './textos/bienvenida.js';
+import * as seo from './textos/seo.js';
+import * as conEspecie from './textos/conEspecie.js';
+import * as invitacion from './textos/invitacion.js';
+import * as errores from './textos/errores.js';
+import * as cercania from './textos/cercania.js';
+import * as distancia from './textos/distancia.js';
+import * as catalogo from './textos/catalogo.js';
+import de from './idiomas/de.js';
+import pt from './idiomas/pt.js';
+import fr from './idiomas/fr.js';
+import it from './idiomas/it.js';
+import nl from './idiomas/nl.js';
+import pl from './idiomas/pl.js';
+
+const SECCIONES = [comun, muro, tanques, cuenta, foro, mercado, tiendas, legal, wiki];
+// Funciones nuevas con los 8 idiomas en el mismo archivo
+const MULTI = [cuidado, herramientas, chat, traduccion, social, pasos, anadir, logros, estadisticas, guardados, relacionados, bienvenida, seo, conEspecie, invitacion, errores, cercania, distancia, catalogo];
+const conMulti = (lang, base) => Object.assign({}, base, ...MULTI.map((s) => s[lang]));
+
+export const diccionarios = {
+  es: conMulti('es', Object.assign({}, ...SECCIONES.map((s) => s.es))),
+  en: conMulti('en', Object.assign({}, ...SECCIONES.map((s) => s.en))),
+  de: conMulti('de', de),
+  pt: conMulti('pt', pt),
+  fr: conMulti('fr', fr),
+  it: conMulti('it', it),
+  nl: conMulti('nl', nl),
+  pl: conMulti('pl', pl),
+};

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import Link from '@/components/Enlace';
 import Breadcrumbs from './Breadcrumbs';
 
 export default function WikiArticleHeader({ slug, title }) {
