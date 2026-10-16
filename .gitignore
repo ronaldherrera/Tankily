@@ -52,3 +52,7 @@ public/ads.txt
 
 # (la caché de scripts/especies está ahora en node_modules/.cache)
 scripts/especies/cache/
+
+# Borradores locales que no se publican
+/public/propuestas-logo.html
+/scripts/tmp/
