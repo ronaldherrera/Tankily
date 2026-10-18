@@ -13,11 +13,16 @@ const SITIO = 'https://tankily.com';
 // Colores de la marca en versión clara (los clientes de correo no respetan bien el modo oscuro)
 const C = { fondo: '#eef6fa', tarjeta: '#ffffff', tinta: '#0b1f33', texto: '#3c5266', suave: '#7a8fa3', ola: '#4fc3e8', boton: '#0b1f33' };
 
-function bloque({ titulo, texto, boton }, { pie, lema }) {
+// El botón lleva a tankily.com (no a supabase.co): un enlace a otro dominio que el remitente es de lo que
+// más hace sospechar a Gmail y Outlook. La página /verificar/ completa la acción con el código del correo.
+const TIPO_OTP = { confirmacion: 'email', recuperacion: 'recovery', enlace: 'email', cambio_email: 'email_change' };
+const enlace = (tipo, lang) => `${SITIO}/${lang}/verificar/?token_hash={{ .TokenHash }}&type=${TIPO_OTP[tipo]}`;
+
+function bloque({ titulo, texto, boton }, { pie, lema }, url) {
   return `
       <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:${C.tinta};font-weight:700;">${titulo}</h1>
       <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:${C.texto};">${texto}</p>
-      <p style="margin:0 0 28px;"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:${C.boton};color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">${boton}</a></p>
+      <p style="margin:0 0 28px;"><a href="${url}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:${C.boton};color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">${boton}</a></p>
       <p style="margin:0;font-size:13px;line-height:1.5;color:${C.suave};">${pie}</p>
     </td></tr>
     <tr><td style="padding:16px 8px 0;font-size:12px;color:${C.suave};text-align:center;">Tankily · ${lema}</td></tr>`;
@@ -26,7 +31,7 @@ function bloque({ titulo, texto, boton }, { pie, lema }) {
 function plantilla(tipo) {
   const t = textos[tipo];
   // {{ if eq .Data.idioma "en" }} … {{ else if … }} … {{ else }} (español) {{ end }}
-  const ramas = IDIOMAS.slice(1).map((l, i) => `{{ ${i ? 'else if' : 'if'} eq (printf "%v" .Data.idioma) "${l}" }}${bloque(t[l], textos.comun[l])}`).join('\n    ');
+  const ramas = IDIOMAS.slice(1).map((l, i) => `{{ ${i ? 'else if' : 'if'} eq (printf "%v" .Data.idioma) "${l}" }}${bloque(t[l], textos.comun[l], enlace(tipo, l))}`).join('\n    ');
   return `<!doctype html>
 <!-- Generado por scripts/generar_plantillas_email.mjs: edita textos.json y vuelve a generarlo -->
 <html>
@@ -39,7 +44,7 @@ function plantilla(tipo) {
     </td></tr>
     <tr><td style="background:${C.tarjeta};border-radius:18px;padding:32px 28px;border-top:4px solid ${C.ola};">
     ${ramas}
-    {{ else }}${bloque(t.es, textos.comun.es)}
+    {{ else }}${bloque(t.es, textos.comun.es, enlace(tipo, 'es'))}
     {{ end }}
   </table>
 </td></tr>

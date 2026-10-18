@@ -36,10 +36,11 @@ import * as recorte from './textos/recorte.js';
 import * as seguimiento from './textos/seguimiento.js';
 import * as cita from './textos/cita.js';
 import * as administracion from './textos/administracion.js';
+import * as verificar from './textos/verificar.js';
 
 const SECCIONES = [comun, muro, tanques, cuenta, foro, mercado, tiendas, legal, wiki];
 // Funciones nuevas con los 8 idiomas en el mismo archivo
-const MULTI = [cuidado, herramientas, chat, traduccion, social, pasos, anadir, logros, estadisticas, guardados, relacionados, bienvenida, seo, conEspecie, invitacion, errores, cercania, distancia, catalogo, instalar, apoyar, contrasena, selector, recorte, seguimiento, cita, administracion];
+const MULTI = [cuidado, herramientas, chat, traduccion, social, pasos, anadir, logros, estadisticas, guardados, relacionados, bienvenida, seo, conEspecie, invitacion, errores, cercania, distancia, catalogo, instalar, apoyar, contrasena, selector, recorte, seguimiento, cita, administracion, verificar];
 
 export const conMulti = (lang, base) => Object.assign({}, base, ...MULTI.map((s) => s[lang]));
 export const desdeSecciones = (lang) => conMulti(lang, Object.assign({}, ...SECCIONES.map((s) => s[lang])));
