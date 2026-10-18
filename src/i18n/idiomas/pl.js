@@ -156,10 +156,10 @@ export default {
   },
   registro: {
     titulo: 'Załóż konto', subtitulo: 'Za darmo. Zapisuj swoje zbiorniki i dołącz do społeczności.', nombre: 'Imię', usuario: 'Nazwa użytkownika',
-    usuarioEj: 'np. rafa_krakow', asiTeMencionaran: 'Inni oznaczą cię jako @{usuario}', minimo: 'Co najmniej 8 znaków.', acepto: 'Akceptuję',
+    usuarioEj: 'np. rafa_krakow', asiTeMencionaran: 'Inni oznaczą cię jako @{usuario}', minimo: 'Co najmniej 8 znaków, w tym wielkie i małe litery oraz cyfra.', acepto: 'Akceptuję',
     normas: 'zasady społeczności', yLa: 'oraz', privacidad: 'politykę prywatności', crear: 'Załóż konto', creando: 'Zakładanie konta…', yaTienes: 'Masz już konto?',
-    entra: 'Zaloguj się', errorUsuario: 'Nazwa użytkownika musi mieć 3–20 znaków: małe litery, cyfry lub podkreślenia.',
-    errorContrasena: 'Hasło musi mieć co najmniej 8 znaków.', usuarioCogido: 'Ta nazwa użytkownika jest już zajęta.', emailExiste: 'Istnieje już konto z tym adresem e-mail.',
+    entra: 'Zaloguj się', errorUsuario: 'Nazwa użytkownika musi mieć 3–20 znaków: małe litery, cyfry, podkreślenia, kropki lub myślniki (nie na początku ani na końcu i nie dwie pod rząd).',
+    errorContrasena: 'Hasło musi mieć co najmniej 8 znaków, w tym wielkie i małe litery oraz cyfrę.', usuarioCogido: 'Ta nazwa użytkownika jest już zajęta.', emailExiste: 'Istnieje już konto z tym adresem e-mail.',
     revisaCorreo: 'Sprawdź skrzynkę', enlaceEnviado: 'Wysłaliśmy link na adres {email}. Otwórz go, aby potwierdzić konto i zacząć zapisywać zbiorniki.',
     irAEntrar: 'Przejdź do logowania',
   },

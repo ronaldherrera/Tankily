@@ -160,10 +160,10 @@ export default {
   },
   registro: {
     titulo: 'Crée ton compte', subtitulo: 'Gratuit. Enregistre tes bacs et rejoins la communauté.', nombre: 'Nom', usuario: 'Nom d’utilisateur',
-    usuarioEj: 'ex. : recif_lyon', asiTeMencionaran: 'On te mentionnera ainsi : @{usuario}', minimo: '8 caractères minimum.', acepto: 'J’accepte les',
+    usuarioEj: 'ex. : recif_lyon', asiTeMencionaran: 'On te mentionnera ainsi : @{usuario}', minimo: '8 caractères minimum, avec majuscules, minuscules et au moins un chiffre.', acepto: 'J’accepte les',
     normas: 'règles de la communauté', yLa: 'et la', privacidad: 'politique de confidentialité', crear: 'Créer un compte', creando: 'Création du compte…',
-    yaTienes: 'Déjà un compte ?', entra: 'Connecte-toi', errorUsuario: 'Le nom d’utilisateur doit faire 3 à 20 caractères : minuscules, chiffres ou tiret bas.',
-    errorContrasena: 'Le mot de passe doit contenir au moins 8 caractères.', usuarioCogido: 'Ce nom d’utilisateur est déjà pris.',
+    yaTienes: 'Déjà un compte ?', entra: 'Connecte-toi', errorUsuario: 'Le nom d’utilisateur doit faire 3 à 20 caractères : minuscules, chiffres, tiret bas, points ou tirets (ni au début, ni à la fin, ni deux de suite).',
+    errorContrasena: 'Le mot de passe doit contenir au moins 8 caractères, avec majuscules, minuscules et au moins un chiffre.', usuarioCogido: 'Ce nom d’utilisateur est déjà pris.',
     emailExiste: 'Un compte existe déjà avec cet e-mail.', revisaCorreo: 'Vérifie ta boîte mail',
     enlaceEnviado: 'Nous avons envoyé un lien à {email}. Ouvre-le pour confirmer ton compte et commencer à enregistrer tes bacs.', irAEntrar: 'Aller à la connexion',
   },

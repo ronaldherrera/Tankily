@@ -30,7 +30,7 @@ async function huella(texto: string) {
 }
 
 // #etiquetas, @menciones y enlaces no se traducen nunca
-const PROTEGER = /(#[\p{L}\p{N}_]{2,40}|@[a-zA-Z0-9_]{3,20}|https?:\/\/[^\s<]+)/gu;
+const PROTEGER = /(#[\p{L}\p{N}_]{2,40}|@[a-zA-Z0-9_][a-zA-Z0-9_.-]{1,18}[a-zA-Z0-9_]|https?:\/\/[^\s<]+)/gu;
 const escapar = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const desescapar = (s: string) => s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 

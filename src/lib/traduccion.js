@@ -7,6 +7,7 @@
 //  4. Si nada está disponible: botón "Ver traducción" (descarga el idioma en Chrome o abre Google Translate).
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from './supabase';
+import { MENCION } from '@/lib/usuario';
 
 // --- Detección del idioma al publicar -------------------------------------------
 // Con el detector de Chrome si está; si no, se asume el idioma de la interfaz.
@@ -56,7 +57,7 @@ async function traducirEnServidor(cuerpo) {
 }
 
 // #etiquetas, @menciones y enlaces no se traducen: se traducen solo los trozos de texto que hay entre ellos
-const PROTEGER = /(#[\p{L}\p{N}_]{2,40}|@[a-zA-Z0-9_]{3,20}|https?:\/\/[^\s]+)/gu;
+const PROTEGER = new RegExp(String.raw`(#[\p{L}\p{N}_]{2,40}|${MENCION}|https?:\/\/[^\s]+)`, 'gu');
 async function traducirConChrome(texto, de, a) {
   const traductor = await self.Translator.create({ sourceLanguage: de, targetLanguage: a });
   const partes = texto.split(PROTEGER);

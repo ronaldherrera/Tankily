@@ -9,6 +9,7 @@ import { NIVELES } from '@/lib/constantes';
 import { useT } from '@/i18n/IdiomaProvider';
 import SelectorUbicacion from '@/components/SelectorUbicacion';
 import { Avatar, RequiereSesion, useTostada } from '@/components/ui';
+import { usuarioValido } from '@/lib/usuario';
 
 export default function EditarPerfil() {
   const { usuario, perfil, cargando, recargarPerfil } = useSesion();
@@ -42,7 +43,7 @@ export default function EditarPerfil() {
     e.preventDefault();
     setError('');
     const nombreUsuario = f.usuario.trim().toLowerCase();
-    if (!/^[a-z0-9_]{3,20}$/.test(nombreUsuario)) return setError(t('registro.errorUsuario'));
+    if (!usuarioValido(nombreUsuario)) return setError(t('registro.errorUsuario'));
     setGuardando(true);
     const { error } = await supabase.from('perfiles').update({
       usuario: nombreUsuario,

@@ -6,8 +6,8 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
 
 ## 🔴 Antes de publicar (bloqueantes)
 
-- [ ] **Revisar y aprobar el commit.** Todo el trabajo está sin commit. Cuando lo revises, dime "haz el commit" y lo hago (y el push, que despliega a Hostinger). Tras el push, mira en GitHub → Actions que el despliegue sale en verde: ahora, antes de publicar, pasa lint, textos, pruebas automáticas y comprobación de enlaces.
-- [ ] **Supabase → Authentication → URL Configuration**
+- [x] **Revisar y aprobar el commit.** Todo el trabajo está sin commit. Cuando lo revises, dime "haz el commit" y lo hago (y el push, que despliega a Hostinger). Tras el push, mira en GitHub → Actions que el despliegue sale en verde: ahora, antes de publicar, pasa lint, textos, pruebas automáticas y comprobación de enlaces.
+- [x] **Supabase → Authentication → URL Configuration**
   - Site URL: `https://tankily.com`
   - Redirect URLs: `https://tankily.com/**` y `http://localhost:3210/**`
   - Sin esto fallan la confirmación de email, la recuperación de contraseña, el enlace sin contraseña y el acceso con Google.
@@ -19,7 +19,7 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
   - Proveedor de traducción (MyMemory y/o DeepL) como encargado del tratamiento.
   - Acceso con Google, Apple, Facebook y Microsoft: qué datos recibimos (nombre, email, foto).
   - Google AdSense y su CMP (cuando lo actives).
-- [ ] **Borrar `public/propuestas-logo.html`** si ya no la necesitas (si no, se publicará). Dímelo y lo quito.
+- [x] **Borrar `public/propuestas-logo.html`** si ya no la necesitas (si no, se publicará). Dímelo y lo quito.
 
 ## 🟠 Primeras semanas
 
@@ -54,7 +54,7 @@ _Lista generada por Claude. Lo que vaya surgiendo mientras trabajo se añade aba
 - [ ] **Hacerte administrador** para usar el nuevo panel `/admin/` (resumen, denuncias, tiendas Pro y verificación, campañas). Cuando tengas tu cuenta creada en la web, ejecuta (cambiando `tu_usuario`):
       `npx supabase db query --linked "update perfiles set es_admin = true where usuario = 'tu_usuario'"`
       Aparecerá "Admin" en el menú lateral.
-- [ ] **Protección contra contraseñas filtradas** (recomendación del analizador de seguridad de Supabase): Supabase → Authentication → Providers → Email → activar "Leaked password protection". Impide registrarse con contraseñas que han aparecido en filtraciones conocidas.
+- [x] **Contraseñas** (18/10/2026): mínimo 8 con mayúsculas, minúsculas y números; la web valida lo mismo. La protección contra contraseñas filtradas solo existe en el plan Pro de Supabase: activarla si algún día se cambia de plan.
 - [ ] **Decidir: páginas propias para cada tanque, hilo y anuncio (SEO).** Hoy un tanque se abre como `/tanque/?id=…`: para Google todas esas direcciones son la misma página, así que no indexa tanques, hilos del foro ni anuncios uno a uno (sí lo hace con la wiki, las calculadoras y las secciones). La solución es generar en cada publicación una página fija por contenido público (`/tanque/arrecife-del-salon-123/`) leyendo Supabase durante el build, y volver a publicar automáticamente cada noche con GitHub Actions para incluir lo nuevo. Es un cambio de arquitectura de un par de días y **no obliga a cambiar de hosting** (alternativa al punto "Valorar Vercel" de arriba). Te lo propongo para cuando la comunidad tenga contenido real. Dime si lo hago.
 - [ ] **(Opcional) Limpiar la plantilla de los .md de WikiTank.** 30 archivos de grupos de especies (p. ej. `WikiTank/Acuarios/Acuario marino — arrecife de coral (reef)/Especies habituales/Corales/Corales.md`) empiezan con "## ESTRUCTURA DE FICHA …", una plantilla para redactar. La web ya la oculta al mostrar la página, así que no corre prisa; si la quitas de los archivos, el ocultado simplemente deja de tener efecto.
 - [ ] **Emails de la cuenta con la marca y en el idioma del usuario.** Están listos en `supabase/plantillas/` (confirmación, nueva contraseña, enlace para entrar y cambio de email), en los 8 idiomas: cada uno elige el idioma con el que se registró el usuario y, si no lo sabe, va en español. Para activarlos: Supabase → Authentication → Emails → Templates, y en cada tipo pega el asunto y el HTML:

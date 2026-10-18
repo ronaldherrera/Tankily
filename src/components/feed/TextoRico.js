@@ -1,6 +1,7 @@
 import Link from '@/components/Enlace';
+import { MENCION } from '@/lib/usuario';
 
-const PATRON = /(#[\p{L}\p{N}_]{2,40}|@[a-zA-Z0-9_]{3,20}|https?:\/\/[^\s]+)/gu;
+const PATRON = new RegExp(String.raw`(#[\p{L}\p{N}_]{2,40}|${MENCION}|https?:\/\/[^\s]+)`, 'gu');
 
 // Convierte #etiquetas, @menciones y enlaces en vínculos.
 // Con `sinEnlaces` solo los resalta: se usa dentro de otro enlace (la cita de un eco),

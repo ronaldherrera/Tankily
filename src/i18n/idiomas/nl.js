@@ -154,10 +154,10 @@ export default {
   },
   registro: {
     titulo: 'Maak je account', subtitulo: 'Gratis. Leg je bakken vast en word lid van de community.', nombre: 'Naam', usuario: 'Gebruikersnaam',
-    usuarioEj: 'bijv. rif_utrecht', asiTeMencionaran: 'Zo vermelden anderen je: @{usuario}', minimo: 'Minimaal 8 tekens.', acepto: 'Ik ga akkoord met de',
+    usuarioEj: 'bijv. rif_utrecht', asiTeMencionaran: 'Zo vermelden anderen je: @{usuario}', minimo: 'Minimaal 8 tekens, met hoofdletters, kleine letters en een cijfer.', acepto: 'Ik ga akkoord met de',
     normas: 'communityregels', yLa: 'en het', privacidad: 'privacybeleid', crear: 'Account maken', creando: 'Account wordt gemaakt…', yaTienes: 'Al een account?',
-    entra: 'Inloggen', errorUsuario: 'Gebruikersnamen hebben 3 tot 20 tekens: kleine letters, cijfers of liggende streepjes.',
-    errorContrasena: 'Het wachtwoord moet minstens 8 tekens hebben.', usuarioCogido: 'Deze gebruikersnaam is al in gebruik.',
+    entra: 'Inloggen', errorUsuario: 'Gebruikersnamen hebben 3 tot 20 tekens: kleine letters, cijfers, liggende streepjes, punten of koppeltekens (niet aan het begin of eind en niet twee achter elkaar).',
+    errorContrasena: 'Het wachtwoord moet minstens 8 tekens hebben, met hoofdletters, kleine letters en een cijfer.', usuarioCogido: 'Deze gebruikersnaam is al in gebruik.',
     emailExiste: 'Er bestaat al een account met dit e-mailadres.', revisaCorreo: 'Bekijk je inbox',
     enlaceEnviado: 'We hebben een link naar {email} gestuurd. Open hem om je account te bevestigen en je bakken vast te leggen.', irAEntrar: 'Naar inloggen',
   },

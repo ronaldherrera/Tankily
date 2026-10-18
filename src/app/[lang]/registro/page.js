@@ -6,6 +6,8 @@ import { supabase } from '@/lib/supabase';
 import { Marca } from '@/components/shell/AppShell';
 import { useT } from '@/i18n/IdiomaProvider';
 import AccesoSocial from '@/components/auth/AccesoSocial';
+import { contrasenaValida } from '@/lib/contrasena';
+import { usuarioValido } from '@/lib/usuario';
 
 export default function RegistroPage() {
   const router = useNavegar();
@@ -21,8 +23,8 @@ export default function RegistroPage() {
     e.preventDefault();
     setError('');
     const usuario = f.usuario.trim().toLowerCase();
-    if (!/^[a-z0-9_]{3,20}$/.test(usuario)) return setError(t('registro.errorUsuario'));
-    if (f.password.length < 8) return setError(t('registro.errorContrasena'));
+    if (!usuarioValido(usuario)) return setError(t('registro.errorUsuario'));
+    if (!contrasenaValida(f.password)) return setError(t('registro.errorContrasena'));
     setCargando(true);
     const { data: ocupado } = await supabase.from('perfiles').select('id').eq('usuario', usuario).maybeSingle();
     if (ocupado) { setCargando(false); return setError(t('registro.usuarioCogido')); }

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useTostada } from '@/components/ui';
 import { useT } from '@/i18n/IdiomaProvider';
+import { contrasenaValida } from '@/lib/contrasena';
 
 // Destino del enlace de recuperación: Supabase ya ha abierto sesión al llegar aquí
 export default function NuevaContrasenaPage() {
@@ -16,7 +17,7 @@ export default function NuevaContrasenaPage() {
 
   async function guardar(e) {
     e.preventDefault();
-    if (password.length < 8) return setError(t('registro.errorContrasena'));
+    if (!contrasenaValida(password)) return setError(t('registro.errorContrasena'));
     const { error } = await supabase.auth.updateUser({ password });
     if (error) return setError(error.message);
     tostada(t('recuperar.cambiada'));
