@@ -8,6 +8,7 @@ import Publicidad from '@/components/Publicidad';
 import PostCard from './PostCard';
 import { useT } from '@/i18n/IdiomaProvider';
 import ErrorCarga from '@/components/ErrorCarga';
+import { cargarMisEcos } from '@/lib/ecos';
 
 const TANQUE = 'tanque:tanques(id, nombre, tipo)';
 export const SELECT_POST = `*, ${AUTOR}, ${TANQUE}, original:eco_de(*, ${AUTOR}, ${TANQUE})`;
@@ -32,6 +33,7 @@ export default function Feed({ modo = 'todos', etiqueta, autorId, tanqueId, cabe
   const { t } = useT();
   const [posts, setPosts] = useState(null);
   const [gustados, setGustados] = useState(new Set());
+  const [misEcos, setMisEcos] = useState(new Map());
   const [hayMas, setHayMas] = useState(true);
   const [cargandoMas, setCargandoMas] = useState(false);
   const [nuevos, setNuevos] = useState(0);
@@ -43,8 +45,12 @@ export default function Feed({ modo = 'todos', etiqueta, autorId, tanqueId, cabe
   const marcarGustados = useCallback(async (lista) => {
     if (!usuario || !lista.length) return;
     const ids = lista.flatMap((p) => [p.id, p.original?.id]).filter(Boolean);
-    const { data } = await supabase.from('me_gusta').select('publicacion_id').eq('usuario_id', usuario.id).in('publicacion_id', ids);
+    const [{ data }, ecos] = await Promise.all([
+      supabase.from('me_gusta').select('publicacion_id').eq('usuario_id', usuario.id).in('publicacion_id', ids),
+      cargarMisEcos(usuario.id, ids),
+    ]);
     setGustados((prev) => new Set([...prev, ...(data || []).map((g) => g.publicacion_id)]));
+    setMisEcos((prev) => new Map([...prev, ...ecos]));
   }, [usuario]);
 
   const cargar = useCallback(async (reiniciar) => {
@@ -119,8 +125,13 @@ export default function Feed({ modo = 'todos', etiqueta, autorId, tanqueId, cabe
         vacio || <Vacio titulo={t('muro.vacioGenericoTitulo')}>{t('muro.vacioGenericoTexto')}</Vacio>
       ) : (
         posts.map((post, i) => (
-          <div key={post.id} style={{ display: 'contents' }}>
-            <PostCard post={post} meGusta={gustados.has(post.original && !post.contenido ? post.original.id : post.id)} onBorrado={alBorrar} />
+          <div key={post.id} style={{ display: 'contents', '--i': i % 10 }}>
+            <PostCard
+              post={post}
+              meGusta={gustados.has(post.original && !post.contenido ? post.original.id : post.id)}
+              miEco={misEcos.get(post.original && !post.contenido ? post.original.id : post.id)}
+              onBorrado={alBorrar}
+            />
             {conPublicidad && (i + 1) % PUBLI_CADA === 0 && <Publicidad ubicacion="feed" />}
           </div>
         ))

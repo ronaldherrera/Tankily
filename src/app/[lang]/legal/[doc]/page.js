@@ -3,7 +3,7 @@ import Link from '@/components/Enlace';
 import { traducir } from '@/i18n/traducir';
 import { alternativas } from '@/lib/seo';
 
-const EMAIL = process.env.NEXT_PUBLIC_EMAIL_CONTACTO || 'contacto@tankily.com';
+const EMAIL = process.env.NEXT_PUBLIC_EMAIL_CONTACTO || 'krill@tankily.com';
 const DOCS = ['aviso-legal', 'privacidad', 'cookies', 'normas'];
 
 export function generateStaticParams() {

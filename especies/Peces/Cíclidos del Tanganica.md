@@ -803,7 +803,7 @@
 ### Tropheus Annectens (Tropheus annectens)
 **Familia**: Cichlidae
 **Origen**: Lago Tanganica
-**Tamaño**: 14 cm
+**Tamaño**: 12 cm
 **Temperatura**: 24 – 27°C
 **pH**: 8.0 – 9.0
 **GH**: 10 – 20 °dGH

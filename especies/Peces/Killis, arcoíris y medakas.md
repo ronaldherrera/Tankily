@@ -879,7 +879,7 @@
 ### Ojos Azules Neón (Pseudomugil luminatus)
 **Familia**: Pseudomugilidae
 **Origen**: Papúa Nueva Guinea
-**Tamaño**: 3.5 cm
+**Tamaño**: 3 cm
 **Temperatura**: 24 – 28°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH
@@ -1389,7 +1389,7 @@
 
 ---
 
-### Killi de Puerzl (Aphyosemion puerzli)
+### Killi de Puerzl (Aphyosemion puerzli / Fundulopanchax puerzli)
 **Familia**: Nothobranchiidae
 **Origen**: Camerún
 **Tamaño**: 6 cm
@@ -1469,7 +1469,7 @@
 **Familia**: Nothobranchiidae
 **Origen**: Tanzania y Kenia
 **Tamaño**: 5 cm
-**Temperatura**: 22 – 26°C
+**Temperatura**: 20 – 24°C
 **pH**: 6.5 – 7.5
 **GH**: 4 – 15 °dGH
 **Dificultad**: ★★★☆☆
@@ -1640,7 +1640,7 @@
 **Familia**: Melanotaeniidae
 **Origen**: Norte de Australia
 **Tamaño**: 8 cm
-**Temperatura**: 22 – 28°C
+**Temperatura**: 20 – 26°C
 **pH**: 5.5 – 7.5
 **GH**: 2 – 12 °dGH
 **Dificultad**: ★★☆☆☆

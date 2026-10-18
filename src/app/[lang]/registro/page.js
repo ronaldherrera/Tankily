@@ -8,11 +8,12 @@ import { useT } from '@/i18n/IdiomaProvider';
 import AccesoSocial from '@/components/auth/AccesoSocial';
 import { contrasenaValida } from '@/lib/contrasena';
 import { usuarioValido } from '@/lib/usuario';
+import CampoContrasena from '@/components/CampoContrasena';
 
 export default function RegistroPage() {
   const router = useNavegar();
   const { t, lang } = useT();
-  const [f, setF] = useState({ nombre: '', usuario: '', email: '', password: '' });
+  const [f, setF] = useState({ nombre: '', usuario: '', email: '', password: '', repetir: '' });
   const [acepta, setAcepta] = useState(false);
   const [error, setError] = useState('');
   const [enviado, setEnviado] = useState(false);
@@ -25,6 +26,7 @@ export default function RegistroPage() {
     const usuario = f.usuario.trim().toLowerCase();
     if (!usuarioValido(usuario)) return setError(t('registro.errorUsuario'));
     if (!contrasenaValida(f.password)) return setError(t('registro.errorContrasena'));
+    if (f.repetir !== f.password) return setError(t('contrasena.noCoinciden'));
     setCargando(true);
     const { data: ocupado } = await supabase.from('perfiles').select('id').eq('usuario', usuario).maybeSingle();
     if (ocupado) { setCargando(false); return setError(t('registro.usuarioCogido')); }
@@ -40,6 +42,9 @@ export default function RegistroPage() {
     });
     setCargando(false);
     if (error) return setError(error.message === 'User already registered' ? t('registro.emailExiste') : error.message);
+    // Con la confirmación de email activada, Supabase no da error si el email ya existe (no envía nada y
+    // devuelve el usuario sin identidades): se avisa para que entre o recupere la contraseña.
+    if (data.user && data.user.identities?.length === 0) return setError(t('registro.emailExiste'));
     if (data.session) router.push('/tanques/nuevo/');
     else setEnviado(true);
   }
@@ -70,7 +75,14 @@ export default function RegistroPage() {
         <small>{t('registro.asiTeMencionaran', { usuario: f.usuario.trim().toLowerCase() || 'usuario' })}</small>
       </label>
       <label className="campo"><span>{t('acceso.email')}</span><input className="entrada" type="email" autoComplete="email" required value={f.email} onChange={cambiar('email')} /></label>
-      <label className="campo"><span>{t('acceso.contrasena')}</span><input className="entrada" type="password" autoComplete="new-password" required minLength={8} value={f.password} onChange={cambiar('password')} /><small>{t('registro.minimo')}</small></label>
+      <CampoContrasena etiqueta={t('acceso.contrasena')} valor={f.password} onCambio={(v) => setF({ ...f, password: v })} autoComplete="new-password" minLength={8} ayuda={t('registro.minimo')} />
+      <CampoContrasena
+        etiqueta={t('contrasena.repetir')}
+        valor={f.repetir}
+        onCambio={(v) => setF({ ...f, repetir: v })}
+        autoComplete="new-password"
+        error={f.repetir && f.repetir !== f.password.slice(0, f.repetir.length) ? t('contrasena.noCoinciden') : ''}
+      />
       <label className="casilla">
         <input type="checkbox" required checked={acepta} onChange={(e) => setAcepta(e.target.checked)} />
         <span>{t('registro.acepto')} <Link className="enlace" href="/legal/normas/" target="_blank">{t('registro.normas')}</Link> {t('registro.yLa')} <Link className="enlace" href="/legal/privacidad/" target="_blank">{t('registro.privacidad')}</Link>.</span>

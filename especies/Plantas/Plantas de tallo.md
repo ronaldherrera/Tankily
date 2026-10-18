@@ -668,7 +668,7 @@
 
 ---
 
-### Hygrophila Lancea (Hygrophila lancea)
+### Hygrophila Lancea (Hygrophila lancea / Hygrophila ringens)
 **Familia**: Acanthaceae
 **Origen**: Asia oriental
 **Tamaño**: 10 – 30 cm

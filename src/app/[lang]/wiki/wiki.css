@@ -153,7 +153,7 @@
 .pokedex-grupo-cabecera { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .pokedex-grupo-cabecera h3 { margin: 0; font-size: 1.05rem; }
 .pokedex-grupo-cabecera .cuenta { font-size: 0.8rem; color: var(--texto-3); }
-.pokedex-carrusel { display: flex; gap: 10px; overflow-x: auto; padding: 4px 2px 12px; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: color-mix(in oklab, var(--agua) 40%, transparent) transparent; }
+.pokedex-carrusel { display: flex; gap: 10px; overflow-x: auto; padding: 4px 2px 12px; scroll-snap-type: x proximity; }
 .pokedex-carrusel::-webkit-scrollbar { height: 6px; }
 .pokedex-carrusel::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--agua) 40%, transparent); border-radius: 6px; }
 .especie {

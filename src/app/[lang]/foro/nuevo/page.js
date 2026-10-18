@@ -11,6 +11,7 @@ import { useT } from '@/i18n/IdiomaProvider';
 import { detectarIdioma } from '@/lib/traduccion';
 import HilosParecidos from '@/components/foro/HilosParecidos';
 import { mensajeError } from '@/lib/errores';
+import Selector from '@/components/Selector';
 
 function NuevoHilo() {
   const params = useSearchParams();
@@ -53,10 +54,10 @@ function NuevoHilo() {
         <section className="cristal" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <label className="campo">
             <span>{t('foro.nuevo.categoria')}</span>
-            <select className="entrada" required value={f.categoria} onChange={(e) => setF({ ...f, categoria: e.target.value })}>
+            <Selector className="entrada" required value={f.categoria} onChange={(e) => setF({ ...f, categoria: e.target.value })}>
               <option value="" disabled>{t('foro.nuevo.elige')}</option>
               {FORO_CATEGORIAS.map((c) => <option key={c.slug} value={c.slug}>{t(`foro.grupos.${c.grupo}`)} · {t(`foro.categorias.${c.slug}.nombre`)}</option>)}
-            </select>
+            </Selector>
           </label>
           <label className="campo">
             <span>{t('foro.nuevo.tituloCampo')}</span>
@@ -70,10 +71,10 @@ function NuevoHilo() {
           {tanques.length > 0 && (
             <label className="campo">
               <span>{t('foro.nuevo.adjuntarTanque')}</span>
-              <select className="entrada" value={f.tanque_id} onChange={(e) => setF({ ...f, tanque_id: e.target.value })}>
+              <Selector className="entrada" value={f.tanque_id} onChange={(e) => setF({ ...f, tanque_id: e.target.value })}>
                 <option value="">{t('comun.ninguno')}</option>
                 {tanques.map((tq) => <option key={tq.id} value={tq.id}>{tq.nombre}</option>)}
-              </select>
+              </Selector>
               <small>{t('foro.nuevo.verTanque')}</small>
             </label>
           )}

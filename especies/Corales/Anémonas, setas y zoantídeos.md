@@ -2,7 +2,7 @@
 
 ---
 
-### Anémona Magnífica (Heteractis magnifica)
+### Anémona Magnífica (Heteractis magnifica / Radianthus magnifica)
 **Tipo**: Anémona
 **Familia**: Stichodactylidae
 **Origen**: Indo-Pacífico y mar Rojo
@@ -21,7 +21,7 @@
 
 ---
 
-### Anémona Sebae (Heteractis crispa)
+### Anémona Sebae (Heteractis crispa / Radianthus crispa)
 **Tipo**: Anémona
 **Familia**: Stichodactylidae
 **Origen**: Indo-Pacífico
@@ -40,7 +40,7 @@
 
 ---
 
-### Anémona Malu (Heteractis malu)
+### Anémona Malu (Heteractis malu / Radianthus malu)
 **Tipo**: Anémona
 **Familia**: Stichodactylidae
 **Origen**: Pacífico occidental y Hawái
@@ -116,7 +116,7 @@
 
 ---
 
-### Anémona de Larga Trompeta (Macrodactyla doreensis)
+### Anémona de Larga Trompeta (Macrodactyla doreensis / Condylactis doreensis)
 **Tipo**: Anémona
 **Familia**: Actiniidae
 **Origen**: Pacífico occidental

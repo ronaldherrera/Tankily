@@ -7,6 +7,7 @@ import { Marca } from '@/components/shell/AppShell';
 import { useT } from '@/i18n/IdiomaProvider';
 import AccesoSocial from '@/components/auth/AccesoSocial';
 import { enviarEnlace } from '@/lib/autenticacion';
+import CampoContrasena from '@/components/CampoContrasena';
 
 export default function AccederPage() {
   const router = useNavegar();
@@ -53,7 +54,7 @@ export default function AccederPage() {
       </div>
       <AccesoSocial />
       <label className="campo"><span>{t('acceso.email')}</span><input className="entrada" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></label>
-      <label className="campo"><span>{t('acceso.contrasena')}</span><input className="entrada" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} /></label>
+      <CampoContrasena etiqueta={t('acceso.contrasena')} valor={password} onCambio={setPassword} />
       {error && <p className="aviso error" role="alert">{error}</p>}
       <button className="btn btn-primario" disabled={cargando}>{cargando ? t('acceso.entrando') : t('acceso.entrar')}</button>
       {enlace === 'enviado' ? (

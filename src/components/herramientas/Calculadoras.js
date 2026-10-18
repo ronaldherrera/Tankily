@@ -12,6 +12,7 @@ import {
   volumenRectangular, volumenCilindrico, pesoAgua, cambioAgua, porcentajeParaNitrato,
   co2DesdeKhPh, zonaCo2, convertirDureza, pptDesdeDensidad, densidadDesdePpt, salNecesaria,
 } from '@/lib/calculos';
+import Selector from '@/components/Selector';
 
 const CM_POR_IN = 2.54;
 const L_POR_GAL = 3.78541;
@@ -165,9 +166,9 @@ function Dureza() {
         <Campo etiqueta={t('herr.dureza.valor')} valor={valor} onCambio={setValor} />
         <label className="campo calc-campo" htmlFor={id}>
           <span>{t('herr.dureza.unidad')}</span>
-          <select id={id} className="entrada" value={unidad} onChange={(e) => setUnidad(e.target.value)}>
+          <Selector id={id} className="entrada" value={unidad} onChange={(e) => setUnidad(e.target.value)}>
             {UNIDADES.map((k) => <option key={k} value={k}>{t(`herr.dureza.${k}`)}</option>)}
-          </select>
+          </Selector>
         </label>
       </div>
       <div className="calc-resultados">

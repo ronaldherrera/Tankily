@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { PROVINCIAS } from '@/lib/constantes';
 import { listaPaises } from '@/lib/paises';
 import { useT } from '@/i18n/IdiomaProvider';
+import Selector from '@/components/Selector';
 
 // País + provincia/región. En España, lista de provincias; en el resto, texto libre.
 // modo "filtro" añade la opción de "todos" en ambos campos.
@@ -19,7 +20,7 @@ export default function SelectorUbicacion({ pais, region, onCambio, requerido = 
     <>
       <label className={filtro ? undefined : 'campo'} style={filtro ? { display: 'contents' } : undefined}>
         {!filtro && <span>{t('ubicacion.pais')}</span>}
-        <select
+        <Selector
           className="entrada"
           required={requerido}
           value={pais || ''}
@@ -28,17 +29,17 @@ export default function SelectorUbicacion({ pais, region, onCambio, requerido = 
         >
           <option value="">{filtro ? t('ubicacion.todosLosPaises') : t('comun.sinIndicar')}</option>
           {paises.length ? paises.map((p) => <option key={p.codigo} value={p.codigo}>{p.nombre}</option>) : pais && <option value={pais}>{pais}</option>}
-        </select>
+        </Selector>
       </label>
 
       {pais && (
         <label className={filtro ? undefined : 'campo'} style={filtro ? { display: 'contents' } : undefined}>
           {!filtro && <span>{t('ubicacion.region')}</span>}
           {pais === 'ES' ? (
-            <select className="entrada" required={requerido && !filtro} value={region || ''} aria-label={t('ubicacion.region')} onChange={(e) => onCambio({ pais, region: e.target.value })}>
+            <Selector className="entrada" required={requerido && !filtro} value={region || ''} aria-label={t('ubicacion.region')} onChange={(e) => onCambio({ pais, region: e.target.value })}>
               <option value="">{filtro ? t('ubicacion.todoElPais') : t('ubicacion.elige')}</option>
               {PROVINCIAS.map((p) => <option key={p}>{p}</option>)}
-            </select>
+            </Selector>
           ) : (
             <input
               className="entrada"

@@ -9,6 +9,7 @@ import { SELECT_POST } from './Feed';
 import { useT } from '@/i18n/IdiomaProvider';
 import { detectarIdioma } from '@/lib/traduccion';
 import { mensajeError } from '@/lib/errores';
+import Selector from '@/components/Selector';
 
 export default function PostComposer({ onPublicado, tanqueFijo = null }) {
   const { usuario, perfil } = useSesion();
@@ -68,10 +69,10 @@ export default function PostComposer({ onPublicado, tanqueFijo = null }) {
       {error && <p className="aviso error">{error}</p>}
       <div className="compositor-pie">
         {!tanqueFijo && tanques.length > 0 && (
-          <select className="entrada" style={{ width: 'auto', minHeight: 36, height: 36, paddingBlock: 0 }} value={tanqueId} onChange={(e) => setTanqueId(e.target.value)} aria-label={t('compositor.tanqueRelacionado')}>
+          <Selector className="entrada" style={{ width: 'auto', minHeight: 36, height: 36, paddingBlock: 0 }} value={tanqueId} onChange={(e) => setTanqueId(e.target.value)} aria-label={t('compositor.tanqueRelacionado')}>
             <option value="">{t('compositor.sinTanque')}</option>
             {tanques.map((t) => <option key={t.id} value={t.id}>{t.nombre}</option>)}
-          </select>
+          </Selector>
         )}
         <span className="texto-3 mini" style={{ marginLeft: 'auto' }}>{texto.length > 1800 ? `${2000 - texto.length}` : ''}</span>
         <button className="btn btn-primario btn-s" disabled={!puedePublicar}>{enviando ? t('comun.publicando') : t('comun.publicar')}</button>

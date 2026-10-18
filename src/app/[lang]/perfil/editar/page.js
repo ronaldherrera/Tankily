@@ -10,6 +10,14 @@ import { useT } from '@/i18n/IdiomaProvider';
 import SelectorUbicacion from '@/components/SelectorUbicacion';
 import { Avatar, RequiereSesion, useTostada } from '@/components/ui';
 import { usuarioValido } from '@/lib/usuario';
+import Selector from '@/components/Selector';
+import RecortarImagen from '@/components/RecortarImagen';
+
+// Foto de perfil cuadrada (se ve en círculo) y portada 3:1, como se muestran en el perfil
+const RECORTES = {
+  avatar_url: { forma: 'circulo', proporcion: 1, anchoSalida: 512, titulo: 'recorte.foto' },
+  portada_url: { forma: 'rectangulo', proporcion: 3, anchoSalida: 1500, titulo: 'recorte.portada' },
+};
 
 export default function EditarPerfil() {
   const { usuario, perfil, cargando, recargarPerfil } = useSesion();
@@ -19,6 +27,7 @@ export default function EditarPerfil() {
   const [f, setF] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState('');
+  const [recorte, setRecorte] = useState(null);
 
   useEffect(() => {
     if (perfil && !f) setF({ usuario: perfil.usuario, nombre: perfil.nombre || '', bio: perfil.bio || '', pais: perfil.pais || '', provincia: perfil.provincia || '', nivel: perfil.nivel || '', avatar_url: perfil.avatar_url || '', portada_url: perfil.portada_url || '' });
@@ -30,13 +39,19 @@ export default function EditarPerfil() {
 
   const cambiar = (c) => (e) => setF({ ...f, [c]: e.target.value });
 
-  async function subir(campo, e) {
+  // Al elegir una foto se abre el recorte; al aplicarlo se sube ya recortada
+  function subir(campo, e) {
     const archivo = e.target.files?.[0];
-    if (!archivo) return;
+    e.target.value = '';
+    if (archivo) setRecorte({ campo, archivo });
+  }
+  async function subirRecorte(archivo) {
+    const { campo } = recorte;
     try {
-      const url = await subirImagen(archivo, 'perfil', { ladoMaximo: campo === 'avatar_url' ? 512 : 1600 });
+      const url = await subirImagen(archivo, 'perfil', { ladoMaximo: RECORTES[campo].anchoSalida });
       setF((x) => ({ ...x, [campo]: url }));
     } catch (err) { setError(err.message); }
+    setRecorte(null);
   }
 
   async function guardar(e) {
@@ -81,16 +96,25 @@ export default function EditarPerfil() {
             <SelectorUbicacion pais={f.pais} region={f.provincia} onCambio={({ pais, region }) => setF({ ...f, pais, provincia: region })} />
             <label className="campo">
               <span>{t('editarPerfil.experiencia')}</span>
-              <select className="entrada" value={f.nivel} onChange={cambiar('nivel')}>
+              <Selector className="entrada" value={f.nivel} onChange={cambiar('nivel')}>
                 <option value="">{t('comun.sinIndicar')}</option>
                 {NIVELES.map((k) => <option key={k} value={k}>{t(`perfil.niveles.${k}`)}</option>)}
-              </select>
+              </Selector>
             </label>
           </div>
         </section>
         {error && <p className="aviso error">{error}</p>}
         <button className="btn btn-primario" style={{ alignSelf: 'flex-end' }} disabled={guardando}>{guardando ? t('comun.guardando') : t('editarPerfil.guardar')}</button>
       </form>
+      {recorte && (
+        <RecortarImagen
+          archivo={recorte.archivo}
+          {...RECORTES[recorte.campo]}
+          titulo={t(RECORTES[recorte.campo].titulo)}
+          onListo={subirRecorte}
+          onCancelar={() => setRecorte(null)}
+        />
+      )}
     </div>
   );
 }

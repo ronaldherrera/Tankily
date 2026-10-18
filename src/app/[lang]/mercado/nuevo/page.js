@@ -11,6 +11,7 @@ import { MONEDAS, monedaDe, paisProbable } from '@/lib/paises';
 import { RequiereSesion, SubidorImagenes, useTostada } from '@/components/ui';
 import SelectorUbicacion from '@/components/SelectorUbicacion';
 import { mensajeError } from '@/lib/errores';
+import Selector from '@/components/Selector';
 
 const VACIO = { titulo: '', descripcion: '', categoria: 'peces', modalidad: 'venta', precio: '', moneda: 'EUR', pais: '', provincia: '', envio: false, envio_alcance: 'pais', imagenes: [], estado: 'activo', como_tienda: false };
 
@@ -88,15 +89,15 @@ function FormularioAnuncio() {
           <div className="fila-campos">
             <label className="campo">
               <span>{t('mercado.form.categoria')}</span>
-              <select className="entrada" value={f.categoria} onChange={cambiar('categoria')}>
+              <Selector className="entrada" value={f.categoria} onChange={cambiar('categoria')}>
                 {CATEGORIAS_ANUNCIO.map((k) => <option key={k} value={k}>{t(`mercado.categorias.${k}`)}</option>)}
-              </select>
+              </Selector>
             </label>
             <label className="campo">
               <span>{t('mercado.form.modalidad')}</span>
-              <select className="entrada" value={f.modalidad} onChange={cambiar('modalidad')}>
+              <Selector className="entrada" value={f.modalidad} onChange={cambiar('modalidad')}>
                 {MODALIDADES.map((k) => <option key={k} value={k}>{t(`mercado.modalidades.${k}`)}</option>)}
-              </select>
+              </Selector>
             </label>
           </div>
           {f.modalidad !== 'regalo' && (
@@ -104,9 +105,9 @@ function FormularioAnuncio() {
               <label className="campo"><span>{t('mercado.form.precio')}</span><input className="entrada" inputMode="decimal" value={f.precio} onChange={cambiar('precio')} placeholder={f.modalidad === 'cambio' ? t('mercado.form.opcional') : t('mercado.form.precioEj')} /></label>
               <label className="campo">
                 <span>{t('mercado.form.moneda')}</span>
-                <select className="entrada" value={f.moneda} onChange={cambiar('moneda')}>
+                <Selector className="entrada" value={f.moneda} onChange={cambiar('moneda')}>
                   {MONEDAS.map((m) => <option key={m}>{m}</option>)}
-                </select>
+                </Selector>
               </label>
             </div>
           )}
@@ -121,11 +122,11 @@ function FormularioAnuncio() {
             {id && (
               <label className="campo">
                 <span>{t('mercado.form.estado')}</span>
-                <select className="entrada" value={f.estado} onChange={cambiar('estado')}>
+                <Selector className="entrada" value={f.estado} onChange={cambiar('estado')}>
                   <option value="activo">{t('mercado.form.disponible')}</option>
                   <option value="reservado">{t('mercado.form.reservado')}</option>
                   <option value="vendido">{t('mercado.form.vendido')}</option>
-                </select>
+                </Selector>
               </label>
             )}
           </div>
@@ -133,11 +134,11 @@ function FormularioAnuncio() {
           {f.envio && (
             <label className="campo">
               <span>{t('envio.alcance')}</span>
-              <select className="entrada" value={f.envio_alcance || 'pais'} onChange={cambiar('envio_alcance')}>
+              <Selector className="entrada" value={f.envio_alcance || 'pais'} onChange={cambiar('envio_alcance')}>
                 <option value="provincia">{t('envio.opcionProvincia')}</option>
                 <option value="pais">{t('envio.opcionPais')}</option>
                 <option value="internacional">{t('envio.opcionInternacional')}</option>
-              </select>
+              </Selector>
             </label>
           )}
           {tienda && !id && <label className="casilla"><input type="checkbox" checked={f.como_tienda} onChange={cambiar('como_tienda')} /> {t('mercado.form.comoTienda', { tienda: tienda.nombre })}</label>}

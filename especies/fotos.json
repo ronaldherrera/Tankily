@@ -3422,13 +3422,6 @@
     "urlLicencia": "https://creativecommons.org/licenses/by-sa/3.0",
     "fuente": "https://commons.wikimedia.org/wiki/File:Echinodorus_grandiflorus_grandiflorus_BotGardBln07122011C.JPG"
   },
-  "echinodorus-grisebachii": {
-    "archivo": "echinodorus-grisebachii.webp",
-    "autor": "Djlayton4 , Daniel J. Layton",
-    "licencia": "CC BY-SA 3.0",
-    "urlLicencia": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "fuente": "https://commons.wikimedia.org/wiki/File:Symphysodon_%27Red_Turquoise%27_and_%27Blue_Diamond%27.jpg"
-  },
   "echinodorus-osiris": {
     "archivo": "echinodorus-osiris.webp",
     "autor": "阿橋 HQ",
@@ -3639,8 +3632,8 @@
     "urlLicencia": "https://creativecommons.org/licenses/by-sa/4.0",
     "fuente": "https://commons.wikimedia.org/wiki/File:Epalzeorhynchos_bicolor1.jpg"
   },
-  "epalzeorhynchos-frenatum": {
-    "archivo": "epalzeorhynchos-frenatum.webp",
+  "epalzeorhynchos-frenatus": {
+    "archivo": "epalzeorhynchos-frenatus.webp",
     "autor": "MerlinSenger at German Wikipedia",
     "licencia": "CC BY-SA 3.0",
     "urlLicencia": "http://creativecommons.org/licenses/by-sa/3.0/",

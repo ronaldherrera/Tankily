@@ -1182,7 +1182,7 @@
 
 ---
 
-### Pez Pipa Bandeado (Doryrhamphus dactyliophorus)
+### Pez Pipa Bandeado (Doryrhamphus dactyliophorus / Dunckerocampus dactyliophorus)
 **Familia**: Syngnathidae
 **Origen**: Indo-Pacífico
 **Tamaño**: 18 cm

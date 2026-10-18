@@ -10,6 +10,7 @@ import { useT } from '@/i18n/IdiomaProvider';
 import { Modal, Vacio, useTostada } from '@/components/ui';
 import { analizarCompatibilidad, especieDe, ultimasMediciones } from '@/lib/compatibilidad';
 import Compatibilidad, { ListaAvisos, useFormatoAgua } from './Compatibilidad';
+import Selector from '@/components/Selector';
 
 const normalizar = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
@@ -110,9 +111,9 @@ function FormularioHabitante({ tanque, habitantes, mediciones, onGuardado, onCer
         <div className="fila-campos">
           <label className="campo">
             <span>{t('habitantesForm.categoria')}</span>
-            <select className="entrada" value={h.categoria} onChange={(e) => setH({ ...h, categoria: e.target.value })}>
+            <Selector className="entrada" value={h.categoria} onChange={(e) => setH({ ...h, categoria: e.target.value })}>
               {CATEGORIAS_HABITANTE.map((k) => <option key={k} value={k}>{t(`habitantes.${k}`)}</option>)}
-            </select>
+            </Selector>
           </label>
           <label className="campo">
             <span>{t('habitantesForm.cantidad')}</span>

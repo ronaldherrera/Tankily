@@ -96,7 +96,7 @@ function Bandeja() {
               </header>
               <div className="hilo-mensajes">
                 {hilo.map((m) => (
-                  <div key={m.id} className={`burbuja${m.emisor_id === usuario.id ? ' mia' : ''}`}>
+                  <div key={m.id} className={`burbuja${m.emisor_id === usuario.id ? ' mia' : ''}${m.enviando ? ' enviando' : ''}`}>
                     {m.anuncio && <Link href={`/mercado/anuncio/?id=${m.anuncio.id}`} className="mini" style={{ display: 'flex', gap: 4, alignItems: 'center', opacity: 0.8 }}><Tag size={12} /> {m.anuncio.titulo}</Link>}
                     <p className="prosa">{m.contenido}</p>
                     <span className="mini" style={{ opacity: 0.6 }}>{formatRelativeTime(m.creado_en)}</span>

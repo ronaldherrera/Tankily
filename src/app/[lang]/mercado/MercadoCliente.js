@@ -18,6 +18,7 @@ import OrdenCercania from '@/components/OrdenCercania';
 import { nombrePais } from '@/lib/paises';
 import AnuncioCard, { SELECT_ANUNCIO } from '@/components/mercado/AnuncioCard';
 import Publicidad from '@/components/Publicidad';
+import Selector from '@/components/Selector';
 
 const POR_PAGINA = 24;
 
@@ -114,10 +115,10 @@ function Mercado() {
             <input value={filtros.q} onChange={(e) => poner('q', e.target.value)} placeholder={t('mercado.buscar')} aria-label={t('mercado.buscar')} />
           </label>
           <SelectorUbicacion modo="filtro" pais={filtros.pais} region={filtros.provincia} onCambio={({ pais, region }) => setFiltros({ ...filtros, pais, provincia: region })} />
-          <select className="entrada" value={filtros.modalidad} onChange={(e) => poner('modalidad', e.target.value)} aria-label={t('mercado.modalidad')}>
+          <Selector className="entrada" value={filtros.modalidad} onChange={(e) => poner('modalidad', e.target.value)} aria-label={t('mercado.modalidad')}>
             <option value="">{t('mercado.todasModalidades')}</option>
             {MODALIDADES.map((k) => <option key={k} value={k}>{t(`mercado.modalidades.${k}`)}</option>)}
-          </select>
+          </Selector>
           {usuario && (
             <label className="casilla" style={{ alignItems: 'center', position: 'relative', zIndex: 2 }}>
               <input type="checkbox" checked={filtros.mios} onChange={(e) => poner('mios', e.target.checked)} /> {t('mercado.misAnuncios')}

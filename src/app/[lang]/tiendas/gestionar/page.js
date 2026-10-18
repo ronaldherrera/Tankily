@@ -14,6 +14,14 @@ import SelectorUbicacion from '@/components/SelectorUbicacion';
 import { RequiereSesion, useTostada } from '@/components/ui';
 import { esPro } from '@/lib/tiendas';
 import { geocodificarTienda } from '@/lib/geocodificar';
+import Selector from '@/components/Selector';
+import RecortarImagen from '@/components/RecortarImagen';
+
+// Logo cuadrado y portada 3:1
+const RECORTES = {
+  logo_url: { forma: 'rectangulo', proporcion: 1, anchoSalida: 512, titulo: 'recorte.logo' },
+  portada_url: { forma: 'rectangulo', proporcion: 3, anchoSalida: 1500, titulo: 'recorte.portada' },
+};
 
 const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
 
@@ -27,6 +35,7 @@ export default function GestionarTienda() {
   const [existente, setExistente] = useState(undefined);
   const [f, setF] = useState(VACIA);
   const [slugTocado, setSlugTocado] = useState(false);
+  const [recorte, setRecorte] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState('');
 
@@ -48,11 +57,19 @@ export default function GestionarTienda() {
     setF((x) => ({ ...x, [c]: valor, ...(c === 'nombre' && !slugTocado ? { slug: slugify(valor) } : {}) }));
   };
 
-  async function subir(campo, e) {
+  // Al elegir una foto se abre el recorte; al aplicarlo se sube ya recortada
+  function subir(campo, e) {
     const archivo = e.target.files?.[0];
-    if (!archivo) return;
-    try { const url = await subirImagen(archivo, 'tienda', { ladoMaximo: campo === 'logo_url' ? 512 : 1600 }); setF((x) => ({ ...x, [campo]: url })); }
-    catch (err) { setError(err.message); }
+    e.target.value = '';
+    if (archivo) setRecorte({ campo, archivo });
+  }
+  async function subirRecorte(archivo) {
+    const { campo } = recorte;
+    try {
+      const url = await subirImagen(archivo, 'tienda', { ladoMaximo: RECORTES[campo].anchoSalida });
+      setF((x) => ({ ...x, [campo]: url }));
+    } catch (err) { setError(err.message); }
+    setRecorte(null);
   }
 
   async function guardar(e) {
@@ -139,11 +156,11 @@ export default function GestionarTienda() {
           {f.venta_online && (
             <label className="campo">
               <span>{t('envio.alcance')}</span>
-              <select className="entrada" value={f.envio_alcance || 'pais'} onChange={cambiar('envio_alcance')}>
+              <Selector className="entrada" value={f.envio_alcance || 'pais'} onChange={cambiar('envio_alcance')}>
                 <option value="provincia">{t('envio.opcionProvincia')}</option>
                 <option value="pais">{t('envio.opcionPais')}</option>
                 <option value="internacional">{t('envio.opcionInternacional')}</option>
-              </select>
+              </Selector>
             </label>
           )}
         </section>
@@ -151,6 +168,15 @@ export default function GestionarTienda() {
         {error && <p className="aviso error">{error}</p>}
         <button className="btn btn-primario" style={{ alignSelf: 'flex-end' }} disabled={guardando}>{guardando ? t('comun.guardando') : existente ? t('comun.guardarCambios') : t('tiendas.gestionar.crear')}</button>
       </form>
+      {recorte && (
+        <RecortarImagen
+          archivo={recorte.archivo}
+          {...RECORTES[recorte.campo]}
+          titulo={t(RECORTES[recorte.campo].titulo)}
+          onListo={subirRecorte}
+          onCancelar={() => setRecorte(null)}
+        />
+      )}
     </div>
   );
 }

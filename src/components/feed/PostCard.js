@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from '@/components/Enlace';
-import { Heart, MessageCircle, Repeat2, Share, MoreHorizontal, Trash2, Flag } from 'lucide-react';
+import { Heart, MessageCircle, Repeat2, Share, MoreHorizontal, Trash2, Flag, Quote, Undo2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useSesion } from '@/lib/sesion';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
 import { colorAgua } from '@/lib/constantes';
 import { useT } from '@/i18n/IdiomaProvider';
-import { Avatar, NombreAutor, Galeria, useTostada } from '@/components/ui';
+import { Avatar, NombreAutor, Galeria, Modal, useTostada } from '@/components/ui';
+import { detectarIdioma } from '@/lib/traduccion';
 import TextoTraducible from './TextoTraducible';
-import CommentSection from './CommentSection';
+import CommentSection, { precargarComentarios } from './CommentSection';
 import Reportar from '@/components/Reportar';
 import { usePresencia } from '@/lib/presencia';
 import { borrarImagenes } from '@/lib/imagenes';
@@ -39,7 +40,7 @@ function Contenido({ post, sinEnlaces = false }) {
   );
 }
 
-export default function PostCard({ post, meGusta = false, onBorrado, destacado = false }) {
+export default function PostCard({ post, meGusta = false, miEco, onBorrado, destacado = false }) {
   const { usuario } = useSesion();
   const tostada = useTostada();
   const { t } = useT();
@@ -54,6 +55,23 @@ export default function PostCard({ post, meGusta = false, onBorrado, destacado =
   const [menu, setMenu] = useState(false);
   const [reportando, setReportando] = useState(false);
   const menuOpciones = usePresencia(menu);
+  // Republicar, como en X: "Hacer eco" tal cual o "Citar" con un comentario propio
+  const [menuEco, setMenuEco] = useState(false);
+  const menuEcoPresencia = usePresencia(menuEco);
+  const cajaEco = useRef(null);
+  const [citando, setCitando] = useState(false);
+  // Mi eco y mi cita de esta publicación (ids), para marcar el botón y no repetir
+  const [eco, setEco] = useState(miEco?.eco || null);
+  const [cita, setCita] = useState(miEco?.cita || null);
+
+  useEffect(() => {
+    if (!menuEco) return undefined;
+    const fuera = (e) => !cajaEco.current?.contains(e.target) && setMenuEco(false);
+    const escape = (e) => e.key === 'Escape' && setMenuEco(false);
+    document.addEventListener('pointerdown', fuera);
+    document.addEventListener('keydown', escape);
+    return () => { document.removeEventListener('pointerdown', fuera); document.removeEventListener('keydown', escape); };
+  }, [menuEco]);
 
 
   async function alternarGusta() {
@@ -70,13 +88,32 @@ export default function PostCard({ post, meGusta = false, onBorrado, destacado =
     }
   }
 
-  async function hacerEco() {
+  function abrirMenuEco() {
     if (!usuario) return tostada(t('post.entraEco'));
-    const { error } = await supabase.from('publicaciones').insert({ eco_de: objetivo.id, tipo: 'eco' });
+    setMenuEco(!menuEco);
+  }
+
+  async function hacerEco() {
+    setMenuEco(false);
+    if (!usuario) return tostada(t('post.entraEco'));
+    const { data, error } = await supabase.from('publicaciones').insert({ eco_de: objetivo.id, tipo: 'eco' }).select('id').single();
     if (!error) {
+      setEco(data.id);
       setNumEcos((n) => n + 1);
       tostada(t('post.ecoPublicado'));
     }
+  }
+
+  // Deshacer el eco: se borra mi eco (no la publicación original). Si esta tarjeta era ese eco, se quita del muro.
+  async function deshacerEco() {
+    setMenuEco(false);
+    const id = eco;
+    setEco(null);
+    setNumEcos((n) => Math.max(0, n - 1));
+    const { error } = await supabase.from('publicaciones').delete().eq('id', id).eq('usuario_id', usuario.id);
+    if (error) { setEco(id); setNumEcos((n) => n + 1); return; }
+    tostada(t('cita.ecoDeshecho'));
+    if (post.id === id) onBorrado?.(post.id);
   }
 
   async function compartir() {
@@ -150,12 +187,37 @@ export default function PostCard({ post, meGusta = false, onBorrado, destacado =
       </div>
 
       <footer className="post-acciones">
-        <button onClick={() => setVerComentarios(!verComentarios)} aria-label={t('post.comentarios')} aria-expanded={verComentarios}>
+        <button
+          onClick={() => setVerComentarios(!verComentarios)}
+          onPointerEnter={() => precargarComentarios(objetivo.id)}
+          onFocus={() => precargarComentarios(objetivo.id)}
+          aria-label={t('post.comentarios')}
+          aria-expanded={verComentarios}
+        >
           <MessageCircle size={18} /> <span>{numComentarios || ''}</span>
         </button>
-        <button onClick={hacerEco} aria-label={t('post.hacerEco')}>
-          <Repeat2 size={18} /> <span>{numEcos || ''}</span>
-        </button>
+        <span ref={cajaEco} className="post-eco">
+          <button
+            onClick={abrirMenuEco}
+            aria-label={t('post.hacerEco')}
+            aria-haspopup="menu"
+            aria-expanded={menuEco}
+            aria-pressed={!!(eco || cita)}
+            className={`${menuEco ? 'activo' : ''}${eco || cita ? ' eco-hecho' : ''}`}
+          >
+            <Repeat2 size={18} /> <span>{numEcos || ''}</span>
+          </button>
+          {menuEcoPresencia.montado && (
+            <div className={`menu cristal menu-eco${menuEcoPresencia.saliendo ? ' saliendo' : ''}`} role="menu">
+              {eco
+                ? <button role="menuitem" onClick={deshacerEco}><Undo2 size={16} /> {t('cita.deshacerEco')}</button>
+                : <button role="menuitem" onClick={hacerEco}><Repeat2 size={16} /> {t('post.hacerEco')}</button>}
+              {cita
+                ? <Link role="menuitem" href={`/post/?id=${cita}`} onClick={() => setMenuEco(false)}><Quote size={16} /> {t('cita.verCita')}</Link>
+                : <button role="menuitem" onClick={() => { setMenuEco(false); setCitando(true); }}><Quote size={16} /> {t('cita.citar')}</button>}
+            </div>
+          )}
+        </span>
         <button onClick={alternarGusta} aria-label={t('post.meGusta')} aria-pressed={gusta} className={gusta ? 'gusta' : ''}>
           <Heart size={18} fill={gusta ? 'currentColor' : 'none'} /> <span>{numGusta || ''}</span>
         </button>
@@ -165,14 +227,77 @@ export default function PostCard({ post, meGusta = false, onBorrado, destacado =
       </footer>
 
       {verComentarios && (
-        <CommentSection
-          postId={objetivo.id}
-          autorPostId={objetivo.usuario_id}
-          onCambioTotal={(d) => setNumComentarios((n) => n + d)}
-        />
+        <div className="despliega">
+          <CommentSection
+            postId={objetivo.id}
+            autorPostId={objetivo.usuario_id}
+            onCambioTotal={(d) => setNumComentarios((n) => n + d)}
+          />
+        </div>
       )}
 
       {reportando && <Reportar tipo="publicacion" objetoId={post.id} onCerrar={() => setReportando(false)} />}
+      {citando && (
+        <CitarPost
+          original={objetivo}
+          onCerrar={() => setCitando(false)}
+          onPublicada={(id) => { setCitando(false); setCita(id); setNumEcos((n) => n + 1); tostada(t('cita.publicada')); }}
+        />
+      )}
     </article>
+  );
+}
+
+// Ventana para citar: tu comentario arriba y la publicación original enmarcada debajo, como quedará en el muro
+function CitarPost({ original, onCerrar, onPublicada }) {
+  const { t, lang } = useT();
+  const { perfil } = useSesion();
+  const [texto, setTexto] = useState('');
+  const [error, setError] = useState('');
+  const [publicando, setPublicando] = useState(false);
+
+  async function publicar(e) {
+    e.preventDefault();
+    if (!texto.trim()) return setError(t('cita.vacia'));
+    setPublicando(true);
+    const { data, error: fallo } = await supabase.from('publicaciones').insert({
+      eco_de: original.id, tipo: 'eco', contenido: texto.trim(), idioma: await detectarIdioma(texto, lang),
+    }).select('id').single();
+    setPublicando(false);
+    if (fallo) return setError(fallo.message);
+    onPublicada(data.id);
+  }
+
+  return (
+    <Modal titulo={t('cita.titulo')} onCerrar={onCerrar} ancho={560}>
+      <form className="citar" onSubmit={publicar}>
+        <div className="citar-autor">
+          <Avatar perfil={perfil} tamano={40} />
+          <textarea
+            className="entrada"
+            rows={3}
+            maxLength={2000}
+            autoFocus
+            value={texto}
+            onChange={(e) => { setTexto(e.target.value); setError(''); }}
+            placeholder={t('cita.placeholder')}
+            aria-label={t('cita.placeholder')}
+          />
+        </div>
+        <div className="eco-citado">
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
+            <Avatar perfil={original.autor} tamano={22} />
+            <strong className="pequeno">{original.autor?.nombre || original.autor?.usuario}</strong>
+            <span className="texto-3 mini">{formatRelativeTime(original.creado_en)}</span>
+          </div>
+          <Contenido post={original} sinEnlaces />
+        </div>
+        {error && <p className="aviso error">{error}</p>}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+          <button type="button" className="btn" onClick={onCerrar}>{t('recorte.cancelar')}</button>
+          <button className="btn btn-primario" disabled={publicando || !texto.trim()}>{t('cita.publicar')}</button>
+        </div>
+      </form>
+    </Modal>
   );
 }

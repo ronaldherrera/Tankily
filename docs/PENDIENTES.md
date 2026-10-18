@@ -11,7 +11,7 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
   - Site URL: `https://tankily.com`
   - Redirect URLs: `https://tankily.com/**` y `http://localhost:3210/**`
   - Sin esto fallan la confirmación de email, la recuperación de contraseña, el enlace sin contraseña y el acceso con Google.
-- [ ] **Correo saliente propio (SMTP).** El correo de Supabase por defecto solo permite unos pocos emails por hora y suele acabar en spam. Contrata un servicio (Resend, Brevo, Postmark o el SMTP de Hostinger) con un remitente tipo `hola@tankily.com` y configúralo en Supabase → Authentication → Emails → SMTP Settings.
+- [x] **Correo saliente propio (SMTP)** (18/10/2026): buzón `krill@tankily.com` en Hostinger (MX, SPF, DKIM y DMARC comprobados) y SMTP en Supabase (`smtp.hostinger.com:465`). Pendiente: probar el envío y activar las plantillas con la marca. ~~ El correo de Supabase por defecto solo permite unos pocos emails por hora y suele acabar en spam. Contrata un servicio (Resend, Brevo, Postmark o el SMTP de Hostinger) con un remitente tipo `hola@tankily.com` y configúralo en Supabase → Authentication → Emails → SMTP Settings.~~
 - [ ] **Borrar los datos de demostración** (19 usuarios inventados, sus tanques, reseñas, etc.):
       `npx supabase db query --linked -f supabase/demo/limpiar_demo.sql`
 - [ ] **Datos del titular en los textos legales** (nombre o razón social, NIF/CIF, dirección, email) en `src/i18n/textos/legal.js`. Mejor si los revisa un abogado.
@@ -51,7 +51,7 @@ _Lista generada por Claude. Lo que vaya surgiendo mientras trabajo se añade aba
 
 ## Añadido durante la sesión de noche
 
-- [ ] **Hacerte administrador** para usar el nuevo panel `/admin/` (resumen, denuncias, tiendas Pro y verificación, campañas). Cuando tengas tu cuenta creada en la web, ejecuta (cambiando `tu_usuario`):
+- [x] **Hacerte administrador** (18/10/2026, `ronald.herrera`) para usar el nuevo panel `/admin/` (resumen, denuncias, tiendas Pro y verificación, campañas). Cuando tengas tu cuenta creada en la web, ejecuta (cambiando `tu_usuario`):
       `npx supabase db query --linked "update perfiles set es_admin = true where usuario = 'tu_usuario'"`
       Aparecerá "Admin" en el menú lateral.
 - [x] **Contraseñas** (18/10/2026): mínimo 8 con mayúsculas, minúsculas y números; la web valida lo mismo. La protección contra contraseñas filtradas solo existe en el plan Pro de Supabase: activarla si algún día se cambia de plan.

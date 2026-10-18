@@ -211,7 +211,7 @@
 
 ---
 
-### Socolofi (Chindongo socolofi)
+### Socolofi (Chindongo socolofi / Pseudotropheus socolofi)
 **Familia**: Cichlidae
 **Origen**: Lago Malawi (costa de Mozambique)
 **Tamaño**: 10 cm
@@ -230,7 +230,7 @@
 
 ---
 
-### Elongatus (Chindongo elongatus)
+### Elongatus (Chindongo elongatus / Pseudotropheus elongatus)
 **Familia**: Cichlidae
 **Origen**: Lago Malawi
 **Tamaño**: 10 cm
@@ -1123,7 +1123,7 @@
 
 ---
 
-### Cynotilapia Zebroides (Cynotilapia zebroides)
+### Cynotilapia Zebroides (Cynotilapia zebroides / Microchromis zebroides)
 **Familia**: Cichlidae
 **Origen**: Lago Malawi (costa de Mozambique)
 **Tamaño**: 9 cm
@@ -1142,7 +1142,7 @@
 
 ---
 
-### Melanochromis Parallelus (Melanochromis parallelus)
+### Melanochromis Parallelus (Melanochromis parallelus / Melanochromis loriae)
 **Familia**: Cichlidae
 **Origen**: Lago Malawi (costa sudeste)
 **Tamaño**: 10 cm
@@ -1161,7 +1161,7 @@
 
 ---
 
-### Melanochromis Interruptus (Melanochromis interruptus)
+### Melanochromis Interruptus (Melanochromis interruptus / Pseudotropheus interruptus)
 **Familia**: Cichlidae
 **Origen**: Lago Malawi (costa sur)
 **Tamaño**: 11 cm
@@ -1313,7 +1313,7 @@
 
 ---
 
-### Protomelas Steveni (Protomelas steveni)
+### Protomelas Steveni Taiwan (Protomelas sp. "Steveni Taiwan")
 **Familia**: Cichlidae
 **Origen**: Lago Malawi
 **Tamaño**: 15 cm

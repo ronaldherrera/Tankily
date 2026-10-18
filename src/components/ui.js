@@ -1,6 +1,9 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+
+// useLayoutEffect avisa en el servidor (export estático): allí basta con useEffect
+const useLayoutEffectSeguro = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 import Link from '@/components/Enlace';
 import { useT } from '@/i18n/IdiomaProvider';
 import { ImagePlus, X, Loader2 } from 'lucide-react';
@@ -27,7 +30,8 @@ export function NombreAutor({ perfil, conUsuario = true }) {
   );
 }
 
-export function Modal({ titulo, onCerrar, children, ancho = 520 }) {
+// `icono`: algo que va delante del título (p. ej. la foto del usuario)
+export function Modal({ titulo, onCerrar, children, ancho = 520, icono }) {
   const ref = useRef(null);
   const { t } = useT();
   const [saliendo, setSaliendo] = useState(false);
@@ -41,7 +45,9 @@ export function Modal({ titulo, onCerrar, children, ancho = 520 }) {
     const alPulsar = (e) => e.key === 'Escape' && cerrar();
     document.addEventListener('keydown', alPulsar);
     const previo = document.activeElement;
-    ref.current?.querySelector('input, textarea, select, button')?.focus();
+    // Foco al primer campo donde escribir; si no hay, al primer botón (el de cerrar)
+    (ref.current?.querySelector('input:not([type=hidden]):not([type=range]):not([type=checkbox]), textarea, select')
+      || ref.current?.querySelector('button'))?.focus();
     document.body.style.overflow = 'hidden';
     return () => {
       document.removeEventListener('keydown', alPulsar);
@@ -54,7 +60,7 @@ export function Modal({ titulo, onCerrar, children, ancho = 520 }) {
     <div className={`velo${saliendo ? ' saliendo' : ''}`} onMouseDown={(e) => e.target === e.currentTarget && cerrar()}>
       <div ref={ref} className="modal cristal cristal-refracta" role="dialog" aria-modal="true" aria-label={titulo} style={{ maxWidth: ancho }}>
         <div className="modal-cabecera">
-          <h2 className="titulo-m">{titulo}</h2>
+          <h2 className="titulo-m" style={icono ? { display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 } : undefined}>{icono}{titulo}</h2>
           <button className="btn btn-fantasma btn-icono btn-s" onClick={cerrar} aria-label={t('comun.cerrar')}><X size={18} /></button>
         </div>
         {children}
@@ -87,14 +93,57 @@ export function TostadaProvider({ children }) {
 }
 export const useTostada = () => useContext(TostadaContext);
 
+// Pestañas con una marca que se desliza (con muelle) hasta la elegida en lugar de saltar
 export function Pestanas({ opciones, valor, onCambio, etiqueta }) {
+  const caja = useRef(null);
+  const [marca, setMarca] = useState(null);
+  const primera = useRef(true);
+
+  useLayoutEffectSeguro(() => {
+    const medir = () => {
+      const b = caja.current?.querySelector('[aria-selected="true"]');
+      if (!b) return setMarca(null);
+      setMarca({ x: b.offsetLeft, y: b.offsetTop, w: b.offsetWidth, h: b.offsetHeight, animar: !primera.current });
+      primera.current = false;
+    };
+    medir();
+    const obs = new ResizeObserver(medir);
+    if (caja.current) obs.observe(caja.current);
+    return () => obs.disconnect();
+  }, [valor, opciones.length]);
+
   return (
-    <div className="pestanas cristal-suave" role="tablist" aria-label={etiqueta}>
+    <div ref={caja} className={`pestanas cristal-suave${marca ? ' con-marca' : ''}`} role="tablist" aria-label={etiqueta}>
+      {marca && (
+        <span
+          className="pestanas-marca"
+          aria-hidden="true"
+          style={{ width: marca.w, height: marca.h, transform: `translate(${marca.x}px, ${marca.y}px)`, transition: marca.animar ? undefined : 'none' }}
+        />
+      )}
       {opciones.map(([clave, texto]) => (
-        <button key={clave} role="tab" className="pestana" aria-selected={valor === clave} onClick={() => onCambio(clave)}>
+        <button key={clave} role="tab" className="pestana" aria-selected={valor === clave} onClick={() => onCambio(clave)} title={typeof texto === 'string' ? texto : undefined}>
           {texto}
         </button>
       ))}
+    </div>
+  );
+}
+
+// Altura que se anima (con muelle) cuando cambia el contenido, en lugar de saltar
+export function AlturaFluida({ children, className }) {
+  const interior = useRef(null);
+  const [alto, setAlto] = useState(null);
+  useLayoutEffectSeguro(() => {
+    const nodo = interior.current;
+    if (!nodo) return undefined;
+    const obs = new ResizeObserver(() => setAlto(nodo.offsetHeight));
+    obs.observe(nodo);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <div className={`altura-fluida${className ? ` ${className}` : ''}`} style={{ height: alto ?? 'auto' }}>
+      <div ref={interior}>{children}</div>
     </div>
   );
 }

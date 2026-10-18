@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { useT } from '@/i18n/IdiomaProvider';
 import { Modal, useTostada } from '@/components/ui';
 import { TIPOS_TAREA, marcarHecha, tareasDelTanque } from '@/lib/tareas';
+import Selector from '@/components/Selector';
 
 const ICONOS = { cambio_agua: Droplets, test: FlaskConical, filtro: Filter, limpieza: Brush, abono: Sprout, dosificacion: Pipette, poda: Scissors, alimento: Package, otro: ListChecks };
 
@@ -88,9 +89,9 @@ function FormularioTarea({ tanque, onGuardada, onCerrar }) {
       <form onSubmit={guardar} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <label className="campo">
           <span>{t('tareas.tipo')}</span>
-          <select className="entrada" value={tipo} onChange={(e) => { setTipo(e.target.value); setCada(TIPOS_TAREA[e.target.value].dias); }}>
+          <Selector className="entrada" value={tipo} onChange={(e) => { setTipo(e.target.value); setCada(TIPOS_TAREA[e.target.value].dias); }}>
             {Object.keys(TIPOS_TAREA).map((k) => <option key={k} value={k}>{t(`tareas.tipos.${k}`)}</option>)}
-          </select>
+          </Selector>
         </label>
         {tipo === 'otro' && (
           <label className="campo">

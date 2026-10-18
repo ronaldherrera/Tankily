@@ -158,7 +158,7 @@ export default {
     usuarioEj: 'es. reef_milano', asiTeMencionaran: 'Ti menzioneranno così: @{usuario}', minimo: 'Minimo 8 caratteri, con maiuscole, minuscole e almeno un numero.', acepto: 'Accetto le',
     normas: 'regole della community', yLa: 'e l’', privacidad: 'informativa sulla privacy', crear: 'Registrati', creando: 'Creazione account…',
     yaTienes: 'Hai già un account?', entra: 'Accedi', errorUsuario: 'Il nome utente deve avere da 3 a 20 caratteri: lettere minuscole, numeri, trattino basso, punti o trattini (non all’inizio o alla fine, né due di seguito).',
-    errorContrasena: 'La password deve avere almeno 8 caratteri, con maiuscole, minuscole e almeno un numero.', usuarioCogido: 'Questo nome utente è già in uso.', emailExiste: 'Esiste già un account con questa email.',
+    errorContrasena: 'La password deve avere almeno 8 caratteri, con maiuscole, minuscole e almeno un numero.', usuarioCogido: 'Questo nome utente è già in uso.', emailExiste: 'Esiste già un account con questa email. Accedi o recupera la password.',
     revisaCorreo: 'Controlla la tua email', enlaceEnviado: 'Abbiamo inviato un link a {email}. Aprilo per confermare l’account e iniziare a registrare le tue vasche.',
     irAEntrar: 'Vai all’accesso',
   },

@@ -1542,7 +1542,7 @@
 
 ---
 
-### Ángel de Bandas Múltiples (Centropyge multifasciata)
+### Ángel de Bandas Múltiples (Centropyge multifasciata / Paracentropyge multifasciata)
 **Familia**: Pomacanthidae
 **Origen**: Indo-Pacífico
 **Tamaño**: 12 cm

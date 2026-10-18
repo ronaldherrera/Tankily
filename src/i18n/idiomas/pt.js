@@ -163,7 +163,7 @@ export default {
     normas: 'regras da comunidade', yLa: 'e a', privacidad: 'política de privacidade', crear: 'Criar conta', creando: 'Criando conta…',
     yaTienes: 'Já tem conta?', entra: 'Entre', errorUsuario: 'O nome de usuário deve ter de 3 a 20 caracteres: letras minúsculas, números, sublinhado, pontos ou hífens (não no início nem no fim, nem dois seguidos).',
     errorContrasena: 'A senha deve ter pelo menos 8 caracteres, com letras maiúsculas, minúsculas e algum número.', usuarioCogido: 'Esse nome de usuário já está em uso.',
-    emailExiste: 'Já existe uma conta com esse e-mail.', revisaCorreo: 'Confira seu e-mail',
+    emailExiste: 'Já existe uma conta com esse e-mail. Entre ou recupere sua senha.', revisaCorreo: 'Confira seu e-mail',
     enlaceEnviado: 'Enviamos um link para {email}. Abra-o para confirmar sua conta e começar a registrar seus aquários.', irAEntrar: 'Ir para o login',
   },
   recuperar: {

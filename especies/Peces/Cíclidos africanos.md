@@ -575,7 +575,7 @@
 ### Nanochromis Parilus (Nanochromis parilus)
 **Familia**: Cichlidae
 **Origen**: Bajo Congo
-**Tamaño**: 8 cm
+**Tamaño**: 7 cm (machos)
 **Temperatura**: 23 – 27°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH

@@ -705,7 +705,7 @@
 
 ---
 
-### Coral Pergamino (Turbinaria peltata)
+### Coral Pergamino (Turbinaria peltata / Duncanopsammia peltata)
 **Tipo**: Coral duro LPS
 **Familia**: Dendrophylliidae
 **Origen**: Indo-Pacífico
@@ -724,7 +724,7 @@
 
 ---
 
-### Coral Bola de Huevas (Euphyllia divisa)
+### Coral Bola de Huevas (Euphyllia divisa / Fimbriaphyllia divisa)
 **Tipo**: Coral duro LPS
 **Familia**: Euphylliidae
 **Origen**: Indo-Pacífico
@@ -1503,7 +1503,7 @@
 
 ---
 
-### Sinularia Asterolobata (Sinularia asterolobata)
+### Sinularia Asterolobata (Sinularia asterolobata / Sclerophytum asterolobatum)
 **Tipo**: Coral blando
 **Familia**: Sarcophytidae
 **Origen**: Indo-Pacífico
@@ -1769,7 +1769,7 @@
 
 ---
 
-### Coral Burbuja Pulsante (Euphyllia yaeyamaensis)
+### Coral Burbuja Pulsante (Euphyllia yaeyamaensis / Fimbriaphyllia yaeyamaensis)
 **Tipo**: Coral duro LPS
 **Familia**: Euphylliidae
 **Origen**: Pacífico occidental
@@ -1845,7 +1845,7 @@
 
 ---
 
-### Coral Dedos de Cuero Tubular (Sinularia notanda)
+### Coral Dedos de Cuero Tubular (Sinularia notanda / Sclerophytum notandum)
 **Tipo**: Coral blando
 **Familia**: Sarcophytidae
 **Origen**: Indo-Pacífico

@@ -1222,7 +1222,7 @@
 
 ---
 
-### Pseudocromis Diadema (Pseudochromis diadema)
+### Pseudocromis Diadema (Pseudochromis diadema / Pictichromis diadema)
 **Familia**: Pseudochromidae
 **Origen**: Pacífico occidental
 **Tamaño**: 6 cm

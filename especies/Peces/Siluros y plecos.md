@@ -480,7 +480,7 @@
 ### Pleco Panaque Azul (Baryancistrus beggini)
 **Familia**: Loricariidae
 **Origen**: Río Guayabero (Colombia)
-**Tamaño**: 15 cm
+**Tamaño**: 12 cm
 **Temperatura**: 24 – 28°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH
@@ -575,7 +575,7 @@
 ### Pleco Lyretail Adonis (Acanthicus adonis)
 **Familia**: Loricariidae
 **Origen**: Río Tocantins (Brasil)
-**Tamaño**: 100 cm
+**Tamaño**: 60 cm (hay registros de hasta 1 m)
 **Temperatura**: 25 – 29°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 15 °dGH
@@ -594,7 +594,7 @@
 ### Pleco Lira (Acanthicus hystrix)
 **Familia**: Loricariidae
 **Origen**: Cuenca del Amazonas (Brasil)
-**Tamaño**: 100 cm
+**Tamaño**: 60 cm
 **Temperatura**: 25 – 29°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 15 °dGH
@@ -1050,7 +1050,7 @@
 ### Synodontis Enano (Mochokiella paynei)
 **Familia**: Mochokidae
 **Origen**: Sierra Leona y Liberia
-**Tamaño**: 6 cm
+**Tamaño**: 5 cm
 **Temperatura**: 22 – 26°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH
@@ -1411,7 +1411,7 @@
 ### Pleco Vampiro de Joselima (Leporacanthicus joselimai)
 **Familia**: Loricariidae
 **Origen**: Río Tapajós (Brasil)
-**Tamaño**: 20 cm
+**Tamaño**: 15 cm
 **Temperatura**: 26 – 30°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH
@@ -1655,7 +1655,7 @@
 
 ---
 
-### Pleco Sabaji (Peckoltia sabaji)
+### Pleco Sabaji (Peckoltia sabaji / Hemiancistrus sabaji)
 **Familia**: Loricariidae
 **Origen**: Cuencas del Amazonas y Orinoco
 **Tamaño**: 15 cm
@@ -1712,7 +1712,7 @@
 
 ---
 
-### Corydoras Venezolano (Corydoras venezuelanus)
+### Corydoras Venezolano (Corydoras venezuelanus / Corydoras aeneus)
 **Familia**: Callichthyidae
 **Origen**: Venezuela
 **Tamaño**: 6 cm

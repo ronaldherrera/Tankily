@@ -363,7 +363,7 @@
 
 ---
 
-### Labeo Frenatus (Epalzeorhynchos frenatum)
+### Labeo Frenatus (Epalzeorhynchos frenatus)
 **Familia**: Cyprinidae
 **Origen**: Cuencas del Mekong y Chao Phraya
 **Tamaño**: 15 cm
@@ -762,7 +762,7 @@
 
 ---
 
-### Rasbora Línea Roja (Rasbora pauciperforata)
+### Rasbora Línea Roja (Rasbora pauciperforata / Trigonopoma pauciperforatum)
 **Familia**: Danionidae
 **Origen**: Península de Malasia y Sumatra
 **Tamaño**: 6 cm
@@ -800,10 +800,10 @@
 
 ---
 
-### Rasbora Ojo de Pavo (Rasbora dorsiocellata)
+### Rasbora Ojo de Pavo (Rasbora dorsiocellata / Brevibora dorsiocellata)
 **Familia**: Danionidae
 **Origen**: Península de Malasia y Sumatra
-**Tamaño**: 6 cm
+**Tamaño**: 4.5 cm
 **Temperatura**: 22 – 26°C
 **pH**: 5.5 – 7.0
 **GH**: 2 – 12 °dGH
@@ -1373,7 +1373,7 @@
 ### Barbo Rayado (Striuntius lineatus)
 **Familia**: Cyprinidae
 **Origen**: Península de Malasia, Sumatra y Borneo
-**Tamaño**: 10 cm
+**Tamaño**: 6 cm
 **Temperatura**: 22 – 26°C
 **pH**: 5.5 – 7.0
 **GH**: 2 – 10 °dGH

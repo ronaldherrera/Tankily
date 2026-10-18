@@ -518,7 +518,7 @@
 ### Ilyodon (Ilyodon whitei)
 **Familia**: Goodeidae
 **Origen**: Río Balsas (México)
-**Tamaño**: 10 cm
+**Tamaño**: 8 cm
 **Temperatura**: 20 – 26°C
 **pH**: 7.0 – 8.0
 **GH**: 8 – 20 °dGH

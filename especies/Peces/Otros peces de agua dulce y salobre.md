@@ -575,7 +575,7 @@
 ### Pez Hoja de Schomburgk (Polycentrus schomburgkii)
 **Familia**: Polycentridae
 **Origen**: Guayanas y Trinidad
-**Tamaño**: 10 cm
+**Tamaño**: 8 cm
 **Temperatura**: 22 – 26°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH
@@ -803,7 +803,7 @@
 ### Raya Leopoldi (Potamotrygon leopoldi)
 **Familia**: Potamotrygonidae
 **Origen**: Río Xingú (Brasil)
-**Tamaño**: 40 cm de disco
+**Tamaño**: 40 cm de disco (más con la cola)
 **Temperatura**: 26 – 30°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH
@@ -974,7 +974,7 @@
 ### Pez Elefante Nariz Larga (Campylomormyrus cassaicus)
 **Familia**: Mormyridae
 **Origen**: Cuenca del Congo
-**Tamaño**: 40 cm
+**Tamaño**: 25 cm
 **Temperatura**: 24 – 28°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH

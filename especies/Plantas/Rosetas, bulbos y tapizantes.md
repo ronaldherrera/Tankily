@@ -621,7 +621,7 @@
 
 ---
 
-### Espada de Horeman (Echinodorus uruguayensis)
+### Espada de Horeman (Echinodorus uruguayensis / Aquarius uruguayensis)
 **Familia**: Alismataceae
 **Origen**: Uruguay, sur de Brasil y Argentina
 **Tamaño**: 30 – 60 cm
@@ -675,7 +675,7 @@
 
 ---
 
-### Espada Tropica (Echinodorus parviflorus)
+### Espada Tropica (Echinodorus parviflorus / Echinodorus grisebachii)
 **Familia**: Alismataceae
 **Origen**: Perú y Bolivia
 **Tamaño**: 15 – 25 cm
@@ -837,7 +837,7 @@
 
 ---
 
-### Hierba Pigmea Glomerata (Hemianthus glomeratus)
+### Hierba Pigmea Glomerata (Hemianthus glomeratus / Micranthemum glomeratum)
 **Familia**: Linderniaceae
 **Origen**: Florida (Estados Unidos)
 **Tamaño**: 5 – 15 cm
@@ -981,7 +981,7 @@
 
 ---
 
-### Echinodorus Grandiflorus (Echinodorus grandiflorus)
+### Echinodorus Grandiflorus (Echinodorus grandiflorus / Aquarius grandiflorus)
 **Familia**: Alismataceae
 **Origen**: Sudamérica
 **Tamaño**: 30 – 60 cm
@@ -999,7 +999,7 @@
 
 ---
 
-### Echinodorus Horizontalis (Echinodorus horizontalis)
+### Echinodorus Horizontalis (Echinodorus horizontalis / Aquarius horizontalis)
 **Familia**: Alismataceae
 **Origen**: Cuenca del Amazonas
 **Tamaño**: 20 – 30 cm
@@ -1109,7 +1109,7 @@
 
 ---
 
-### Espada Mayor (Echinodorus major)
+### Espada Mayor (Echinodorus major / Aquarius major)
 **Familia**: Alismataceae
 **Origen**: Brasil
 **Tamaño**: 30 – 60 cm
@@ -1323,24 +1323,6 @@
 **Posición**: primer plano – plano medio
 **Propagación**: esquejes
 **Notas**: Hojas redondas diminutas en tallos finos que forman matas compactas. Con poda frecuente se mantiene como un arbusto bajo; sin CO2 se alarga y pierde las hojas de abajo.
-
----
-
-### Echinodorus Grisebachii (Echinodorus grisebachii)
-**Familia**: Alismataceae
-**Origen**: Centroamérica y norte de Sudamérica
-**Tamaño**: 10 – 20 cm
-**Temperatura**: 20 – 28°C
-**pH**: 6.0 – 7.5
-**GH**: 2 – 15 °dGH
-**Dificultad**: ★☆☆☆☆
-**Luz**: baja – media
-**CO2**: no necesario
-**Fertilización**: media (pastillas en el sustrato)
-**Crecimiento**: medio
-**Posición**: primer plano – plano medio
-**Propagación**: estolones
-**Notas**: Pequeña espada de hojas estrechas, a menudo vendida como forma "Tropica" o "Parviflorus". Echa estolones y cubre el suelo poco a poco. Muy robusta.
 
 ---
 

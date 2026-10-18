@@ -860,7 +860,7 @@
 ### Tetra Dientón (Exodon paradoxus)
 **Familia**: Characidae
 **Origen**: Cuencas del Amazonas y Branco
-**Tamaño**: 15 cm
+**Tamaño**: 12 cm
 **Temperatura**: 23 – 28°C
 **pH**: 5.5 – 7.5
 **GH**: 2 – 15 °dGH
@@ -1164,7 +1164,7 @@
 ### Copeina Guttata (Copeina guttata)
 **Familia**: Lebiasinidae
 **Origen**: Cuenca del Amazonas
-**Tamaño**: 15 cm
+**Tamaño**: 10 cm
 **Temperatura**: 23 – 28°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH
@@ -1696,7 +1696,7 @@
 ### Tetra Marginado (Hemigrammus marginatus)
 **Familia**: Characidae
 **Origen**: Sudamérica (amplia distribución)
-**Tamaño**: 8 cm
+**Tamaño**: 5 cm
 **Temperatura**: 22 – 28°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 15 °dGH
@@ -1886,7 +1886,7 @@
 ### Pez Hacha Común (Gasteropelecus levis)
 **Familia**: Gasteropelecidae
 **Origen**: Bajo Amazonas
-**Tamaño**: 6 cm
+**Tamaño**: 5 cm
 **Temperatura**: 23 – 27°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH

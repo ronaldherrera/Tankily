@@ -172,7 +172,7 @@ export default {
     creando: 'Konto wird erstellt…', yaTienes: 'Schon ein Konto?', entra: 'Anmelden',
     errorUsuario: 'Benutzernamen müssen 3–20 Zeichen haben: Kleinbuchstaben, Zahlen, Unterstriche, Punkte oder Bindestriche (nicht am Anfang oder Ende und nicht zwei hintereinander).',
     errorContrasena: 'Das Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie eine Zahl enthalten.', usuarioCogido: 'Dieser Benutzername ist schon vergeben.',
-    emailExiste: 'Es gibt bereits ein Konto mit dieser E-Mail.', revisaCorreo: 'Schau in dein Postfach',
+    emailExiste: 'Es gibt bereits ein Konto mit dieser E-Mail. Melde dich an oder setze dein Passwort zurück.', revisaCorreo: 'Schau in dein Postfach',
     enlaceEnviado: 'Wir haben einen Link an {email} geschickt. Öffne ihn, um dein Konto zu bestätigen und deine Becken zu erfassen.',
     irAEntrar: 'Zur Anmeldung',
   },

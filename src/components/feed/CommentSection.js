@@ -11,6 +11,23 @@ import { detectarIdioma } from '@/lib/traduccion';
 import { useT } from '@/i18n/IdiomaProvider';
 import { mensajeError } from '@/lib/errores';
 
+const CAMPOS = `id, contenido, idioma, creado_en, usuario_id, ${AUTOR}`;
+// Comentarios ya pedidos por publicación: se piden al pasar por encima del botón 💬 (antes del clic)
+// y se reutilizan durante un minuto si se cierran y se vuelven a abrir (después se piden de nuevo,
+// por si alguien ha comentado mientras tanto)
+const pedidos = new Map();
+const VIGENCIA = 60000;
+export function precargarComentarios(postId) {
+  const guardado = pedidos.get(postId);
+  if (!guardado || Date.now() - guardado.cuando > VIGENCIA) {
+    const promesa = supabase.from('comentarios').select(CAMPOS).eq('publicacion_id', postId)
+      .order('creado_en', { ascending: true })
+      .then(({ data, error }) => { if (error) pedidos.delete(postId); return data || []; });
+    pedidos.set(postId, { cuando: Date.now(), promesa });
+  }
+  return pedidos.get(postId).promesa;
+}
+
 export default function CommentSection({ postId, autorPostId, onCambioTotal }) {
   const { usuario, perfil } = useSesion();
   const { t, lang } = useT();
@@ -20,13 +37,15 @@ export default function CommentSection({ postId, autorPostId, onCambioTotal }) {
   const [enviando, setEnviando] = useState(false);
 
   useEffect(() => {
-    supabase
-      .from('comentarios')
-      .select(`id, contenido, idioma, creado_en, usuario_id, ${AUTOR}`)
-      .eq('publicacion_id', postId)
-      .order('creado_en', { ascending: true })
-      .then(({ data }) => setComentarios(data || []));
+    let vivo = true;
+    precargarComentarios(postId).then((data) => vivo && setComentarios(data));
+    return () => { vivo = false; };
   }, [postId]);
+
+  // Lo que cambia aquí (enviar, borrar) se guarda también en la precarga, para que al reabrir siga igual
+  useEffect(() => {
+    if (comentarios) pedidos.set(postId, { cuando: pedidos.get(postId)?.cuando ?? Date.now(), promesa: Promise.resolve(comentarios) });
+  }, [comentarios, postId]);
 
   async function enviar(e) {
     e.preventDefault();
@@ -36,7 +55,7 @@ export default function CommentSection({ postId, autorPostId, onCambioTotal }) {
     const { data, error } = await supabase
       .from('comentarios')
       .insert({ publicacion_id: postId, contenido, idioma: await detectarIdioma(contenido, lang) })
-      .select(`id, contenido, idioma, creado_en, usuario_id, ${AUTOR}`)
+      .select(CAMPOS)
       .single();
     setEnviando(false);
     if (error) tostada(mensajeError(error, t));
@@ -58,7 +77,9 @@ export default function CommentSection({ postId, autorPostId, onCambioTotal }) {
   return (
     <div className="comentarios">
       {comentarios === null ? (
-        <p className="texto-3 pequeno">{t('comentarios.cargando')}</p>
+        <div className="comentarios-cargando" aria-busy="true" aria-label={t('comentarios.cargando')}>
+          {[0, 1].map((i) => <div key={i} className="comentario"><span className="esqueleto-circulo" /><span className="esqueleto-lineas"><span /><span /></span></div>)}
+        </div>
       ) : comentarios.length === 0 ? (
         <p className="texto-3 pequeno">{t('comentarios.ninguno')}</p>
       ) : (
@@ -82,7 +103,7 @@ export default function CommentSection({ postId, autorPostId, onCambioTotal }) {
       )}
 
       {usuario && (
-        <form onSubmit={enviar} className="comentario" style={{ alignItems: 'center' }}>
+        <form onSubmit={enviar} className="comentario comentario-nuevo">
           <Avatar perfil={perfil} tamano={30} />
           <input
             className="entrada"

@@ -233,7 +233,7 @@
 ### Betta Serpiente (Betta channoides)
 **Familia**: Osphronemidae
 **Origen**: Borneo oriental (Indonesia)
-**Tamaño**: 5 cm
+**Tamaño**: 4 cm
 **Temperatura**: 22 – 26°C
 **pH**: 5.0 – 6.5
 **GH**: 0 – 6 °dGH
@@ -841,7 +841,7 @@
 ### Betta Stigmosa (Betta stigmosa)
 **Familia**: Osphronemidae
 **Origen**: Península de Malasia
-**Tamaño**: 8 cm
+**Tamaño**: 6 cm
 **Temperatura**: 22 – 26°C
 **pH**: 6.0 – 7.0
 **GH**: 2 – 10 °dGH

@@ -62,7 +62,7 @@
 ### Apistogramma de Borelli (Apistogramma borellii)
 **Familia**: Cichlidae
 **Origen**: Cuencas del Paraguay y Paraná
-**Tamaño**: 7 cm (machos)
+**Tamaño**: 5 cm (machos)
 **Temperatura**: 20 – 26°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH
@@ -271,7 +271,7 @@
 ### Cíclido Ajedrezado (Dicrossus filamentosus)
 **Familia**: Cichlidae
 **Origen**: Río Negro y Orinoco
-**Tamaño**: 8 cm
+**Tamaño**: 6 cm (machos)
 **Temperatura**: 25 – 29°C
 **pH**: 4.5 – 6.5
 **GH**: 0 – 5 °dGH
@@ -651,7 +651,7 @@
 ### Ivanacara Adoketa (Ivanacara adoketa / Nannacara adoketa)
 **Familia**: Cichlidae
 **Origen**: Río Negro (Brasil)
-**Tamaño**: 8 cm
+**Tamaño**: 6 cm
 **Temperatura**: 25 – 29°C
 **pH**: 4.5 – 6.5
 **GH**: 0 – 5 °dGH
@@ -1221,7 +1221,7 @@
 ### Apistogramma Iniridae (Apistogramma iniridae)
 **Familia**: Cichlidae
 **Origen**: Río Inírida (Colombia)
-**Tamaño**: 6 cm (machos)
+**Tamaño**: 5 cm (machos)
 **Temperatura**: 25 – 29°C
 **pH**: 4.5 – 6.5
 **GH**: 0 – 5 °dGH
@@ -1259,7 +1259,7 @@
 ### Apistogramma Elizabethae (Apistogramma elizabethae)
 **Familia**: Cichlidae
 **Origen**: Alto río Negro (Brasil)
-**Tamaño**: 8 cm (machos)
+**Tamaño**: 7 cm (machos)
 **Temperatura**: 26 – 30°C
 **pH**: 4.0 – 6.0
 **GH**: 0 – 4 °dGH
@@ -1354,7 +1354,7 @@
 ### Apistogramma Juruensis (Apistogramma juruensis)
 **Familia**: Cichlidae
 **Origen**: Río Juruá (Brasil)
-**Tamaño**: 6 cm (machos)
+**Tamaño**: 4 cm (machos)
 **Temperatura**: 24 – 28°C
 **pH**: 5.0 – 6.5
 **GH**: 0 – 6 °dGH
@@ -1373,7 +1373,7 @@
 ### Apistogrammoides (Apistogrammoides pucallpaensis)
 **Familia**: Cichlidae
 **Origen**: Río Ucayali (Perú)
-**Tamaño**: 5 cm
+**Tamaño**: 3.5 cm
 **Temperatura**: 24 – 28°C
 **pH**: 5.5 – 7.0
 **GH**: 1 – 10 °dGH
@@ -1411,7 +1411,7 @@
 ### Laetacara Araguaiae (Laetacara araguaiae)
 **Familia**: Cichlidae
 **Origen**: Río Araguaia (Brasil)
-**Tamaño**: 8 cm
+**Tamaño**: 6 cm
 **Temperatura**: 24 – 28°C
 **pH**: 6.0 – 7.5
 **GH**: 2 – 12 °dGH
@@ -1468,7 +1468,7 @@
 ### Dicrossus Gladicauda (Dicrossus gladicauda)
 **Familia**: Cichlidae
 **Origen**: Colombia (cuenca del Orinoco)
-**Tamaño**: 8 cm
+**Tamaño**: 6 cm (machos)
 **Temperatura**: 25 – 29°C
 **pH**: 4.5 – 6.5
 **GH**: 0 – 5 °dGH
@@ -1655,7 +1655,7 @@
 
 ---
 
-### Convicto Amarillo Enano (Cryptoheros nanoluteus)
+### Convicto Amarillo Enano (Cryptoheros nanoluteus / Amatitlania nanolutea)
 **Familia**: Cichlidae
 **Origen**: Panamá
 **Tamaño**: 10 cm
@@ -1674,7 +1674,7 @@
 
 ---
 
-### Cíclido de Tres Manchas (Amphilophus trimaculatus)
+### Cíclido de Tres Manchas (Amphilophus trimaculatus / Cichlasoma trimaculatum)
 **Familia**: Cichlidae
 **Origen**: Vertiente pacífica de México a El Salvador
 **Tamaño**: 35 cm

@@ -9,6 +9,7 @@ import { useT } from '@/i18n/IdiomaProvider';
 import { useTostada } from '@/components/ui';
 import { analizarCompatibilidad, especieDe, ultimasMediciones } from '@/lib/compatibilidad';
 import { ListaAvisos } from '@/components/tanques/Compatibilidad';
+import Selector from '@/components/Selector';
 
 const CATEGORIA = { peces: 'pez', 'otros peces': 'pez', corales: 'coral', plantas: 'planta', macroalgas: 'planta', invertebrados: 'invertebrado' };
 const menciona = (a, nombre) => [a.especie, a.a?.nombre, a.b?.nombre, ...(a.especies || [])].includes(nombre);
@@ -98,9 +99,9 @@ export default function AnadirATanque({ titulo, grupo }) {
           <div className="fila-campos">
             <label className="campo">
               <span>{t('anadir.tanque')}</span>
-              <select className="entrada" value={tanqueId} onChange={(e) => setTanqueId(e.target.value)}>
+              <Selector className="entrada" value={tanqueId} onChange={(e) => setTanqueId(e.target.value)}>
                 {tanques.map((x) => <option key={x.id} value={x.id}>{x.nombre}</option>)}
-              </select>
+              </Selector>
             </label>
             <label className="campo" style={{ maxWidth: 120 }}>
               <span>{t('anadir.cantidad')}</span>

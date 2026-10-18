@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from '@/components/Enlace';
+import { Avatar } from '@/components/ui';
 import { supabase, AUTOR } from '@/lib/supabase';
 import { useT } from '@/i18n/IdiomaProvider';
 import { useUnidades } from '@/lib/unidades';
@@ -57,8 +58,8 @@ export default function TanquesConEspecie({ titulo }) {
               <img className="miniatura-tanque" src={imagenTanque(tq)} alt="" loading="lazy" />
               <span style={{ minWidth: 0, flex: 1 }}>
                 <strong className="pequeno" style={{ display: 'block' }}>{tq.nombre}</strong>
-                <span className="mini texto-3">
-                  @{tq.autor?.usuario} · {t(`tipos.${tq.tipo}`)}{tq.litros ? `, ${u.volumen(tq.litros)}` : ''}
+                <span className="mini texto-3" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
+                  {tq.autor && <Avatar perfil={tq.autor} tamano={16} />}@{tq.autor?.usuario} · {t(`tipos.${tq.tipo}`)}{tq.litros ? `, ${u.volumen(tq.litros)}` : ''}
                 </span>
               </span>
               <span className="mini texto-2">{t('conEspecie.ejemplares', { n: tq.cantidad })}</span>

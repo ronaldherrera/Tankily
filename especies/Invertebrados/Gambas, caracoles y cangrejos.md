@@ -676,7 +676,7 @@
 
 ---
 
-### Nerita Cebra (Neritina natalensis)
+### Nerita Cebra (Neritina natalensis / Vittina natalensis)
 **Familia**: Neritidae
 **Origen**: Costa este de África
 **Tamaño**: 2 – 2.5 cm
@@ -977,7 +977,7 @@
 
 ---
 
-### Vieira de Fuego (Lima scabra)
+### Vieira de Fuego (Lima scabra / Ctenoides scaber)
 **Familia**: Limidae
 **Origen**: Caribe
 **Tamaño**: 6 – 8 cm
@@ -1308,7 +1308,7 @@
 
 ---
 
-### Gamba Anémona Moteada (Periclimenes brevicarpalis)
+### Gamba Anémona Moteada (Periclimenes brevicarpalis / Ancylocaris brevicarpalis)
 **Familia**: Palaemonidae
 **Origen**: Indo-Pacífico y mar Rojo
 **Tamaño**: 3 cm

@@ -3,7 +3,7 @@ import { Check } from 'lucide-react';
 import { traducir } from '@/i18n/traducir';
 import { alternativas } from '@/lib/seo';
 
-const EMAIL = process.env.NEXT_PUBLIC_EMAIL_CONTACTO || 'contacto@tankily.com';
+const EMAIL = process.env.NEXT_PUBLIC_EMAIL_CONTACTO || 'krill@tankily.com';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;

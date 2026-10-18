@@ -3,29 +3,53 @@
 // Mensajería compartida por la página /mensajes/ y el chat flotante de escritorio:
 // carga los mensajes del usuario, escucha los nuevos en tiempo real, los agrupa en
 // conversaciones y permite enviar y marcar como leídos.
+// Rendimiento: se cargan una vez los más recientes y después solo se añade lo nuevo (nunca se
+// vuelve a descargar todo por un mensaje); lo que envías aparece al instante, antes de que
+// responda el servidor.
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from './supabase';
 
 export const PERFIL_CHAT = 'id, usuario, nombre, avatar_url';
 const SELECT = `*, emisor:perfiles!emisor_id(${PERFIL_CHAT}), receptor:perfiles!receptor_id(${PERFIL_CHAT}), anuncio:anuncios(id, titulo)`;
+const LIMITE = 500;
+
+// Añade mensajes sin duplicar (el propio puede llegar por la respuesta y por tiempo real) y en orden
+function fusionar(previos, nuevos) {
+  const porId = new Map((previos || []).map((m) => [m.id, m]));
+  for (const m of nuevos) porId.set(m.id, m);
+  return [...porId.values()].sort((a, b) => a.creado_en.localeCompare(b.creado_en));
+}
 
 export function useMensajeria(usuario, activo = true) {
   const [mensajes, setMensajes] = useState(null);
 
   useEffect(() => {
     if (!usuario || !activo) return undefined;
-    const cargar = () => supabase.from('mensajes').select(SELECT)
+    let vivo = true;
+    // Los más recientes (antes se pedían los 1000 más antiguos: con mucho historial, lo nuevo no salía)
+    supabase.from('mensajes').select(SELECT)
       .or(`emisor_id.eq.${usuario.id},receptor_id.eq.${usuario.id}`)
-      .order('creado_en', { ascending: true }).limit(1000)
-      .then(({ data }) => setMensajes(data || []));
-    cargar();
+      .order('creado_en', { ascending: false }).limit(LIMITE)
+      .then(({ data }) => { if (vivo) setMensajes((previos) => fusionar(previos, (data || []).reverse())); });
+
+    // Mensaje nuevo para mí: se pide solo ese (con nombres y fotos) y se añade
+    const alLlegar = async ({ new: fila }) => {
+      const { data } = await supabase.from('mensajes').select(SELECT).eq('id', fila.id).maybeSingle();
+      if (vivo && data) setMensajes((ms) => fusionar(ms, [data]));
+    };
     // Nombre de canal único: la página y el chat flotante pueden convivir un instante
     const canal = supabase.channel(`mensajes-${usuario.id}-${Math.random().toString(36).slice(2, 8)}`)
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensajes', filter: `receptor_id=eq.${usuario.id}` }, cargar)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensajes', filter: `receptor_id=eq.${usuario.id}` }, alLlegar)
       .subscribe();
-    const alLeer = () => cargar();
+
+    // La otra vista (página o chat flotante) marcó una conversación como leída: se refleja aquí sin recargar
+    const alLeer = (e) => {
+      const con = e.detail?.con;
+      if (!con) return;
+      setMensajes((ms) => (ms || []).map((m) => (m.receptor_id === usuario.id && m.emisor_id === con ? { ...m, leido: true } : m)));
+    };
     window.addEventListener('tk:leidos', alLeer);
-    return () => { supabase.removeChannel(canal); window.removeEventListener('tk:leidos', alLeer); };
+    return () => { vivo = false; supabase.removeChannel(canal); window.removeEventListener('tk:leidos', alLeer); };
   }, [usuario, activo]);
 
   // Conversaciones agrupadas por la otra persona, la más reciente primero
@@ -48,23 +72,41 @@ export function useMensajeria(usuario, activo = true) {
     [mensajes],
   );
 
+  // Se pinta al instante (marcado como "enviando") y se sustituye por el real cuando responde el servidor
   const enviar = useCallback(async ({ con, contenido, anuncioId = null }) => {
+    const provisional = {
+      id: `enviando-${Date.now()}`, emisor_id: usuario?.id, receptor_id: con, contenido, leido: false,
+      creado_en: new Date().toISOString(), anuncio_id: anuncioId ? Number(anuncioId) : null, enviando: true,
+      emisor: null, receptor: null,
+    };
+    setMensajes((ms) => {
+      const previo = (ms || []).find((m) => m.emisor_id === con || m.receptor_id === con);
+      // Para que la conversación siga en la lista mientras se envía, se reutilizan los perfiles ya conocidos
+      if (previo) {
+        provisional.emisor = previo.emisor_id === usuario?.id ? previo.emisor : previo.receptor;
+        provisional.receptor = previo.emisor_id === con ? previo.emisor : previo.receptor;
+      }
+      return [...(ms || []), provisional];
+    });
     const { data, error } = await supabase.from('mensajes')
       .insert({ receptor_id: con, contenido, anuncio_id: anuncioId ? Number(anuncioId) : null })
       .select(SELECT).single();
-    if (error) throw error;
-    setMensajes((ms) => [...(ms || []), data]);
+    if (error) {
+      setMensajes((ms) => (ms || []).filter((m) => m.id !== provisional.id));
+      throw error;
+    }
+    setMensajes((ms) => fusionar((ms || []).filter((m) => m.id !== provisional.id), [data]));
     return data;
-  }, []);
+  }, [usuario]);
 
   const marcarLeidos = useCallback(async (con) => {
     if (!usuario || !con) return;
     const pendientes = (mensajes || []).some((m) => m.receptor_id === usuario.id && m.emisor_id === con && !m.leido);
     if (!pendientes) return;
-    await supabase.from('mensajes').update({ leido: true }).eq('receptor_id', usuario.id).eq('emisor_id', con).eq('leido', false);
     setMensajes((ms) => ms.map((m) => (m.receptor_id === usuario.id && m.emisor_id === con ? { ...m, leido: true } : m)));
+    await supabase.from('mensajes').update({ leido: true }).eq('receptor_id', usuario.id).eq('emisor_id', con).eq('leido', false);
     // Avisa a la insignia del menú y a la otra vista de mensajes
-    window.dispatchEvent(new Event('tk:leidos'));
+    window.dispatchEvent(new CustomEvent('tk:leidos', { detail: { con } }));
   }, [usuario, mensajes]);
 
   const totalSinLeer = conversaciones.reduce((s, c) => s + c.sinLeer, 0);

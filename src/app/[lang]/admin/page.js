@@ -4,7 +4,7 @@
 // Solo para perfiles con es_admin. Los cambios protegidos van por funciones admin_* de la base de
 // datos, que vuelven a comprobar que quien llama es administrador.
 // Es una herramienta interna: sus textos están en español e inglés aquí mismo, no en los diccionarios.
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { ShieldCheck, Trash2, Check, X, BadgeCheck, Crown } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
@@ -12,6 +12,8 @@ import { useSesion } from '@/lib/sesion';
 import { useT } from '@/i18n/IdiomaProvider';
 import { Pestanas, Vacio, Cargando, useTostada } from '@/components/ui';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
+import Selector from '@/components/Selector';
+import { useSearchParams } from 'next/navigation';
 
 const TEXTOS = {
   es: {
@@ -204,14 +206,14 @@ function Campanas({ x }) {
         <div className="fila-campos">
           <label className="campo"><span>{x.imagen}</span>{campo('imagen_url')}</label>
           <label className="campo"><span>{x.ubicacion}</span>
-            <select className="entrada" value={f.ubicacion} onChange={(e) => setF({ ...f, ubicacion: e.target.value })}>{UBICACIONES.map((u) => <option key={u}>{u}</option>)}</select>
+            <Selector className="entrada" value={f.ubicacion} onChange={(e) => setF({ ...f, ubicacion: e.target.value })}>{UBICACIONES.map((u) => <option key={u}>{u}</option>)}</Selector>
           </label>
         </div>
         <div className="fila-campos">
           <label className="campo"><span>{x.tienda}</span>
-            <select className="entrada" value={f.tienda_id} onChange={(e) => setF({ ...f, tienda_id: e.target.value })}>
+            <Selector className="entrada" value={f.tienda_id} onChange={(e) => setF({ ...f, tienda_id: e.target.value })}>
               <option value="">{x.ninguna}</option>{tiendas.map((ti) => <option key={ti.id} value={ti.id}>{ti.nombre}</option>)}
-            </select>
+            </Selector>
           </label>
           <label className="campo"><span>{x.prioridad}</span>{campo('prioridad', { type: 'number' })}</label>
           <label className="campo"><span>{x.fin}</span>{campo('fin', { type: 'date' })}</label>
@@ -236,11 +238,21 @@ function Campanas({ x }) {
   );
 }
 
+const PESTANAS = ['resumen', 'denuncias', 'tiendas', 'campanas'];
+
 export default function AdminPage() {
+  return <Suspense><Admin /></Suspense>;
+}
+
+function Admin() {
   const { perfil, cargando } = useSesion();
   const { lang } = useT();
   const x = TEXTOS[lang] || TEXTOS.en;
-  const [pestana, setPestana] = useState('resumen');
+  // La pestaña puede venir en el enlace (?s=denuncias), p. ej. desde la burbuja de administración
+  const s = useSearchParams().get('s');
+  const [pestana, setPestana] = useState(PESTANAS.includes(s) ? s : 'resumen');
+  const [sPrevio, setSPrevio] = useState(s);
+  if (s !== sPrevio) { setSPrevio(s); if (PESTANAS.includes(s)) setPestana(s); }
 
   if (cargando) return null;
   if (!perfil?.es_admin) return <div className="contenido"><div className="columna"><Vacio titulo={x.soloAdmin} /></div></div>;

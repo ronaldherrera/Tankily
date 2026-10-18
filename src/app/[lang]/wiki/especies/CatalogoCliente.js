@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Search, Thermometer, Box } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { useT } from '@/i18n/IdiomaProvider';
+import Selector from '@/components/Selector';
 
 const CATEGORIAS = ['pez', 'invertebrado', 'coral', 'planta'];
 const DIFICULTAD = { facil: (d) => d <= 2, media: (d) => d === 3, dificil: (d) => d >= 4 };
@@ -109,13 +110,13 @@ export default function CatalogoCliente({ especies }) {
           {hayFiltros && <button type="button" className="enlace pequeno" onClick={limpiar} style={{ background: 'none', border: 0, cursor: 'pointer' }}>{t('catalogo.limpiar')}</button>}
           <label className="catalogo-orden mini">
             <span className="texto-3">{t('catalogo.ordenar')}</span>
-            <select className="entrada" value={orden} onChange={(e) => setOrden(e.target.value)}>
+            <Selector className="entrada" value={orden} onChange={(e) => setOrden(e.target.value)}>
               <option value="cientifico">{t('catalogo.ordenCientifico')}</option>
               <option value="comun">{t('catalogo.ordenComun')}</option>
               <option value="facil">{t('catalogo.ordenFacil')}</option>
               <option value="tamano">{t('catalogo.ordenTamano')}</option>
               <option value="litros">{t('catalogo.ordenLitros')}</option>
-            </select>
+            </Selector>
           </label>
         </div>
       </div>

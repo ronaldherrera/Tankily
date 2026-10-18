@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import {
-  Waves, Fish, MessagesSquare, Tag, Store, BookOpen, Calculator, Search, Bell, Mail, Menu, Plus, LogIn, ShieldCheck, X, Coffee,
+  Waves, Fish, MessagesSquare, Tag, Store, BookOpen, Calculator, Search, Bell, Mail, Menu, Plus, LogIn, X, Coffee,
 } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
@@ -14,6 +14,7 @@ import { Avatar } from '@/components/ui';
 import AvisoCookies from './AvisoCookies';
 import AvisoApp from './AvisoApp';
 import MenuMas from './MenuMas';
+import BotonAdmin from './BotonAdmin';
 import ChatFlotante from './ChatFlotante';
 import BotonTema from './BotonTema';
 import SelectorIdioma from './SelectorIdioma';
@@ -119,6 +120,19 @@ export default function AppShell({ children }) {
   const noLeidos = useNoLeidos(usuario);
   const [masAbierto, setMasAbierto] = useState(false);
   const [rutaMenu, setRutaMenu] = useState(pathname);
+  const principal = useRef(null);
+  const primeraRuta = useRef(true);
+
+  // Al cambiar de página, el contenido nuevo entra con un fundido y una leve subida (sin remontar nada).
+  // Web Animations: no deja clases puestas ni pelea con las animaciones de cada página.
+  useEffect(() => {
+    if (primeraRuta.current) { primeraRuta.current = false; return; }
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    principal.current?.animate(
+      [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }],
+      { duration: 420, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
+    );
+  }, [pathname]);
 
   // El menú "Más" de la barra inferior se cierra al cambiar de página o con Escape
   if (rutaMenu !== pathname) {
@@ -173,12 +187,6 @@ export default function AppShell({ children }) {
                 <Link href="/mensajes/" className="nav-item" aria-current={activo(pathname, '/mensajes/') ? 'page' : undefined}>
                   <Mail size={20} /><span>{t('nav.mensajes')}</span><Insignia n={noLeidos.mensajes} />
                 </Link>
-                {/* Solo administradores; el nombre "Admin" es igual en todos los idiomas */}
-                {perfil?.es_admin && (
-                  <Link href="/admin/" className="nav-item" aria-current={activo(pathname, '/admin/') ? 'page' : undefined}>
-                    <ShieldCheck size={20} /><span>Admin</span>
-                  </Link>
-                )}
               </>
             )}
 
@@ -227,7 +235,7 @@ export default function AppShell({ children }) {
             </div>
           </header>
 
-          <main id="principal">
+          <main id="principal" ref={principal}>
             {children}
           </main>
 
@@ -269,6 +277,8 @@ export default function AppShell({ children }) {
       <ChatFlotante />
       <AvisoCookies />
       <AvisoApp />
+      {/* Administración: burbuja flotante que se arrastra (solo administradores) */}
+      <BotonAdmin />
     </>
   );
 }
