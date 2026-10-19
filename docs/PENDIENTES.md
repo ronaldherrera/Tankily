@@ -47,7 +47,7 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
 - [ ] **Analítica respetuosa con la privacidad** (Plausible, Umami o similar) para saber qué páginas funcionan. Dime cuál y la integro.
 - [ ] **Redes sociales de Tankily** (Instagram, TikTok, Facebook, X) con el logo y el manual de marca (`marca/manual-de-marca.html`).
 - [ ] **Valorar Vercel u otro hosting con servidor** para que cada tanque, hilo y anuncio tenga una URL indexable por Google (hoy usan `?id=` y no se indexan bien).
-- [ ] **Apple Developer** (99 $/año) si quieres "Continuar con Apple" o, más adelante, app de iOS.
+- [x] **Apple Developer** (ya activo: "Continuar con Apple" funciona desde el 19/10/2026) (99 $/año) si quieres "Continuar con Apple" o, más adelante, app de iOS.
 
 ---
 
@@ -70,8 +70,8 @@ _Lista generada por Claude. Lo que vaya surgiendo mientras trabajo se añade aba
 
 ## 💡 Propuestas que necesitan tu decisión (no las he hecho)
 
-- [ ] **Ocultar automáticamente lo muy denunciado**: si una publicación, hilo o anuncio recibe, por ejemplo, 3 denuncias de usuarios distintos, se oculta hasta que lo revises en `/admin/`. Protege la comunidad de noche y en fines de semana. ¿Con cuántas denuncias?
-- [ ] **Avisos por email** (hecho el 19/10/2026; falta activarlo con los 2 secretos): mensajes nuevos y respuestas del foro (cada 15 min, solo lo que sigue sin leer pasados 10 min, máx. 1 correo por tipo y hora) y resumen semanal opcional los lunes (pendientes + tareas de mantenimiento). Preferencias y baja en `/avisos/` (enlace en Ajustes y en cada correo, más baja de un clic en Gmail). Piezas: migración `20261019120000_avisos_email.sql` (tabla `avisos_email`, pg_cron + pg_net), Edge Function `avisos`. Nunca escribe a las cuentas demo (`*.invalid`). Para activarlo:
+- [x] **Ocultar automáticamente lo muy denunciado** (hecho el 19/10/2026: con 5 denuncias de personas distintas; se vuelve a mostrar desde Admin): si una publicación, hilo o anuncio recibe, por ejemplo, 3 denuncias de usuarios distintos, se oculta hasta que lo revises en `/admin/`. Protege la comunidad de noche y en fines de semana. ¿Con cuántas denuncias?
+- [x] **Avisos por email** (activos desde el 19/10/2026, probado: el correo llega): mensajes nuevos y respuestas del foro (cada 15 min, solo lo que sigue sin leer pasados 10 min, máx. 1 correo por tipo y hora) y resumen semanal opcional los lunes (pendientes + tareas de mantenimiento). Preferencias y baja en `/avisos/` (enlace en Ajustes y en cada correo, más baja de un clic en Gmail). Piezas: migración `20261019120000_avisos_email.sql` (tabla `avisos_email`, pg_cron + pg_net), Edge Function `avisos`. Nunca escribe a las cuentas demo (`*.invalid`). Para activarlo:
   1. `npx supabase secrets set SMTP_PASS="<contraseña de krill@tankily.com>" --project-ref ivizkgmogzvscygcxepy`
   2. `node scripts/clave_avisos.mjs` (crea la clave entre pg_cron y la función, sin mostrarla)
   ~~"te han respondido en el foro", "tienes un mensaje", y un resumen semanal opcional.~~
