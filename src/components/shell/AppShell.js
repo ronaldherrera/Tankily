@@ -19,11 +19,14 @@ import ChatFlotante from './ChatFlotante';
 import BotonTema from './BotonTema';
 import SelectorIdioma from './SelectorIdioma';
 import { cargarScriptAdsense } from '@/lib/adsense';
+import { CICLO, estadoLogo } from '@/lib/logoAnimado';
+import { useCargando } from '@/lib/cargando';
 
 // Símbolo de Tankily: la t con una ola por travesaño y una burbuja por punto.
 // Con `conNombre`, la t hace de inicial de "ankily" (logotipo); el recorte del
 // viewBox ajusta la t a la caja de la letra para que apoye en la línea base.
-export function Marca({ tamano = 30, conNombre = false }) {
+// `animable`: la ola puede animarse (la de la cabecera); `animar`: se anima ahora (algo está cargando)
+export function Marca({ tamano = 30, conNombre = false, animable = false, animar = false }) {
   const id = useId().replace(/:/g, '');
   const simbolo = (
     <svg
@@ -31,6 +34,7 @@ export function Marca({ tamano = 30, conNombre = false }) {
       viewBox={conNombre ? '9.5 0 46 64' : '0 0 64 64'}
       width={conNombre ? undefined : tamano}
       height={conNombre ? undefined : tamano}
+      overflow="visible"
       aria-hidden="true"
     >
       <defs>
@@ -40,12 +44,91 @@ export function Marca({ tamano = 30, conNombre = false }) {
         </linearGradient>
       </defs>
       <path d="M29 10V40a12 12 0 0 0 12 12h3" fill="none" stroke="currentColor" strokeWidth="9" strokeLinecap="round" />
-      <path d="M14 26c5-4.2 10-4.2 15 0s10 4.2 15 0" fill="none" stroke={`url(#marca-ola-${id})`} strokeWidth="8.5" strokeLinecap="round" />
-      <circle cx="51" cy="13" r="4" fill="var(--marca-ola)" />
+      {animable ? <OlaAnimada id={id} animar={animar} /> : (
+        <>
+          <path d="M14 26c5-4.2 10-4.2 15 0s10 4.2 15 0" fill="none" stroke={`url(#marca-ola-${id})`} strokeWidth="8.5" strokeLinecap="round" />
+          <circle cx="51" cy="13" r="4" fill="var(--marca-ola)" />
+        </>
+      )}
     </svg>
   );
   if (!conNombre) return simbolo;
   return <>{simbolo}<span className="marca-nombre">ankily</span></>;
+}
+
+// Ola y burbuja animadas (lib/logoAnimado.js) mientras `animar` es true: la ola avanza y la burbuja se
+// desprende, sube y estalla. Al terminar acelera hasta el instante en que coincide con el icono y se para.
+const INICIAL = estadoLogo(0, { r: 4 });
+// Aplica un fotograma directamente al SVG (sin pasar por React: 60 veces por segundo)
+function dibujar({ ola, burbuja, anillo, gotas }, e) {
+  ola.current?.setAttribute('d', e.ola);
+  const b = burbuja.current;
+  if (b) {
+    b.setAttribute('cx', e.burbuja.x); b.setAttribute('cy', e.burbuja.y);
+    b.setAttribute('rx', e.burbuja.rx); b.setAttribute('ry', e.burbuja.ry);
+    b.style.opacity = e.burbuja.opacidad;
+    b.style.fill = `color-mix(in srgb, var(--marca-ola) ${Math.round(e.burbuja.color * 100)}%, var(--marca-ola-fin))`;
+  }
+  const a = anillo.current;
+  if (a) { a.setAttribute('r', e.anillo.r); a.setAttribute('stroke-width', e.anillo.grosor); a.style.opacity = e.anillo.opacidad; }
+  e.gotas.forEach((g, i) => {
+    const c = gotas.current[i];
+    if (c) { c.setAttribute('cx', g.x); c.setAttribute('cy', g.y); c.setAttribute('r', g.r); }
+  });
+}
+
+function OlaAnimada({ id, animar }) {
+  const ola = useRef(null), burbuja = useRef(null), anillo = useRef(null), gotas = useRef([]), grupo = useRef(null);
+  const reloj = useRef({ t: 0, activo: false, terminar: false, frame: 0 });
+
+  useEffect(() => {
+    const r = reloj.current;
+    const refs = { ola, burbuja, anillo, gotas };
+    if (!animar) { r.terminar = true; return; }
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    r.terminar = false;
+    if (r.activo) return;
+    r.activo = true;
+    grupo.current?.setAttribute('filter', `url(#marca-goo-${id})`);
+    let antes = performance.now();
+    const pintar = (ahora) => {
+      const dt = Math.min(0.1, (ahora - antes) / 1000);
+      antes = ahora;
+      const siguiente = r.t + dt * (r.terminar ? 2.6 : 1.25);
+      // Al terminar, se para al cruzar el final del ciclo: el instante en que es igual al icono
+      if (r.terminar && Math.floor(siguiente / CICLO) > Math.floor(r.t / CICLO)) {
+        r.t = 0;
+        r.activo = false;
+        dibujar(refs, INICIAL);
+        grupo.current?.removeAttribute('filter');
+        return;
+      }
+      r.t = siguiente;
+      dibujar(refs, estadoLogo(r.t, { r: 4 }));
+      r.frame = requestAnimationFrame(pintar);
+    };
+    r.frame = requestAnimationFrame(pintar);
+  }, [animar, id]);
+  useEffect(() => () => cancelAnimationFrame(reloj.current.frame), []);
+
+  const b = INICIAL.burbuja;
+  return (
+    <>
+      <filter id={`marca-goo-${id}`} filterUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="b" />
+        <feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="g" />
+        <feComposite in="SourceGraphic" in2="g" operator="atop" />
+      </filter>
+      <g ref={grupo}>
+        <path ref={ola} d={INICIAL.ola} fill="none" stroke={`url(#marca-ola-${id})`} strokeWidth="8.5" strokeLinecap="round" />
+        <ellipse ref={burbuja} cx={b.x} cy={b.y} rx={b.rx} ry={b.ry} style={{ fill: 'var(--marca-ola)' }} />
+      </g>
+      <circle ref={anillo} cx="51" cy="13" r="4" fill="none" stroke="var(--marca-ola)" strokeDasharray="2.8 2.1" strokeLinecap="round" style={{ opacity: 0 }} />
+      <g fill="var(--marca-ola)">
+        {INICIAL.gotas.map((g, i) => <circle key={i} ref={(el) => { gotas.current[i] = el; }} cx={g.x} cy={g.y} r="0" />)}
+      </g>
+    </>
+  );
 }
 
 // Filtro SVG del cristal refractivo (solo Chromium).
@@ -118,6 +201,7 @@ export default function AppShell({ children }) {
   const { usuario, perfil } = useSesion();
   const { t, lang } = useT();
   const noLeidos = useNoLeidos(usuario);
+  const cargando = useCargando();
   const [masAbierto, setMasAbierto] = useState(false);
   const [rutaMenu, setRutaMenu] = useState(pathname);
   const principal = useRef(null);
@@ -183,7 +267,7 @@ export default function AppShell({ children }) {
       <div className="shell">
         <aside className="rail">
           <nav className="rail-interior cristal cristal-fijo" aria-label={t('nav.principal')}>
-            <Link href="/" className="marca" aria-label="Tankily"><Marca conNombre /></Link>
+            <Link href="/" className="marca" aria-label="Tankily"><Marca conNombre animable animar={cargando} /></Link>
             {NAV.map(({ href, clave, icono: Icono }) => (
               <Link key={href} href={href} className="nav-item" aria-current={activo(pathname, href) ? 'page' : undefined}>
                 <Icono size={20} /><span>{t(clave)}</span>
@@ -231,7 +315,7 @@ export default function AppShell({ children }) {
 
         <div style={{ minWidth: 0 }}>
           <header className="barra-superior cristal cristal-fijo">
-            <Link href="/" className="marca marca-barra" aria-label="Tankily"><Marca conNombre /></Link>
+            <Link href="/" className="marca marca-barra" aria-label="Tankily"><Marca conNombre animable animar={cargando} /></Link>
             {/* Sin botón de tema: en el móvil está en el menú "Más" de la barra inferior */}
             <div style={{ display: 'flex', gap: 2 }}>
               <Link href="/explorar/" className="btn btn-fantasma btn-icono" aria-label={t('nav.buscar')}><Search size={20} /></Link>
