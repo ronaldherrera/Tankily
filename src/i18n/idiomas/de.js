@@ -1,7 +1,8 @@
+import { identidadTitular } from '../../lib/titular.js';
+
+// Titular: nombre, NIF y domicilio en src/lib/titular.js (lo vacío no se muestra)
+const IDENTIDAD = identidadTitular();
 // Deutsch — gleiche Schlüssel wie src/i18n/textos/* (wird mit `npm run i18n` geprüft)
-const INHABER = '[Name oder Firma des Inhabers]';
-const STEUERNR = '[Steuernummer]';
-const ADRESSE = '[Vollständige Anschrift]';
 
 export default {
   meta: {
@@ -347,7 +348,7 @@ export default {
       'aviso-legal': {
         titulo: 'Impressum',
         secciones: [
-          ['Betreiber', `Diese Website wird betrieben von ${INHABER}, Steuernummer ${STEUERNR}, Anschrift ${ADRESSE}. Kontakt: {email}.`],
+          ['Betreiber', `Diese Website wird betrieben von ${IDENTIDAD}. Kontakt: {email}.`],
           ['Zweck', 'Tankily ist eine Online-Community für Aquarianer: Logbücher für Aquarien und Teiche, sozialer Feed, Forum, Kleinanzeigen zwischen Privatpersonen, Händlerverzeichnis und die Enzyklopädie WikiTank.'],
           ['Inhalte der Nutzer', 'Jeder Nutzer ist für seine Inhalte selbst verantwortlich. Tankily ist nicht Partei von Verkäufen zwischen Nutzern und übernimmt keine Gewähr für angebotene Produkte. Rechtswidrige Inhalte entfernen wir, sobald wir davon Kenntnis erhalten (nutze die Schaltfläche „Melden“).'],
           ['Urheberrecht', 'Design, Marke und WikiTank-Texte gehören dem Betreiber. Nutzer behalten die Rechte an ihren Fotos und Texten und räumen Tankily eine nicht exklusive Lizenz zur Anzeige innerhalb des Dienstes ein.'],
@@ -357,10 +358,10 @@ export default {
       privacidad: {
         titulo: 'Datenschutzerklärung',
         secciones: [
-          ['Verantwortlicher', `${INHABER} (${STEUERNR}), ${ADRESSE}. Kontakt für Datenschutz: {email}.`],
-          ['Welche Daten wir verarbeiten', 'E-Mail und (verschlüsseltes) Passwort für dein Konto; die Profilangaben, die du hinzufügst (Name, Foto, Land, Region, Über mich); die Inhalte, die du postest (Becken, Messungen, Fotos, Nachrichten, Anzeigen, Bewertungen) sowie minimale technische Daten für die Sicherheit des Dienstes.'],
+          ['Verantwortlicher', `${IDENTIDAD}. Kontakt für Datenschutz: {email}.`],
+          ['Welche Daten wir verarbeiten', 'E-Mail und (verschlüsseltes) Passwort für dein Konto; die Profilangaben, die du hinzufügst (Name, Foto, Land, Region, Über mich); die Inhalte, die du postest (Becken, Messungen, Fotos, Nachrichten, Anzeigen, Bewertungen) sowie minimale technische Daten für die Sicherheit des Dienstes. Wenn du dich mit Google oder Apple anmeldest, erhalten wir von dort deinen Namen und deine E-Mail (bei Apple kannst du sie verbergen, dann erhalten wir eine Weiterleitungsadresse) und bei Google dein Profilbild; du kannst die Verknüpfung durch Löschen deines Kontos aufheben.'],
           ['Wozu', 'Um den Dienst bereitzustellen, für den du dich registrierst (Rechtsgrundlage: Vertragserfüllung), um ihn sicher zu halten und Inhalte zu moderieren (berechtigtes Interesse) und – nur mit deiner Einwilligung – um personalisierte Werbung zu zeigen.'],
-          ['Empfänger', 'Dienstleister, die uns beim Betrieb helfen: Supabase (Datenbank und Anmeldung, Server in der EU), unser Webhoster und – wenn du Werbe-Cookies akzeptierst – Google AdSense. Wir verkaufen deine Daten nicht.'],
+          ['Empfänger', 'Dienstleister, die uns beim Betrieb helfen: Supabase (Datenbank und Anmeldung, Server in der EU), Hostinger (Hosting der Website und Versand deiner Konto-E-Mails, EU), die maschinellen Übersetzungsdienste MyMemory und DeepL (sie erhalten nur den Text der übersetzten Beiträge und Kommentare, ohne Kontodaten; EU) und – wenn du Werbe-Cookies akzeptierst – Google AdSense. Wir verkaufen deine Daten nicht.'],
           ['Was öffentlich ist', 'Dein Profil, öffentliche Becken, Beiträge, Forenthemen, Anzeigen und Bewertungen sind für alle sichtbar. Private Becken, Becken nur für Follower und private Nachrichten nicht.'],
           ['Speicherdauer', 'Solange du dein Konto behältst. Beim Löschen werden dein Profil und alle Inhalte entfernt.'],
           ['Deine Rechte', 'Du kannst deine Daten in den Einstellungen einsehen, korrigieren, exportieren und löschen („Meine Daten herunterladen“ und „Mein Konto löschen“) oder uns kontaktieren, um weitere Rechte auszuüben (Einschränkung, Widerspruch). Du kannst dich außerdem bei der zuständigen Datenschutzbehörde beschweren.'],

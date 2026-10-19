@@ -1,7 +1,8 @@
+import { identidadTitular } from '../../lib/titular.js';
+
+// Titular: nombre, NIF y domicilio en src/lib/titular.js (lo vacío no se muestra)
+const IDENTIDAD = identidadTitular();
 // Français — mêmes clés que src/i18n/textos/* (vérifié avec `npm run i18n`)
-const TITULAIRE = '[Nom ou raison sociale du titulaire]';
-const IDENTIFIANT = '[Numéro d’identification fiscale]';
-const ADRESSE = '[Adresse complète]';
 
 export default {
   meta: {
@@ -334,7 +335,7 @@ export default {
       'aviso-legal': {
         titulo: 'Mentions légales',
         secciones: [
-          ['Éditeur du site', `Ce site est édité par ${TITULAIRE}, identifiant ${IDENTIFIANT}, domicilié ${ADRESSE}. Contact : {email}.`],
+          ['Éditeur du site', `Ce site est édité par ${IDENTIDAD}. Contact : {email}.`],
           ['Objet', 'Tankily est une communauté en ligne pour les aquariophiles : carnets d’aquariums et de bassins, fil social, forum, petites annonces entre particuliers, annuaire de magasins et l’encyclopédie WikiTank.'],
           ['Contenus des utilisateurs', 'Chaque utilisateur est responsable de ce qu’il publie. Tankily n’intervient pas dans les ventes entre utilisateurs et ne garantit pas les produits annoncés ; nous retirons tout contenu illicite dès que nous en avons connaissance (utilise le bouton « Signaler »).'],
           ['Propriété intellectuelle', 'Le design, la marque et les textes de WikiTank appartiennent à l’éditeur. Les utilisateurs conservent les droits sur leurs photos et textes et accordent à Tankily une licence non exclusive pour les afficher dans le service.'],
@@ -344,10 +345,10 @@ export default {
       privacidad: {
         titulo: 'Politique de confidentialité',
         secciones: [
-          ['Responsable du traitement', `${TITULAIRE} (${IDENTIFIANT}), ${ADRESSE}. Contact confidentialité : {email}.`],
-          ['Données traitées', 'E-mail et mot de passe (chiffré) de ton compte ; les informations de profil que tu choisis d’ajouter (nom, photo, pays, région, bio) ; le contenu que tu publies (bacs, mesures, photos, messages, annonces, avis) et des données techniques minimales pour la sécurité du service.'],
+          ['Responsable du traitement', `${IDENTIDAD}. Contact confidentialité : {email}.`],
+          ['Données traitées', 'E-mail et mot de passe (chiffré) de ton compte ; les informations de profil que tu choisis d’ajouter (nom, photo, pays, région, bio) ; le contenu que tu publies (bacs, mesures, photos, messages, annonces, avis) et des données techniques minimales pour la sécurité du service. Si tu te connectes avec Google ou Apple, nous recevons d’eux ton nom et ton e-mail (avec Apple tu peux le masquer : nous recevons alors une adresse de relais) et, avec Google, ta photo de profil ; tu peux supprimer ce lien en supprimant ton compte.'],
           ['Finalités', 'Fournir le service que tu demandes en t’inscrivant (base légale : exécution du contrat), assurer la sécurité et modérer les contenus (intérêt légitime) et, uniquement avec ton accord, afficher de la publicité personnalisée (consentement).'],
-          ['Destinataires', 'Les prestataires qui nous aident à fournir le service : Supabase (base de données et authentification, serveurs dans l’UE), notre hébergeur et, si tu acceptes les cookies publicitaires, Google AdSense. Nous ne vendons pas tes données.'],
+          ['Destinataires', 'Les prestataires qui nous aident à fournir le service : Supabase (base de données et authentification, serveurs dans l’UE), Hostinger (hébergement du site et envoi des e-mails de ton compte, UE), les services de traduction automatique MyMemory et DeepL (ils ne reçoivent que le texte des publications et commentaires traduits, sans données de compte ; UE) et, si tu acceptes les cookies publicitaires, Google AdSense. Nous ne vendons pas tes données.'],
           ['Ce qui est public', 'Ton profil, tes bacs publics, publications, sujets du forum, annonces et avis sont visibles par tous. Les bacs privés ou réservés aux abonnés et les messages privés ne le sont pas.'],
           ['Durée de conservation', 'Tant que tu conserves ton compte. Sa suppression efface ton profil et tout ton contenu.'],
           ['Tes droits', 'Tu peux accéder à tes données, les corriger, les exporter et les supprimer depuis les Paramètres (« Télécharger mes données » et « Supprimer mon compte »), ou nous écrire pour exercer tout autre droit (limitation, opposition). Tu peux aussi introduire une réclamation auprès de l’autorité de protection des données de ton pays.'],

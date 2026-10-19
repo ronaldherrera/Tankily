@@ -1,8 +1,9 @@
+import { identidadTitular } from '../../lib/titular.js';
+
+// Titular: nombre, NIF y domicilio en src/lib/titular.js (lo vacío no se muestra)
+const IDENTIDAD = identidadTitular();
 // Polski — te same klucze co src/i18n/textos/* (sprawdzane przez `npm run i18n`).
 // Liczba mnoga: uno (1), pocos (2–4, 22–24…), muchos (5–21, 25…), otros (ułamki).
-const WLASCICIEL = '[Imię i nazwisko lub nazwa firmy właściciela]';
-const NIP = '[NIP]';
-const ADRES = '[Pełny adres]';
 
 export default {
   meta: {
@@ -324,7 +325,7 @@ export default {
       'aviso-legal': {
         titulo: 'Nota prawna',
         secciones: [
-          ['Właściciel serwisu', `Właścicielem serwisu jest ${WLASCICIEL}, NIP ${NIP}, adres: ${ADRES}. Kontakt: {email}.`],
+          ['Właściciel serwisu', `Właścicielem serwisu jest ${IDENTIDAD}. Kontakt: {email}.`],
           ['Cel', 'Tankily to internetowa społeczność akwarystów: dzienniki akwariów i oczek wodnych, aktualności, forum, ogłoszenia między osobami prywatnymi, katalog sklepów i encyklopedia WikiTank.'],
           ['Treści użytkowników', 'Każdy użytkownik odpowiada za to, co publikuje. Tankily nie jest stroną transakcji między użytkownikami i nie gwarantuje ogłaszanych produktów. Usuwamy treści niezgodne z prawem, gdy tylko się o nich dowiemy (użyj przycisku „Zgłoś”).'],
           ['Własność intelektualna', 'Projekt, marka i teksty WikiTank należą do właściciela. Użytkownicy zachowują prawa do swoich zdjęć i tekstów i udzielają Tankily niewyłącznej licencji na ich wyświetlanie w serwisie.'],
@@ -334,10 +335,10 @@ export default {
       privacidad: {
         titulo: 'Polityka prywatności',
         secciones: [
-          ['Administrator', `${WLASCICIEL} (${NIP}), ${ADRES}. Kontakt w sprawie prywatności: {email}.`],
-          ['Jakie dane przetwarzamy', 'E-mail i (zaszyfrowane) hasło do konta; dane profilu, które zdecydujesz się dodać (imię, zdjęcie, kraj, region, opis); publikowane treści (zbiorniki, pomiary, zdjęcia, wiadomości, ogłoszenia, opinie) oraz minimalne dane techniczne niezbędne dla bezpieczeństwa serwisu.'],
+          ['Administrator', `${IDENTIDAD}. Kontakt w sprawie prywatności: {email}.`],
+          ['Jakie dane przetwarzamy', 'E-mail i (zaszyfrowane) hasło do konta; dane profilu, które zdecydujesz się dodać (imię, zdjęcie, kraj, region, opis); publikowane treści (zbiorniki, pomiary, zdjęcia, wiadomości, ogłoszenia, opinie) oraz minimalne dane techniczne niezbędne dla bezpieczeństwa serwisu. Jeśli logujesz się przez Google lub Apple, otrzymujemy od nich twoje imię i e-mail (w Apple możesz go ukryć – wtedy dostajemy adres przekierowujący), a w przypadku Google także zdjęcie profilowe; możesz to odłączyć, usuwając konto.'],
           ['W jakim celu', 'Aby świadczyć usługę, o którą prosisz przy rejestracji (podstawa: wykonanie umowy), zapewnić bezpieczeństwo i moderować treści (prawnie uzasadniony interes) oraz – wyłącznie za twoją zgodą – wyświetlać spersonalizowane reklamy.'],
-          ['Komu je udostępniamy', 'Dostawcom, którzy pomagają nam świadczyć usługę: Supabase (baza danych i logowanie, serwery w UE), naszemu hostingowi oraz – jeśli zaakceptujesz reklamowe pliki cookie – Google AdSense. Nie sprzedajemy twoich danych.'],
+          ['Komu je udostępniamy', 'Dostawcom, którzy pomagają nam świadczyć usługę: Supabase (baza danych i logowanie, serwery w UE), Hostinger (hosting serwisu i wysyłka e-maili dotyczących konta, UE), usługom tłumaczenia maszynowego MyMemory i DeepL (otrzymują tylko tekst tłumaczonych wpisów i komentarzy, bez danych konta; UE) oraz – jeśli zaakceptujesz reklamowe pliki cookie – Google AdSense. Nie sprzedajemy twoich danych.'],
           ['Co jest publiczne', 'Twój profil, publiczne zbiorniki, wpisy, wątki na forum, ogłoszenia i opinie są widoczne dla wszystkich. Zbiorniki prywatne lub tylko dla obserwujących oraz prywatne wiadomości – nie.'],
           ['Jak długo', 'Dopóki masz konto. Po jego usunięciu kasujemy profil i wszystkie twoje treści.'],
           ['Twoje prawa', 'Możesz przeglądać, poprawiać, eksportować i usuwać swoje dane w Ustawieniach („Pobierz moje dane” i „Usuń moje konto”) albo napisać do nas, aby skorzystać z innych praw (ograniczenie, sprzeciw). Możesz też złożyć skargę do organu ochrony danych w swoim kraju.'],

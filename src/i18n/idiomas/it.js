@@ -1,7 +1,8 @@
+import { identidadTitular } from '../../lib/titular.js';
+
+// Titular: nombre, NIF y domicilio en src/lib/titular.js (lo vacío no se muestra)
+const IDENTIDAD = identidadTitular();
 // Italiano — stesse chiavi di src/i18n/textos/* (verificato con `npm run i18n`)
-const TITOLARE = '[Nome o ragione sociale del titolare]';
-const CODICE = '[Codice fiscale / P. IVA]';
-const INDIRIZZO = '[Indirizzo completo]';
 
 export default {
   meta: {
@@ -322,7 +323,7 @@ export default {
       'aviso-legal': {
         titulo: 'Note legali',
         secciones: [
-          ['Titolare del sito', `Questo sito è di proprietà di ${TITOLARE}, ${CODICE}, con sede in ${INDIRIZZO}. Contatto: {email}.`],
+          ['Titolare del sito', `Questo sito è di proprietà di ${IDENTIDAD}. Contatto: {email}.`],
           ['Oggetto', 'Tankily è una community online per acquariofili: diario di acquari e laghetti, bacheca social, forum, mercatino tra privati, elenco di negozi e l’enciclopedia WikiTank.'],
           ['Contenuti degli utenti', 'Ogni utente è responsabile di ciò che pubblica. Tankily non partecipa alle compravendite tra utenti né garantisce i prodotti annunciati, e rimuove i contenuti illeciti non appena ne viene a conoscenza (segnalali con il pulsante "Segnala").'],
           ['Proprietà intellettuale', 'Il design, il marchio e i testi di WikiTank appartengono al titolare. Gli utenti mantengono i diritti sulle proprie foto e testi e concedono a Tankily una licenza non esclusiva per mostrarli all’interno del servizio.'],
@@ -332,10 +333,10 @@ export default {
       privacidad: {
         titulo: 'Informativa sulla privacy',
         secciones: [
-          ['Titolare del trattamento', `${TITOLARE} (${CODICE}), ${INDIRIZZO}. Contatto per la privacy: {email}.`],
-          ['Quali dati trattiamo', 'Email e password (cifrata) del tuo account; i dati del profilo che scegli di aggiungere (nome, foto, paese, regione, bio); i contenuti che pubblichi (vasche, misurazioni, foto, messaggi, annunci, recensioni) e dati tecnici minimi per la sicurezza del servizio.'],
+          ['Titolare del trattamento', `${IDENTIDAD}. Contatto per la privacy: {email}.`],
+          ['Quali dati trattiamo', 'Email e password (cifrata) del tuo account; i dati del profilo che scegli di aggiungere (nome, foto, paese, regione, bio); i contenuti che pubblichi (vasche, misurazioni, foto, messaggi, annunci, recensioni) e dati tecnici minimi per la sicurezza del servizio. Se accedi con Google o Apple, riceviamo da loro il tuo nome e la tua email (con Apple puoi nasconderla e riceviamo un indirizzo di inoltro) e, con Google, la foto del profilo; puoi scollegarlo eliminando l’account.'],
           ['Per quali finalità', 'Fornire il servizio che richiedi registrandoti (base giuridica: esecuzione del contratto), garantire la sicurezza e moderare i contenuti (legittimo interesse) e, solo se accetti, mostrare pubblicità personalizzata (consenso).'],
-          ['Con chi li condividiamo', 'Con i fornitori che ci aiutano a erogare il servizio: Supabase (database e autenticazione, server nell’UE), il nostro hosting e, se accetti i cookie pubblicitari, Google AdSense. Non vendiamo i tuoi dati.'],
+          ['Con chi li condividiamo', 'Con i fornitori che ci aiutano a erogare il servizio: Supabase (database e autenticazione, server nell’UE), Hostinger (hosting del sito e invio delle email del tuo account, UE), i servizi di traduzione automatica MyMemory e DeepL (ricevono solo il testo dei post e dei commenti tradotti, senza dati dell’account; UE) e, se accetti i cookie pubblicitari, Google AdSense. Non vendiamo i tuoi dati.'],
           ['Cosa è pubblico', 'Il tuo profilo, le vasche pubbliche, i post, le discussioni del forum, gli annunci e le recensioni sono visibili a tutti. Le vasche private o solo per follower e i messaggi privati no.'],
           ['Per quanto tempo', 'Finché mantieni l’account. Eliminandolo, il profilo e tutti i contenuti vengono cancellati.'],
           ['I tuoi diritti', 'Puoi accedere ai tuoi dati, correggerli, esportarli ed eliminarli dalle Impostazioni ("Scarica i miei dati" ed "Elimina il mio account"), oppure scriverci per esercitare qualsiasi altro diritto (limitazione, opposizione). Puoi anche presentare reclamo all’autorità per la protezione dei dati del tuo paese.'],

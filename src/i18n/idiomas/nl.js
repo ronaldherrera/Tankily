@@ -1,7 +1,8 @@
+import { identidadTitular } from '../../lib/titular.js';
+
+// Titular: nombre, NIF y domicilio en src/lib/titular.js (lo vacío no se muestra)
+const IDENTIDAD = identidadTitular();
 // Nederlands — dezelfde sleutels als src/i18n/textos/* (gecontroleerd met `npm run i18n`)
-const EIGENAAR = '[Naam of bedrijfsnaam van de eigenaar]';
-const NUMMER = '[Btw-/fiscaal nummer]';
-const ADRES = '[Volledig adres]';
 
 export default {
   meta: {
@@ -319,7 +320,7 @@ export default {
       'aviso-legal': {
         titulo: 'Juridische informatie',
         secciones: [
-          ['Eigenaar van de site', `Deze website is eigendom van ${EIGENAAR}, nummer ${NUMMER}, gevestigd te ${ADRES}. Contact: {email}.`],
+          ['Eigenaar van de site', `Deze website is eigendom van ${IDENTIDAD}. Contact: {email}.`],
           ['Doel', 'Tankily is een online community voor aquarianen: logboeken voor aquaria en vijvers, een sociale tijdlijn, forum, marktplaats tussen particulieren, winkelgids en de encyclopedie WikiTank.'],
           ['Inhoud van gebruikers', 'Iedere gebruiker is verantwoordelijk voor wat hij plaatst. Tankily is geen partij bij verkopen tussen gebruikers en geeft geen garantie op aangeboden producten. Onrechtmatige inhoud verwijderen we zodra we ervan op de hoogte zijn (gebruik de knop "Melden").'],
           ['Intellectueel eigendom', 'Het ontwerp, het merk en de teksten van WikiTank zijn van de eigenaar. Gebruikers behouden de rechten op hun foto’s en teksten en geven Tankily een niet-exclusieve licentie om ze binnen de dienst te tonen.'],
@@ -329,10 +330,10 @@ export default {
       privacidad: {
         titulo: 'Privacybeleid',
         secciones: [
-          ['Verwerkingsverantwoordelijke', `${EIGENAAR} (${NUMMER}), ${ADRES}. Contact voor privacy: {email}.`],
-          ['Welke gegevens we verwerken', 'E-mail en (versleuteld) wachtwoord van je account; de profielgegevens die je toevoegt (naam, foto, land, regio, bio); de inhoud die je plaatst (bakken, metingen, foto’s, berichten, advertenties, beoordelingen) en minimale technische gegevens voor de veiligheid van de dienst.'],
+          ['Verwerkingsverantwoordelijke', `${IDENTIDAD}. Contact voor privacy: {email}.`],
+          ['Welke gegevens we verwerken', 'E-mail en (versleuteld) wachtwoord van je account; de profielgegevens die je toevoegt (naam, foto, land, regio, bio); de inhoud die je plaatst (bakken, metingen, foto’s, berichten, advertenties, beoordelingen) en minimale technische gegevens voor de veiligheid van de dienst. Als je inlogt met Google of Apple, ontvangen we van hen je naam en e-mail (bij Apple kun je die verbergen; dan krijgen we een doorstuuradres) en bij Google je profielfoto; je kunt de koppeling verbreken door je account te verwijderen.'],
           ['Waarvoor', 'Om de dienst te leveren waarvoor je je aanmeldt (grondslag: uitvoering van de overeenkomst), om hem veilig te houden en inhoud te modereren (gerechtvaardigd belang) en, alleen met je toestemming, om gepersonaliseerde advertenties te tonen.'],
-          ['Met wie we ze delen', 'Met de leveranciers die ons helpen de dienst te leveren: Supabase (database en inloggen, servers in de EU), onze hostingpartij en, als je advertentiecookies accepteert, Google AdSense. We verkopen je gegevens niet.'],
+          ['Met wie we ze delen', 'Met de leveranciers die ons helpen de dienst te leveren: Supabase (database en inloggen, servers in de EU), Hostinger (hosting van de website en verzending van je account-e-mails, EU), de automatische vertaaldiensten MyMemory en DeepL (die alleen de tekst van vertaalde berichten en reacties ontvangen, zonder accountgegevens; EU) en, als je advertentiecookies accepteert, Google AdSense. We verkopen je gegevens niet.'],
           ['Wat openbaar is', 'Je profiel, openbare bakken, berichten, forumonderwerpen, advertenties en beoordelingen zijn voor iedereen zichtbaar. Privébakken, bakken voor alleen volgers en privéberichten niet.'],
           ['Bewaartermijn', 'Zolang je je account houdt. Bij verwijdering worden je profiel en al je inhoud gewist.'],
           ['Je rechten', 'Je kunt je gegevens inzien, corrigeren, exporteren en verwijderen via Instellingen ("Mijn gegevens downloaden" en "Mijn account verwijderen"), of ons mailen om andere rechten uit te oefenen (beperking, bezwaar). Je kunt ook een klacht indienen bij de toezichthouder in je land.'],

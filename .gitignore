@@ -56,3 +56,6 @@ scripts/especies/cache/
 # Borradores locales que no se publican
 /public/propuestas-logo.html
 /scripts/tmp/
+
+# Claves privadas (Apple Sign in, etc.): nunca al repositorio
+*.p8

@@ -11,11 +11,11 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
   - Site URL: `https://tankily.com`
   - Redirect URLs: `https://tankily.com/**` y `http://localhost:3210/**`
   - Sin esto fallan la confirmación de email, la recuperación de contraseña, el enlace sin contraseña y el acceso con Google.
-- [x] **Correo saliente propio (SMTP)** (18/10/2026): buzón `krill@tankily.com` en Hostinger (MX, SPF, DKIM y DMARC comprobados) y SMTP en Supabase (`smtp.hostinger.com:465`). Pendiente: probar el envío y activar las plantillas con la marca. ~~ El correo de Supabase por defecto solo permite unos pocos emails por hora y suele acabar en spam. Contrata un servicio (Resend, Brevo, Postmark o el SMTP de Hostinger) con un remitente tipo `hola@tankily.com` y configúralo en Supabase → Authentication → Emails → SMTP Settings.~~
+- [x] **Correo saliente propio (SMTP)** (18/10/2026): buzón `krill@tankily.com` en Hostinger (MX, SPF, DKIM y DMARC comprobados) y SMTP en Supabase (`smtp.hostinger.com:465`). Plantillas con la marca activadas y enlaces a tankily.com/…/verificar/: el correo de prueba llega a la bandeja principal (SPF, DKIM y DMARC en PASS). ~~ El correo de Supabase por defecto solo permite unos pocos emails por hora y suele acabar en spam. Contrata un servicio (Resend, Brevo, Postmark o el SMTP de Hostinger) con un remitente tipo `hola@tankily.com` y configúralo en Supabase → Authentication → Emails → SMTP Settings.~~
 - [ ] **Borrar los datos de demostración** (19 usuarios inventados, sus tanques, reseñas, etc.):
       `npx supabase db query --linked -f supabase/demo/limpiar_demo.sql`
-- [ ] **Datos del titular en los textos legales** (nombre o razón social, NIF/CIF, dirección, email) en `src/i18n/textos/legal.js`. Mejor si los revisa un abogado.
-- [ ] **Política de privacidad**: hay un borrador listo en `docs/borrador-privacidad.md` (revísalo, mejor con un abogado). Cubre:
+- [x] **Datos del titular en los textos legales** (19/10/2026): nombre y contacto (`hola@ronaldherrera.es`) puestos en `src/lib/titular.js`, en los 8 idiomas. **Al empezar a facturar**: alta censal (modelo 037) y rellenar ahí `nif` y `domicilio` (puede ser una oficina virtual); salen solos en el aviso legal y la privacidad. ~~**Datos del titular en los textos legales** (nombre o razón social, NIF/CIF, dirección, email) en `src/i18n/textos/legal.js`. Mejor si los revisa un abogado.~~
+- [ ] **Política de privacidad** (19/10/2026: ya incluye en los 8 idiomas Supabase, Hostinger —web y correo—, MyMemory/DeepL y AdSense; incluye también el acceso con Google; falta que la revise un profesional): hay un borrador listo en `docs/borrador-privacidad.md` (revísalo, mejor con un abogado). Cubre:
   - Proveedor de traducción (MyMemory y/o DeepL) como encargado del tratamiento.
   - Acceso con Google, Apple, Facebook y Microsoft: qué datos recibimos (nombre, email, foto).
   - Google AdSense y su CMP (cuando lo actives).
@@ -23,18 +23,22 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
 
 ## 🟠 Primeras semanas
 
+- [ ] **⏰ Renovar el secreto de "Iniciar sesión con Apple" antes del 17 de abril de 2027** (Apple lo hace caducar cada 6 meses; si caduca, nadie podrá entrar con Apple). `node scripts/secreto_apple.mjs "ruta\AuthKey_J96R4VKA2Y.p8"` y pegar el resultado en Supabase → Authentication → Providers → Apple → Secret Key. Datos: equipo 839J8P4YP6, clave J96R4VKA2Y, Services ID `com.tankily.web`, App ID `com.tankily.app`.
+
+- [ ] **Logo de Tankily en el avatar de los correos** (Gmail): crear una cuenta de Google con `krill@tankily.com` (Nombre: Tankily, sin apellidos) y subir `public/icons/icon-512.png` como foto. El 18/10/2026 falló la verificación por SMS ("no entregado"): reintentar otro día o con otro móvil. Mientras, Gravatar (gravatar.com) con la misma dirección y el mismo logo.
+
 - [ ] **Donaciones ("invítame a un café")**: la página `/apoyar/` y su enlace en el menú ya están hechos, con el botón en "Muy pronto".
   1. Crea la cuenta en [ko-fi.com](https://ko-fi.com) (sin comisión en donaciones sueltas; Buy Me a Coffee cobra un 5 %) y conecta PayPal y/o Stripe para cobrar.
   2. En la página de Ko-fi: moneda en euros, precio del "café" (p. ej. 3 €), activa las donaciones mensuales y, si quieres, una meta ("servidor de este año").
   3. Pásame el enlace (tipo `ko-fi.com/tankily`) y lo pongo en `src/lib/apoyo.js`.
   4. Lo que entre cuenta como ingreso de la actividad: coméntalo con tu gestor y menciónalo en el aviso legal.
 
-- [ ] **Acceso con cuentas externas**: guía paso a paso en `docs/acceso-con-cuentas-externas.md`. Empieza por Google (gratis, 15 min). Apple cuesta 99 $/año.
+- [x] **Acceso con Google** (19/10/2026): proyecto de Google Cloud `tankily` (no el de Flox), cliente "Tankily web", app publicada en producción y activada en Supabase. Apple, Facebook y Microsoft siguen pendientes. ~~**Acceso con cuentas externas**: guía paso a paso en `docs/acceso-con-cuentas-externas.md`. Empieza por Google (gratis, 15 min). Apple cuesta 99 $/año.~~
 - [ ] **Traducción de más calidad**: clave gratuita de DeepL API Free y
       `npx supabase secrets set DEEPL_API_KEY=tu_clave --project-ref ivizkgmogzvscygcxepy`
       (hoy traduce MyMemory, gratis pero limitado a ~5.000 caracteres/día).
 - [ ] **Google AdSense**: alta de la web, verificación del dominio y variables `NEXT_PUBLIC_ADSENSE_CLIENT` y `NEXT_PUBLIC_ADSENSE_SLOT` en GitHub → Settings → Secrets and variables → Actions → Variables. `ads.txt` se genera solo.
-- [ ] **Google Search Console** (y Bing Webmaster Tools): verificar `tankily.com` y enviar `https://tankily.com/sitemap.xml`.
+- [x] **Google Search Console** (19/10/2026): `tankily.com` verificado por DNS (TXT en Hostinger), sitemap enviado y marca de la app de Google verificada y publicada (la pantalla de Google dice "Tankily"). Falta Bing Webmaster Tools (se puede importar desde Search Console). ~~**Google Search Console** (y Bing Webmaster Tools): verificar `tankily.com` y enviar `https://tankily.com/sitemap.xml`.~~
 - [ ] **Revisión nativa de las traducciones** de la interfaz (de, pt, fr, it, nl, pl): están hechas, pero no revisadas por hablantes nativos.
 - [ ] **Plan Pro para tiendas**: decidir precios por país/moneda y darte de alta en Stripe para cobrar. Hoy el Pro se activa a mano desde Supabase.
 
@@ -57,7 +61,7 @@ _Lista generada por Claude. Lo que vaya surgiendo mientras trabajo se añade aba
 - [x] **Contraseñas** (18/10/2026): mínimo 8 con mayúsculas, minúsculas y números; la web valida lo mismo. La protección contra contraseñas filtradas solo existe en el plan Pro de Supabase: activarla si algún día se cambia de plan.
 - [ ] **Decidir: páginas propias para cada tanque, hilo y anuncio (SEO).** Hoy un tanque se abre como `/tanque/?id=…`: para Google todas esas direcciones son la misma página, así que no indexa tanques, hilos del foro ni anuncios uno a uno (sí lo hace con la wiki, las calculadoras y las secciones). La solución es generar en cada publicación una página fija por contenido público (`/tanque/arrecife-del-salon-123/`) leyendo Supabase durante el build, y volver a publicar automáticamente cada noche con GitHub Actions para incluir lo nuevo. Es un cambio de arquitectura de un par de días y **no obliga a cambiar de hosting** (alternativa al punto "Valorar Vercel" de arriba). Te lo propongo para cuando la comunidad tenga contenido real. Dime si lo hago.
 - [ ] **(Opcional) Limpiar la plantilla de los .md de WikiTank.** 30 archivos de grupos de especies (p. ej. `WikiTank/Acuarios/Acuario marino — arrecife de coral (reef)/Especies habituales/Corales/Corales.md`) empiezan con "## ESTRUCTURA DE FICHA …", una plantilla para redactar. La web ya la oculta al mostrar la página, así que no corre prisa; si la quitas de los archivos, el ocultado simplemente deja de tener efecto.
-- [ ] **Emails de la cuenta con la marca y en el idioma del usuario.** Están listos en `supabase/plantillas/` (confirmación, nueva contraseña, enlace para entrar y cambio de email), en los 8 idiomas: cada uno elige el idioma con el que se registró el usuario y, si no lo sabe, va en español. Para activarlos: Supabase → Authentication → Emails → Templates, y en cada tipo pega el asunto y el HTML:
+- [x] **Emails de la cuenta con la marca y en el idioma del usuario.** (activadas el 18/10/2026) Están listos en `supabase/plantillas/` (confirmación, nueva contraseña, enlace para entrar y cambio de email), en los 8 idiomas: cada uno elige el idioma con el que se registró el usuario y, si no lo sabe, va en español. Para activarlos: Supabase → Authentication → Emails → Templates, y en cada tipo pega el asunto y el HTML:
   - _Confirm signup_ → `confirmacion.html`, asunto "Confirma tu cuenta · Confirm your account — Tankily"
   - _Reset password_ → `recuperacion.html`, asunto "Nueva contraseña · New password — Tankily"
   - _Magic link_ → `enlace.html`, asunto "Tu enlace para entrar · Your sign-in link — Tankily"

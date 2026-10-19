@@ -2,8 +2,10 @@ import { notFound } from 'next/navigation';
 import Link from '@/components/Enlace';
 import { traducir } from '@/i18n/traducir';
 import { alternativas } from '@/lib/seo';
+import { TITULAR } from '@/lib/titular';
 
-const EMAIL = process.env.NEXT_PUBLIC_EMAIL_CONTACTO || 'krill@tankily.com';
+// Contacto de los textos legales: el del titular (src/lib/titular.js)
+const EMAIL = TITULAR.email;
 const DOCS = ['aviso-legal', 'privacidad', 'cookies', 'normas'];
 
 export function generateStaticParams() {

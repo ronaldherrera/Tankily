@@ -1,7 +1,8 @@
+import { identidadTitular } from '../../lib/titular.js';
+
+// Titular: nombre, NIF y domicilio en src/lib/titular.js (lo vacío no se muestra)
+const IDENTIDAD = identidadTitular();
 // Português (Brasil) — mesmas chaves de src/i18n/textos/* (verificado com `npm run i18n`)
-const TITULAR = '[Nome ou razão social do titular]';
-const DOC = '[NIF/CNPJ]';
-const ENDERECO = '[Endereço completo]';
 
 export default {
   meta: {
@@ -329,7 +330,7 @@ export default {
       'aviso-legal': {
         titulo: 'Aviso legal',
         secciones: [
-          ['Titular do site', `Este site pertence a ${TITULAR}, documento ${DOC}, com endereço em ${ENDERECO}. Contato: {email}.`],
+          ['Titular do site', `Este site pertence a ${IDENTIDAD}. Contato: {email}.`],
           ['Objeto', 'O Tankily é uma comunidade online para aquaristas: registro de aquários e lagos, feed social, fórum, classificados entre particulares, diretório de lojas e a enciclopédia WikiTank.'],
           ['Conteúdo dos usuários', 'Cada usuário é responsável pelo que publica. O Tankily não participa das vendas entre usuários nem garante os produtos anunciados, e removerá conteúdo ilícito assim que tiver conhecimento dele (avise-nos pelo botão "Denunciar").'],
           ['Propriedade intelectual', 'O design, a marca e os textos da WikiTank pertencem ao titular. Os usuários mantêm os direitos sobre suas fotos e textos e concedem ao Tankily uma licença não exclusiva para exibi-los dentro do serviço.'],
@@ -339,10 +340,10 @@ export default {
       privacidad: {
         titulo: 'Política de privacidade',
         secciones: [
-          ['Responsável', `${TITULAR} (${DOC}), ${ENDERECO}. Contato para privacidade: {email}.`],
-          ['Quais dados tratamos', 'E-mail e senha (criptografada) da sua conta; os dados de perfil que você decidir adicionar (nome, foto, país, região, bio); o conteúdo que você publica (aquários, medições, fotos, mensagens, anúncios, avaliações) e dados técnicos mínimos para a segurança do serviço.'],
+          ['Responsável', `${IDENTIDAD}. Contato para privacidade: {email}.`],
+          ['Quais dados tratamos', 'E-mail e senha (criptografada) da sua conta; os dados de perfil que você decidir adicionar (nome, foto, país, região, bio); o conteúdo que você publica (aquários, medições, fotos, mensagens, anúncios, avaliações) e dados técnicos mínimos para a segurança do serviço. Se você entrar com o Google ou a Apple, recebemos deles seu nome e e-mail (com a Apple você pode ocultá-lo e recebemos um endereço de encaminhamento) e, com o Google, sua foto de perfil; você pode desvincular excluindo sua conta.'],
           ['Para quê', 'Prestar o serviço que você solicita ao se cadastrar (base legal: execução do contrato), manter a segurança e moderar conteúdo (interesse legítimo) e, só se você aceitar, mostrar publicidade personalizada (consentimento).'],
-          ['Com quem compartilhamos', 'Com os fornecedores que nos ajudam a prestar o serviço: Supabase (banco de dados e autenticação, servidores na UE), nossa hospedagem e, se você aceitar os cookies de publicidade, o Google AdSense. Não vendemos seus dados.'],
+          ['Com quem compartilhamos', 'Com os fornecedores que nos ajudam a prestar o serviço: Supabase (banco de dados e autenticação, servidores na UE), Hostinger (hospedagem do site e envio dos e-mails da sua conta, UE), os serviços de tradução automática MyMemory e DeepL (recebem apenas o texto das publicações e comentários traduzidos, sem dados da conta; UE) e, se você aceitar os cookies de publicidade, o Google AdSense. Não vendemos seus dados.'],
           ['O que é público', 'Seu perfil, seus aquários públicos, publicações, tópicos do fórum, anúncios e avaliações são visíveis para qualquer pessoa. Aquários privados ou só para seguidores e mensagens privadas, não.'],
           ['Por quanto tempo', 'Enquanto você mantiver a conta. Ao excluí-la, seu perfil e todo o seu conteúdo são apagados.'],
           ['Seus direitos', 'Você pode acessar, corrigir, exportar e excluir seus dados em Configurações ("Baixar meus dados" e "Excluir minha conta") ou nos escrever para exercer qualquer outro direito (limitação, oposição). Também pode reclamar à autoridade de proteção de dados do seu país.'],
