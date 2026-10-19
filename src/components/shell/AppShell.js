@@ -143,6 +143,14 @@ export default function AppShell({ children }) {
       .then(({ error }) => { if (!error) try { localStorage.setItem('tk-idioma-avisos', marca); } catch { /* nada */ } });
   }, [usuario, lang]);
 
+  // Un apunte al día por persona con sesión (solo la fecha): activos y retención del panel de administración
+  useEffect(() => {
+    if (!usuario) return;
+    const hoy = `${usuario.id}:${new Date().toISOString().slice(0, 10)}`;
+    try { if (localStorage.getItem('tk-visita') === hoy) return; } catch { /* sigue */ }
+    supabase.rpc('apuntar_visita').then(({ error }) => { if (!error) try { localStorage.setItem('tk-visita', hoy); } catch { /* nada */ } });
+  }, [usuario]);
+
   // El menú "Más" de la barra inferior se cierra al cambiar de página o con Escape
   if (rutaMenu !== pathname) {
     setRutaMenu(pathname);

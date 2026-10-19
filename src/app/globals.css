@@ -1540,6 +1540,27 @@ h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
 .admin-lista > li { padding: 14px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .admin-acciones { display: flex; gap: 6px; flex-wrap: wrap; }
 
+/* Admin → Crecimiento */
+.admin-bloque { padding: 18px; border-radius: var(--radio-m); display: flex; flex-direction: column; gap: 10px; }
+.embudo { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.embudo-fila { display: flex; justify-content: space-between; gap: 12px; font-size: 0.92rem; }
+.embudo-barra { height: 8px; border-radius: 999px; background: rgba(var(--c-tinta), 0.08); overflow: hidden; margin-top: 6px; }
+.embudo-barra > span { display: block; height: 100%; border-radius: inherit; background: var(--agua); transition: width 0.7s var(--muelle-suave); }
+.embudo > .caida .embudo-barra > span { background: var(--aviso); }
+.embudo-caida { color: var(--aviso); }
+.grafico-semanas { display: grid; grid-template-columns: repeat(12, 1fr); gap: 6px; align-items: end; height: 140px; padding-top: 8px; }
+.grafico-semanas > div { position: relative; height: 100%; display: flex; align-items: flex-end; justify-content: center; gap: 2px; }
+.grafico-semanas span { width: 42%; min-height: 2px; border-radius: 4px 4px 1px 1px; transition: height 0.7s var(--muelle-suave); }
+.barra-altas, .punto-altas { background: var(--agua); }
+.barra-activos, .punto-activos { background: rgba(var(--c-tinta), 0.35); }
+.leyenda-semanas { display: flex; align-items: center; gap: 6px; }
+.leyenda-semanas > span { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.leyenda-semanas > .punto-activos { margin-left: 10px; }
+.tabla-cohortes { width: 100%; border-collapse: separate; border-spacing: 3px; font-size: 0.85rem; text-align: center; }
+.tabla-cohortes th { font-weight: 600; color: var(--texto-3); padding: 4px 6px; }
+.tabla-cohortes td { padding: 7px 6px; border-radius: 6px; font-variant-numeric: tabular-nums; }
+.tabla-cohortes td:first-child { text-align: left; white-space: nowrap; }
+
 /* Anuncios guardados: marcador sobre la foto de la tarjeta y en la ficha */
 .tarjeta-anuncio-caja { position: relative; display: flex; }
 .tarjeta-anuncio-caja > .tarjeta-anuncio { flex: 1; min-width: 0; }

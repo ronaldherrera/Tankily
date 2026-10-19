@@ -16,6 +16,7 @@ import Reportar from '@/components/Reportar';
 import Lateral from '@/components/Lateral';
 import { useT } from '@/i18n/IdiomaProvider';
 import { mensajeError } from '@/lib/errores';
+import { evento } from '@/lib/analitica';
 
 function Hilo() {
   const id = useSearchParams().get('id');
@@ -68,6 +69,7 @@ function Hilo() {
     const { data, error } = await supabase.from('foro_respuestas').insert({ hilo_id: hilo.id, contenido: texto.trim(), imagenes, idioma: await detectarIdioma(texto, lang) }).select(`*, ${AUTOR}`).single();
     setEnviando(false);
     if (error) return tostada(t('foro.hilo.errorResponder', { error: mensajeError(error, t) }));
+    evento('respuesta_foro');
     setRespuestas([...respuestas, data]);
     setTexto('');
     setImagenes([]);

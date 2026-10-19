@@ -10,6 +10,7 @@ import { useT } from '@/i18n/IdiomaProvider';
 import { detectarIdioma } from '@/lib/traduccion';
 import { mensajeError } from '@/lib/errores';
 import Selector from '@/components/Selector';
+import { evento } from '@/lib/analitica';
 
 export default function PostComposer({ onPublicado, tanqueFijo = null }) {
   const { usuario, perfil } = useSesion();
@@ -47,6 +48,7 @@ export default function PostComposer({ onPublicado, tanqueFijo = null }) {
       setError(t('compositor.error', { error: mensajeError(error, t) }));
       return;
     }
+    evento('publicacion', { tipo: imagenes.length ? 'con_fotos' : 'texto' });
     setTexto('');
     setImagenes([]);
     onPublicado?.(data);

@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { ShieldCheck, LayoutDashboard, Flag, Store, Megaphone } from 'lucide-react';
+import { ShieldCheck, LayoutDashboard, Flag, Store, Megaphone, TrendingUp } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
 import { useSesion } from '@/lib/sesion';
@@ -14,6 +14,7 @@ const TAM = 48;
 const MARGEN = 12;
 const SECCIONES = [
   ['resumen', LayoutDashboard],
+  ['crecimiento', TrendingUp],
   ['denuncias', Flag],
   ['tiendas', Store],
   ['campanas', Megaphone],

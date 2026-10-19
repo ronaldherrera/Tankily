@@ -15,6 +15,7 @@ import CommentSection, { precargarComentarios } from './CommentSection';
 import Reportar from '@/components/Reportar';
 import { usePresencia } from '@/lib/presencia';
 import { borrarImagenes } from '@/lib/imagenes';
+import { evento } from '@/lib/analitica';
 
 export function ChipTanque({ tanque }) {
   if (!tanque) return null;
@@ -271,6 +272,7 @@ function CitarPost({ original, onCerrar, onPublicada }) {
     setPublicando(false);
     if (fallo?.code === '23505') return setError(t('cita.yaCitada'));
     if (fallo) return setError(fallo.message);
+    evento('publicacion', { tipo: 'cita' });
     onPublicada(data.id);
   }
 

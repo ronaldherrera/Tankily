@@ -44,7 +44,7 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
 
 ## 🟡 Cuando haya tráfico
 
-- [ ] **Analítica respetuosa con la privacidad** (Plausible, Umami o similar) para saber qué páginas funcionan. Dime cuál y la integro.
+- [x] **Analítica** (19/10/2026): hecho el panel **Admin → Crecimiento** (activos día/7/30, embudo de activación, altas por semana, retención por semana de registro; tabla `actividad_diaria`) y preparado Umami (script + eventos: registro, acceso_social, tanque_creado, publicacion, hilo, respuesta_foro, anuncio, push_activado, instalar_app, apoyar). Política de privacidad actualizada en 8 idiomas. Umami activo (cuenta en cloud.umami.is, ID en `src/lib/analitica.js`). ~~**Analítica respetuosa con la privacidad** (Plausible, Umami o similar) para saber qué páginas funcionan. Dime cuál y la integro.~~
 - [ ] **Redes sociales de Tankily** (Instagram, TikTok, Facebook, X) con el logo y el manual de marca (`marca/manual-de-marca.html`).
 - [ ] **Valorar Vercel u otro hosting con servidor** para que cada tanque, hilo y anuncio tenga una URL indexable por Google (hoy usan `?id=` y no se indexan bien).
 - [x] **Apple Developer** (ya activo: "Continuar con Apple" funciona desde el 19/10/2026) (99 $/año) si quieres "Continuar con Apple" o, más adelante, app de iOS.

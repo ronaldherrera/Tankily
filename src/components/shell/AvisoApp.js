@@ -7,6 +7,7 @@ import { ADSENSE_ACTIVO } from '@/lib/adsense';
 import { DURACION_SALIDA } from '@/lib/presencia';
 import { enModoApp, plataforma } from '@/lib/instalarApp';
 import { leerConsentimiento } from './AvisoCookies';
+import { evento as medir } from '@/lib/analitica';
 
 const CLAVE_DESCARTE = 'tk-aviso-app';
 const CLAVE_INSTALADA = 'tk-app-instalada';
@@ -71,6 +72,7 @@ export default function AvisoApp() {
     if (!evento) return;
     evento.prompt();
     const { outcome } = await evento.userChoice;
+    medir('instalar_app', { resultado: outcome });
     window.__tkInstalar = null;
     setInstalable(false);
     cerrar(outcome !== 'accepted');

@@ -12,6 +12,7 @@ import { detectarIdioma } from '@/lib/traduccion';
 import HilosParecidos from '@/components/foro/HilosParecidos';
 import { mensajeError } from '@/lib/errores';
 import Selector from '@/components/Selector';
+import { evento } from '@/lib/analitica';
 
 function NuevoHilo() {
   const params = useSearchParams();
@@ -44,6 +45,7 @@ function NuevoHilo() {
     }).select('id').single();
     setEnviando(false);
     if (error) return setError(mensajeError(error, t));
+    evento('hilo');
     router.push(`/foro/hilo/?id=${data.id}`);
   }
 

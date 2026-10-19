@@ -9,6 +9,7 @@ import AccesoSocial from '@/components/auth/AccesoSocial';
 import { contrasenaValida } from '@/lib/contrasena';
 import { usuarioValido } from '@/lib/usuario';
 import CampoContrasena from '@/components/CampoContrasena';
+import { evento } from '@/lib/analitica';
 
 export default function RegistroPage() {
   const router = useNavegar();
@@ -45,6 +46,7 @@ export default function RegistroPage() {
     // Con la confirmación de email activada, Supabase no da error si el email ya existe (no envía nada y
     // devuelve el usuario sin identidades): se avisa para que entre o recupere la contraseña.
     if (data.user && data.user.identities?.length === 0) return setError(t('registro.emailExiste'));
+    evento('registro', { metodo: 'email' });
     if (data.session) router.push('/tanques/nuevo/');
     else setEnviado(true);
   }

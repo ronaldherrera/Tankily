@@ -19,6 +19,13 @@ const TEXTOS = {
   es: {
     titulo: 'Administración', soloAdmin: 'Esta sección es solo para administradores.',
     resumen: 'Resumen', denuncias: 'Denuncias', tiendas: 'Tiendas', campanas: 'Campañas',
+    crecimiento: 'Crecimiento', activosDia: 'Activos hoy', activosSemana: 'Activos 7 días', activosMes: 'Activos 30 días', reales: 'Usuarios reales',
+    pegajosidad: 'Vuelven a diario', pegajosidadAyuda: 'Activos hoy / activos 30 días. Por encima del 20 % es muy bueno.',
+    embudo: 'Embudo de activación', embudoAyuda: 'Dónde se queda la gente. El paso con más caída es el primero que hay que mejorar.',
+    pasoRegistro: 'Se registran', pasoTanque: 'Crean un tanque', pasoApunta: 'Apuntan mediciones o eventos', pasoParticipa: 'Participan (publican, comentan, foro)', pasoVuelve: 'Vuelven tras la primera semana',
+    mayorCaida: 'Mayor caída', semanas: 'Altas y activos por semana', altas: 'Altas', activos: 'Activos',
+    cohortes: 'Retención por semana de registro', cohortesAyuda: '% de cada grupo que volvió en la semana 1, 2, 3 y 4 después de registrarse.', semana: 'Semana', personas: 'Personas', sem: 'S{n}',
+    conPush: 'Con notificaciones push', conResumen: 'Con resumen semanal', sinDatos: 'Aún no hay datos: se empiezan a apuntar desde hoy.',
     usuarios: 'Usuarios', usuarios7d: 'Nuevos esta semana', tanques: 'Tanques', publicaciones7d: 'Publicaciones esta semana',
     hilos7d: 'Hilos esta semana', anunciosActivos: 'Anuncios activos', tiendasPro: 'Tiendas Pro', reportesPendientes: 'Denuncias pendientes',
     sinDenuncias: 'No hay denuncias pendientes.', verContenido: 'Ver', borrar: 'Borrar contenido', revisado: 'Revisada', descartar: 'Descartar', mostrar: 'Volver a mostrar', mostrado: 'Contenido visible de nuevo; denuncias descartadas.',
@@ -34,6 +41,13 @@ const TEXTOS = {
   en: {
     titulo: 'Administration', soloAdmin: 'This section is for administrators only.',
     resumen: 'Overview', denuncias: 'Reports', tiendas: 'Stores', campanas: 'Campaigns',
+    crecimiento: 'Growth', activosDia: 'Active today', activosSemana: 'Active 7 days', activosMes: 'Active 30 days', reales: 'Real users',
+    pegajosidad: 'Come back daily', pegajosidadAyuda: 'Active today / active 30 days. Above 20% is very good.',
+    embudo: 'Activation funnel', embudoAyuda: 'Where people drop off. Fix the step with the biggest drop first.',
+    pasoRegistro: 'Sign up', pasoTanque: 'Create a tank', pasoApunta: 'Log measurements or events', pasoParticipa: 'Take part (post, comment, forum)', pasoVuelve: 'Come back after week one',
+    mayorCaida: 'Biggest drop', semanas: 'Sign-ups and active users per week', altas: 'Sign-ups', activos: 'Active',
+    cohortes: 'Retention by sign-up week', cohortesAyuda: '% of each group that came back in week 1, 2, 3 and 4 after signing up.', semana: 'Week', personas: 'People', sem: 'W{n}',
+    conPush: 'With push notifications', conResumen: 'With weekly digest', sinDatos: 'No data yet: tracking starts today.',
     usuarios: 'Users', usuarios7d: 'New this week', tanques: 'Tanks', publicaciones7d: 'Posts this week',
     hilos7d: 'Threads this week', anunciosActivos: 'Active listings', tiendasPro: 'Pro stores', reportesPendientes: 'Pending reports',
     sinDenuncias: 'No pending reports.', verContenido: 'View', borrar: 'Delete content', revisado: 'Reviewed', descartar: 'Dismiss', mostrar: 'Show again', mostrado: 'Content visible again; reports dismissed.',
@@ -69,6 +83,90 @@ function Resumen({ x }) {
   return (
     <div className="admin-cifras">
       {cifras.map(([k, v]) => <div key={k} className={k === 'reportesPendientes' && r.reportes_pendientes > 0 ? 'alerta' : ''}><span className="cifra">{v}</span><span className="mini texto-3">{x[k]}</span></div>)}
+    </div>
+  );
+}
+
+const pct = (a, b) => (b ? Math.round((100 * a) / b) : 0);
+
+// Enganche: activos, embudo de activación, altas por semana y retención (admin_crecimiento)
+function Crecimiento({ x }) {
+  const { locale } = useT();
+  const [c, setC] = useState(null);
+  useEffect(() => { supabase.rpc('admin_crecimiento').then(({ data }) => setC(data)); }, []);
+  if (!c) return <Cargando alto={90} n={3} />;
+
+  const { activos: a, embudo: e } = c;
+  const pasos = [['pasoRegistro', e.registro, e.registro], ['pasoTanque', e.tanque, e.registro], ['pasoApunta', e.apunta, e.registro],
+    ['pasoParticipa', e.participa, e.registro], ['pasoVuelve', e.vuelve, e.vuelve_base]];
+  // El paso que más gente pierde respecto al anterior (sin el de volver, que se mide sobre otra base)
+  let caida = null;
+  for (let i = 1; i < 4; i++) {
+    const perdida = pct(pasos[i - 1][1], e.registro) - pct(pasos[i][1], e.registro);
+    if (perdida > 0 && (!caida || perdida > caida.perdida)) caida = { i, perdida };
+  }
+  const maxSemana = Math.max(1, ...c.semanas.map((s) => Math.max(s.altas, s.activos)));
+  const fecha = (d) => new Date(`${d}T00:00:00`).toLocaleDateString(locale, { day: 'numeric', month: 'short' });
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+      <div className="admin-cifras">
+        {[['activosDia', a.dia], ['activosSemana', a.semana], ['activosMes', a.mes], ['reales', a.total]].map(([k, v]) =>
+          <div key={k}><span className="cifra">{v}</span><span className="mini texto-3">{x[k]}</span></div>)}
+        <div title={x.pegajosidadAyuda}><span className="cifra">{pct(a.dia, a.mes)} %</span><span className="mini texto-3">{x.pegajosidad}</span></div>
+      </div>
+
+      <section className="cristal-suave admin-bloque">
+        <h2 className="titulo-s">{x.embudo}</h2>
+        <p className="mini texto-3">{x.embudoAyuda}</p>
+        <ol className="embudo">
+          {pasos.map(([k, n, base], i) => (
+            <li key={k} className={caida?.i === i ? 'caida' : undefined}>
+              <div className="embudo-fila"><span>{x[k]}</span><span><strong>{n}</strong> <span className="texto-3">· {pct(n, base)} %</span></span></div>
+              <div className="embudo-barra"><span style={{ width: `${pct(n, base)}%` }} /></div>
+              {caida?.i === i && <span className="mini embudo-caida">{x.mayorCaida}: −{caida.perdida} %</span>}
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="cristal-suave admin-bloque">
+        <h2 className="titulo-s">{x.semanas}</h2>
+        <div className="grafico-semanas" role="img" aria-label={x.semanas}>
+          {c.semanas.map((s) => (
+            <div key={s.semana} title={`${fecha(s.semana)} · ${x.altas}: ${s.altas} · ${x.activos}: ${s.activos}`}>
+              <span className="barra-activos" style={{ height: `${(100 * s.activos) / maxSemana}%` }} />
+              <span className="barra-altas" style={{ height: `${(100 * s.altas) / maxSemana}%` }} />
+            </div>
+          ))}
+        </div>
+        <p className="mini texto-3 leyenda-semanas"><span className="punto-altas" /> {x.altas} <span className="punto-activos" /> {x.activos}</p>
+      </section>
+
+      <section className="cristal-suave admin-bloque">
+        <h2 className="titulo-s">{x.cohortes}</h2>
+        <p className="mini texto-3">{x.cohortesAyuda}</p>
+        {c.cohortes?.length ? (
+          <div style={{ overflowX: 'auto' }}>
+            <table className="tabla-cohortes">
+              <thead><tr><th>{x.semana}</th><th>{x.personas}</th>{[1, 2, 3, 4].map((n) => <th key={n}>{x.sem.replace('{n}', n)}</th>)}</tr></thead>
+              <tbody>
+                {c.cohortes.map((k) => (
+                  <tr key={k.semana}>
+                    <td>{fecha(k.semana)}</td><td>{k.personas}</td>
+                    {k.retencion.map((v, i) => <td key={i} style={v == null ? undefined : { background: `rgba(var(--c-tinta), ${0.05 + v / 140})` }}>{v == null ? '·' : `${v} %`}</td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : <p className="texto-2 pequeno">{x.sinDatos}</p>}
+      </section>
+
+      <div className="admin-cifras">
+        <div><span className="cifra">{c.avisos.push}</span><span className="mini texto-3">{x.conPush}</span></div>
+        <div><span className="cifra">{c.avisos.resumen}</span><span className="mini texto-3">{x.conResumen}</span></div>
+      </div>
     </div>
   );
 }
@@ -248,7 +346,7 @@ function Campanas({ x }) {
   );
 }
 
-const PESTANAS = ['resumen', 'denuncias', 'tiendas', 'campanas'];
+const PESTANAS = ['resumen', 'crecimiento', 'denuncias', 'tiendas', 'campanas'];
 
 export default function AdminPage() {
   return <Suspense><Admin /></Suspense>;
@@ -272,8 +370,9 @@ function Admin() {
       <div className="columna">
         <h1 className="titulo-l" style={{ paddingTop: 12, display: 'flex', alignItems: 'center', gap: 10 }}><ShieldCheck size={26} style={{ color: 'var(--agua)' }} /> {x.titulo}</h1>
         <Pestanas etiqueta={x.titulo} valor={pestana} onCambio={setPestana}
-          opciones={[['resumen', x.resumen], ['denuncias', x.denuncias], ['tiendas', x.tiendas], ['campanas', x.campanas]]} />
+          opciones={[['resumen', x.resumen], ['crecimiento', x.crecimiento], ['denuncias', x.denuncias], ['tiendas', x.tiendas], ['campanas', x.campanas]]} />
         {pestana === 'resumen' && <Resumen x={x} />}
+        {pestana === 'crecimiento' && <Crecimiento x={x} />}
         {pestana === 'denuncias' && <Denuncias x={x} />}
         {pestana === 'tiendas' && <Tiendas x={x} />}
         {pestana === 'campanas' && <Campanas x={x} />}

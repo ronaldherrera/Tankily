@@ -12,6 +12,7 @@ import { RequiereSesion, SubidorImagenes, useTostada } from '@/components/ui';
 import SelectorUbicacion from '@/components/SelectorUbicacion';
 import { mensajeError } from '@/lib/errores';
 import Selector from '@/components/Selector';
+import { evento } from '@/lib/analitica';
 
 const VACIO = { titulo: '', descripcion: '', categoria: 'peces', modalidad: 'venta', precio: '', moneda: 'EUR', pais: '', provincia: '', envio: false, envio_alcance: 'pais', imagenes: [], estado: 'activo', como_tienda: false };
 
@@ -71,6 +72,7 @@ function FormularioAnuncio() {
     else res = await supabase.from('anuncios').insert({ ...fila, tienda_id: f.como_tienda && tienda ? tienda.id : null }).select('id').single();
     setGuardando(false);
     if (res.error) return setError(mensajeError(res.error, t));
+    if (!id) evento('anuncio');
     tostada(id ? t('mercado.form.actualizado') : t('mercado.form.publicado'));
     router.push(`/mercado/anuncio/?id=${res.data.id}`);
   }

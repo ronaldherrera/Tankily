@@ -10,6 +10,7 @@ import { useUnidades } from '@/lib/unidades';
 import { TIPOS_TANQUE, VISIBILIDADES, colorAgua } from '@/lib/constantes';
 import { tareasIniciales, cambioAguaSugerido } from '@/lib/tareas';
 import { RequiereSesion, SubidorImagenes, useTostada } from '@/components/ui';
+import { evento } from '@/lib/analitica';
 
 const EQUIPO = ['iluminacion', 'filtracion', 'calentador', 'skimmer', 'co2', 'sustrato'];
 
@@ -82,6 +83,7 @@ function Formulario() {
       ? await supabase.from('tanques').update(fila).eq('id', id).select('id').single()
       : await supabase.from('tanques').insert(fila).select('id').single();
     if (!res.error && !id) {
+      evento('tanque_creado', { tipo: tq.tipo });
       // Recordatorios sugeridos: cuentan desde hoy, salvo el test del agua (anima a la primera medición)
       const hoy = new Date().toISOString();
       await supabase.from('tareas').insert(tareasIniciales(tq.tipo).map((x) => ({ ...x, tanque_id: res.data.id, ultima_vez: x.tipo === 'test' ? null : hoy })));

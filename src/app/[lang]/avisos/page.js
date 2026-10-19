@@ -9,6 +9,7 @@ import { useSesion } from '@/lib/sesion';
 import { RequiereSesion, useTostada } from '@/components/ui';
 import { useT } from '@/i18n/IdiomaProvider';
 import { activarPush, desactivarPush, estadoPush } from '@/lib/push';
+import { evento } from '@/lib/analitica';
 
 // [columna de avisos_email, texto, icono]
 const EMAIL = [['mensajes', 'mensajes', MessageCircle], ['foro', 'foro', MessagesSquare], ['resumen', 'resumen', CalendarDays]];
@@ -93,7 +94,7 @@ function Preferencias() {
     try {
       const estado = push === 'activas' ? await desactivarPush() : await activarPush();
       setPush(estado);
-      if (estado === 'activas') tostada(t('avisos.pushActivadas'));
+      if (estado === 'activas') { tostada(t('avisos.pushActivadas')); evento('push_activado'); }
     } catch (e) {
       tostada(t('avisos.pushError', { error: e.message }));
     } finally {

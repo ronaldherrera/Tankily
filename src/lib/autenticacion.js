@@ -5,6 +5,7 @@
 // se consulta /auth/v1/settings, que es público, así que activar uno no requiere tocar código.
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
+import { evento } from './analitica';
 
 const URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const CLAVE = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -34,6 +35,7 @@ export function useProveedores(lang) {
 
 // Tras volver del proveedor, Supabase deja la sesión iniciada y se aterriza en el muro del idioma actual
 export async function entrarCon(proveedor, lang) {
+  evento('acceso_social', { proveedor });
   return supabase.auth.signInWithOAuth({
     provider: proveedor,
     options: {

@@ -9,6 +9,7 @@ import { SCRIPT_INSTALAR } from '@/lib/instalarApp';
 import { IDIOMAS, LOCALES, esIdioma } from '@/i18n/config';
 import { IdiomaProvider } from '@/i18n/IdiomaProvider';
 import { traducir } from '@/i18n/traducir';
+import { UMAMI_ID, UMAMI_SCRIPT } from '@/lib/analitica';
 
 const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
 
@@ -58,6 +59,8 @@ export default async function RootLayout({ children, params }) {
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_INSTALAR }} />
         {/* Casi todas las páginas piden datos a Supabase al cargar: se abre la conexión cuanto antes */}
+        {/* Analítica sin cookies (src/lib/analitica.js); data-domains: no cuenta las visitas en local */}
+        {UMAMI_ID && <script defer src={UMAMI_SCRIPT} data-website-id={UMAMI_ID} data-domains="tankily.com" />}
         {process.env.NEXT_PUBLIC_SUPABASE_URL && <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} crossOrigin="anonymous" />}
       </head>
       <body>
