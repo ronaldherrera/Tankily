@@ -25,3 +25,32 @@ self.addEventListener('fetch', (evento) => {
     evento.respondWith(fetch(request).catch(() => caches.match('/icon.svg')));
   }
 });
+
+// Notificaciones push (Edge Function `push`): { titulo, cuerpo, url, etiqueta }
+self.addEventListener('push', (evento) => {
+  let datos = {};
+  try { datos = evento.data?.json() || {}; } catch { /* aviso sin datos */ }
+  evento.waitUntil(self.registration.showNotification(datos.titulo || 'Tankily', {
+    body: datos.cuerpo || '',
+    icon: '/icons/icon-192.png',
+    badge: '/icons/icon-192.png',
+    tag: datos.etiqueta,
+    renotify: !!datos.etiqueta,
+    data: { url: datos.url || '/' },
+  }));
+});
+
+// Al tocarla: si Tankily ya está abierto, se usa esa ventana; si no, se abre una nueva
+self.addEventListener('notificationclick', (evento) => {
+  evento.notification.close();
+  const url = new URL(evento.notification.data?.url || '/', self.location.origin).href;
+  evento.waitUntil((async () => {
+    const ventanas = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    const abierta = ventanas.find((v) => new URL(v.url).origin === self.location.origin);
+    if (abierta) {
+      await abierta.focus();
+      return abierta.navigate(url).catch(() => self.clients.openWindow(url));
+    }
+    return self.clients.openWindow(url);
+  })());
+});

@@ -1,0 +1,114 @@
+{
+ "es": {
+  "tipos": {
+   "me_gusta": "le ha gustado tu publicación",
+   "comentario": "ha comentado tu publicación",
+   "seguidor": "ha empezado a seguirte",
+   "eco": "ha hecho eco de tu publicación",
+   "mencion": "te ha mencionado",
+   "respuesta_foro": "ha respondido a tu hilo",
+   "solucion": "ha marcado tu respuesta como solución",
+   "resena": "ha valorado tu tienda",
+   "seguidor_tanque": "sigue tu tanque"
+  },
+  "alguien": "Alguien"
+ },
+ "en": {
+  "tipos": {
+   "me_gusta": "liked your post",
+   "comentario": "commented on your post",
+   "seguidor": "started following you",
+   "eco": "reposted your post",
+   "mencion": "mentioned you",
+   "respuesta_foro": "replied to your thread",
+   "solucion": "marked your reply as the solution",
+   "resena": "reviewed your store",
+   "seguidor_tanque": "follows your tank"
+  },
+  "alguien": "Someone"
+ },
+ "de": {
+  "tipos": {
+   "me_gusta": "gefällt dein Beitrag",
+   "comentario": "hat deinen Beitrag kommentiert",
+   "seguidor": "folgt dir jetzt",
+   "eco": "hat deinen Beitrag geteilt",
+   "mencion": "hat dich erwähnt",
+   "respuesta_foro": "hat auf dein Thema geantwortet",
+   "solucion": "hat deine Antwort als Lösung markiert",
+   "resena": "hat dein Geschäft bewertet",
+   "seguidor_tanque": "folgt deinem Becken"
+  },
+  "alguien": "Jemand"
+ },
+ "pt": {
+  "tipos": {
+   "me_gusta": "curtiu sua publicação",
+   "comentario": "comentou sua publicação",
+   "seguidor": "começou a seguir você",
+   "eco": "compartilhou sua publicação",
+   "mencion": "mencionou você",
+   "respuesta_foro": "respondeu ao seu tópico",
+   "solucion": "marcou sua resposta como solução",
+   "resena": "avaliou sua loja",
+   "seguidor_tanque": "segue seu aquário"
+  },
+  "alguien": "Alguém"
+ },
+ "fr": {
+  "tipos": {
+   "me_gusta": "a aimé ta publication",
+   "comentario": "a commenté ta publication",
+   "seguidor": "te suit désormais",
+   "eco": "a partagé ta publication",
+   "mencion": "t’a mentionné",
+   "respuesta_foro": "a répondu à ton sujet",
+   "solucion": "a marqué ta réponse comme solution",
+   "resena": "a évalué ton magasin",
+   "seguidor_tanque": "suit ton bac"
+  },
+  "alguien": "Quelqu’un"
+ },
+ "it": {
+  "tipos": {
+   "me_gusta": "ha messo mi piace al tuo post",
+   "comentario": "ha commentato il tuo post",
+   "seguidor": "ha iniziato a seguirti",
+   "eco": "ha condiviso il tuo post",
+   "mencion": "ti ha menzionato",
+   "respuesta_foro": "ha risposto alla tua discussione",
+   "solucion": "ha segnato la tua risposta come soluzione",
+   "resena": "ha recensito il tuo negozio",
+   "seguidor_tanque": "segue la tua vasca"
+  },
+  "alguien": "Qualcuno"
+ },
+ "nl": {
+  "tipos": {
+   "me_gusta": "vindt je bericht leuk",
+   "comentario": "reageerde op je bericht",
+   "seguidor": "volgt je nu",
+   "eco": "deelde je bericht",
+   "mencion": "noemde je",
+   "respuesta_foro": "antwoordde op je onderwerp",
+   "solucion": "markeerde je antwoord als oplossing",
+   "resena": "beoordeelde je winkel",
+   "seguidor_tanque": "volgt je bak"
+  },
+  "alguien": "Iemand"
+ },
+ "pl": {
+  "tipos": {
+   "me_gusta": "polubił(a) twój wpis",
+   "comentario": "skomentował(a) twój wpis",
+   "seguidor": "zaczął(-ęła) cię obserwować",
+   "eco": "udostępnił(a) twój wpis",
+   "mencion": "oznaczył(a) cię",
+   "respuesta_foro": "odpowiedział(a) w twoim wątku",
+   "solucion": "oznaczył(a) twoją odpowiedź jako rozwiązanie",
+   "resena": "ocenił(a) twój sklep",
+   "seguidor_tanque": "obserwuje twój zbiornik"
+  },
+  "alguien": "Ktoś"
+ }
+}
