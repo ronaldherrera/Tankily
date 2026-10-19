@@ -27,14 +27,14 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
 
 - [ ] **Logo de Tankily en el avatar de los correos** (Gmail): crear una cuenta de Google con `krill@tankily.com` (Nombre: Tankily, sin apellidos) y subir `public/icons/icon-512.png` como foto. El 18/10/2026 falló la verificación por SMS ("no entregado"): reintentar otro día o con otro móvil. Mientras, Gravatar (gravatar.com) con la misma dirección y el mismo logo.
 
-- [ ] **Donaciones ("invítame a un café")**: la página `/apoyar/` y su enlace en el menú ya están hechos, con el botón en "Muy pronto".
+- [x] **Donaciones ("invítame a un café")** (19/10/2026): ko-fi.com/tankily con Stripe propio (cuenta nueva, transferencias manuales; sin PayPal, decidido), 3 € el café, sin mensuales; enlazado en `/apoyar/`.
   1. Crea la cuenta en [ko-fi.com](https://ko-fi.com) (sin comisión en donaciones sueltas; Buy Me a Coffee cobra un 5 %) y conecta PayPal y/o Stripe para cobrar.
   2. En la página de Ko-fi: moneda en euros, precio del "café" (p. ej. 3 €), activa las donaciones mensuales y, si quieres, una meta ("servidor de este año").
   3. Pásame el enlace (tipo `ko-fi.com/tankily`) y lo pongo en `src/lib/apoyo.js`.
   4. Lo que entre cuenta como ingreso de la actividad: coméntalo con tu gestor y menciónalo en el aviso legal.
 
 - [x] **Acceso con Google** (19/10/2026): proyecto de Google Cloud `tankily` (no el de Flox), cliente "Tankily web", app publicada en producción y activada en Supabase. Apple, Facebook y Microsoft siguen pendientes. ~~**Acceso con cuentas externas**: guía paso a paso en `docs/acceso-con-cuentas-externas.md`. Empieza por Google (gratis, 15 min). Apple cuesta 99 $/año.~~
-- [ ] **Traducción de más calidad**: clave gratuita de DeepL API Free y
+- [x] **Traducción de más calidad** (20/10/2026): DeepL activo (plan Developer: crédito único de 1 M de caracteres, no mensual). Si se agota o falla, la función `traducir` pasa sola a MyMemory. ~~**Traducción de más calidad**: clave gratuita de DeepL API Free y~~
       `npx supabase secrets set DEEPL_API_KEY=tu_clave --project-ref ivizkgmogzvscygcxepy`
       (hoy traduce MyMemory, gratis pero limitado a ~5.000 caracteres/día).
 - [ ] **Google AdSense**: alta de la web, verificación del dominio y variables `NEXT_PUBLIC_ADSENSE_CLIENT` y `NEXT_PUBLIC_ADSENSE_SLOT` en GitHub → Settings → Secrets and variables → Actions → Variables. `ads.txt` se genera solo.

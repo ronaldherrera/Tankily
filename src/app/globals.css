@@ -1540,6 +1540,21 @@ h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
 .admin-lista > li { padding: 14px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .admin-acciones { display: flex; gap: 6px; flex-wrap: wrap; }
 
+/* Admin → Proveedores */
+.saltos-proveedores { display: flex; flex-wrap: wrap; gap: 6px; }
+.saltos-proveedores .chip { text-decoration: none; }
+.proveedores { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+.proveedor { padding: 14px 16px; border-radius: var(--radio-m); display: flex; flex-direction: column; gap: 8px; }
+.proveedor.descartado { opacity: 0.55; }
+.proveedor-cabecera { display: flex; align-items: center; gap: 8px; }
+.proveedor-cabecera > strong { flex: 1; min-width: 0; }
+.proveedor-datos { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; font-size: 0.82rem; }
+.proveedor-datos dt { color: var(--texto-3); }
+.proveedor-datos dd { margin: 0; color: var(--texto-2); }
+.chip.estado-activo { color: var(--agua); }
+.chip.estado-pendiente { color: var(--aviso); }
+.aviso-renovar { display: flex; align-items: center; gap: 8px; margin: 0; padding: 10px 14px; border-radius: var(--radio-m); font-size: 0.9rem; color: var(--aviso); background: color-mix(in oklab, var(--aviso) 12%, transparent); border: 1px solid color-mix(in oklab, var(--aviso) 35%, transparent); }
+
 /* Admin → Crecimiento */
 .admin-bloque { padding: 18px; border-radius: var(--radio-m); display: flex; flex-direction: column; gap: 10px; }
 .embudo { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }

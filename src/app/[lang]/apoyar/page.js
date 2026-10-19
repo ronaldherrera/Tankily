@@ -3,7 +3,7 @@ import { Coffee, Check, Heart } from 'lucide-react';
 import { traducir } from '@/i18n/traducir';
 import { alternativas } from '@/lib/seo';
 import { URL_APOYO } from '@/lib/apoyo';
-import { evento } from '@/lib/analitica';
+import EnlaceApoyo from '@/components/EnlaceApoyo';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
@@ -42,9 +42,9 @@ export default async function ApoyarPage({ params }) {
             {lista(t('apoyar.paga'), Check)}
             {URL_APOYO ? (
               <>
-                <a href={URL_APOYO} target="_blank" rel="noopener" className="btn btn-primario" style={{ alignSelf: 'flex-start' }} onClick={() => evento('apoyar')}>
+                <EnlaceApoyo href={URL_APOYO} className="btn btn-primario" style={{ alignSelf: 'flex-start' }}>
                   <Coffee size={18} aria-hidden />{t('apoyar.boton')}
-                </a>
+                </EnlaceApoyo>
                 <p className="pequeno texto-3">{t('apoyar.nota')}</p>
               </>
             ) : (

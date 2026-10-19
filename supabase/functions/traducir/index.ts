@@ -3,7 +3,8 @@
 // así nadie puede usar esta función como traductor gratuito. Guarda el resultado en la caché
 // compartida `traducciones` para que cada texto se traduzca una sola vez por idioma.
 //
-// Proveedor: DeepL si existe el secreto DEEPL_API_KEY (las claves gratuitas acaban en ":fx"):
+// Proveedor: DeepL si existe el secreto DEEPL_API_KEY (las claves gratuitas acaban en ":fx"); si DeepL falla
+// o se agota el crédito, MyMemory. Clave:
 //   npx supabase secrets set DEEPL_API_KEY=... --project-ref <ref>
 // Si no, la API gratuita de MyMemory (sin clave, ~5000 caracteres/día; la caché lo multiplica).
 import { createClient } from 'jsr:@supabase/supabase-js@2';
@@ -118,15 +119,27 @@ Deno.serve(async (req) => {
     .match({ tabla, fila_id: id, campo, idioma }).maybeSingle();
   if (guardada && guardada.huella === h) return responder({ texto: guardada.texto, de: fila.idioma, cache: true });
 
+  // DeepL si hay clave; si falla (p. ej. 456: crédito agotado), MyMemory, para que traducir no deje de funcionar
   const clave = Deno.env.get('DEEPL_API_KEY');
-  let resultado: { texto: string; de: string };
-  try {
-    resultado = clave ? await conDeepL(original, idioma, clave, fila.idioma) : await conMyMemory(original, fila.idioma, idioma);
-  } catch (e) {
-    return responder({ error: 'proveedor', detalle: String(e) }, 502);
+  let resultado: { texto: string; de: string } | null = null;
+  let proveedor = 'mymemory';
+  if (clave) {
+    try {
+      resultado = await conDeepL(original, idioma, clave, fila.idioma);
+      proveedor = 'deepl';
+    } catch (e) {
+      console.error('DeepL', String(e));
+    }
+  }
+  if (!resultado?.texto) {
+    try {
+      resultado = await conMyMemory(original, fila.idioma, idioma);
+    } catch (e) {
+      return responder({ error: 'proveedor', detalle: String(e) }, 502);
+    }
   }
   if (!resultado.texto) return responder({ error: 'proveedor' }, 502);
 
   await sb.from('traducciones').upsert({ tabla, fila_id: id, campo, idioma, huella: h, texto: resultado.texto });
-  return responder({ texto: resultado.texto, de: resultado.de, proveedor: clave ? 'deepl' : 'mymemory' });
+  return responder({ texto: resultado.texto, de: resultado.de, proveedor });
 });

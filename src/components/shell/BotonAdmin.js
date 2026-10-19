@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { ShieldCheck, LayoutDashboard, Flag, Store, Megaphone, TrendingUp } from 'lucide-react';
+import { ShieldCheck, LayoutDashboard, Flag, Store, Megaphone, TrendingUp, Plug } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
 import { useSesion } from '@/lib/sesion';
@@ -18,6 +18,7 @@ const SECCIONES = [
   ['denuncias', Flag],
   ['tiendas', Store],
   ['campanas', Megaphone],
+  ['proveedores', Plug],
 ];
 
 const leer = () => { try { return JSON.parse(localStorage.getItem(CLAVE)) || null; } catch { return null; } };

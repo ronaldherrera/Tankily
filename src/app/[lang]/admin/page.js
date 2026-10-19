@@ -5,12 +5,12 @@
 // datos, que vuelven a comprobar que quien llama es administrador.
 // Es una herramienta interna: sus textos están en español e inglés aquí mismo, no en los diccionarios.
 import { Suspense, useCallback, useEffect, useState } from 'react';
-import { ShieldCheck, Trash2, Check, X, BadgeCheck, Crown, Eye } from 'lucide-react';
+import { ShieldCheck, Trash2, Check, X, BadgeCheck, Crown, Eye, Plus, Pencil, ExternalLink, CalendarClock } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
 import { useSesion } from '@/lib/sesion';
 import { useT } from '@/i18n/IdiomaProvider';
-import { Pestanas, Vacio, Cargando, useTostada } from '@/components/ui';
+import { Pestanas, Vacio, Cargando, Modal, useTostada } from '@/components/ui';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
 import Selector from '@/components/Selector';
 import { useSearchParams } from 'next/navigation';
@@ -19,6 +19,14 @@ const TEXTOS = {
   es: {
     titulo: 'Administración', soloAdmin: 'Esta sección es solo para administradores.',
     resumen: 'Resumen', denuncias: 'Denuncias', tiendas: 'Tiendas', campanas: 'Campañas',
+    proveedores: 'Proveedores', proveedoresAyuda: 'Todas las plataformas que usa Tankily: para qué sirven, dónde se gestionan, con qué cuenta y qué hay que renovar.',
+    nuevoProveedor: 'Añadir proveedor', editarProveedor: 'Editar proveedor', borrarProveedor: 'Borrar', confirmarBorrarProveedor: '¿Borrar este proveedor de la lista?',
+    nombreProveedor: 'Nombre', categoria: 'Categoría', paraQue: 'Para qué sirve', enlacePanel: 'Enlace al panel', cuenta: 'Cuenta', coste: 'Coste',
+    estado: 'Estado', renovar: 'Renovar el', notas: 'Notas', abrirPanel: 'Abrir panel', guardar: 'Guardar',
+    sinClaves: 'No apuntes aquí claves ni contraseñas: esas van en los secretos de Supabase o GitHub.',
+    renovarPronto: '{nombre}: renovar antes del {fecha} (quedan {n} días).',
+    estados: { activo: 'Activo', pendiente: 'Pendiente', descartado: 'Descartado' },
+    categorias: { infraestructura: 'Infraestructura', correo: 'Correo', acceso: 'Inicio de sesión', seo: 'Buscadores', analitica: 'Analítica', pagos: 'Pagos', traduccion: 'Traducción', otros: 'Otros' },
     crecimiento: 'Crecimiento', activosDia: 'Activos hoy', activosSemana: 'Activos 7 días', activosMes: 'Activos 30 días', reales: 'Usuarios reales',
     pegajosidad: 'Vuelven a diario', pegajosidadAyuda: 'Activos hoy / activos 30 días. Por encima del 20 % es muy bueno.',
     embudo: 'Embudo de activación', embudoAyuda: 'Dónde se queda la gente. El paso con más caída es el primero que hay que mejorar.',
@@ -41,6 +49,14 @@ const TEXTOS = {
   en: {
     titulo: 'Administration', soloAdmin: 'This section is for administrators only.',
     resumen: 'Overview', denuncias: 'Reports', tiendas: 'Stores', campanas: 'Campaigns',
+    proveedores: 'Providers', proveedoresAyuda: 'Every platform Tankily uses: what it’s for, where it’s managed, which account and what needs renewing.',
+    nuevoProveedor: 'Add provider', editarProveedor: 'Edit provider', borrarProveedor: 'Delete', confirmarBorrarProveedor: 'Remove this provider from the list?',
+    nombreProveedor: 'Name', categoria: 'Category', paraQue: 'What it’s for', enlacePanel: 'Dashboard link', cuenta: 'Account', coste: 'Cost',
+    estado: 'Status', renovar: 'Renew by', notas: 'Notes', abrirPanel: 'Open dashboard', guardar: 'Save',
+    sinClaves: 'Never store keys or passwords here: they belong in the Supabase or GitHub secrets.',
+    renovarPronto: '{nombre}: renew before {fecha} ({n} days left).',
+    estados: { activo: 'Active', pendiente: 'Pending', descartado: 'Dropped' },
+    categorias: { infraestructura: 'Infrastructure', correo: 'Email', acceso: 'Sign-in', seo: 'Search engines', analitica: 'Analytics', pagos: 'Payments', traduccion: 'Translation', otros: 'Other' },
     crecimiento: 'Growth', activosDia: 'Active today', activosSemana: 'Active 7 days', activosMes: 'Active 30 days', reales: 'Real users',
     pegajosidad: 'Come back daily', pegajosidadAyuda: 'Active today / active 30 days. Above 20% is very good.',
     embudo: 'Activation funnel', embudoAyuda: 'Where people drop off. Fix the step with the biggest drop first.',
@@ -346,10 +362,141 @@ function Campanas({ x }) {
   );
 }
 
-const PESTANAS = ['resumen', 'crecimiento', 'denuncias', 'tiendas', 'campanas'];
+const PESTANAS = ['resumen', 'crecimiento', 'denuncias', 'tiendas', 'campanas', 'proveedores'];
 
 export default function AdminPage() {
   return <Suspense><Admin /></Suspense>;
+}
+
+const CATEGORIAS = ['infraestructura', 'correo', 'acceso', 'seo', 'analitica', 'pagos', 'traduccion', 'otros'];
+const ESTADOS = ['activo', 'pendiente', 'descartado'];
+const VACIO = { nombre: '', categoria: 'otros', para_que: '', enlace: '', cuenta: '', coste: '', estado: 'activo', renovar_el: '', notas: '' };
+const diasHasta = (fecha) => Math.ceil((new Date(`${fecha}T00:00:00`) - new Date()) / 86400000);
+
+// Todas las plataformas de Tankily: para qué sirven, dónde se gestionan, cuenta, coste y renovaciones.
+// Solo datos de referencia: las claves y contraseñas nunca se apuntan aquí.
+function Proveedores({ x }) {
+  const tostada = useTostada();
+  const { locale } = useT();
+  const [lista, setLista] = useState(null);
+  const [editando, setEditando] = useState(null); // fila (o VACIO para una nueva)
+  const cargar = useCallback(() => {
+    supabase.from('proveedores').select('*').order('orden').order('nombre').then(({ data }) => setLista(data || []));
+  }, []);
+  useEffect(() => { cargar(); }, [cargar]);
+
+  async function guardar(e) {
+    e.preventDefault();
+    const f = editando;
+    const fila = {
+      nombre: f.nombre.trim(), categoria: f.categoria, para_que: f.para_que.trim() || null, enlace: f.enlace.trim() || null,
+      cuenta: f.cuenta.trim() || null, coste: f.coste.trim() || null, estado: f.estado, renovar_el: f.renovar_el || null, notas: f.notas.trim() || null,
+    };
+    const { error } = f.id
+      ? await supabase.from('proveedores').update(fila).eq('id', f.id)
+      : await supabase.from('proveedores').insert({ ...fila, orden: 1000 });
+    if (error) return tostada(error.message);
+    setEditando(null);
+    tostada(x.guardado);
+    cargar();
+  }
+  async function borrar() {
+    if (!confirm(x.confirmarBorrarProveedor)) return;
+    const { error } = await supabase.from('proveedores').delete().eq('id', editando.id);
+    if (error) return tostada(error.message);
+    setEditando(null);
+    cargar();
+  }
+
+  if (!lista) return <Cargando alto={70} n={3} />;
+  const proximas = lista.filter((p) => p.renovar_el && p.estado !== 'descartado' && diasHasta(p.renovar_el) <= 60);
+  const campo = (k, props = {}) => <input className="entrada" value={editando[k] ?? ''} onChange={(e) => setEditando({ ...editando, [k]: e.target.value })} {...props} />;
+  const fecha = (d) => new Date(`${d}T00:00:00`).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+        <p className="texto-2 pequeno" style={{ flex: 1, minWidth: 220 }}>{x.proveedoresAyuda}</p>
+        <button type="button" className="btn btn-s btn-primario" onClick={() => setEditando(VACIO)}><Plus size={16} aria-hidden /> {x.nuevoProveedor}</button>
+      </div>
+
+      <nav className="saltos-proveedores" aria-label={x.proveedores}>
+        {CATEGORIAS.filter((c) => lista.some((p) => p.categoria === c)).map((c) => (
+          <a key={c} href={`#prov-${c}`} className="chip">{x.categorias[c]} <span className="texto-3">{lista.filter((p) => p.categoria === c).length}</span></a>
+        ))}
+      </nav>
+
+      {proximas.map((p) => (
+        <p key={p.id} className="aviso-renovar"><CalendarClock size={16} aria-hidden />
+          {x.renovarPronto.replace('{nombre}', p.nombre).replace('{fecha}', fecha(p.renovar_el)).replace('{n}', Math.max(0, diasHasta(p.renovar_el)))}
+        </p>
+      ))}
+
+      {CATEGORIAS.filter((c) => lista.some((p) => p.categoria === c)).map((c) => (
+        <section key={c} id={`prov-${c}`} style={{ display: 'flex', flexDirection: 'column', gap: 10, scrollMarginTop: 'calc(var(--seg-arriba, 0px) + 80px)' }}>
+          <h2 className="titulo-s">{x.categorias[c]}</h2>
+          <ul className="proveedores">
+            {lista.filter((p) => p.categoria === c).map((p) => (
+              <li key={p.id} className={`cristal-suave proveedor ${p.estado}`}>
+                <div className="proveedor-cabecera">
+                  <strong>{p.nombre}</strong>
+                  <span className={`chip estado-${p.estado}`}>{x.estados[p.estado]}</span>
+                  <button type="button" className="btn btn-fantasma btn-icono btn-s" onClick={() => setEditando({ ...VACIO, ...p, renovar_el: p.renovar_el || '' })} aria-label={x.editarProveedor}><Pencil size={15} /></button>
+                </div>
+                {p.para_que && <p className="pequeno texto-2">{p.para_que}</p>}
+                <dl className="proveedor-datos">
+                  {p.cuenta && <><dt>{x.cuenta}</dt><dd>{p.cuenta}</dd></>}
+                  {p.coste && <><dt>{x.coste}</dt><dd>{p.coste}</dd></>}
+                  {p.renovar_el && <><dt>{x.renovar}</dt><dd>{fecha(p.renovar_el)}</dd></>}
+                </dl>
+                {p.notas && <p className="mini texto-3">{p.notas}</p>}
+                {p.enlace && <a href={p.enlace} target="_blank" rel="noopener noreferrer" className="btn btn-s" style={{ alignSelf: 'flex-start' }}><ExternalLink size={15} aria-hidden /> {x.abrirPanel}</a>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      {editando && (
+        <Modal titulo={editando.id ? x.editarProveedor : x.nuevoProveedor} onCerrar={() => setEditando(null)} ancho={560}>
+          <form onSubmit={guardar} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div className="fila-campos">
+              <label className="campo"><span>{x.nombreProveedor}</span>{campo('nombre', { required: true, maxLength: 60 })}</label>
+              <label className="campo"><span>{x.categoria}</span>
+                <Selector value={editando.categoria} onChange={(e) => setEditando({ ...editando, categoria: e.target.value })}>
+                  {CATEGORIAS.map((c) => <option key={c} value={c}>{x.categorias[c]}</option>)}
+                </Selector>
+              </label>
+            </div>
+            <label className="campo"><span>{x.paraQue}</span>
+              <textarea className="entrada" rows={2} maxLength={400} value={editando.para_que ?? ''} onChange={(e) => setEditando({ ...editando, para_que: e.target.value })} />
+            </label>
+            <label className="campo"><span>{x.enlacePanel}</span>{campo('enlace', { type: 'url', placeholder: 'https://…' })}</label>
+            <div className="fila-campos">
+              <label className="campo"><span>{x.cuenta}</span>{campo('cuenta', { maxLength: 120 })}</label>
+              <label className="campo"><span>{x.coste}</span>{campo('coste', { maxLength: 120 })}</label>
+            </div>
+            <div className="fila-campos">
+              <label className="campo"><span>{x.estado}</span>
+                <Selector value={editando.estado} onChange={(e) => setEditando({ ...editando, estado: e.target.value })}>
+                  {ESTADOS.map((s) => <option key={s} value={s}>{x.estados[s]}</option>)}
+                </Selector>
+              </label>
+              <label className="campo"><span>{x.renovar}</span>{campo('renovar_el', { type: 'date' })}</label>
+            </div>
+            <label className="campo"><span>{x.notas}</span>
+              <textarea className="entrada" rows={3} maxLength={1000} value={editando.notas ?? ''} onChange={(e) => setEditando({ ...editando, notas: e.target.value })} />
+            </label>
+            <p className="mini texto-3">{x.sinClaves}</p>
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'space-between', flexWrap: 'wrap' }}>
+              {editando.id ? <button type="button" className="btn btn-s btn-peligro" onClick={borrar}><Trash2 size={15} aria-hidden /> {x.borrarProveedor}</button> : <span />}
+              <button className="btn btn-primario">{x.guardar}</button>
+            </div>
+          </form>
+        </Modal>
+      )}
+    </div>
+  );
 }
 
 function Admin() {
@@ -370,12 +517,13 @@ function Admin() {
       <div className="columna">
         <h1 className="titulo-l" style={{ paddingTop: 12, display: 'flex', alignItems: 'center', gap: 10 }}><ShieldCheck size={26} style={{ color: 'var(--agua)' }} /> {x.titulo}</h1>
         <Pestanas etiqueta={x.titulo} valor={pestana} onCambio={setPestana}
-          opciones={[['resumen', x.resumen], ['crecimiento', x.crecimiento], ['denuncias', x.denuncias], ['tiendas', x.tiendas], ['campanas', x.campanas]]} />
+          opciones={[['resumen', x.resumen], ['crecimiento', x.crecimiento], ['denuncias', x.denuncias], ['tiendas', x.tiendas], ['campanas', x.campanas], ['proveedores', x.proveedores]]} />
         {pestana === 'resumen' && <Resumen x={x} />}
         {pestana === 'crecimiento' && <Crecimiento x={x} />}
         {pestana === 'denuncias' && <Denuncias x={x} />}
         {pestana === 'tiendas' && <Tiendas x={x} />}
         {pestana === 'campanas' && <Campanas x={x} />}
+        {pestana === 'proveedores' && <Proveedores x={x} />}
       </div>
     </div>
   );
