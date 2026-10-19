@@ -5,7 +5,7 @@
 // datos, que vuelven a comprobar que quien llama es administrador.
 // Es una herramienta interna: sus textos están en español e inglés aquí mismo, no en los diccionarios.
 import { Suspense, useCallback, useEffect, useState } from 'react';
-import { ShieldCheck, Trash2, Check, X, BadgeCheck, Crown } from 'lucide-react';
+import { ShieldCheck, Trash2, Check, X, BadgeCheck, Crown, Eye } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
 import { useSesion } from '@/lib/sesion';
@@ -21,7 +21,7 @@ const TEXTOS = {
     resumen: 'Resumen', denuncias: 'Denuncias', tiendas: 'Tiendas', campanas: 'Campañas',
     usuarios: 'Usuarios', usuarios7d: 'Nuevos esta semana', tanques: 'Tanques', publicaciones7d: 'Publicaciones esta semana',
     hilos7d: 'Hilos esta semana', anunciosActivos: 'Anuncios activos', tiendasPro: 'Tiendas Pro', reportesPendientes: 'Denuncias pendientes',
-    sinDenuncias: 'No hay denuncias pendientes.', verContenido: 'Ver', borrar: 'Borrar contenido', revisado: 'Revisada', descartar: 'Descartar',
+    sinDenuncias: 'No hay denuncias pendientes.', verContenido: 'Ver', borrar: 'Borrar contenido', revisado: 'Revisada', descartar: 'Descartar', mostrar: 'Volver a mostrar', mostrado: 'Contenido visible de nuevo; denuncias descartadas.',
     borrado: 'Contenido borrado', confirmarBorrar: '¿Borrar este contenido? No se puede deshacer.',
     motivo: { spam: 'Spam', ofensivo: 'Ofensivo', fraude: 'Fraude', maltrato_animal: 'Maltrato animal', especie_protegida: 'Especie protegida', otro: 'Otro' },
     denunciadoPor: 'denunciado por @{u}',
@@ -36,7 +36,7 @@ const TEXTOS = {
     resumen: 'Overview', denuncias: 'Reports', tiendas: 'Stores', campanas: 'Campaigns',
     usuarios: 'Users', usuarios7d: 'New this week', tanques: 'Tanks', publicaciones7d: 'Posts this week',
     hilos7d: 'Threads this week', anunciosActivos: 'Active listings', tiendasPro: 'Pro stores', reportesPendientes: 'Pending reports',
-    sinDenuncias: 'No pending reports.', verContenido: 'View', borrar: 'Delete content', revisado: 'Reviewed', descartar: 'Dismiss',
+    sinDenuncias: 'No pending reports.', verContenido: 'View', borrar: 'Delete content', revisado: 'Reviewed', descartar: 'Dismiss', mostrar: 'Show again', mostrado: 'Content visible again; reports dismissed.',
     borrado: 'Content deleted', confirmarBorrar: 'Delete this content? This can’t be undone.',
     motivo: { spam: 'Spam', ofensivo: 'Offensive', fraude: 'Fraud', maltrato_animal: 'Animal cruelty', especie_protegida: 'Protected species', otro: 'Other' },
     denunciadoPor: 'reported by @{u}',
@@ -86,6 +86,15 @@ function Denuncias({ x }) {
     await supabase.from('reportes').update({ estado: nuevo }).eq('id', r.id);
     setLista((l) => l.filter((y) => y.id !== r.id));
   }
+  // Con 5 denuncias el contenido se oculta solo (ver migración de moderación); si eran injustas, se vuelve
+  // a mostrar y se descartan todas sus denuncias pendientes
+  async function mostrar(r) {
+    const { error } = await supabase.rpc('admin_mostrar', { p_tipo: r.tipo, p_id: Number(r.objeto_id), p_visible: true });
+    if (error) return tostada(error.message);
+    await supabase.from('reportes').update({ estado: 'descartado' }).eq('tipo', r.tipo).eq('objeto_id', r.objeto_id).eq('estado', 'pendiente');
+    tostada(x.mostrado);
+    cargar();
+  }
   async function borrar(r) {
     if (!window.confirm(x.confirmarBorrar)) return;
     const { error } = await supabase.from(OBJETO[r.tipo].tabla).delete().eq('id', r.objeto_id);
@@ -110,6 +119,7 @@ function Denuncias({ x }) {
             </div>
             <div className="admin-acciones">
               {o.enlace && <Link href={o.enlace(r.objeto_id)} className="btn btn-s" target="_blank">{x.verContenido}</Link>}
+              {o.tabla && <button type="button" className="btn btn-s" onClick={() => mostrar(r)}><Eye size={14} /> {x.mostrar}</button>}
               {o.tabla && <button type="button" className="btn btn-s btn-peligro" onClick={() => borrar(r)}><Trash2 size={14} /> {x.borrar}</button>}
               <button type="button" className="btn btn-s" onClick={() => estado(r, 'revisado')}><Check size={14} /> {x.revisado}</button>
               <button type="button" className="btn btn-s btn-fantasma" onClick={() => estado(r, 'descartado')}><X size={14} /> {x.descartar}</button>

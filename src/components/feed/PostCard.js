@@ -101,6 +101,11 @@ export default function PostCard({ post, meGusta = false, miEco, onBorrado, dest
       setEco(data.id);
       setNumEcos((n) => n + 1);
       tostada(t('post.ecoPublicado'));
+    } else if (error.code === '23505') {
+      // Ya había un eco (la base de datos solo permite uno): se marca el botón con el existente
+      const { data: previo } = await supabase.from('publicaciones').select('id')
+        .eq('usuario_id', usuario.id).eq('eco_de', objetivo.id).is('contenido', null).maybeSingle();
+      if (previo) setEco(previo.id);
     }
   }
 
@@ -264,6 +269,7 @@ function CitarPost({ original, onCerrar, onPublicada }) {
       eco_de: original.id, tipo: 'eco', contenido: texto.trim(), idioma: await detectarIdioma(texto, lang),
     }).select('id').single();
     setPublicando(false);
+    if (fallo?.code === '23505') return setError(t('cita.yaCitada'));
     if (fallo) return setError(fallo.message);
     onPublicada(data.id);
   }
