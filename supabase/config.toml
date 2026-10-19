@@ -411,3 +411,8 @@ s3_secret_key = "env(S3_SECRET_KEY)"
 # declarative_schema_path = "./database"
 # JSON string passed through to pg-delta SQL formatting.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"
+
+# Avisos por email: la llama pg_cron con una clave propia (cabecera x-avisos) y Gmail/Outlook para la baja
+# de un clic, que no llevan JWT de Supabase.
+[functions.avisos]
+verify_jwt = false

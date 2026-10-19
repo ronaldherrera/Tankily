@@ -71,7 +71,10 @@ _Lista generada por Claude. Lo que vaya surgiendo mientras trabajo se añade aba
 ## 💡 Propuestas que necesitan tu decisión (no las he hecho)
 
 - [ ] **Ocultar automáticamente lo muy denunciado**: si una publicación, hilo o anuncio recibe, por ejemplo, 3 denuncias de usuarios distintos, se oculta hasta que lo revises en `/admin/`. Protege la comunidad de noche y en fines de semana. ¿Con cuántas denuncias?
-- [ ] **Avisos por email** (necesita el SMTP propio): "te han respondido en el foro", "tienes un mensaje", y un resumen semanal opcional con la actividad de los tanques que sigues. Es lo que más hace volver a la gente.
+- [ ] **Avisos por email** (hecho el 19/10/2026; falta activarlo con los 2 secretos): mensajes nuevos y respuestas del foro (cada 15 min, solo lo que sigue sin leer pasados 10 min, máx. 1 correo por tipo y hora) y resumen semanal opcional los lunes (pendientes + tareas de mantenimiento). Preferencias y baja en `/avisos/` (enlace en Ajustes y en cada correo, más baja de un clic en Gmail). Piezas: migración `20261019120000_avisos_email.sql` (tabla `avisos_email`, pg_cron + pg_net), Edge Function `avisos`. Nunca escribe a las cuentas demo (`*.invalid`). Para activarlo:
+  1. `npx supabase secrets set SMTP_PASS="<contraseña de krill@tankily.com>" --project-ref ivizkgmogzvscygcxepy`
+  2. `node scripts/clave_avisos.mjs` (crea la clave entre pg_cron y la función, sin mostrarla)
+  ~~"te han respondido en el foro", "tienes un mensaje", y un resumen semanal opcional.~~
 - [ ] **Notificaciones push** en la app instalada para mensajes y respuestas (necesita claves de envío; gratis).
 - [ ] **Límites del freno antispam**: los he puesto holgados (punto 40 del informe). Si en la práctica alguien legítimo choca con ellos, se suben en un minuto.
 - [ ] **(Contenido de WikiTank) Salinidad de las fichas marinas.** Muchas fichas dan 1,023–1,025 de densidad (≈31–33 ppt), algo por debajo de los ~35 ppt (1,026) habituales en reef. La web ya lo tolera (punto 45 del informe), pero si quieres que el "agua ideal" que muestra coincida con la práctica, habría que revisar esos rangos en los .md (yo no los toco).

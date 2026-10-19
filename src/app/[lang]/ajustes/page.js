@@ -16,7 +16,7 @@ const TABLAS_PROPIAS = [
   ['foro_hilos', 'usuario_id'], ['foro_respuestas', 'usuario_id'], ['anuncios', 'usuario_id'], ['tiendas', 'propietario_id'],
   ['seguidores', 'seguidor_id'], ['me_gusta', 'usuario_id'], ['tienda_resenas', 'usuario_id'],
   ['tanque_seguidores', 'usuario_id'], ['foro_votos', 'usuario_id'], ['notificaciones', 'usuario_id'],
-  ['anuncios_guardados', 'usuario_id'],
+  ['anuncios_guardados', 'usuario_id'], ['avisos_email', 'usuario_id'],
 ];
 
 export default function AjustesPage() {
@@ -92,6 +92,12 @@ export default function AjustesPage() {
             <div className="campo"><span>{t('ajustes.idioma')}</span><SelectorIdiomaLista /></div>
             <div className="campo"><span>{t('ajustes.unidades')}</span><SelectorUnidades /></div>
           </div>
+        </section>
+
+        <section className="cristal" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <h2 className="titulo-s">{t('avisos.titulo')}</h2>
+          <p className="texto-2 pequeno">{t('avisos.ajustesTexto')}</p>
+          <Link href="/avisos/" className="btn btn-s" style={{ alignSelf: 'flex-start', position: 'relative', zIndex: 2 }}>{t('avisos.gestionar')}</Link>
         </section>
 
         <section className="cristal" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>

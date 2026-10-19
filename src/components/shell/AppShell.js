@@ -116,7 +116,7 @@ function Insignia({ n }) {
 export default function AppShell({ children }) {
   const pathname = sinIdioma(usePathname() || '/');
   const { usuario, perfil } = useSesion();
-  const { t } = useT();
+  const { t, lang } = useT();
   const noLeidos = useNoLeidos(usuario);
   const [masAbierto, setMasAbierto] = useState(false);
   const [rutaMenu, setRutaMenu] = useState(pathname);
@@ -133,6 +133,15 @@ export default function AppShell({ children }) {
       { duration: 420, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
     );
   }, [pathname]);
+
+  // Los avisos por email se escriben en el idioma que la persona usa en la web
+  useEffect(() => {
+    if (!usuario) return;
+    const marca = `${usuario.id}:${lang}`;
+    try { if (localStorage.getItem('tk-idioma-avisos') === marca) return; } catch { /* sigue */ }
+    supabase.from('avisos_email').upsert({ usuario_id: usuario.id, idioma: lang }, { onConflict: 'usuario_id' })
+      .then(({ error }) => { if (!error) try { localStorage.setItem('tk-idioma-avisos', marca); } catch { /* nada */ } });
+  }, [usuario, lang]);
 
   // El menú "Más" de la barra inferior se cierra al cambiar de página o con Escape
   if (rutaMenu !== pathname) {

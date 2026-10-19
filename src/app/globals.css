@@ -580,6 +580,24 @@ select.entrada option { background: var(--superficie); }
 .casilla { display: flex; gap: 10px; align-items: flex-start; font-size: 0.92rem; color: var(--texto-2); cursor: pointer; }
 .casilla input { accent-color: var(--agua); width: 18px; height: 18px; margin-top: 2px; }
 
+/* Interruptor (avisos por email) */
+.interruptor {
+  appearance: none; flex-shrink: 0; position: relative; width: 44px; height: 26px; margin: 0; border-radius: 999px;
+  background: var(--superficie-2); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--texto-2) 30%, transparent);
+  cursor: pointer; transition: background var(--hover), box-shadow var(--hover);
+}
+.interruptor::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--texto-2); transition: transform 0.42s var(--muelle), background var(--hover);
+}
+.interruptor:checked { background: var(--agua); box-shadow: none; }
+.interruptor:checked::after { transform: translateX(18px); background: #fff; }
+.interruptor:focus-visible { outline: 2px solid var(--agua); outline-offset: 2px; }
+.interruptor:disabled { opacity: 0.5; cursor: default; }
+.opcion-aviso { position: relative; z-index: 2; display: flex; align-items: center; gap: 14px; cursor: pointer; }
+.opcion-aviso-icono { flex-shrink: 0; color: var(--agua); }
+.opcion-aviso-texto { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
 .chip {
   display: inline-flex;
   align-items: center;
