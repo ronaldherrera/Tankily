@@ -40,7 +40,7 @@ function plantilla(tipo) {
 <tr><td align="center">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;">
     <tr><td style="padding:0 8px 16px;">
-      <a href="${SITIO}" style="text-decoration:none;"><img src="${SITIO}/icons/icon-192.png" width="40" height="40" alt="Tankily" style="display:block;border:0;border-radius:10px;"></a>
+      <a href="${SITIO}" style="text-decoration:none;"><img src="${SITIO}/icons/logo-animado.gif" width="48" height="48" alt="Tankily" style="display:block;border:0;border-radius:10px;"></a>
     </td></tr>
     <tr><td style="background:${C.tarjeta};border-radius:18px;padding:32px 28px;border-top:4px solid ${C.ola};">
     ${ramas}

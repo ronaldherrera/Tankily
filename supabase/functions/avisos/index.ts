@@ -143,7 +143,7 @@ function redactar(tipo: Tipo, f: Fila) {
 <html lang="${lang}"><body style="margin:0;padding:0;background:${C.fondo};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.fondo};padding:32px 16px;"><tr><td align="center">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;">
-    <tr><td style="padding:0 8px 16px;"><a href="${SITIO}/${lang}/" style="text-decoration:none;"><img src="${SITIO}/icons/icon-192.png" width="40" height="40" alt="Tankily" style="display:block;border:0;border-radius:10px;"></a></td></tr>
+    <tr><td style="padding:0 8px 16px;"><a href="${SITIO}/${lang}/" style="text-decoration:none;"><img src="${SITIO}/icons/logo-animado.gif" width="48" height="48" alt="Tankily" style="display:block;border:0;border-radius:10px;"></a></td></tr>
     <tr><td style="background:${C.tarjeta};border-radius:18px;padding:32px 28px;border-top:4px solid ${C.ola};">
       <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:${C.tinta};font-weight:700;">${esc(t[tipo].titulo)}</h1>
       ${cuerpo}
