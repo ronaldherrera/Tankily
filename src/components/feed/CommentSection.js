@@ -5,13 +5,13 @@ import { Send, Trash2 } from 'lucide-react';
 import { supabase, AUTOR } from '@/lib/supabase';
 import { useSesion } from '@/lib/sesion';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
-import { Avatar, NombreAutor, useTostada } from '@/components/ui';
+import { Avatar, NombreAutor, useTostada, EtiquetaOculto } from '@/components/ui';
 import TextoTraducible from './TextoTraducible';
 import { detectarIdioma } from '@/lib/traduccion';
 import { useT } from '@/i18n/IdiomaProvider';
 import { mensajeError } from '@/lib/errores';
 
-const CAMPOS = `id, contenido, idioma, creado_en, usuario_id, ${AUTOR}`;
+const CAMPOS = `id, contenido, idioma, creado_en, usuario_id, oculto, ${AUTOR}`;
 // Comentarios ya pedidos por publicación: se piden al pasar por encima del botón 💬 (antes del clic)
 // y se reutilizan durante un minuto si se cierran y se vuelven a abrir (después se piden de nuevo,
 // por si alguien ha comentado mientras tanto)
@@ -90,6 +90,7 @@ export default function CommentSection({ postId, autorPostId, onCambioTotal }) {
               <div style={{ display: 'flex', gap: 8, alignItems: 'baseline' }}>
                 <NombreAutor perfil={c.autor} conUsuario={false} />
                 <span className="texto-3 mini">{formatRelativeTime(c.creado_en)}</span>
+                <EtiquetaOculto oculto={c.oculto} />
                 {usuario && (usuario.id === c.usuario_id || usuario.id === autorPostId) && (
                   <button className="btn btn-fantasma btn-icono btn-s" style={{ marginLeft: 'auto', width: 26, height: 26 }} onClick={() => borrar(c.id)} aria-label={t('comentarios.eliminar')}>
                     <Trash2 size={14} />

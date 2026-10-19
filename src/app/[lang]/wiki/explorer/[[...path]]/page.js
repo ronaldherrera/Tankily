@@ -6,6 +6,7 @@ import { JsonLd, migas } from '@/lib/datosEstructurados';
 import { tituloWiki } from '../../formato';
 import ExplorerClient from './ExplorerClient';
 import { slugsPorTitulo } from '@/lib/catalogoEspecies';
+import { IDIOMAS_WIKI, nodoTraducible, contenidoTraducido, titulosTraducidos } from '@/lib/wikiTraduccion';
 
 const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
 
@@ -74,13 +75,23 @@ function resumen(contenido, titulo) {
   return limpio.length > 155 ? `${limpio.slice(0, 152).replace(/\s+\S*$/, '')}…` : limpio;
 }
 
-// Generar todos los caminos posibles para exportación estática.
-// Solo en español: el contenido aún no está traducido y generarlo en los 8 idiomas multiplicaba el
-// tamaño del build (los enlaces de otros idiomas van a /es/, ver conIdioma en src/i18n/config.js).
+// Versión de la página en un idioma: título, contenido y si está traducida (lib/wikiTraduccion.js).
+// En los idiomas sin traducción todavía (o en las páginas de grupos de especies) el contenido va en español.
+function enIdioma(nodo, pathArray, lang) {
+  const contenido = leerContenido(nodo);
+  const titulos = lang === 'es' ? {} : titulosTraducidos(lang);
+  const nombre = (titulo) => titulos[titulo] || tituloWiki(titulo);
+  if (lang === 'es' || !IDIOMAS_WIKI.includes(lang)) return { contenido, nombre, traducido: lang === 'es' };
+  const traducido = nodoTraducible(pathArray) && !!titulos[nodo.title] && (!contenido || contenidoTraducido(contenido, lang) != null);
+  return { contenido: traducido && contenido ? contenidoTraducido(contenido, lang) : contenido, nombre, traducido };
+}
+
+// Generar todos los caminos posibles para exportación estática: en español y en los idiomas con
+// traducción (IDIOMAS_WIKI). En los demás no se genera (el .htaccess y conIdioma llevan a /es/).
 export async function generateStaticParams({ params }) {
   const { lang } = await params;
   // Next exige al menos una ruta por idioma: en los demás, una vacía que da 404 (el .htaccess redirige a /es/)
-  if (lang !== 'es') return [{ path: ['_'] }];
+  if (lang !== 'es' && !IDIOMAS_WIKI.includes(lang)) return [{ path: ['_'] }];
   const paths = [];
 
   function collectPaths(nodes, currentPath = []) {
@@ -97,47 +108,58 @@ export async function generateStaticParams({ params }) {
   return paths;
 }
 
-// El contenido de la wiki solo existe en español: en otros idiomas no se indexa hasta traducirlo
+// Las páginas traducidas se indexan en su idioma y enlazan entre sí (hreflang); las que siguen en español
+// apuntan a la versión española y no se indexan
 export async function generateMetadata({ params }) {
   const { lang, path: pathArray } = await params;
   const nodo = findNodeByPath(wikiTankTree, pathArray);
   if (!nodo) return {};
   const ruta = `/wiki/explorer/${pathArray.join('/')}/`;
+  const v = enIdioma(nodo, pathArray, lang);
+  const conTraduccion = nodoTraducible(pathArray) && IDIOMAS_WIKI.some((l) => enIdioma(nodo, pathArray, l).traducido);
   return {
-    title: `${tituloWiki(nodo.title)} · WikiTank`,
-    description: resumen(leerContenido(nodo), tituloWiki(nodo.title)),
-    alternates: { canonical: `/es${ruta}` },
-    robots: lang === 'es' ? undefined : { index: false, follow: true },
+    title: `${v.nombre(nodo.title)} · WikiTank`,
+    description: resumen(v.contenido, v.nombre(nodo.title)),
+    alternates: v.traducido ? {
+      canonical: `/${lang}${ruta}`,
+      languages: conTraduccion ? Object.fromEntries([['es', `/es${ruta}`], ...IDIOMAS_WIKI.filter((l) => enIdioma(nodo, pathArray, l).traducido).map((l) => [l, `/${l}${ruta}`]), ['x-default', `/es${ruta}`]]) : undefined,
+    } : { canonical: `/es${ruta}` },
+    robots: v.traducido ? undefined : { index: false, follow: true },
   };
 }
 
 export default async function WikiExplorerPage({ params }) {
-  const { path: pathArray } = await params;
+  const { lang, path: pathArray } = await params;
   const currentNode = findNodeByPath(wikiTankTree, pathArray);
 
   if (!currentNode) notFound();
 
-  const content = leerContenido(currentNode);
+  const v = enIdioma(currentNode, pathArray, lang);
+  const content = v.contenido;
+  const idiomaPagina = v.traducido ? lang : 'es';
   // Las páginas con fichas de especies (tipos de acuario, koi) enlazan cada ficha con su página propia
   const conEspecies = currentNode.children?.some((c) => /especies habituales/i.test(c.title)) || pathArray.includes('estanques-koi');
 
-  // Datos estructurados para Google: artículo de WikiTank (en español, su idioma) y migas de pan
-  const rutaCanonica = `/es/wiki/explorer/${pathArray.join('/')}/`;
+  // Datos estructurados para Google: artículo de WikiTank (en el idioma de la página) y migas de pan
+  const rutaCanonica = `/${idiomaPagina}/wiki/explorer/${pathArray.join('/')}/`;
   const articulo = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: tituloWiki(currentNode.title),
-    description: resumen(content, tituloWiki(currentNode.title)),
-    inLanguage: 'es',
+    headline: v.nombre(currentNode.title),
+    description: resumen(content, v.nombre(currentNode.title)),
+    inLanguage: idiomaPagina,
     url: `${URL_SITIO}${rutaCanonica}`,
     ...(currentNode.previewImage ? { image: `${URL_SITIO}${encodeURI(currentNode.previewImage)}` } : {}),
-    isPartOf: { '@type': 'WebSite', name: 'WikiTank · Tankily', url: `${URL_SITIO}/es/wiki/` },
+    isPartOf: { '@type': 'WebSite', name: 'WikiTank · Tankily', url: `${URL_SITIO}/${idiomaPagina}/wiki/` },
     publisher: { '@type': 'Organization', name: 'Tankily', logo: { '@type': 'ImageObject', url: `${URL_SITIO}/icons/icon-512.png` } },
   };
+  const nodos = cadena(wikiTankTree, pathArray);
   const miga = migas([
-    ['WikiTank', '/es/wiki/'],
-    ...cadena(wikiTankTree, pathArray).map((n, i) => [tituloWiki(n.title), `/es/wiki/explorer/${pathArray.slice(0, i + 1).join('/')}/`]),
+    ['WikiTank', `/${idiomaPagina}/wiki/`],
+    ...nodos.map((n, i) => [v.nombre(n.title), `/${idiomaPagina}/wiki/explorer/${pathArray.slice(0, i + 1).join('/')}/`]),
   ]);
+  // Títulos para la pantalla (nodo actual, subsecciones y migas) en el idioma de la página
+  const titulos = Object.fromEntries([currentNode, ...nodos, ...(currentNode.children || [])].map((n) => [n.title, v.nombre(n.title)]));
 
   return (
     <>
@@ -146,6 +168,9 @@ export default async function WikiExplorerPage({ params }) {
         currentNode={currentNode}
         pathArray={pathArray}
         content={content}
+        titulos={titulos}
+        migas={nodos.map((n) => titulos[n.title])}
+        traducido={v.traducido}
         slugsEspecies={conEspecies ? slugsPorTitulo() : null}
       />
     </>

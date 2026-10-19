@@ -9,7 +9,8 @@ const legible = (segmento) => {
   return t.charAt(0).toUpperCase() + t.slice(1);
 };
 
-export default function Breadcrumbs({ path = [] }) {
+// `nombres`: títulos ya traducidos de cada tramo (WikiTank); si no llegan, se deducen del slug
+export default function Breadcrumbs({ path = [], nombres }) {
   const { t } = useT();
   return (
     <nav className="wiki-migas cristal cristal-fijo" aria-label={t('wiki.ruta')}>
@@ -21,7 +22,7 @@ export default function Breadcrumbs({ path = [] }) {
             href={`/wiki/explorer/${path.slice(0, idx + 1).join('/')}`}
             aria-current={idx === path.length - 1 ? 'page' : undefined}
           >
-            {legible(segment)}
+            {nombres?.[idx] || legible(segment)}
           </Link>
         </React.Fragment>
       ))}

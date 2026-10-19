@@ -1540,6 +1540,9 @@ h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
 .admin-lista > li { padding: 14px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .admin-acciones { display: flex; gap: 6px; flex-wrap: wrap; }
 
+/* Contenido propio ocultado por denuncias */
+.chip.etiqueta-oculto { color: var(--aviso); border-color: color-mix(in oklab, var(--aviso) 40%, transparent); cursor: help; }
+
 /* Admin → Proveedores */
 .saltos-proveedores { display: flex; flex-wrap: wrap; gap: 6px; }
 .saltos-proveedores .chip { text-decoration: none; }

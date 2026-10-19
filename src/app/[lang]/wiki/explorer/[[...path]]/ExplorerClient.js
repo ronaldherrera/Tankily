@@ -18,9 +18,11 @@ import { useT } from '@/i18n/IdiomaProvider';
 // Cabecera de una ficha tal como la limpia el catálogo de especies (para buscar su página en slugsEspecies)
 const limpiarTituloEspecie = (titulo) => titulo.replace(/\s+/g, ' ').replace(/\s*—.*$/, '').trim();
 
-export default function ExplorerClient({ currentNode, pathArray, content, slugsEspecies }) {
+export default function ExplorerClient({ currentNode, pathArray, content, slugsEspecies, titulos = {}, migas, traducido = false }) {
   const { terms, openGlossary } = useGlossary();
   const { t, lang } = useT();
+  // Títulos en el idioma de la página (vienen del servidor); si falta alguno, el original
+  const nombre = (titulo) => titulos[titulo] || tituloWiki(titulo);
 
   // Identificar "ESPECIES HABITUALES" de forma robusta
   const specialChild = currentNode.children?.find(c => {
@@ -166,7 +168,7 @@ export default function ExplorerClient({ currentNode, pathArray, content, slugsE
           >
             {!child.previewImage && <Folder size={18} />}
           </span>
-          <strong>{tituloWiki(child.title)}</strong>
+          <strong>{nombre(child.title)}</strong>
         </Link>
       ))}
     </nav>
@@ -260,11 +262,11 @@ export default function ExplorerClient({ currentNode, pathArray, content, slugsE
     return flowContent;
   };
 
-  const titulo = tituloWiki(currentNode.title);
+  const titulo = nombre(currentNode.title);
 
   return (
     <article style={{ '--agua': aguaGrupo(currentNode.title, pathArray) === '#9fe7f5' ? undefined : aguaGrupo(currentNode.title, pathArray) }}>
-      <Breadcrumbs path={pathArray} />
+      <Breadcrumbs path={pathArray} nombres={migas} />
 
       {currentNode.previewImage ? (
         <header className="wiki-hero">
@@ -280,9 +282,9 @@ export default function ExplorerClient({ currentNode, pathArray, content, slugsE
         <h1 className="wiki-titulo">{titulo}</h1>
       )}
 
-      {lang !== 'es' && t('wiki.sinTraducir') && <p className="aviso" lang={lang} style={{ marginBottom: 16 }}>{t('wiki.sinTraducir')}</p>}
+      {lang !== 'es' && !traducido && t('wiki.sinTraducir') && <p className="aviso" lang={lang} style={{ marginBottom: 16 }}>{t('wiki.sinTraducir')}</p>}
 
-      <div className="wiki-articulo" lang="es">
+      <div className="wiki-articulo" lang={traducido ? lang : 'es'}>
         <div className="md">
           {renderMarkdownFlow(beforeSplit)}
         </div>

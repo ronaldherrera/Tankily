@@ -3,9 +3,11 @@ import { wikiTankTree } from '@/lib/wikiData';
 import { catalogoEspecies } from '@/lib/catalogoEspecies';
 import { HERRAMIENTAS } from '@/lib/herramientas';
 import { FORO_CATEGORIAS, TIPOS_TANQUE, slugTipo } from '@/lib/constantes';
+import { rutasPublicas } from '@/lib/paginasPublicas';
+import { IDIOMAS_WIKI, nodoTraducible, titulosTraducidos } from '@/lib/wikiTraduccion';
 
-// sitemap.xml: páginas indexables en todos los idiomas (con sus alternativas hreflang)
-// y WikiTank, que de momento solo se indexa en español.
+// sitemap.xml: páginas indexables en todos los idiomas (con sus alternativas hreflang), WikiTank (de momento
+// solo en español) y el contenido público de la comunidad (lib/paginasPublicas.js).
 export const dynamic = 'force-static';
 
 const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
@@ -27,14 +29,15 @@ const RUTAS = [
   ...LEGALES.map((d) => [`/legal/${d}/`, 0.2, 'yearly']),
 ];
 
+// [ruta, ¿traducible?, título] de cada página de WikiTank
 function rutasWiki(nodos, prefijo = []) {
   return nodos.flatMap((n) => {
     const ruta = [...prefijo, n.slug];
-    return [ruta.join('/'), ...(n.children ? rutasWiki(n.children, ruta) : [])];
+    return [[ruta.join('/'), nodoTraducible(ruta), n.title], ...(n.children ? rutasWiki(n.children, ruta) : [])];
   });
 }
 
-export default function sitemap() {
+export default async function sitemap() {
   const ahora = new Date();
   const paginas = RUTAS.flatMap(([ruta, prioridad, frecuencia]) => IDIOMAS.map((lang) => ({
     url: `${URL_SITIO}/${lang}${ruta}`,
@@ -43,16 +46,24 @@ export default function sitemap() {
     priority: prioridad,
     alternates: { languages: Object.fromEntries(IDIOMAS.map((l) => [LOCALES[l], `${URL_SITIO}/${l}${ruta}`])) },
   })));
-  const wiki = rutasWiki(wikiTankTree).map((ruta) => ({
-    url: `${URL_SITIO}/es/wiki/explorer/${encodeURI(ruta)}/`,
-    lastModified: ahora,
-    changeFrequency: 'monthly',
-    priority: 0.6,
-  }));
+  // WikiTank: en español y, si están traducidas, en los idiomas de IDIOMAS_WIKI (con sus alternativas)
+  const wiki = rutasWiki(wikiTankTree).flatMap(([ruta, traducible, titulo]) => {
+    const idiomas = ['es', ...IDIOMAS_WIKI.filter((l) => traducible && titulosTraducidos(l)[titulo])];
+    const url = (l) => `${URL_SITIO}/${l}/wiki/explorer/${encodeURI(ruta)}/`;
+    const alternates = idiomas.length > 1 ? { languages: Object.fromEntries(idiomas.map((l) => [l, url(l)])) } : undefined;
+    return idiomas.map((l) => ({ url: url(l), lastModified: ahora, changeFrequency: 'monthly', priority: 0.6, alternates }));
+  });
   // Catálogo y fichas de especies de WikiTank (en español, como el resto de la wiki)
   const especies = [
     { url: `${URL_SITIO}/es/wiki/especies/`, lastModified: ahora, changeFrequency: 'weekly', priority: 0.8 },
     ...catalogoEspecies().map((e) => ({ url: `${URL_SITIO}/es/wiki/especies/${e.slug}/`, lastModified: ahora, changeFrequency: 'monthly', priority: 0.7 })),
   ];
-  return [...paginas, ...wiki, ...especies];
+  // Tanques públicos, hilos del foro y anuncios activos (cada uno en su idioma; se actualiza cada noche)
+  const comunidad = (await rutasPublicas()).map(({ ruta, fecha }) => ({
+    url: `${URL_SITIO}${ruta}`,
+    lastModified: fecha ? new Date(fecha) : ahora,
+    changeFrequency: 'weekly',
+    priority: 0.6,
+  }));
+  return [...paginas, ...wiki, ...especies, ...comunidad];
 }

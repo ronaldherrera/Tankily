@@ -16,13 +16,15 @@ export function idiomaActual() {
 // Rutas internas que no llevan prefijo de idioma (recursos estáticos)
 const SIN_PREFIJO = /^\/(wiki-media|images|_next|favicon|ads\.txt)/;
 const CON_PREFIJO = new RegExp(`^/(${IDIOMAS.join('|')})(/|$)`);
-// Artículos de WikiTank: solo se generan en español hasta que se traduzcan (las fichas de especies, sí en todos)
+// Artículos de WikiTank: en español y en los idiomas con traducción (WikiTank-traducciones/, ver
+// lib/wikiTraduccion.js); en los demás, los enlaces llevan a la versión española
+export const IDIOMAS_WIKI = ['en', 'de', 'fr'];
 const SOLO_ESPANOL = /^\/wiki\/explorer\//;
 
 export function conIdioma(href, lang) {
   if (typeof href !== 'string' || !href.startsWith('/') || href.startsWith('//')) return href;
   if (SIN_PREFIJO.test(href) || CON_PREFIJO.test(href)) return href;
-  if (SOLO_ESPANOL.test(href)) return `/es${href}`;
+  if (SOLO_ESPANOL.test(href) && lang !== 'es' && !IDIOMAS_WIKI.includes(lang)) return `/es${href}`;
   return `/${lang}${href}`;
 }
 

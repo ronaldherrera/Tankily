@@ -8,7 +8,7 @@ import { useSesion } from '@/lib/sesion';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
 import { colorAgua } from '@/lib/constantes';
 import { useT } from '@/i18n/IdiomaProvider';
-import { Avatar, NombreAutor, Galeria, Modal, useTostada } from '@/components/ui';
+import { Avatar, NombreAutor, Galeria, Modal, useTostada, EtiquetaOculto } from '@/components/ui';
 import { detectarIdioma } from '@/lib/traduccion';
 import TextoTraducible from './TextoTraducible';
 import CommentSection, { precargarComentarios } from './CommentSection';
@@ -159,6 +159,7 @@ export default function PostCard({ post, meGusta = false, miEco, onBorrado, dest
           <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap' }}>
             <NombreAutor perfil={autor} />
             <Link href={`/post/?id=${objetivo.id}`} className="texto-3 pequeno">{formatRelativeTime(objetivo.creado_en)}</Link>
+            <EtiquetaOculto oculto={objetivo.oculto} />
           </div>
           <ChipTanque tanque={objetivo.tanque} />
         </div>

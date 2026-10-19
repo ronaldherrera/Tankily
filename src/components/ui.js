@@ -6,7 +6,7 @@ import { createContext, useCallback, useContext, useEffect, useLayoutEffect, use
 const useLayoutEffectSeguro = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 import Link from '@/components/Enlace';
 import { useT } from '@/i18n/IdiomaProvider';
-import { ImagePlus, X, Loader2 } from 'lucide-react';
+import { ImagePlus, X, Loader2, EyeOff } from 'lucide-react';
 import { subirImagen } from '@/lib/imagenes';
 import { DURACION_SALIDA } from '@/lib/presencia';
 
@@ -252,4 +252,11 @@ export function RequiereSesion({ children, texto }) {
       </Vacio>
     </div>
   );
+}
+
+// Etiqueta para el contenido propio ocultado por denuncias (solo lo ven su autor y los administradores)
+export function EtiquetaOculto({ oculto }) {
+  const { t } = useT();
+  if (!oculto) return null;
+  return <span className="chip etiqueta-oculto" title={t('moderacion.ocultoAyuda')}><EyeOff size={12} aria-hidden /> {t('moderacion.oculto')}</span>;
 }

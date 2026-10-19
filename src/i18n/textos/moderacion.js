@@ -1,0 +1,9 @@
+// Etiqueta en el contenido propio que se ha ocultado por denuncias (components/ui.js → EtiquetaOculto)
+export const es = { moderacion: { oculto: 'Oculto · en revisión', ocultoAyuda: 'Varias personas lo han denunciado. Ahora solo lo ves tú; el equipo lo revisará y, si todo está bien, volverá a verse.' } };
+export const en = { moderacion: { oculto: 'Hidden · under review', ocultoAyuda: 'Several people reported it. Only you can see it now; the team will review it and, if everything is fine, it will be visible again.' } };
+export const de = { moderacion: { oculto: 'Ausgeblendet · in Prüfung', ocultoAyuda: 'Mehrere Personen haben es gemeldet. Nur du siehst es jetzt; das Team prüft es und, wenn alles in Ordnung ist, wird es wieder sichtbar.' } };
+export const pt = { moderacion: { oculto: 'Oculto · em revisão', ocultoAyuda: 'Várias pessoas denunciaram. Agora só você vê; a equipe vai revisar e, se estiver tudo bem, voltará a aparecer.' } };
+export const fr = { moderacion: { oculto: 'Masqué · en cours de vérification', ocultoAyuda: 'Plusieurs personnes l’ont signalé. Toi seul le vois pour l’instant ; l’équipe va le vérifier et, si tout va bien, il sera de nouveau visible.' } };
+export const it = { moderacion: { oculto: 'Nascosto · in revisione', ocultoAyuda: 'Diverse persone lo hanno segnalato. Ora lo vedi solo tu; il team lo controllerà e, se va tutto bene, tornerà visibile.' } };
+export const nl = { moderacion: { oculto: 'Verborgen · wordt beoordeeld', ocultoAyuda: 'Meerdere mensen hebben het gemeld. Alleen jij ziet het nu; het team bekijkt het en als alles in orde is, wordt het weer zichtbaar.' } };
+export const pl = { moderacion: { oculto: 'Ukryte · w trakcie weryfikacji', ocultoAyuda: 'Kilka osób to zgłosiło. Teraz widzisz to tylko ty; zespół to sprawdzi i, jeśli wszystko jest w porządku, znów będzie widoczne.' } };

@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main  # Asegúrate de que tu rama principal se llame 'main'
+  # Cada noche se vuelve a publicar para que los tanques, hilos y anuncios nuevos tengan su página
+  # indexable y entren en el sitemap (rsync solo sube lo que ha cambiado)
+  schedule:
+    - cron: '30 3 * * *'   # 3:30 UTC
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -42,6 +47,10 @@ jobs:
       - name: Enlaces internos rotos
         run: npm run enlaces
 
+      # Sitemap publicado antes de subir el nuevo: IndexNow avisa solo de lo que cambia
+      - name: Guardar el sitemap anterior
+        run: curl -fsS https://tankily.com/sitemap.xml -o sitemap-anterior.xml || true
+
       # rsync por SSH en lugar de FTP: una sola conexión, sube solo lo que cambia y borra lo que ya no existe.
       # Con decenas de miles de páginas, el FTP (archivo a archivo) tardaba horas.
       - name: Deploy to Hostinger via rsync (SSH)
@@ -59,3 +68,6 @@ jobs:
             -e "ssh -i ~/.ssh/deploy -p ${{ secrets.SSH_PORT }}" \
             ./out/ "$DESTINO"
 
+      - name: Avisar a Bing de las páginas nuevas (IndexNow)
+        continue-on-error: true
+        run: node scripts/indexnow.mjs sitemap-anterior.xml out/sitemap.xml
