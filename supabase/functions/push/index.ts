@@ -1,5 +1,7 @@
 // Notificaciones push (Web Push). La llaman los triggers de `mensajes` y `notificaciones` por pg_net
 // con la cabecera x-avisos (misma clave que los avisos por email): { tipo: 'mensaje' | 'notificacion', id }.
+// La función `avisos` también la usa para los recordatorios de mantenimiento, ya redactados:
+// { tipo: 'directo', usuario, titulo, cuerpo, url, etiqueta }.
 // Lee la fila, redacta el aviso en el idioma de la persona y lo envía a todos sus dispositivos suscritos;
 // las suscripciones caducadas (404/410) se borran.
 //
@@ -15,11 +17,18 @@ const recortar = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1)}
 Deno.serve(async (req) => {
   const clave = Deno.env.get('AVISOS_CLAVE');
   if (req.method !== 'POST' || !clave || req.headers.get('x-avisos') !== clave) return new Response('', { status: 401 });
-  const { tipo, id } = await req.json().catch(() => ({}));
-  if (!['mensaje', 'notificacion'].includes(tipo) || !Number.isInteger(id)) return new Response('', { status: 400 });
-
+  const peticion = await req.json().catch(() => ({}));
+  const { tipo, id } = peticion;
   const sb = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
   webpush.setVapidDetails('mailto:krill@tankily.com', Deno.env.get('VAPID_PUBLICA')!, Deno.env.get('VAPID_PRIVADA')!);
+
+  if (tipo === 'directo') {
+    const { usuario, titulo, cuerpo, url, etiqueta } = peticion;
+    if (!usuario || !titulo || !url) return new Response('', { status: 400 });
+    const { data: subs } = await sb.from('push_suscripciones').select('id, endpoint, p256dh, auth').eq('usuario_id', usuario);
+    return responder(sb, subs || [], JSON.stringify({ titulo, cuerpo, url, etiqueta }));
+  }
+  if (!['mensaje', 'notificacion'].includes(tipo) || !Number.isInteger(id)) return new Response('', { status: 400 });
 
   // Quién recibe, quién lo provoca y adónde lleva
   let destino: string, actorId: string | null, ruta: string, cuerpo: string, etiqueta: string;
@@ -55,7 +64,13 @@ Deno.serve(async (req) => {
     ? { titulo: quien, cuerpo }
     : { titulo: 'Tankily', cuerpo: `${quien} ${T[lang].tipos[cuerpo] ?? ''}`.trim() };
   const carga = JSON.stringify({ ...aviso, url: `/${lang}${ruta}`, etiqueta });
+  return responder(sb, subs, carga);
+});
 
+type Sub = { id: number; endpoint: string; p256dh: string; auth: string };
+
+// Envía la carga a todos los dispositivos y borra las suscripciones caducadas
+async function responder(sb: ReturnType<typeof createClient>, subs: Sub[], carga: string) {
   let enviados = 0;
   const caducadas: number[] = [];
   await Promise.all(subs.map(async (s) => {
@@ -70,4 +85,4 @@ Deno.serve(async (req) => {
   }));
   if (caducadas.length) await sb.from('push_suscripciones').delete().in('id', caducadas);
   return new Response(JSON.stringify({ enviados, caducadas: caducadas.length }), { headers: { 'Content-Type': 'application/json' } });
-});
+}

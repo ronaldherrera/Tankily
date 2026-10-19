@@ -1,0 +1,90 @@
+{
+ "es": {
+  "cambio_agua": "Cambio de agua",
+  "test": "Test del agua",
+  "filtro": "Limpiar el filtro",
+  "limpieza": "Limpiar los cristales",
+  "abono": "Abonar",
+  "dosificacion": "Dosificar",
+  "poda": "Podar las plantas",
+  "alimento": "Reponer alimento",
+  "otro": "Otra tarea"
+ },
+ "en": {
+  "cambio_agua": "Water change",
+  "test": "Water test",
+  "filtro": "Clean the filter",
+  "limpieza": "Clean the glass",
+  "abono": "Fertilise",
+  "dosificacion": "Dose",
+  "poda": "Trim the plants",
+  "alimento": "Restock food",
+  "otro": "Other task"
+ },
+ "de": {
+  "cambio_agua": "Wasserwechsel",
+  "test": "Wassertest",
+  "filtro": "Filter reinigen",
+  "limpieza": "Scheiben reinigen",
+  "abono": "Düngen",
+  "dosificacion": "Dosieren",
+  "poda": "Pflanzen schneiden",
+  "alimento": "Futter nachkaufen",
+  "otro": "Andere Aufgabe"
+ },
+ "pt": {
+  "cambio_agua": "Troca de água",
+  "test": "Teste da água",
+  "filtro": "Limpar o filtro",
+  "limpieza": "Limpar os vidros",
+  "abono": "Fertilizar",
+  "dosificacion": "Dosar",
+  "poda": "Podar as plantas",
+  "alimento": "Repor ração",
+  "otro": "Outra tarefa"
+ },
+ "fr": {
+  "cambio_agua": "Changement d’eau",
+  "test": "Test de l’eau",
+  "filtro": "Nettoyer le filtre",
+  "limpieza": "Nettoyer les vitres",
+  "abono": "Fertiliser",
+  "dosificacion": "Doser",
+  "poda": "Tailler les plantes",
+  "alimento": "Racheter de la nourriture",
+  "otro": "Autre tâche"
+ },
+ "it": {
+  "cambio_agua": "Cambio d’acqua",
+  "test": "Test dell’acqua",
+  "filtro": "Pulire il filtro",
+  "limpieza": "Pulire i vetri",
+  "abono": "Fertilizzare",
+  "dosificacion": "Dosare",
+  "poda": "Potare le piante",
+  "alimento": "Ricomprare il cibo",
+  "otro": "Altra attività"
+ },
+ "nl": {
+  "cambio_agua": "Waterverversing",
+  "test": "Watertest",
+  "filtro": "Filter schoonmaken",
+  "limpieza": "Ruiten schoonmaken",
+  "abono": "Bemesten",
+  "dosificacion": "Doseren",
+  "poda": "Planten snoeien",
+  "alimento": "Voer bijkopen",
+  "otro": "Andere taak"
+ },
+ "pl": {
+  "cambio_agua": "Podmiana wody",
+  "test": "Test wody",
+  "filtro": "Czyszczenie filtra",
+  "limpieza": "Czyszczenie szyb",
+  "abono": "Nawożenie",
+  "dosificacion": "Dozowanie",
+  "poda": "Przycinanie roślin",
+  "alimento": "Zakup pokarmu",
+  "otro": "Inne zadanie"
+ }
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link, { useNavegar } from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
 import { Marca } from '@/components/shell/AppShell';
@@ -15,6 +15,8 @@ export default function RegistroPage() {
   const router = useNavegar();
   const { t, lang } = useT();
   const [f, setF] = useState({ nombre: '', usuario: '', email: '', password: '', repetir: '' });
+  // Primer paso del embudo "Registro" de Umami: igual en todos los idiomas (la URL cambia con el idioma)
+  useEffect(() => { evento('registro_abierto'); }, []);
   const [acepta, setAcepta] = useState(false);
   const [error, setError] = useState('');
   const [enviado, setEnviado] = useState(false);
