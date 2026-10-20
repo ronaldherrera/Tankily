@@ -9,13 +9,14 @@ import { useUnidades } from '@/lib/unidades';
 import { colorAgua, imagenTanque } from '@/lib/constantes';
 import { especieDe } from '@/lib/compatibilidad';
 import { nombresDe } from './AnadirATanque';
+import { enlaceTanque } from '@/lib/enlaces';
 
 const MAXIMO = 6;
 
 // Ficha de especie: enlace a la calculadora de compatibilidad y tanques visibles de la comunidad que la tienen. Une la wiki (que trae
 // visitas de Google) con la red social. Si nadie la tiene, no ocupa sitio.
 export default function TanquesConEspecie({ titulo }) {
-  const { t } = useT();
+  const { t, lang } = useT();
   const u = useUnidades();
   const { comun, cientifico } = useMemo(() => nombresDe(titulo), [titulo]);
   const especie = useMemo(() => especieDe({ nombre: comun, nombre_cientifico: cientifico }), [comun, cientifico]);
@@ -24,7 +25,7 @@ export default function TanquesConEspecie({ titulo }) {
   useEffect(() => {
     let vigente = true;
     supabase.from('habitantes')
-      .select(`cantidad, tanque:tanques!inner(id, nombre, tipo, litros, foto_url, ${AUTOR})`)
+      .select(`cantidad, tanque:tanques!inner(id, nombre, tipo, litros, foto_url, visibilidad, idioma, creado_en, ${AUTOR})`)
       .ilike('nombre_cientifico', cientifico)
       .order('creado_en', { ascending: false })
       .limit(30)
@@ -54,7 +55,7 @@ export default function TanquesConEspecie({ titulo }) {
       <ul>
         {tanques.slice(0, MAXIMO).map((tq) => (
           <li key={tq.id}>
-            <Link href={`/tanque/?id=${tq.id}`} className="fila-tanque" style={{ '--agua': colorAgua(tq.tipo) }}>
+            <Link href={enlaceTanque(tq, lang)} className="fila-tanque" style={{ '--agua': colorAgua(tq.tipo) }}>
               <img className="miniatura-tanque" src={imagenTanque(tq)} alt="" loading="lazy" />
               <span style={{ minWidth: 0, flex: 1 }}>
                 <strong className="pequeno" style={{ display: 'block' }}>{tq.nombre}</strong>

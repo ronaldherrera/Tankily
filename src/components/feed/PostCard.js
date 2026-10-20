@@ -16,11 +16,13 @@ import Reportar from '@/components/Reportar';
 import { usePresencia } from '@/lib/presencia';
 import { borrarImagenes } from '@/lib/imagenes';
 import { evento } from '@/lib/analitica';
+import { enlaceTanque } from '@/lib/enlaces';
 
 export function ChipTanque({ tanque }) {
+  const { lang } = useT();
   if (!tanque) return null;
   return (
-    <Link href={`/tanque/?id=${tanque.id}`} className="etiqueta-agua" style={{ '--agua': colorAgua(tanque.tipo) }}>
+    <Link href={enlaceTanque(tanque, lang)} className="etiqueta-agua" style={{ '--agua': colorAgua(tanque.tipo) }}>
       {tanque.nombre}
     </Link>
   );

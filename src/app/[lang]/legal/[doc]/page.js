@@ -6,7 +6,7 @@ import { TITULAR } from '@/lib/titular';
 
 // Contacto de los textos legales: el del titular (src/lib/titular.js)
 const EMAIL = TITULAR.email;
-const DOCS = ['aviso-legal', 'privacidad', 'cookies', 'normas'];
+const DOCS = ['aviso-legal', 'privacidad', 'cookies', 'normas', 'planes'];
 
 export function generateStaticParams() {
   return DOCS.map((doc) => ({ doc }));

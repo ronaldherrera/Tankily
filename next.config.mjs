@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
+  // Hora de construcción: los listados enlazan a las páginas indexables que ya existían (lib/enlaces.js)
+  env: { NEXT_PUBLIC_CONSTRUIDO: new Date().toISOString() },
   trailingSlash: true,
   // Solo en desarrollo: deja que la recarga en vivo funcione desde el móvil, por la red de casa
   // (192.168.x.x) o por un túnel (ver-desde-fuera)

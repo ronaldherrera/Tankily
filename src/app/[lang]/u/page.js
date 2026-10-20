@@ -50,7 +50,7 @@ function Perfil() {
       if (!p) return;
       document.title = `${p.nombre || p.usuario} (@${p.usuario}) · Tankily`;
       const [t, s1, s2, yo, ti, mios] = await Promise.all([
-        supabase.from('tanques').select('id, nombre, tipo, litros, foto_url, visibilidad').eq('usuario_id', p.id).order('creado_en'),
+        supabase.from('tanques').select('id, nombre, tipo, litros, foto_url, visibilidad, idioma, creado_en').eq('usuario_id', p.id).order('creado_en'),
         supabase.from('seguidores').select('*', { count: 'exact', head: true }).eq('seguido_id', p.id),
         supabase.from('seguidores').select('*', { count: 'exact', head: true }).eq('seguidor_id', p.id),
         usuario ? supabase.from('seguidores').select('seguido_id').eq('seguidor_id', usuario.id).eq('seguido_id', p.id) : Promise.resolve({ data: [] }),

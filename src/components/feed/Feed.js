@@ -10,7 +10,7 @@ import { useT } from '@/i18n/IdiomaProvider';
 import ErrorCarga from '@/components/ErrorCarga';
 import { cargarMisEcos } from '@/lib/ecos';
 
-const TANQUE = 'tanque:tanques(id, nombre, tipo)';
+const TANQUE = 'tanque:tanques(id, nombre, tipo, visibilidad, idioma, creado_en)';
 export const SELECT_POST = `*, ${AUTOR}, ${TANQUE}, original:eco_de(*, ${AUTOR}, ${TANQUE})`;
 const POR_PAGINA = 15;
 const PUBLI_CADA = 6;

@@ -55,6 +55,8 @@ export default async function ProPage({ params }) {
           ))}
         </div>
 
+        <p className="pequeno texto-3">{t('planPro.condiciones')} <Link href="/legal/planes/" className="enlace">{t('planPro.condicionesEnlace')}</Link>.</p>
+
         <section className="cristal-suave" style={{ padding: 24, maxWidth: 860 }}>
           <h2 className="titulo-s" style={{ marginBottom: 8 }}>{t('pro.marcasTitulo')}</h2>
           <p className="texto-2">{t('pro.marcasTexto')} <a className="enlace" href={`mailto:${EMAIL}`}>{EMAIL}</a>.</p>

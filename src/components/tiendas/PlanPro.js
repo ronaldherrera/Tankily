@@ -75,7 +75,7 @@ export default function PlanPro({ tienda, onActualizada }) {
           {t('planPro.anual')} <span className="chip">{t('planPro.ahorro')}</span>
         </a>
       </div>
-      <p className="mini texto-3">{t('planPro.seguro')}</p>
+      <p className="mini texto-3">{t('planPro.seguro')} {t('planPro.condiciones')} <Link href="/legal/planes/" className="enlace">{t('planPro.condicionesEnlace')}</Link>.</p>
     </section>
   );
 }

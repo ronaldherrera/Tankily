@@ -28,7 +28,7 @@ export default function TanquesCliente({ tipo = '' }) {
   useEffect(() => {
     if (cargando) return;
     setTanques(null);
-    let q = supabase.from('tanques').select(`id, nombre, tipo, litros, foto_url, visibilidad, ${AUTOR}`);
+    let q = supabase.from('tanques').select(`id, nombre, tipo, litros, foto_url, visibilidad, idioma, creado_en, ${AUTOR}`);
     if (vista === 'mios' && usuario) q = q.eq('usuario_id', usuario.id).order('creado_en');
     else q = q.eq('visibilidad', 'publico').order('creado_en', { ascending: false }).limit(60);
     if (tipo) q = q.eq('tipo', tipo);

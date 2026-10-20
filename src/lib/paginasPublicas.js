@@ -4,12 +4,9 @@
 // pública, así que solo entra lo que cualquiera puede ver. Cada una existe solo en el idioma de su contenido.
 // Los enlaces dentro de la web siguen usando ?id=, que funciona también con lo creado después del último build.
 import { supabase, AUTOR } from './supabase';
+import { slugCon, idDeSlug } from './slugs';
 
-const sinAcentos = (s = '') => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
-const base = (texto) => sinAcentos(texto).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60).replace(/-$/, '');
-// "Arrecife del salón" + 12 → "arrecife-del-salon-12" (el id al final hace la dirección única y estable)
-export const slugCon = (texto, id) => `${base(texto) || 'tankily'}-${id}`;
-export const idDeSlug = (slug) => { const m = /-(\d+)$/.exec(slug || ''); return m ? Number(m[1]) : null; };
+export { slugCon, idDeSlug };
 
 // Sin contenido en un idioma, la ruta necesita al menos un parámetro para el export estático
 export const VACIO = '_';
@@ -75,7 +72,7 @@ export async function datosHilo(slug) {
   const id = idDeSlug(slug);
   if (!id || !process.env.NEXT_PUBLIC_SUPABASE_URL) return null;
   const { data: hilo } = await supabase.from('foro_hilos')
-    .select(`*, ${AUTOR}, tanque:tanques(id, nombre, tipo, litros, foto_url, visibilidad)`).eq('id', id).maybeSingle();
+    .select(`*, ${AUTOR}, tanque:tanques(id, nombre, tipo, litros, foto_url, visibilidad, idioma, creado_en)`).eq('id', id).maybeSingle();
   if (!hilo) return null;
   const { data: respuestas } = await supabase.from('foro_respuestas').select(`*, ${AUTOR}`).eq('hilo_id', id).order('creado_en');
   return { hilo, respuestas: respuestas || [], slug: slugCon(hilo.titulo, id) };

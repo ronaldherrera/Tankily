@@ -7,15 +7,16 @@ import { formatPrecio, formatRelativeTime } from '@/lib/formatRelativeTime';
 import { useT } from '@/i18n/IdiomaProvider';
 import { nombrePais, unirLugar } from '@/lib/paises';
 import BotonGuardar from './BotonGuardar';
+import { enlaceAnuncio } from '@/lib/enlaces';
 
 // destacado: el campo calculado destacado_ahora (marcado por un admin o de una tienda con Pro vigente)
-export const SELECT_ANUNCIO = 'id, titulo, precio, moneda, modalidad, provincia, pais, envio, envio_alcance, imagenes, estado, destacado:destacado_ahora, creado_en, categoria, tienda:tiendas(nombre, slug, verificada, lat, lng)';
+export const SELECT_ANUNCIO = 'id, titulo, idioma, precio, moneda, modalidad, provincia, pais, envio, envio_alcance, imagenes, estado, destacado:destacado_ahora, creado_en, categoria, tienda:tiendas(nombre, slug, verificada, lat, lng)';
 
 export default function AnuncioCard({ anuncio }) {
-  const { t, locale } = useT();
+  const { t, locale, lang } = useT();
   return (
     <div className="tarjeta-anuncio-caja">
-    <Link href={`/mercado/anuncio/?id=${anuncio.id}`} className={`tarjeta-anuncio cristal-suave${anuncio.destacado ? ' destacado' : ''}`}>
+    <Link href={enlaceAnuncio(anuncio, lang)} className={`tarjeta-anuncio cristal-suave${anuncio.destacado ? ' destacado' : ''}`}>
       <div className="tarjeta-anuncio-foto">
         {anuncio.imagenes?.[0] ? <img src={anuncio.imagenes[0]} alt="" loading="lazy" /> : <span className="texto-3 mini">{t('mercado.sinFoto')}</span>}
         {anuncio.estado !== 'activo' && <span className="sello">{anuncio.estado === 'reservado' ? t('mercado.reservado') : t('mercado.vendido')}</span>}

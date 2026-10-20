@@ -4,18 +4,19 @@ import { formatRelativeTime } from '@/lib/formatRelativeTime';
 import { Avatar } from '@/components/ui';
 import { useT } from '@/i18n/IdiomaProvider';
 import TextoTraducible from '@/components/feed/TextoTraducible';
+import { enlaceHilo } from '@/lib/enlaces';
 
 export const SELECT_HILO = 'id, titulo, categoria, num_respuestas, ultima_actividad, creado_en, solucion_id, fijado, cerrado, idioma, autor:perfiles!usuario_id(usuario, nombre, avatar_url)';
 
 // nuevaPestana: abre el hilo aparte (p. ej. desde el formulario de un hilo nuevo, para no perder lo escrito)
 export default function FilaHilo({ hilo, conCategoria = false, nuevaPestana = false }) {
-  const { t } = useT();
+  const { t, lang } = useT();
   const aparte = nuevaPestana ? { target: '_blank', rel: 'noopener' } : {};
   return (
     <li className="fila-hilo">
       <Avatar perfil={hilo.autor} tamano={36} />
       <div style={{ flex: 1, minWidth: 0 }}>
-        <Link href={`/foro/hilo/?id=${hilo.id}`} className="fila-hilo-titulo" {...aparte}>
+        <Link href={enlaceHilo(hilo, lang)} className="fila-hilo-titulo" {...aparte}>
           {hilo.fijado && <Pin size={14} aria-label={t('foro.fila.fijado')} />}
           {hilo.cerrado && <Lock size={14} aria-label={t('foro.fila.cerrado')} />}
           <TextoTraducible tabla="foro_hilos" id={hilo.id} campo="titulo" texto={hilo.titulo} idioma={hilo.idioma} compacto render={(x) => x} />

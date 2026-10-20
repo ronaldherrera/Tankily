@@ -13,6 +13,7 @@ import TanqueCard from '@/components/tanques/TanqueCard';
 import Lateral, { Tendencias } from '@/components/Lateral';
 import { useT } from '@/i18n/IdiomaProvider';
 import { HERRAMIENTAS } from '@/lib/herramientas';
+import { enlaceHilo, enlaceAnuncio } from '@/lib/enlaces';
 
 const normalizar = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 // Evita que comas o paréntesis rompan el filtro or() de PostgREST
@@ -20,7 +21,7 @@ const limpiar = (s) => s.replace(/[,()%*\\]/g, ' ').trim();
 
 function Resultados({ q }) {
   const [r, setR] = useState(null);
-  const { t } = useT();
+  const { t, lang } = useT();
   const traducirLocal = t;
 
   useEffect(() => {
@@ -30,9 +31,9 @@ function Resultados({ q }) {
     const patron = `%${t}%`;
     Promise.all([
       supabase.from('perfiles').select('id, usuario, nombre, avatar_url, bio').or(`usuario.ilike.${patron},nombre.ilike.${patron}`).limit(8),
-      supabase.from('tanques').select('id, nombre, tipo, litros, foto_url, visibilidad, autor:perfiles!usuario_id(usuario, nombre, avatar_url)').ilike('nombre', patron).limit(8),
-      supabase.from('foro_hilos').select('id, titulo, num_respuestas, categoria').or(`titulo.ilike.${patron},contenido.ilike.${patron}`).order('ultima_actividad', { ascending: false }).limit(8),
-      supabase.from('anuncios').select('id, titulo, precio, moneda, modalidad, provincia, imagenes').eq('estado', 'activo').ilike('titulo', patron).limit(8),
+      supabase.from('tanques').select('id, nombre, tipo, litros, foto_url, visibilidad, idioma, creado_en, autor:perfiles!usuario_id(usuario, nombre, avatar_url)').ilike('nombre', patron).limit(8),
+      supabase.from('foro_hilos').select('id, titulo, num_respuestas, categoria, idioma, creado_en').or(`titulo.ilike.${patron},contenido.ilike.${patron}`).order('ultima_actividad', { ascending: false }).limit(8),
+      supabase.from('anuncios').select('id, titulo, precio, moneda, modalidad, provincia, imagenes, estado, idioma, creado_en').eq('estado', 'activo').ilike('titulo', patron).limit(8),
       supabase.from('tiendas').select('id, slug, nombre, ciudad, provincia, logo_url').or(`nombre.ilike.${patron},ciudad.ilike.${patron}`).limit(6),
     ]).then(([perfiles, tanques, hilos, anuncios, tiendas]) => {
       const nq = normalizar(t);
@@ -106,7 +107,7 @@ function Resultados({ q }) {
           <h2 className="titulo-s" style={{ marginBottom: 6 }}>{t('explorar.enForo')}</h2>
           <ul className="lista-filas">
             {r.hilos.map((h) => (
-              <li key={h.id}><MessagesSquare size={16} className="texto-3" /><Link href={`/foro/hilo/?id=${h.id}`} style={{ flex: 1 }}>{h.titulo}</Link><span className="mini texto-3">{t('explorar.respuestasCorto', { n: h.num_respuestas })}</span></li>
+              <li key={h.id}><MessagesSquare size={16} className="texto-3" /><Link href={enlaceHilo(h, lang)} style={{ flex: 1 }}>{h.titulo}</Link><span className="mini texto-3">{t('explorar.respuestasCorto', { n: h.num_respuestas })}</span></li>
             ))}
           </ul>
         </section>
@@ -116,7 +117,7 @@ function Resultados({ q }) {
           <h2 className="titulo-s" style={{ marginBottom: 6 }}>{t('explorar.enMercado')}</h2>
           <ul className="lista-filas">
             {r.anuncios.map((a) => (
-              <li key={a.id}><Tag size={16} className="texto-3" /><Link href={`/mercado/anuncio/?id=${a.id}`} style={{ flex: 1 }}>{a.titulo}</Link><span className="cifra">{formatPrecio(a.precio, a.modalidad, a.moneda)}</span></li>
+              <li key={a.id}><Tag size={16} className="texto-3" /><Link href={enlaceAnuncio(a, lang)} style={{ flex: 1 }}>{a.titulo}</Link><span className="cifra">{formatPrecio(a.precio, a.modalidad, a.moneda)}</span></li>
             ))}
           </ul>
         </section>

@@ -6,12 +6,13 @@ import { colorAgua, imagenTanque } from '@/lib/constantes';
 import { useT } from '@/i18n/IdiomaProvider';
 import { useUnidades } from '@/lib/unidades';
 import { Avatar } from '@/components/ui';
+import { enlaceTanque } from '@/lib/enlaces';
 
 export default function TanqueCard({ tanque, conAutor = true }) {
-  const { t } = useT();
+  const { t, lang } = useT();
   const u = useUnidades();
   return (
-    <Link href={`/tanque/?id=${tanque.id}`} className="tarjeta-tanque" style={{ '--agua': colorAgua(tanque.tipo) }}>
+    <Link href={enlaceTanque(tanque, lang)} className="tarjeta-tanque" style={{ '--agua': colorAgua(tanque.tipo) }}>
       <img src={imagenTanque(tanque)} alt="" loading="lazy" />
       {tanque.litros && <span className="tarjeta-tanque-litros cifra">{u.volumen(tanque.litros)}</span>}
       <div className="tarjeta-tanque-pie vidrio-tarjeta">

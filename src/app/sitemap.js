@@ -11,7 +11,7 @@ import { IDIOMAS_WIKI, nodoTraducible, titulosTraducidos } from '@/lib/wikiTradu
 export const dynamic = 'force-static';
 
 const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
-const LEGALES = ['aviso-legal', 'privacidad', 'cookies', 'normas'];
+const LEGALES = ['aviso-legal', 'privacidad', 'cookies', 'normas', 'planes'];
 
 const RUTAS = [
   ['/', 1, 'daily'],

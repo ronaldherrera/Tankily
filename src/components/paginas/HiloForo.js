@@ -41,7 +41,7 @@ export default function HiloForo({ id, inicial }) {
     if (!id || cargando) return;
     (async () => {
       const { data } = await supabase.from('foro_hilos')
-        .select(`*, ${AUTOR}, tanque:tanques(id, nombre, tipo, litros, foto_url, visibilidad)`)
+        .select(`*, ${AUTOR}, tanque:tanques(id, nombre, tipo, litros, foto_url, visibilidad, idioma, creado_en)`)
         .eq('id', id).maybeSingle();
       setHilo(data);
       if (!data) return;
