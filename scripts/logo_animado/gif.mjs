@@ -3,18 +3,21 @@
 // icono de la app, se congela la animación fotograma a fotograma en Chrome sin ventana (protocolo de
 // depuración, sin dependencias) y Python (Pillow) une las capturas en el GIF.
 // Uso: node scripts/logo_animado/gif.mjs   (necesita Chrome y `pip install pillow`)
+//      node scripts/logo_animado/gif.mjs --perfil   → foto de perfil animada (Google, redes): 512 px, el
+//      cuadro sin esquinas redondeadas para que el recorte circular no deje bordes claros
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawn, execFileSync } from 'node:child_process';
 
-const LADO = 96;            // se muestra a 40-48 px en el correo: el doble para pantallas nítidas
+const perfil = process.argv.includes('--perfil');
+const LADO = perfil ? 512 : 96; // en el correo se muestra a 40-48 px: el doble para pantallas nítidas
 const FPS = 20;
 const DURACION = 5.5;       // ciclo de la animación (s)
 const FONDO_CORREO = '#eef6fa';
 const PUERTO = 9339;
 const CHROME = process.env.CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-const SALIDA = 'public/icons/logo-animado.gif';
+const SALIDA = perfil ? 'marca/foto-perfil-animada.gif' : 'public/icons/logo-animado.gif';
 
 // Mismo encuadre que scripts/generar_iconos.mjs (cuadro con luz de agua, radio 22 %, símbolo al 72 %).
 // El logo tiene que ser el <svg> principal (si va anidado en otro, Chrome no congela bien su tiempo):
@@ -22,7 +25,7 @@ const SALIDA = 'public/icons/logo-animado.gif';
 const tam = LADO * 0.72, desp = (LADO - tam) / 2, s = tam / 64;
 const vx = -(desp - 0.6 * s) / s, vy = -(desp + 1 * s) / s, vl = LADO / s;
 const cuadro = `<defs><radialGradient id="luz" cx="30%" cy="12%" r="95%"><stop offset="0" stop-color="#15406a"/><stop offset="0.7" stop-color="#071425"/></radialGradient></defs>
-  <rect x="${vx}" y="${vy}" width="${vl}" height="${vl}" rx="${vl * 0.22}" fill="url(#luz)"/>`;
+  <rect x="${vx}" y="${vy}" width="${vl}" height="${vl}" rx="${perfil ? 0 : vl * 0.22}" fill="url(#luz)"/>`;
 const logo = fs.readFileSync('public/logo-animado-oscuro.svg', 'utf8')
   .replace(/<svg[^>]*viewBox="4 2 56 56">/, `<svg id="logo" xmlns="http://www.w3.org/2000/svg" width="${LADO}" height="${LADO}" viewBox="${vx} ${vy} ${vl} ${vl}" style="display:block">
   ${cuadro}`);
@@ -33,7 +36,7 @@ const pagina = path.join(tmp, 'logo.html');
 fs.writeFileSync(pagina, html);
 
 const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${PUERTO}`, `--user-data-dir=${path.join(tmp, 'perfil')}`,
-  '--hide-scrollbars', '--force-device-scale-factor=1', '--window-size=200,200', `file:///${pagina.replace(/\\/g, '/')}`], { stdio: 'ignore' });
+  '--hide-scrollbars', '--force-device-scale-factor=1', `--window-size=${LADO + 100},${LADO + 100}`, `file:///${pagina.replace(/\\/g, '/')}`], { stdio: 'ignore' });
 
 const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
 try {
@@ -71,8 +74,19 @@ import glob, sys
 from PIL import Image
 fs = sorted(glob.glob(sys.argv[1] + '/f*.png'))
 ims = [Image.open(f).convert('RGB') for f in fs]
-pal = ims[0].quantize(colors=128, method=Image.Quantize.MEDIANCUT)
-fr = [im.quantize(palette=pal, dither=Image.Dither.NONE) for im in ims]
+perfil = ${perfil ? 'True' : 'False'}
+if perfil:
+    # A 512 px el degradado de la ola se ve a franjas: paleta de 256 colores sacada de varios fotogramas
+    # (la burbuja cambia de color a lo largo del ciclo) y tramado para suavizar
+    w, h = ims[0].size
+    muestra = Image.new('RGB', (w * 6, h))
+    for k, i in enumerate(range(0, len(ims), max(1, len(ims) // 6))):
+        if k < 6: muestra.paste(ims[i], (k * w, 0))
+    pal = muestra.quantize(colors=256, method=Image.Quantize.MEDIANCUT)
+    fr = [im.quantize(palette=pal, dither=Image.Dither.FLOYDSTEINBERG) for im in ims]
+else:
+    pal = ims[0].quantize(colors=128, method=Image.Quantize.MEDIANCUT)
+    fr = [im.quantize(palette=pal, dither=Image.Dither.NONE) for im in ims]
 fr[0].save(sys.argv[2], save_all=True, append_images=fr[1:], duration=${Math.round(1000 / FPS)}, loop=0, optimize=True, disposal=1)
 print(len(fr), 'fotogramas')`;
   console.log(execFileSync('python', ['-c', py, tmp, SALIDA]).toString().trim(), `→ ${SALIDA} (${(fs.statSync(SALIDA).size / 1024).toFixed(0)} KB)`);

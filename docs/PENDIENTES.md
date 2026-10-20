@@ -12,16 +12,26 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
   - Redirect URLs: `https://tankily.com/**` y `http://localhost:3210/**`
   - Sin esto fallan la confirmación de email, la recuperación de contraseña, el enlace sin contraseña y el acceso con Google.
 - [x] **Correo saliente propio (SMTP)** (18/10/2026): buzón `krill@tankily.com` en Hostinger (MX, SPF, DKIM y DMARC comprobados) y SMTP en Supabase (`smtp.hostinger.com:465`). Plantillas con la marca activadas y enlaces a tankily.com/…/verificar/: el correo de prueba llega a la bandeja principal (SPF, DKIM y DMARC en PASS). ~~ El correo de Supabase por defecto solo permite unos pocos emails por hora y suele acabar en spam. Contrata un servicio (Resend, Brevo, Postmark o el SMTP de Hostinger) con un remitente tipo `hola@tankily.com` y configúralo en Supabase → Authentication → Emails → SMTP Settings.~~
-- [ ] **Borrar los datos de demostración** (19 usuarios inventados, sus tanques, reseñas, etc.):
+- [ ] **Borrar los datos de demostración** (19 usuarios inventados, sus tanques, reseñas, etc.). **Aplazado a propósito (20/10/2026):** se mantienen para generar contenido para las redes sociales. Borrarlos cuando ya no hagan falta:
       `npx supabase db query --linked -f supabase/demo/limpiar_demo.sql`
 - [x] **Datos del titular en los textos legales** (19/10/2026): nombre y contacto (`hola@ronaldherrera.es`) puestos en `src/lib/titular.js`, en los 8 idiomas. **Al empezar a facturar**: alta censal (modelo 037) y rellenar ahí `nif` y `domicilio` (puede ser una oficina virtual); salen solos en el aviso legal y la privacidad. ~~**Datos del titular en los textos legales** (nombre o razón social, NIF/CIF, dirección, email) en `src/i18n/textos/legal.js`. Mejor si los revisa un abogado.~~
-- [ ] **Política de privacidad** (19/10/2026: ya incluye en los 8 idiomas Supabase, Hostinger —web y correo—, MyMemory/DeepL y AdSense; incluye también el acceso con Google; falta que la revise un profesional): hay un borrador listo en `docs/borrador-privacidad.md` (revísalo, mejor con un abogado). Cubre:
+- [ ] **Política de privacidad** (20/10/2026: la revisión profesional se hará sobre la marcha, no bloquea; 19/10/2026: ya incluye en los 8 idiomas Supabase, Hostinger —web y correo—, MyMemory/DeepL y AdSense; incluye también el acceso con Google; falta que la revise un profesional): hay un borrador listo en `docs/borrador-privacidad.md` (revísalo, mejor con un abogado). Cubre:
   - Proveedor de traducción (MyMemory y/o DeepL) como encargado del tratamiento.
   - Acceso con Google, Apple, Facebook y Microsoft: qué datos recibimos (nombre, email, foto).
   - Google AdSense y su CMP (cuando lo actives).
 - [x] **Borrar `public/propuestas-logo.html`** si ya no la necesitas (si no, se publicará). Dímelo y lo quito.
 
 ## 🟠 Primeras semanas
+
+- [ ] **Difusión en grupos de Facebook** (empezada el 20/10/2026; kit, normas de cada grupo y registro en `marca/redes/difusion/GRUPOS-FACEBOOK.txt`):
+  - [ ] **ACUARIOS MARINOS ESPAÑA**: la publicación de Ronald está pendiente de aprobación. Cuando la aprueben, poner el primer comentario con `https://tankily.com` (puede hacerlo Claude).
+  - [ ] **Responder los comentarios** de las publicaciones del 20/10 en acuarios plantados, Quito, Perú y Valencia y Castellón (publicadas como la página Tankily), sobre todo en las primeras horas.
+  - [ ] **No volver a publicar en esos grupos hasta el 3–10/11/2026**, y entonces con contenido útil (un reel de la campaña), no otra presentación.
+  - [ ] **Cada semana: responder 2–3 dudas como Ronald** en Principiantes en Acuarios (mex) y Acuariofilia (Preguntas y Respuestas), con el enlace de Tankily solo cuando ayude (prohíben la autopromoción y, el primero, las páginas).
+  - [ ] **Escribir a los administradores** de Acuariofilia Dulce y Marina de España, Mi Acuario~My aquarium y Acuarios marinos España & Reef para pedir permiso antes de presentar Tankily (mensaje tipo en el kit).
+  - [ ] **Grupos pendientes de aceptación** (Acuariofilia España, Acuariofilia en España, Acuarios y Gambarios España, Acuariofilia Exclusiva Para España): cuando acepten, leer sus normas antes de publicar.
+  - [ ] **Unir el perfil personal de Ronald** al resto de grupos (ahora casi todos están solo con la página).
+- [ ] **Umami en el móvil**: tus visitas desde el Chrome del PC ya no cuentan (20/10/2026, `umami.disabled` en tankily.com y www). Falta hacer lo mismo en el móvil (y en cualquier otro navegador que uses): abrir tankily.com y pedir a Claude cómo marcarlo.
 
 - [ ] **⏰ Renovar el secreto de "Iniciar sesión con Apple" antes del 17 de abril de 2027** (Apple lo hace caducar cada 6 meses; si caduca, nadie podrá entrar con Apple). `node scripts/secreto_apple.mjs "ruta\AuthKey_J96R4VKA2Y.p8"` y pegar el resultado en Supabase → Authentication → Providers → Apple → Secret Key. Datos: equipo 839J8P4YP6, clave J96R4VKA2Y, Services ID `com.tankily.web`, App ID `com.tankily.app`.
 
@@ -48,7 +58,7 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
 ## 🟡 Cuando haya tráfico
 
 - [x] **Analítica** (19/10/2026): hecho el panel **Admin → Crecimiento** (activos día/7/30, embudo de activación, altas por semana, retención por semana de registro; tabla `actividad_diaria`) y preparado Umami (script + eventos: registro, acceso_social, tanque_creado, publicacion, hilo, respuesta_foro, anuncio, push_activado, instalar_app, apoyar). Política de privacidad actualizada en 8 idiomas. Umami activo (cuenta en cloud.umami.is, ID en `src/lib/analitica.js`). ~~**Analítica respetuosa con la privacidad** (Plausible, Umami o similar) para saber qué páginas funcionan. Dime cuál y la integro.~~
-- [ ] **Redes sociales de Tankily** (Instagram, TikTok, Facebook, X) con el logo y el manual de marca (`marca/manual-de-marca.html`).
+- [x] **Redes sociales de Tankily** (20/10/2026): Instagram y TikTok @tankily.social, YouTube @TankilySocial y página de Facebook, con foto, portada/banner y textos (`marca/perfiles-redes.md`, que lista los últimos retoques a mano). Plan de divulgación hasta fin de año: https://claude.ai/artifact/8cc9wZsTP56MT1kRaXoNJn y contenido (25 piezas, 4 nov–30 dic): https://claude.ai/artifact/RWTC49Gdh9p3qSLc5GrSKd (copias en `marca/plan-divulgacion-2026.html` y `marca/contenido-2026.html`; Pinterest y X descartados). **Campaña 20/10–30/12/2026 (32 piezas):** cada publicación, lista para subir, en `marca/redes/publicaciones/<fecha>-<tema>/` (archivos numerados + `INSTRUCCIONES.txt` con el texto de cada red). Se publica SOLO lo que hay ahí. Se generan con `node scripts/redes/generar.mjs --v2 --elevenlabs --solo N` y se empaquetan con `node scripts/redes/empaquetar.mjs --solo N --rehacer`. Voz: Krill castellano (ElevenLabs, clonada de su locución aprobada). **Pendiente (20/10):** confirmar la voz del betta de prueba y regenerar los 20 reels restantes con ella y con vídeo real.
 - [x] **Valorar Vercel u otro hosting con servidor** (descartado de momento: las páginas propias se generan en el build nocturno). ~~**Valorar Vercel u otro hosting con servidor** para que cada tanque, hilo y anuncio tenga una URL indexable por Google (hoy usan `?id=` y no se indexan bien).~~
 - [x] **Apple Developer** (ya activo: "Continuar con Apple" funciona desde el 19/10/2026) (99 $/año) si quieres "Continuar con Apple" o, más adelante, app de iOS.
 

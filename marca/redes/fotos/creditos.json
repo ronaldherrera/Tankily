@@ -1,0 +1,159 @@
+{
+  "Betta splendens": {
+    "archivo": "betta-splendens.jpg",
+    "autor": "Henryk Niestrój",
+    "licencia": "CC BY 4.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Bojownik_syjamski.jpg",
+    "sujeto": [
+      0.17,
+      0.07,
+      0.91,
+      0.8
+    ]
+  },
+  "Corydoras aeneus": {
+    "archivo": "corydoras-aeneus.jpg",
+    "autor": "Autor desconocido",
+    "licencia": "Public domain",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Corydoras_aeneus_2.jpg",
+    "sujeto": [
+      0.02,
+      0.0,
+      0.94,
+      0.9
+    ]
+  },
+  "Corydoras paleatus": {
+    "archivo": "corydoras-paleatus.jpg",
+    "autor": "Sychriscar",
+    "licencia": "CC BY-SA 3.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:19septe_(4).JPG",
+    "sujeto": [
+      0.1,
+      0.08,
+      1.0,
+      0.7
+    ]
+  },
+  "Paracheirodon innesi": {
+    "archivo": "paracheirodon-innesi.jpg",
+    "autor": "Corpse89",
+    "licencia": "CC BY-SA 3.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:NeonTetra.JPG",
+    "sujeto": [
+      0.08,
+      0.16,
+      0.88,
+      0.68
+    ]
+  },
+  "Paracheirodon axelrodi": {
+    "archivo": "paracheirodon-axelrodi.jpg",
+    "autor": "Autor desconocido",
+    "licencia": "Attribution",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Paracheirodon_cardinalis.JPG",
+    "sujeto": [
+      0.25,
+      0.15,
+      0.74,
+      0.6
+    ]
+  },
+  "Neocaridina davidi": {
+    "archivo": "neocaridina-davidi.jpg",
+    "autor": "DirkBlankenhaus",
+    "licencia": "CC BY-SA 3.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Neocaridina-heteropoda-var-red.jpg",
+    "sujeto": [
+      0.1,
+      0.35,
+      0.94,
+      0.75
+    ]
+  },
+  "Poecilia reticulata": {
+    "archivo": "poecilia-reticulata.jpg",
+    "autor": "Wibowo Djatmiko ( Wie146 )",
+    "licencia": "CC BY-SA 3.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Poecilia_retic_090519-8688_kdBdk.jpg",
+    "sujeto": [
+      0.04,
+      0.1,
+      0.99,
+      0.77
+    ]
+  },
+  "Xiphophorus maculatus": {
+    "archivo": "xiphophorus-maculatus.jpg",
+    "autor": "Marrabbio2",
+    "licencia": "CC BY-SA 3.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Rainbow_wag_platy.jpg",
+    "sujeto": [
+      0.14,
+      0.22,
+      0.89,
+      0.82
+    ]
+  },
+  "Carassius auratus": {
+    "archivo": "carassius-auratus.jpg",
+    "autor": "Nesnad",
+    "licencia": "CC BY-SA 4.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Goldfish-inatank-nagasaki-2023-Jan-27.webm",
+    "nota": "Fotograma (2,1 s) del vídeo; la foto anterior cortaba el pez",
+    "sujeto": [
+      0.19,
+      0.05,
+      0.8,
+      0.86
+    ]
+  },
+  "Pterophyllum scalare": {
+    "archivo": "pterophyllum-scalare.jpg",
+    "autor": "Gannu03",
+    "licencia": "CC BY-SA 4.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Angelfish_2.jpg",
+    "sujeto": [
+      0.1,
+      0.08,
+      0.64,
+      1.0
+    ]
+  },
+  "Danio rerio": {
+    "archivo": "danio-rerio.jpg",
+    "autor": "Ffish.asia",
+    "licencia": "CC BY 4.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Zebradanio-P1219668.jpg",
+    "sujeto": [
+      0.02,
+      0.3,
+      0.98,
+      0.64
+    ]
+  },
+  "Trigonostigma heteromorpha": {
+    "archivo": "trigonostigma-heteromorpha.jpg",
+    "autor": "Juan R. Lascorz",
+    "licencia": "CC BY-SA 3.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:01.Rasbora_heteromorpha.jpg",
+    "sujeto": [
+      0.05,
+      0.0,
+      0.97,
+      0.58
+    ]
+  },
+  "Neritina natalensis": {
+    "archivo": "neritina-natalensis.jpg",
+    "autor": "TheJammingYam ( talk )",
+    "licencia": "CC BY-SA 3.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Zebra_Nerite_Snail_1.jpg",
+    "sujeto": [
+      0.09,
+      0.1,
+      0.54,
+      0.64
+    ]
+  }
+}

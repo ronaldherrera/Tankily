@@ -61,3 +61,10 @@ scripts/especies/cache/
 *.p8
 /public/vista-logo-animado.html
 /public/vista-ola-fotogramas.svg
+
+# Piezas de redes generadas (scripts/redes/generar.mjs): vídeos e imágenes pesados, se regeneran
+marca/redes/salida/
+marca/redes/salida-v2/
+marca/redes/publicaciones/
+# Vídeos de Wikimedia Commons para los ganchos (se vuelven a descargar desde creditos.json)
+marca/redes/videos/*.webm

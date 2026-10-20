@@ -1,0 +1,327 @@
+<title>Contenido Tankily 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Geist:wght@400;500;600&display=swap">
+<style>
+/* Calendario de piezas: una columna de lectura; cada semana agrupa sus piezas por fecha real (de ahí las fechas como marcador).
+   Marca de Tankily: agua profunda y la ola azul del logo. */
+:root {
+  --fondo: #f3f8fb; --superficie: #ffffff; --tinta: #0b1d33; --tinta-2: #3d5470; --linea: #d6e3ec;
+  --ola: #2f7fe0; --agua: #1fa9c9; --ola-suave: #e3effc; --hecho: #2f9a4a; --hecho-fondo: #e5f5e9;
+  --display: "Fredoka", "Nunito", "Segoe UI", system-ui, sans-serif;
+  --texto: "Geist", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fondo: #071425; --superficie: #0d2238; --tinta: #e6f0f7; --tinta-2: #9fb6cb; --linea: #1d3a57;
+    --ola: #7cc4ff; --agua: #9fe6f5; --ola-suave: #12304f; --hecho: #7cdc8c; --hecho-fondo: #12301c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fondo: #071425; --superficie: #0d2238; --tinta: #e6f0f7; --tinta-2: #9fb6cb; --linea: #1d3a57;
+  --ola: #7cc4ff; --agua: #9fe6f5; --ola-suave: #12304f; --hecho: #7cdc8c; --hecho-fondo: #12301c; color-scheme: dark;
+}
+body { background: var(--fondo); color: var(--tinta); font-family: var(--texto); font-size: 16px; line-height: 1.55; }
+.pagina { max-width: 48rem; margin: 0 auto; padding-inline: 18px; padding-block: 36px 72px; display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.9rem, 6vw, 2.6rem); }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.12rem; font-weight: 500; }
+p, ul, ol { margin: 0; }
+a { color: var(--ola); }
+.entradilla { color: var(--tinta-2); font-size: 1.05rem; }
+.cabecera { display: grid; gap: 12px; }
+.progreso { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 0.95rem; color: var(--tinta-2); }
+.barra { flex: 1 1 200px; height: 8px; border-radius: 99px; background: var(--ola-suave); overflow: hidden; }
+.barra i { display: block; height: 100%; width: 0; background: var(--hecho); transition: width .3s; }
+section.guia { display: grid; gap: 12px; }
+ul.lista { padding-left: 1.2rem; display: grid; gap: 6px; }
+
+nav.semanas { display: flex; gap: 8px; flex-wrap: wrap; }
+nav.semanas a { text-decoration: none; font-size: 0.88rem; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--linea); color: var(--tinta-2); background: var(--superficie); font-variant-numeric: tabular-nums; }
+nav.semanas a:hover, nav.semanas a:focus-visible { border-color: var(--ola); color: var(--ola); outline: none; }
+
+.semana { display: grid; gap: 14px; scroll-margin-top: 16px; }
+.semana > header { display: grid; gap: 2px; }
+.semana > header p { color: var(--tinta-2); font-size: 0.95rem; }
+
+details.pieza { background: var(--superficie); border: 1px solid var(--linea); border-radius: 12px; }
+details.pieza[data-hecha="1"] { border-color: var(--hecho); }
+details.pieza > summary { list-style: none; cursor: pointer; padding: 14px 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 4px 14px; align-items: center; }
+details.pieza > summary::-webkit-details-marker { display: none; }
+summary:focus-visible { outline: 2px solid var(--ola); outline-offset: 2px; border-radius: 12px; }
+.fecha { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--ola); font-size: 0.9rem; min-width: 5.2rem; }
+.titulo { display: grid; gap: 2px; min-width: 0; }
+.titulo b { font-weight: 600; }
+.titulo span { color: var(--tinta-2); font-size: 0.88rem; }
+.estado { font-size: 0.8rem; font-weight: 600; padding: 3px 10px; border-radius: 99px; background: var(--ola-suave); color: var(--tinta-2); white-space: nowrap; }
+details.pieza[data-hecha="1"] .estado { background: var(--hecho-fondo); color: var(--hecho); }
+@media (max-width: 520px) { details.pieza > summary { grid-template-columns: 1fr auto; } .fecha { grid-column: 1 / -1; } }
+
+.cuerpo { padding: 0 16px 16px; display: grid; gap: 14px; border-top: 1px solid var(--linea); padding-top: 14px; }
+.bloque { display: grid; gap: 6px; }
+.bloque h4 { margin: 0; font-size: 0.8rem; font-weight: 600; color: var(--agua); letter-spacing: 0.03em; }
+.gancho { font-family: var(--display); font-weight: 500; font-size: 1.15rem; }
+ol.guion { padding-left: 1.3rem; display: grid; gap: 4px; }
+ol.guion li::marker { color: var(--tinta-2); font-variant-numeric: tabular-nums; }
+.texto-pub { background: var(--fondo); border: 1px solid var(--linea); border-radius: 10px; padding: 12px 14px; white-space: pre-wrap; font-size: 0.95rem; }
+.acciones { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+button { font: inherit; font-size: 0.9rem; font-weight: 500; border-radius: 99px; padding: 7px 14px; border: 1px solid var(--linea); background: var(--superficie); color: var(--tinta); cursor: pointer; }
+button:hover { border-color: var(--ola); color: var(--ola); }
+button:focus-visible { outline: 2px solid var(--ola); outline-offset: 2px; }
+button.principal { background: var(--ola); border-color: var(--ola); color: var(--superficie); }
+button.principal:hover { color: var(--superficie); filter: brightness(1.08); }
+.aviso-copia { font-size: 0.85rem; color: var(--hecho); min-height: 1.2em; }
+.nota { font-size: 0.88rem; color: var(--tinta-2); }
+@media (prefers-reduced-motion: reduce) { .barra i { transition: none; } }
+</style>
+
+<main class="pagina">
+  <header class="cabecera">
+    <h1>Contenido de Tankily hasta fin de año</h1>
+    <p class="entradilla">25 piezas del 4 de noviembre al 30 de diciembre: miércoles, viernes y domingo. Cada una lleva el gancho de los primeros segundos, el guion, qué grabar y el texto listo para copiar. Se graba una vez y se publica en Instagram (compartiendo en Facebook), TikTok y YouTube Shorts.</p>
+    <div class="progreso"><span id="cuenta">0 de 25 publicadas</span><span class="barra" aria-hidden="true"><i id="relleno"></i></span></div>
+    <nav class="semanas" aria-label="Semanas" id="nav"></nav>
+  </header>
+
+  <section class="guia">
+    <h2>Antes de grabar</h2>
+    <ul class="lista">
+      <li><strong>Formato:</strong> vertical 1080×1920. Reels de 15 a 30 segundos; los carruseles, de 5 a 7 láminas cuadradas o 1080×1350.</li>
+      <li><strong>Subtítulos siempre:</strong> mucha gente ve los vídeos sin sonido. Edits (de Instagram) o CapCut los ponen solos.</li>
+      <li><strong>Grabar la web:</strong> grabación de pantalla del móvil en tankily.com. Los datos de demostración valen como ejemplo de cómo se ve Tankily, nunca como usuarios reales ni opiniones.</li>
+      <li><strong>Fotos de las fichas:</strong> son de Wikimedia Commons. Si sale una en el vídeo, pon en el texto «Foto: autor (licencia)», como aparece bajo la foto en la ficha.</li>
+      <li><strong>Música:</strong> solo la de la biblioteca de cada red, para no tener problemas de derechos.</li>
+      <li><strong>Antes de grabar una pieza con una herramienta,</strong> compruébala tú: si el resultado no coincide con el guion, cambia el guion, no la herramienta.</li>
+      <li><strong>Graba en bloque:</strong> los martes, las 3 piezas de la semana; luego se programan.</li>
+    </ul>
+  </section>
+
+  <div id="calendario"></div>
+</main>
+
+<script>
+const ETIQUETAS = '#acuariofilia #acuario #peces';
+const PIEZAS = [
+  { s: 1, f: 'Mié 4 nov', serie: 'Tankily en 20 s', formato: 'Reel 20 s', titulo: 'Qué es Tankily',
+    gancho: 'Tu acuario, en el bolsillo',
+    guion: ['0–2 s: el logo animado.', '2–6 s: la ficha de un tanque con sus parámetros.', '6–10 s: un aviso de mantenimiento («Toca cambio de agua»).', '10–15 s: buscar una especie y abrir su ficha.', '15–20 s: el muro con tanques. Texto: «Gratis en tankily.com».'],
+    grabar: 'Grabación de pantalla del móvil recorriendo tankily.com. Para el inicio, marca/foto-perfil-animada.gif.',
+    texto: 'Tankily es la red social de la acuariofilia: apunta los parámetros de tu acuario, recibe avisos de mantenimiento, consulta 1.847 especies y comparte tu tanque con gente que sabe de peces.\n\nGratis en tankily.com (enlace en el perfil).',
+    tags: '#acuariofilia #acuario #peces #aquarium #pecesdeacuario' },
+  { s: 1, f: 'Vie 6 nov', serie: 'Especie de la semana', formato: 'Reel 25 s', titulo: 'Betta',
+    gancho: '¿Un betta en una pecera de un litro? Mejor no.',
+    guion: ['Mide 7 cm y vive a 24–30 °C: sin calentador lo pasa mal.', 'Necesita 40 litros como mínimo, mejor 60.', 'Un solo macho por acuario: dos machos se pelean.', 'Le encantan las plantas flotantes para descansar.', 'Ficha completa en Tankily.'],
+    grabar: 'La ficha del betta en Tankily (subiendo y bajando) y un betta: el tuyo si tienes, o la foto de la ficha con su crédito.',
+    texto: 'El betta es de los peces más vendidos… y de los peor alojados. Necesita calentador (24–30 °C), al menos 40 litros y, si es macho, estar solo.\n\nFicha completa: tankily.com/es/wiki/especies/betta-splendens/',
+    tags: '#betta #bettafish #pezbetta #acuariofilia' },
+  { s: 1, f: 'Dom 8 nov', serie: 'Tankily en 15 s', formato: 'Reel 15 s', titulo: 'Calculadora de litros',
+    gancho: 'Tu acuario de 60 litros no tiene 60 litros',
+    guion: ['Meter 60 × 30 × 35 cm: el cristal da 63 litros.', 'Añadir 5 cm de sustrato y 3 cm sin llenar: quedan unos 49 litros de agua.', '«Y las rocas restan otro 5–15 %».', '«Calcula el tuyo en Tankily».'],
+    grabar: 'tankily.com/es/herramientas/volumen/ rellenando los campos en directo.',
+    texto: 'El volumen del cristal no es el agua que tiene tu acuario: hay que descontar el sustrato, lo que queda sin llenar y la decoración. Con los litros reales se calculan la medicación, el abono y los cambios de agua.\n\nCalculadora gratis: tankily.com/es/herramientas/volumen/',
+    tags: '#acuario #acuariofilia #consejosacuario' },
+
+  { s: 2, f: 'Mié 11 nov', serie: '¿Compatibles?', formato: 'Reel 20 s', titulo: 'Betta y gambas cherry',
+    gancho: 'Betta y gambas cherry: ¿sí o no?',
+    guion: ['«Depende del betta».', 'Las gambas adultas pueden convivir si hay muchas plantas y escondites.', 'Las crías: las verá como comida.', 'Si tu betta es muy cazador, mejor por separado.', 'Comprobar la pareja en la herramienta de compatibilidad.'],
+    grabar: 'tankily.com/es/herramientas/compatibilidad/ con betta y gamba cherry. Revisa antes qué dice y ajusta el guion si hace falta.',
+    texto: 'Respuesta corta: depende del betta. Con muchas plantas y escondites, las gambas adultas suelen salir adelante; las crías, no tanto.\n\n¿Tu betta convive con gambas? Cuéntanoslo en comentarios.\n\nCompatibilidad entre especies: tankily.com/es/herramientas/compatibilidad/',
+    tags: '#betta #gambas #neocaridina #cherryshrimp #acuariofilia' },
+  { s: 2, f: 'Vie 13 nov', serie: 'Especie de la semana', formato: 'Reel 20 s', titulo: 'Corydoras',
+    gancho: 'Un corydoras solo es un corydoras triste',
+    guion: ['Viven en grupo: 6 como mínimo.', 'Buscan comida en el fondo con sus barbillas: arena fina, nada de grava que corte.', 'El bronce es el más resistente (22–28 °C).', 'El moteado aguanta agua más fresca (18–24 °C).', '80 litros como mínimo.'],
+    grabar: 'Las fichas de Corydoras aeneus y Corydoras paleatus y, si tienes, tus corydoras en la arena.',
+    texto: 'Los corydoras son los limpiadores simpáticos del fondo, pero necesitan grupo (6 o más) y arena fina para no dañarse las barbillas.\n\nFicha del corydoras bronce: tankily.com/es/wiki/especies/corydoras-aeneus/',
+    tags: '#corydoras #acuariofilia #pecesdeacuario' },
+  { s: 2, f: 'Dom 15 nov', serie: 'Error de principiante', formato: 'Reel 25 s', titulo: 'Meter peces sin ciclar',
+    gancho: 'Montaste el acuario hoy y hoy metiste los peces. Error.',
+    guion: ['El agua nueva aún no tiene las bacterias que eliminan los desechos.', 'Semanas 1–2: sube el amoniaco, tóxico.', 'Después suben los nitritos, también tóxicos.', 'Entre 4 y 8 semanas: amoniaco 0 y nitritos 0, ya está listo.', 'Mide y apúntalo en Tankily para ver cómo evoluciona.'],
+    grabar: 'Un test de agua (tiras o gotas) y la guía de maduración en Tankily.',
+    texto: 'Ciclar el acuario es dejar que crezcan las bacterias que convierten el amoniaco en nitratos. Tarda entre 4 y 8 semanas y es lo que más peces salva.\n\nGuía paso a paso: tankily.com/es/wiki/explorer/ciclado/maduracion/',
+    tags: '#ciclado #acuarioprincipiante #acuariofilia' },
+
+  { s: 3, f: 'Mié 18 nov', serie: 'Especie de la semana', formato: 'Carrusel 5 láminas', titulo: 'Neón o cardenal',
+    gancho: 'Neón o cardenal: ¿sabes distinguirlos?',
+    guion: ['Lámina 1: la pregunta, con los dos peces.', 'Lámina 2: neón común. La franja roja solo llega hasta la mitad del cuerpo.', 'Lámina 3: cardenal. La franja roja recorre todo el cuerpo.', 'Lámina 4: el neón vive a 20–26 °C; el cardenal pide 23–28 °C y agua más blanda.', 'Lámina 5: los dos, en grupo de 10 o más. Fichas en Tankily.'],
+    grabar: 'Las fotos de las fichas de Paracheirodon innesi y P. axelrodi (con crédito) sobre la plantilla de carrusel.',
+    texto: 'Se confunden muchísimo: fíjate en la franja roja. En el neón llega hasta la mitad del cuerpo; en el cardenal, de punta a punta. Y el cardenal pide agua más cálida y blanda.\n\nFichas: tankily.com/es/wiki/especies/paracheirodon-innesi/ y tankily.com/es/wiki/especies/paracheirodon-axelrodi/',
+    tags: '#neon #tetra #cardenal #acuariofilia' },
+  { s: 3, f: 'Vie 20 nov', serie: 'Tankily en 15 s', formato: 'Reel 15 s', titulo: 'Recordatorios de mantenimiento',
+    gancho: '¿Cuándo cambiaste el agua por última vez?',
+    guion: ['Abrir tu tanque y crear la tarea «Cambio de agua» cada 7 días.', 'Enseñar el aviso que llega (notificación o email).', '«Tankily te lo recuerda. Gratis».'],
+    grabar: 'Pantalla del móvil creando la tarea y el aviso recibido.',
+    texto: 'Ponle fecha al mantenimiento: cambios de agua, limpieza del filtro, abonado… Tankily te avisa por notificación o email cuando toca.\n\nGratis en tankily.com',
+    tags: '#acuario #mantenimientoacuario #acuariofilia' },
+  { s: 3, f: 'Dom 22 nov', serie: 'Tankily en 15 s', formato: 'Reel 15 s', titulo: '1.847 especies',
+    gancho: '1.847 especies con ficha. Gratis.',
+    guion: ['Pasar rápido por el catálogo con los filtros: agua dulce, marina, plantas, corales, invertebrados.', 'Abrir una ficha al azar.', '«¿Qué especie quieres ver en el próximo vídeo? Comenta».'],
+    grabar: 'tankily.com/es/wiki/especies/ con los filtros.',
+    texto: 'Peces, gambas, corales y plantas: 1.847 fichas con tamaño, litros, temperatura, pH y con quién pueden vivir.\n\n¿Qué especie quieres ver en el próximo vídeo? Déjala en comentarios.',
+    tags: '#acuariofilia #especies #peces #aquarium' },
+
+  { s: 4, f: 'Mié 25 nov', serie: 'Black Friday', formato: 'Carrusel 7 láminas', titulo: '5 cosas antes de comprar un acuario',
+    gancho: '5 cosas antes de comprar un acuario en Black Friday',
+    guion: ['Lámina 1: el título.', 'Lámina 2: cuanto más grande, más estable. Para empezar, 60 litros o más.', 'Lámina 3: mira qué incluye: filtro, calentador, luz y tapa.', 'Lámina 4: cada litro pesa 1 kg. 60 litros son más de 60 kg con cristal y sustrato: necesitas un mueble firme.', 'Lámina 5: no se estrena con peces. Antes, 4–8 semanas de ciclado.', 'Lámina 6: elige los peces antes que el acuario. Cada especie pide unos litros mínimos.', 'Lámina 7: «¿Qué peces caben en tu acuario? Pruébalo en Tankily».'],
+    grabar: 'Plantilla de carrusel; la última lámina con una captura de la herramienta «Qué especies encajan».',
+    texto: 'Si estás pensando en aprovechar el Black Friday para tu primer acuario, guárdate esto antes de comprar.\n\n¿Qué especies caben en tu acuario? tankily.com/es/herramientas/especies/',
+    tags: '#blackfriday #acuario #acuarioprincipiante #acuariofilia' },
+  { s: 4, f: 'Vie 27 nov', serie: 'Tiendas', formato: 'Reel 20 s', titulo: '¿Tienes tienda de acuariofilia?',
+    gancho: 'Si tienes una tienda de acuariofilia, esto te interesa',
+    guion: ['La ficha de una tienda en Tankily (directorio).', 'Un anuncio en el mercado.', '«Darte de alta es gratis; con el plan Pro destacas tus anuncios y tu ficha».', '«Escríbenos o entra en tankily.com/es/tiendas/».'],
+    grabar: 'Pantalla del directorio de tiendas y del mercado (los datos de ejemplo valen, sin presentarlos como tiendas reales).',
+    texto: 'Tankily tiene un directorio de tiendas y un mercado para la comunidad acuarista. Dar de alta tu tienda es gratis, y con el plan Pro destacas tus anuncios y tu ficha.\n\nMás información: tankily.com/es/tiendas/',
+    tags: '#tiendaacuarios #acuariofilia #acuario' },
+  { s: 4, f: 'Dom 29 nov', serie: 'Especie de la semana', formato: 'Reel 20 s', titulo: 'Gamba cherry',
+    gancho: 'La gamba perfecta para empezar',
+    guion: ['Mide 2–3 cm y es rojo intenso.', 'Aguanta de 16 a 26 °C.', 'Come restos y la película de algas de plantas y cristal.', 'Cría sola en el acuario si no hay peces que se coman las crías.', 'No la mezcles con otras variedades: los cruces pierden el color.'],
+    grabar: 'La ficha de Neocaridina davidi «Red» y, si tienes, tus gambas.',
+    texto: 'La cherry es la gamba con la que empieza casi todo el mundo: resistente, de colores vivos y se reproduce sola si no tiene peces que se coman las crías.\n\nFicha: tankily.com/es/wiki/especies/neocaridina-davidi-red/',
+    tags: '#cherryshrimp #neocaridina #gambas #acuariofilia' },
+
+  { s: 5, f: 'Mié 2 dic', serie: 'Tu primer acuario 1/4', formato: 'Carrusel 6 láminas', titulo: 'Tamaño y dónde ponerlo',
+    gancho: 'Tu primer acuario (1/4): tamaño y sitio',
+    guion: ['Lámina 1: título de la serie.', 'Lámina 2: 60 litros o más. Los pequeños cambian más rápido de temperatura y de química.', 'Lámina 3: lejos de ventanas. El sol directo dispara las algas y la temperatura.', 'Lámina 4: lejos de radiadores y puertas con corriente.', 'Lámina 5: mueble que aguante el peso y enchufe cerca.', 'Lámina 6: nunca muevas un acuario lleno. Sigue la serie.'],
+    grabar: 'Plantilla de carrusel. Si puedes, una foto de tu acuario en su sitio.',
+    texto: 'Empezamos la serie «Tu primer acuario», para quien estrene uno estas Navidades. Hoy: tamaño y dónde ponerlo. Guárdalo para cuando lo montes.',
+    tags: '#tuprimeracuario #acuarioprincipiante #acuariofilia' },
+  { s: 5, f: 'Vie 4 dic', serie: '¿Compatibles?', formato: 'Reel 20 s', titulo: 'Goldfish y peces tropicales',
+    gancho: 'Goldfish con peces tropicales: el error más común',
+    guion: ['El goldfish vive en agua fresca: 10–20 °C.', 'Un betta necesita 24–30 °C; un guppy, 22–28 °C.', 'Uno pasa frío o el otro calor.', 'Además, el goldfish crece hasta 25–35 cm y ensucia mucho: 120 litros por pez.', 'Mejor con otros goldfish.'],
+    grabar: 'Las fichas de goldfish y guppy comparando las temperaturas, o la herramienta de compatibilidad.',
+    texto: 'El goldfish es un pez de agua fría que puede pasar de 25 cm y vivir más de 20 años. Juntarlo con tropicales obliga a que uno de los dos viva fuera de su temperatura.\n\nFicha: tankily.com/es/wiki/especies/carassius-auratus/',
+    tags: '#goldfish #acuario #acuariofilia' },
+  { s: 5, f: 'Dom 6 dic', serie: 'Especie de la semana', formato: 'Reel 20 s', titulo: 'Guppy',
+    gancho: 'El pez que se multiplica solo',
+    guion: ['Macho de 3 cm, hembra de 6 cm.', 'Vive a 22–28 °C y prefiere el agua más bien dura.', 'Un macho por cada 2–3 hembras, para que no las acose.', 'Paren crías ya formadas cada pocas semanas.', 'Ten un plan para las crías antes de comprarlos.'],
+    grabar: 'La ficha del guppy y, si tienes, tus guppys.',
+    texto: 'Fácil, colorido y prolífico: con un macho y varias hembras tendrás crías en pocas semanas. Piensa antes qué harás con ellas.\n\nFicha: tankily.com/es/wiki/especies/poecilia-reticulata/',
+    tags: '#guppy #guppies #acuariofilia #pecesdeacuario' },
+
+  { s: 6, f: 'Mié 9 dic', serie: 'Tu primer acuario 2/4', formato: 'Reel 30 s', titulo: 'El ciclado',
+    gancho: 'Tu primer acuario (2/4): por qué esperar antes de meter peces',
+    guion: ['Semanas 1–2: sube el amoniaco.', 'Semanas 2–3: baja el amoniaco y suben los nitritos.', 'Semanas 3–6: bajan los nitritos y aparecen los nitratos.', 'Semanas 6–8: amoniaco 0 y nitritos 0. Listo.', 'Luego, pocos peces al principio y ve añadiendo.', 'Apunta cada medida en Tankily.'],
+    grabar: 'Tests de agua y la guía de maduración en Tankily; para cerrar, tu tanque con las medidas apuntadas.',
+    texto: 'El paso que más peces salva: dejar que el acuario madure. Así va semana a semana y así sabes que está listo.\n\nGuía: tankily.com/es/wiki/explorer/ciclado/maduracion/',
+    tags: '#tuprimeracuario #ciclado #acuarioprincipiante #acuariofilia' },
+  { s: 6, f: 'Vie 11 dic', serie: 'Tankily en 15 s', formato: 'Reel 15 s', titulo: 'Registro de parámetros',
+    gancho: '¿Sabes cómo ha cambiado tu agua este mes?',
+    guion: ['Apuntar pH, amoniaco, nitritos y nitratos en tu tanque.', 'Enseñar las medidas anteriores para ver la evolución.', '«Si algo se dispara, lo ves a tiempo».'],
+    grabar: 'Pantalla del móvil añadiendo una medición en un tanque.',
+    texto: 'Apunta cada medición de tu acuario y mira cómo evoluciona. Si algo se dispara, lo ves antes de que lo noten los peces.\n\nGratis en tankily.com',
+    tags: '#acuario #parametrosdelagua #acuariofilia' },
+  { s: 6, f: 'Dom 13 dic', serie: 'Error de principiante', formato: 'Reel 20 s', titulo: 'Lavar el filtro con agua del grifo',
+    gancho: 'Lavas el filtro bajo el grifo y tu acuario vuelve a empezar',
+    guion: ['El cloro del grifo mata las bacterias del filtro.', 'Lava la esponja en un cubo con agua del propio acuario, durante el cambio de agua.', 'No hace falta dejarla como nueva: basta con quitar la suciedad gruesa.', 'Y nunca cambies todo el material del filtro a la vez.'],
+    grabar: 'Tú limpiando la esponja en un cubo con agua del acuario.',
+    texto: 'En el filtro viven las bacterias que mantienen el agua sana. Lávalo con agua del propio acuario y sin dejarlo «como nuevo».\n\nMás sobre mantenimiento: tankily.com/es/wiki/explorer/mantenimiento/',
+    tags: '#filtroacuario #mantenimientoacuario #acuariofilia' },
+
+  { s: 7, f: 'Mié 16 dic', serie: 'Tu primer acuario 3/4', formato: 'Carrusel 7 láminas', titulo: 'Primeros peces fáciles',
+    gancho: 'Tu primer acuario (3/4): 5 peces para empezar',
+    guion: ['Lámina 1: título.', 'Lámina 2: platy. Robusto, 60 litros, agua dura.', 'Lámina 3: guppy. 40 litros, 1 macho por cada 2–3 hembras.', 'Lámina 4: danio cebra. El más resistente; grupo de 5 o más y tapa, que salta.', 'Lámina 5: corydoras bronce. Grupo de 6 y arena fina; 80 litros.', 'Lámina 6: rasbora arlequín. Grupo de 6–8, 60 litros.', 'Lámina 7: no todos comparten agua. Compruébalo en Tankily antes de juntarlos.'],
+    grabar: 'Fotos de las fichas (con crédito) sobre la plantilla.',
+    texto: 'Cinco especies resistentes para estrenar acuario. Ojo: no todas quieren la misma agua (los platys y guppys la prefieren dura; la rasbora, más blanda). Comprueba cuáles encajan en el tuyo:\n\ntankily.com/es/herramientas/especies/',
+    tags: '#tuprimeracuario #pecesfaciles #acuarioprincipiante #acuariofilia' },
+  { s: 7, f: 'Vie 18 dic', serie: 'Especie de la semana', formato: 'Reel 20 s', titulo: 'Platy',
+    gancho: 'Si tu agua es dura, este es tu pez',
+    guion: ['Mide 5–6 cm.', 'Vive a 20–28 °C con pH 7–8.', 'Más robusto que el guppy y aguanta el agua dura.', 'Un macho por cada 2 hembras.', 'Hay decenas de colores.'],
+    grabar: 'La ficha del platy y, si tienes, tus platys.',
+    texto: 'En muchas zonas de España el agua del grifo es dura. El platy la agradece: es de los vivíparos más resistentes.\n\nFicha: tankily.com/es/wiki/especies/xiphophorus-maculatus/',
+    tags: '#platy #viviparos #acuariofilia #pecesdeacuario' },
+  { s: 7, f: 'Dom 20 dic', serie: '¿Compatibles?', formato: 'Reel 20 s', titulo: 'Escalares y neones',
+    gancho: 'Escalares y neones: la combinación que acaba mal',
+    guion: ['El escalar llega a 15 cm de alto.', 'Se come los peces que le caben en la boca.', 'Un neón mide 4 cm: acaba siendo comida.', 'Además el escalar necesita acuario alto: 150 litros y 50 cm de altura.'],
+    grabar: 'Las fichas de escalar y neón, o la herramienta de compatibilidad.',
+    texto: 'Es una de las combinaciones más vendidas juntas y una de las que peor acaban: el escalar adulto se come a los neones.\n\nFicha del escalar: tankily.com/es/wiki/especies/pterophyllum-scalare/',
+    tags: '#escalar #pezangel #neon #acuariofilia' },
+
+  { s: 8, f: 'Mié 23 dic', serie: 'Tu primer acuario 4/4', formato: 'Carrusel 6 láminas', titulo: 'Mantenimiento semanal',
+    gancho: 'Tu primer acuario (4/4): 20 minutos a la semana',
+    guion: ['Lámina 1: título.', 'Lámina 2: cambia el 20–30 % del agua cada semana.', 'Lámina 3: agua nueva con acondicionador y a la misma temperatura.', 'Lámina 4: sifona el fondo mientras vacías.', 'Lámina 5: limpia el cristal y revisa el termómetro.', 'Lámina 6: ponlo como recordatorio en Tankily.'],
+    grabar: 'Plantilla de carrusel; la última lámina con la captura de una tarea de mantenimiento.',
+    texto: 'Último capítulo de «Tu primer acuario»: la rutina semanal que mantiene el agua sana en unos 20 minutos.\n\nGuía completa: tankily.com/es/wiki/explorer/mantenimiento/rutinasemanal/',
+    tags: '#tuprimeracuario #mantenimientoacuario #acuariofilia' },
+  { s: 8, f: 'Vie 25 dic', serie: 'Navidad', formato: 'Reel 30 s', titulo: 'Si te han regalado un acuario',
+    gancho: '¿Te han regalado un acuario? No metas los peces todavía.',
+    guion: ['Monta, llena con agua tratada con acondicionador y enciende filtro y calentador.', 'Espera a que madure: 4–8 semanas.', '¿Ya vinieron los peces? Pocos, poca comida y cambios de agua pequeños y frecuentes.', 'Mide amoniaco y nitritos cada pocos días.', 'Toda la serie «Tu primer acuario», en el perfil.'],
+    grabar: 'Un acuario recién montado (el tuyo o uno de tienda) y los tests.',
+    texto: 'Si estas Navidades ha llegado un acuario a casa, esto es lo primero. Y si ya vinieron con peces: poca comida, cambios de agua pequeños y frecuentes, y mide el agua.\n\nGuía: tankily.com/es/wiki/explorer/ciclado/maduracion/\n\n¡Felices fiestas!',
+    tags: '#navidad #tuprimeracuario #acuarioprincipiante #acuariofilia' },
+  { s: 8, f: 'Dom 27 dic', serie: 'Especie de la semana', formato: 'Reel 20 s', titulo: 'Nerita cebra',
+    gancho: 'El caracol que limpia y no se multiplica',
+    guion: ['Mide 2–2,5 cm, con rayas negras en zigzag.', 'Se come las algas del cristal, las piedras y las hojas.', 'En agua dulce no se reproduce: no habrá plaga.', 'Puede dejar huevos blancos en la decoración que no llegan a eclosionar.', 'Vive a 22–28 °C con pH 7–8.'],
+    grabar: 'Una nerita en el cristal (tuya o de la ficha) y la ficha en Tankily.',
+    texto: 'Si buscas un limpiador de algas que no se convierta en plaga, la nerita es de lo mejor: en agua dulce no se reproduce.\n\nFicha: tankily.com/es/wiki/especies/neritina-natalensis/',
+    tags: '#nerita #caracoles #acuariofilia' },
+
+  { s: 9, f: 'Mié 30 dic', serie: 'Fin de año', formato: 'Reel 20 s o carrusel', titulo: 'Balance del año',
+    gancho: 'Así ha sido el primer año de Tankily',
+    guion: ['Las cifras reales de la comunidad: personas, tanques, especies consultadas (sácalas de Admin → Crecimiento ese día).', 'El tanque o la publicación favorita de la comunidad, con permiso de su autor.', 'Qué llega en 2027.', 'Gracias.'],
+    grabar: 'Capturas de la web con las cifras reales. No uses datos de demostración aquí.',
+    texto: 'Gracias a todas las personas que han empezado a usar Tankily este año. [Cifras reales]. En 2027 llega [novedad].\n\n¡Feliz año acuarista!',
+    tags: '#acuariofilia #acuario #felizaño' },
+];
+const SEMANAS = {1:'3–9 nov', 2:'10–16 nov', 3:'17–23 nov', 4:'24–30 nov', 5:'1–7 dic', 6:'8–14 dic', 7:'15–21 dic', 8:'22–28 dic', 9:'29–31 dic'};
+const NOTAS = {4: 'El 30 de noviembre toca revisar las cifras y ajustar el plan.', 5: 'Arranca la serie «Tu primer acuario».', 8: 'El 25 de diciembre cae en viernes: la pieza de Navidad sale ese día.'};
+
+const leer = () => { try { return JSON.parse(localStorage.getItem('tankily-contenido') || '{}'); } catch { return {}; } };
+const guardar = (h) => { try { localStorage.setItem('tankily-contenido', JSON.stringify(h)); } catch {} };
+let hechas = leer();
+
+const esc = (t) => t.replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const enlazar = (t) => esc(t).replace(/(tankily\.com\/[^\s]*)/g, '<a href="https://$1" target="_blank" rel="noopener">$1</a>');
+
+function pintar() {
+  const cal = document.getElementById('calendario');
+  const nav = document.getElementById('nav');
+  let html = '', navHtml = '';
+  for (const s of Object.keys(SEMANAS)) {
+    const piezas = PIEZAS.map((p, i) => ({ ...p, i })).filter((p) => p.s == s);
+    navHtml += `<a href="#semana${s}">${SEMANAS[s]}</a>`;
+    html += `<section class="semana" id="semana${s}"><header><h2>Semana del ${SEMANAS[s]}</h2>${NOTAS[s] ? `<p>${NOTAS[s]}</p>` : ''}</header>`;
+    for (const p of piezas) {
+      const completo = `${p.texto}\n\n${p.tags}`;
+      html += `<details class="pieza" data-i="${p.i}" data-hecha="${hechas[p.i] ? 1 : 0}">
+        <summary><span class="fecha">${p.f}</span><span class="titulo"><b>${esc(p.titulo)}</b><span>${esc(p.serie)} · ${esc(p.formato)}</span></span><span class="estado">${hechas[p.i] ? 'Publicada' : 'Pendiente'}</span></summary>
+        <div class="cuerpo">
+          <div class="bloque"><h4>Gancho (texto en pantalla, primeros 2 segundos)</h4><p class="gancho">${esc(p.gancho)}</p></div>
+          <div class="bloque"><h4>Guion</h4><ol class="guion">${p.guion.map((g) => `<li>${esc(g)}</li>`).join('')}</ol></div>
+          <div class="bloque"><h4>Qué grabar</h4><p>${enlazar(p.grabar)}</p></div>
+          <div class="bloque"><h4>Texto de la publicación</h4><div class="texto-pub" id="t${p.i}">${enlazar(completo)}</div>
+            <div class="acciones"><button class="principal" data-copiar="${p.i}">Copiar texto</button><button data-marcar="${p.i}">${hechas[p.i] ? 'Marcar como pendiente' : 'Marcar como publicada'}</button><span class="aviso-copia" id="a${p.i}" role="status"></span></div>
+          </div>
+        </div>
+      </details>`;
+    }
+    html += `</section>`;
+  }
+  cal.innerHTML = html;
+  nav.innerHTML = navHtml;
+  const n = Object.values(hechas).filter(Boolean).length;
+  document.getElementById('cuenta').textContent = `${n} de ${PIEZAS.length} publicadas`;
+  document.getElementById('relleno').style.width = `${(n / PIEZAS.length) * 100}%`;
+}
+
+document.addEventListener('click', async (e) => {
+  const c = e.target.closest('[data-copiar]');
+  if (c) {
+    const i = c.dataset.copiar, p = PIEZAS[i], aviso = document.getElementById('a' + i);
+    const texto = `${p.texto}\n\n${p.tags}`;
+    try { await navigator.clipboard.writeText(texto); aviso.textContent = 'Copiado'; }
+    catch { const r = document.createRange(); r.selectNodeContents(document.getElementById('t' + i)); const s = getSelection(); s.removeAllRanges(); s.addRange(r); aviso.textContent = 'Texto seleccionado: pulsa Ctrl+C'; }
+    setTimeout(() => { aviso.textContent = ''; }, 2500);
+    return;
+  }
+  const m = e.target.closest('[data-marcar]');
+  if (m) {
+    const i = m.dataset.marcar;
+    hechas[i] = !hechas[i]; guardar(hechas);
+    const abiertas = [...document.querySelectorAll('details.pieza[open]')].map((d) => d.dataset.i);
+    pintar();
+    abiertas.forEach((a) => document.querySelector(`details.pieza[data-i="${a}"]`)?.setAttribute('open', ''));
+  }
+});
+pintar();
+document.querySelector('details.pieza')?.setAttribute('open', '');
+</script>

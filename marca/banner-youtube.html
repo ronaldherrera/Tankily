@@ -1,0 +1,44 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500&family=Geist:wght@400;500&display=swap">
+<style>
+html, body { margin: 0; }
+body { width: 2560px; height: 1440px; overflow: hidden; background: radial-gradient(120% 140% at 30% 0%, #15406a 0%, #0a2038 45%, #050b14 85%); color: #e6f1f7; font-family: 'Geist', system-ui, sans-serif; position: relative; }
+.olas { position: absolute; inset: 0; }
+.contenido { position: absolute; left: 0; right: 0; top: 535px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.logo { display: inline-flex; align-items: baseline; font: 500 150px/1 'Fredoka', sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
+.logo svg { height: 0.94em; width: 0.675em; margin-right: 0.01em; transform: translateY(0.11em); overflow: visible; }
+.lema { font-size: 46px; font-weight: 500; color: #e6f1f7; letter-spacing: -0.005em; }
+.sub { font-size: 30px; color: #a9bfce; margin-top: -12px; }
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="ola" x1="14" y1="0" x2="44" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9fe7f5"/><stop offset="1" stop-color="#5aa8ff"/>
+    </linearGradient>
+    <symbol id="t" viewBox="0 0 64 64">
+      <path d="M29 10V40a12 12 0 0 0 12 12h3" fill="none" stroke="#e6f1f7" stroke-width="9" stroke-linecap="round"/>
+      <path d="M14 26c5-4.2 10-4.2 15 0s10 4.2 15 0" fill="none" stroke="url(#ola)" stroke-width="8.5" stroke-linecap="round"/>
+      <circle cx="51" cy="13" r="4" fill="#9fe7f5"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- Olas suaves en los laterales de abajo; el centro inferior queda libre para la foto de perfil -->
+<svg class="olas" viewBox="0 0 2560 1440" style="opacity:0" preserveAspectRatio="none">
+  <path d="M0 520 C 120 480, 240 480, 360 520 S 600 560, 700 530" fill="none" stroke="#5aa8ff" stroke-opacity="0.22" stroke-width="10" stroke-linecap="round"/>
+  <path d="M0 570 C 140 535, 280 535, 420 570 S 620 600, 680 585" fill="none" stroke="#9fe7f5" stroke-opacity="0.14" stroke-width="8" stroke-linecap="round"/>
+  <path d="M940 530 C 1040 560, 1160 560, 1280 520 S 1520 480, 1640 520" fill="none" stroke="#5aa8ff" stroke-opacity="0.22" stroke-width="10" stroke-linecap="round"/>
+  <path d="M960 585 C 1020 600, 1220 535, 1360 570 S 1560 535, 1640 570" fill="none" stroke="#9fe7f5" stroke-opacity="0.14" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="1490" cy="150" r="9" fill="#9fe7f5" fill-opacity="0.35"/>
+  <circle cx="1530" cy="105" r="5" fill="#9fe7f5" fill-opacity="0.25"/>
+  <circle cx="150" cy="190" r="6" fill="#9fe7f5" fill-opacity="0.2"/>
+</svg>
+
+<div class="contenido">
+  <span class="logo"><svg viewBox="9.5 0 46 64"><use href="#t" width="64" height="64"/></svg>ankily</span>
+  <div class="lema">La red social de la acuariofilia</div>
+  <div class="sub">Tu acuario, 1.847 especies y una comunidad que sabe de peces</div>
+</div>
+</body></html>

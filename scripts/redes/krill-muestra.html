@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&display=swap">
+<script src="krill.js"></script>
+</head><body style="margin:0;background:#071425">
+<canvas id="c" width="1800" height="560"></canvas>
+<script>
+// Muestra de Krill con sus expresiones (para revisarlo y para el manual de marca)
+window.pintar = async () => {
+  await document.fonts.load('600 40px "Fredoka"');
+  const c = document.getElementById('c'), g = c.getContext('2d');
+  const gr = g.createRadialGradient(500, 0, 0, 500, 0, 1400); gr.addColorStop(0, '#15406a'); gr.addColorStop(0.6, '#0a2038'); gr.addColorStop(1, '#050b14');
+  g.fillStyle = gr; g.fillRect(0, 0, c.width, c.height);
+  const exps = [['normal', 0], ['normal', 0.8], ['sorpresa', 0], ['harto', 0], ['feliz', 0]];
+  const nombres = ['Normal', 'Hablando', 'Sorpresa', 'Harto', 'Feliz'];
+  exps.forEach(([e, b], i) => {
+    krill(g, 190 + i * 355, 280, 300, { expresion: e, boca: b, t: 0.4, parpadeo: 0 });
+    g.fillStyle = '#a9bfce'; g.font = '600 32px "Fredoka"'; g.textAlign = 'center'; g.fillText(nombres[i], 190 + i * 355, 510);
+  });
+  return c.toDataURL('image/png').split(',')[1];
+};
+</script>
+</body></html>

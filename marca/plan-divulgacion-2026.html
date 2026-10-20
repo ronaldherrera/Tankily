@@ -1,0 +1,257 @@
+<title>Plan de divulgación Tankily</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Geist:wght@400;500;600&display=swap">
+<style>
+/* Una columna de lectura (~46rem) con la marca de Tankily: agua profunda y la ola azul del logo.
+   Las fases son una secuencia real (fechas), por eso van numeradas; el resto no. */
+:root {
+  --fondo: #f3f8fb;
+  --superficie: #ffffff;
+  --tinta: #0b1d33;
+  --tinta-2: #3d5470;
+  --linea: #d6e3ec;
+  --ola: #2f7fe0;
+  --agua: #1fa9c9;
+  --ola-suave: #e3effc;
+  --aviso: #8a5a00;
+  --aviso-fondo: #fff4dc;
+  --display: "Fredoka", "Nunito", "Segoe UI", system-ui, sans-serif;
+  --texto: "Geist", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fondo: #071425; --superficie: #0d2238; --tinta: #e6f0f7; --tinta-2: #9fb6cb; --linea: #1d3a57;
+    --ola: #7cc4ff; --agua: #9fe6f5; --ola-suave: #12304f; --aviso: #ffd27a; --aviso-fondo: #2e2410;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fondo: #071425; --superficie: #0d2238; --tinta: #e6f0f7; --tinta-2: #9fb6cb; --linea: #1d3a57;
+  --ola: #7cc4ff; --agua: #9fe6f5; --ola-suave: #12304f; --aviso: #ffd27a; --aviso-fondo: #2e2410;
+  color-scheme: dark;
+}
+body { background: var(--fondo); color: var(--tinta); font-family: var(--texto); font-size: 16px; line-height: 1.6; }
+.pagina { max-width: 46rem; margin: 0 auto; padding-inline: 20px; padding-block: 40px 72px; display: grid; gap: 48px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2rem, 6vw, 2.8rem); }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.15rem; font-weight: 500; }
+p, ul, ol { margin: 0; }
+section { display: grid; gap: 16px; }
+.entradilla { color: var(--tinta-2); font-size: 1.1rem; max-width: 40rem; }
+.cabecera { display: grid; gap: 14px; }
+.periodo { color: var(--ola); font-weight: 600; font-size: 0.95rem; }
+ul.lista { padding-left: 1.2rem; display: grid; gap: 6px; }
+strong { font-weight: 600; }
+a { color: var(--ola); }
+
+/* Objetivos */
+.objetivos { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.objetivo { background: var(--superficie); border: 1px solid var(--linea); border-radius: 12px; padding: 14px 16px; display: grid; gap: 2px; align-content: start; }
+.objetivo b { font-family: var(--display); font-weight: 600; font-size: 1.6rem; color: var(--ola); font-variant-numeric: tabular-nums; }
+.objetivo span { color: var(--tinta-2); font-size: 0.9rem; line-height: 1.4; }
+.nota { color: var(--tinta-2); font-size: 0.9rem; }
+
+/* Fases: línea de tiempo con la ola */
+.fases { display: grid; gap: 0; border-left: 3px solid var(--agua); margin-left: 8px; }
+.fase { position: relative; padding: 0 0 28px 24px; display: grid; gap: 8px; }
+.fase:last-child { padding-bottom: 0; }
+.fase::before { content: ""; position: absolute; left: -10px; top: 4px; width: 17px; height: 17px; border-radius: 50%; background: var(--fondo); border: 3px solid var(--ola); }
+.fase .fechas { color: var(--ola); font-weight: 600; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+
+/* Canales */
+.canales { display: grid; gap: 10px; }
+.canal { display: grid; grid-template-columns: 7.5rem 1fr; gap: 4px 16px; padding: 14px 0; border-top: 1px solid var(--linea); }
+.canal:first-child { border-top: 0; }
+.canal h3 { grid-row: span 2; }
+.canal .prioridad { font-size: 0.8rem; font-weight: 600; color: var(--agua); letter-spacing: 0.02em; }
+.canal p { min-width: 0; }
+@media (max-width: 520px) { .canal { grid-template-columns: 1fr; } .canal h3 { grid-row: auto; } }
+
+/* Tablas */
+.tabla { overflow-x: auto; border: 1px solid var(--linea); border-radius: 12px; background: var(--superficie); }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 0.93rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-top: 1px solid var(--linea); }
+thead th { border-top: 0; font-weight: 600; color: var(--tinta-2); font-size: 0.85rem; background: var(--ola-suave); }
+td:first-child { white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--tinta-2); }
+tr.hito td { background: var(--ola-suave); }
+
+/* Rutina semanal */
+.rutina { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.dia { border: 1px solid var(--linea); border-radius: 12px; padding: 14px 16px; background: var(--superficie); display: grid; gap: 4px; align-content: start; }
+.dia b { font-weight: 600; }
+.dia .tiempo { color: var(--ola); font-size: 0.85rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Aviso */
+.aviso { background: var(--aviso-fondo); color: var(--tinta); border-radius: 12px; padding: 16px 18px; display: grid; gap: 8px; }
+.aviso h3 { color: var(--aviso); }
+
+.decisiones ol { padding-left: 1.3rem; display: grid; gap: 8px; }
+</style>
+
+<main class="pagina">
+  <header class="cabecera">
+    <p class="periodo">20 de octubre – 31 de diciembre de 2026</p>
+    <h1>Plan de divulgación de Tankily</h1>
+    <p class="entradilla">Cómo dar a conocer Tankily en diez semanas sin presupuesto y con unas tres horas y media a la semana. La prioridad es llegar a los acuaristas donde ya se reúnen y convertir visitas en cuentas con un tanque creado, no acumular seguidores.</p>
+  </header>
+
+  <section>
+    <h2>De dónde partimos</h2>
+    <ul class="lista">
+      <li><strong>Lo que ya enseña bien Tankily:</strong> WikiTank con 1.847 especies (fichas en 8 idiomas) y 121 artículos, compatibilidad entre especies, calculadoras, registro de parámetros con recordatorios de mantenimiento, foro, mercado y tiendas.</li>
+      <li><strong>Lo que ya mide:</strong> Umami (visitas, origen y eventos de registro, tanque creado, publicación…) y Admin → Crecimiento (activos, embudo de activación y retención por semana).</li>
+      <li><strong>Lo que aún no tiene:</strong> comunidad real ni cuentas en redes. Por eso el contenido de estas semanas sale sobre todo de la wiki y las herramientas, que ya son útiles hoy.</li>
+      <li><strong>Público:</strong> primero España en español. El inglés llega por Reddit y por Google, porque la wiki ya está indexada en inglés, alemán y francés. Alemán y francés en redes, mejor en 2027.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Objetivos a 31 de diciembre</h2>
+    <div class="objetivos">
+      <div class="objetivo"><b>200</b><span>cuentas reales registradas</span></div>
+      <div class="objetivo"><b>60</b><span>tanques creados por personas reales</span></div>
+      <div class="objetivo"><b>25 %</b><span>de altas que crean su tanque en la primera semana</span></div>
+      <div class="objetivo"><b>3</b><span>tiendas activas en Tankily; 1 de ellas en Pro</span></div>
+      <div class="objetivo"><b>40</b><span>piezas publicadas (3 por semana desde el 3 de noviembre)</span></div>
+    </div>
+    <p class="nota">Son cifras orientativas para tener una referencia. Las revisamos el 30 de noviembre con cuatro semanas de datos reales. Los seguidores no son objetivo: se miran, pero lo que cuenta es cuántos llegan a la web y crean un tanque.</p>
+  </section>
+
+  <section>
+    <h2>Canales, por orden de prioridad</h2>
+    <div class="canales">
+      <div class="canal">
+        <h3>Comunidades</h3>
+        <span class="prioridad">Prioridad 1 · 40 min/semana</span>
+        <p>Grupos de Facebook de acuariofilia (en España son de los sitios con más actividad del hobby), foros en español y Reddit en inglés (r/Aquariums, r/PlantedTank, r/ReefTank). Se responden dudas reales y se enlaza la ficha o la calculadora solo cuando resuelve la pregunta. Hay que leer las normas de cada sitio: muchos prohíben la autopromoción. Si te preguntan, dices que Tankily es tuyo.</p>
+      </div>
+      <div class="canal">
+        <h3>Instagram y TikTok</h3>
+        <span class="prioridad">Prioridad 2 · 2 h/semana</span>
+        <p>Vídeos verticales cortos y carruseles. Cada pieza se hace una vez y se publica en los dos (y en YouTube Shorts si cuesta poco). Lo que mejor funciona: empezar por el resultado o la pregunta ("¿Un betta y gambas pueden vivir juntos?") y enseñar la respuesta en Tankily.</p>
+      </div>
+      <div class="canal">
+        <h3>Facebook</h3>
+        <span class="prioridad">Prioridad 3 · 30 min/semana</span>
+        <p>Una página de Tankily que reutiliza lo de Instagram (Meta permite publicar en las dos a la vez) y sirve de carta de presentación cuando compartes en los grupos. Los grupos se tratan como las demás comunidades: aportar primero y enlazar solo cuando ayuda. Si usas fotos de las fichas, las de Wikimedia Commons llevan autor y licencia y hay que conservar el crédito.</p>
+      </div>
+      <div class="canal">
+        <h3>Tiendas</h3>
+        <span class="prioridad">Prioridad 4 · 30 min/semana</span>
+        <p>Las tiendas de acuariofilia son quienes pagan el Pro y quienes más pueden recomendar Tankily en el mostrador. Contactar con 5 por semana, empezando por las cercanas, con un mensaje corto y personal. Lo que se les ofrece: ficha gratis de tienda, anuncios en el mercado y el Pro para destacar.</p>
+      </div>
+      <div class="canal">
+        <h3>SEO</h3>
+        <span class="prioridad">Ya en marcha · 15 min/semana</span>
+        <p>Las páginas ya se indexan solas (sitemap, IndexNow, páginas de tanques, hilos y anuncios). Solo hace falta mirar Search Console los lunes: qué búsquedas traen visitas y qué fichas se quedan cerca de la primera página. Esas fichas son las candidatas a pieza en redes.</p>
+      </div>
+    </div>
+    <p class="nota">Pinterest y X quedan fuera del plan.</p>
+  </section>
+
+  <section>
+    <h2>Cuatro series fijas</h2>
+    <p>Repetir formatos facilita grabar en bloque y que la gente reconozca la cuenta.</p>
+    <ul class="lista">
+      <li><strong>Especie de la semana:</strong> una ficha de WikiTank en 20 segundos (tamaño, litros mínimos, con quién sí y con quién no). Material: 1.847 fichas.</li>
+      <li><strong>¿Compatibles?:</strong> dos especies que la gente junta a menudo y qué dice la herramienta de compatibilidad.</li>
+      <li><strong>Error de principiante:</strong> no ciclar el acuario, sobrepoblar, el betta en una pecera de un litro… Con la solución y el enlace a la guía.</li>
+      <li><strong>Tankily en 15 segundos:</strong> una herramienta cada vez (calculadora de litros, recordatorios, registro de parámetros, mercado).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Fases</h2>
+    <div class="fases">
+      <div class="fase">
+        <span class="fechas">1 · 20 oct – 2 nov</span>
+        <h3>Preparar</h3>
+        <ul class="lista">
+          <li>Reservar el mismo nombre en Instagram, TikTok, Facebook y YouTube (por ejemplo, @tankily o @tankilyapp).</li>
+          <li>Foto de perfil (el logo animado o el icono), bio en una línea y enlace a tankily.com con UTM para medir cada red en Umami.</li>
+          <li>Plantillas con el manual de marca: portada de vídeo y carrusel.</li>
+          <li>Grabar y preparar las 6 primeras piezas antes de publicar la primera, para tener colchón.</li>
+          <li>Lista de 30 tiendas de acuariofilia en España con su contacto.</li>
+        </ul>
+      </div>
+      <div class="fase">
+        <span class="fechas">2 · 3 nov – 30 nov</span>
+        <h3>Arrancar y coger ritmo</h3>
+        <ul class="lista">
+          <li>3 piezas por semana (miércoles, viernes y domingo) con las cuatro series.</li>
+          <li>Comunidades (grupos de Facebook, foros y Reddit) dos veces por semana.</li>
+          <li>5 tiendas contactadas por semana.</li>
+          <li>Black Friday (27 nov): pieza útil para quien compra acuario ("5 cosas antes de comprar") y aviso a las tiendas para que publiquen sus ofertas en el mercado.</li>
+          <li>30 nov: primera revisión de cifras y ajuste del plan.</li>
+        </ul>
+      </div>
+      <div class="fase">
+        <span class="fechas">3 · 1 dic – 31 dic</span>
+        <h3>Campaña «Tu primer acuario»</h3>
+        <ul class="lista">
+          <li>En Navidad y Reyes mucha gente regala o recibe su primer acuario o un betta, y suelen cometer los mismos errores. Es el momento de más utilidad práctica del año.</li>
+          <li>Serie de 4 semanas: tamaño y montaje, ciclado, primeros peces fáciles y mantenimiento semanal con los recordatorios de Tankily.</li>
+          <li>Pieza de "Si te han regalado un acuario" para el 25 de diciembre y el 6 de enero.</li>
+          <li>29–31 dic: balance del año y plan de enero.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Calendario de piezas</h2>
+    <div class="tabla">
+      <table>
+        <thead><tr><th>Semana</th><th>Miércoles</th><th>Viernes</th><th>Domingo</th></tr></thead>
+        <tbody>
+          <tr><td>3–9 nov</td><td>Tankily en 20 s: qué es (con el logo animado)</td><td>Especie: el betta y el mito de la pecera pequeña</td><td>Tankily en 15 s: calculadora de litros</td></tr>
+          <tr><td>10–16 nov</td><td>¿Compatibles? Betta y gambas cherry</td><td>Especie: corydoras, siempre en grupo</td><td>Error: meter peces sin ciclar</td></tr>
+          <tr><td>17–23 nov</td><td>Especie: neón o cardenal, cómo distinguirlos</td><td>Tankily en 15 s: recordatorios de mantenimiento</td><td>1.847 especies: recorrido rápido por el catálogo</td></tr>
+          <tr class="hito"><td>24–30 nov</td><td>5 cosas antes de comprar un acuario en Black Friday</td><td>¿Tienes tienda? Así aparece en Tankily</td><td>Especie: gamba cherry · revisión de cifras</td></tr>
+          <tr><td>1–7 dic</td><td>Tu primer acuario 1/4: tamaño y dónde ponerlo</td><td>¿Compatibles? Goldfish y peces tropicales</td><td>Especie: guppy</td></tr>
+          <tr><td>8–14 dic</td><td>Tu primer acuario 2/4: el ciclado</td><td>Tankily en 15 s: registro de parámetros</td><td>Error: limpiar el filtro con agua del grifo</td></tr>
+          <tr><td>15–21 dic</td><td>Tu primer acuario 3/4: primeros peces fáciles</td><td>Especie: platy</td><td>¿Compatibles? Escalares y neones</td></tr>
+          <tr class="hito"><td>22–28 dic</td><td>Tu primer acuario 4/4: mantenimiento semanal</td><td>25 dic: si te han regalado un acuario</td><td>Especie: caracol nerita</td></tr>
+          <tr><td>29–31 dic</td><td colspan="3">Balance del año en Tankily y qué llega en 2027</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Rutina semanal (unas 3 h 30 min)</h2>
+    <div class="rutina">
+      <div class="dia"><b>Lunes</b><span class="tiempo">30 min</span><span>Mirar Umami, Admin → Crecimiento y Search Console. Elegir las 3 piezas de la semana.</span></div>
+      <div class="dia"><b>Martes</b><span class="tiempo">1 h 30 min</span><span>Grabar y montar las 3 piezas de una vez. Programarlas.</span></div>
+      <div class="dia"><b>Miércoles y sábado</b><span class="tiempo">2 × 20 min</span><span>Comunidades: responder dudas y contestar comentarios.</span></div>
+      <div class="dia"><b>Jueves</b><span class="tiempo">30 min</span><span>Escribir a 5 tiendas.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cómo medimos</h2>
+    <ul class="lista">
+      <li><strong>Cada lunes:</strong> visitas que llegan desde cada red (UTM en Umami), registros, tanques creados y porcentaje de altas que crean su tanque en la primera semana (Admin → Crecimiento).</li>
+      <li><strong>Por pieza:</strong> guardar qué piezas trajeron más visitas a la web, no solo cuántos "me gusta" tuvieron. Las que funcionan se repiten con otra especie o herramienta.</li>
+      <li><strong>Tiendas:</strong> contactadas, que respondieron, dadas de alta y en Pro.</li>
+      <li><strong>Señal de alarma:</strong> si a finales de noviembre una red trae menos del 10 % de las visitas de redes, se le quita tiempo y se pasa al canal que mejor funcione.</li>
+    </ul>
+  </section>
+
+  <section class="aviso">
+    <h3>Datos de demostración en las redes</h3>
+    <p>Los 19 usuarios de prueba sirven para enseñar cómo se ve Tankily con contenido: un tanque con sus parámetros, el muro, el mercado. Úsalos solo como capturas de ejemplo del producto. No conviene presentarlos como personas reales, ni usar sus reseñas como testimonios, ni crear cuentas en redes con esos nombres: además de engañar, es lo que más daña la confianza si alguien lo descubre. En cuanto haya tanques reales, se piden permisos y se sustituyen.</p>
+  </section>
+
+  <section class="decisiones">
+    <h2>Decisiones pendientes</h2>
+    <ol>
+      <li><strong>Nombre en redes:</strong> @tankily si está libre en todas; si no, @tankilyapp en todas para que sea el mismo.</li>
+      <li><strong>¿Sales tú en los vídeos?</strong> Con cara y voz suele funcionar mejor y se graba más rápido. Sin cara también funciona: pantalla del móvil, tu acuario y texto en pantalla.</li>
+      <li><strong>Oferta para las primeras tiendas:</strong> por ejemplo, el primer mes del Pro gratis o un precio de fundador. Hay que decidirlo antes de escribirles.</li>
+      <li><strong>Pequeña prueba de anuncios en diciembre</strong> (50–100 €) para la serie «Tu primer acuario», solo si las piezas sin pagar ya funcionan.</li>
+    </ol>
+  </section>
+</main>
