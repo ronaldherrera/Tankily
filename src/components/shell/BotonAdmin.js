@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { ShieldCheck, LayoutDashboard, Flag, Store, Megaphone, TrendingUp, Plug } from 'lucide-react';
+import { ShieldCheck, LayoutDashboard, Flag, Store, Megaphone, TrendingUp, Plug, BarChart3 } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
 import { useSesion } from '@/lib/sesion';
@@ -50,6 +50,12 @@ function Burbuja() {
   const [pendientes, setPendientes] = useState(0);
   const [, setTamano] = useState(0);
   const panel = usePresencia(abierto);
+  // Analítica en este dispositivo: Umami no cuenta las visitas si existe la marca umami.disabled. Vale para cada
+  // navegador y para la app instalada en iPhone (que guarda sus datos aparte de Safari)
+  const [contando, setContando] = useState(() => { try { return localStorage.getItem('umami.disabled') !== '1'; } catch { return true; } });
+  function cambiarAnalitica() {
+    try { if (contando) localStorage.setItem('umami.disabled', '1'); else localStorage.removeItem('umami.disabled'); setContando(!contando); } catch { /* sin almacenamiento */ }
+  }
   const caja = useRef(null);
   const gesto = useRef(null);
 
@@ -163,6 +169,11 @@ function Burbuja() {
               {clave === 'denuncias' && pendientes > 0 && <b className="insignia">{pendientes}</b>}
             </Link>
           ))}
+          <p className="burbuja-admin-titulo mini">{t('administracion.ajustes')}</p>
+          <button type="button" role="menuitemcheckbox" aria-checked={contando} onClick={cambiarAnalitica}>
+            <BarChart3 size={16} aria-hidden /> <span>{t('administracion.contarVisitas')}</span>
+            <b className="mini texto-3" style={{ marginLeft: 'auto' }}>{contando ? t('administracion.si') : t('administracion.no')}</b>
+          </button>
         </div>
       )}
     </div>
