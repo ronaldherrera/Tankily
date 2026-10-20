@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Share, EllipsisVertical, SquarePlus } from 'lucide-react';
 import { useT } from '@/i18n/IdiomaProvider';
-import { ADSENSE_ACTIVO } from '@/lib/adsense';
+import { ADSENSE_CMP } from '@/lib/adsense';
 import { DURACION_SALIDA } from '@/lib/presencia';
 import { enModoApp, plataforma } from '@/lib/instalarApp';
 import { leerConsentimiento } from './AvisoCookies';
@@ -49,7 +49,7 @@ export default function AvisoApp() {
     // Con el aviso de cookies pendiente, se espera a que se responda
     let temporizador;
     const mostrar = () => { temporizador = setTimeout(() => setVisible(true), RETRASO); };
-    const cookiesPendientes = !ADSENSE_ACTIVO && !leerConsentimiento();
+    const cookiesPendientes = !ADSENSE_CMP && !leerConsentimiento();
     if (cookiesPendientes) window.addEventListener('tk:consentimiento', mostrar, { once: true });
     else mostrar();
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from '@/components/Enlace';
 import { useT } from '@/i18n/IdiomaProvider';
-import { ADSENSE_ACTIVO } from '@/lib/adsense';
+import { ADSENSE_CMP } from '@/lib/adsense';
 import { DURACION_SALIDA } from '@/lib/presencia';
 
 const CLAVE = 'tk-consentimiento-cookies';
@@ -19,8 +19,8 @@ export default function AvisoCookies() {
   const { t } = useT();
 
   useEffect(() => {
-    // Con AdSense activo, el aviso lo muestra el gestor de consentimiento certificado de Google
-    setVisible(!ADSENSE_ACTIVO && !leerConsentimiento());
+    // Con el gestor de consentimiento certificado de Google activo (lib/adsense.js), el aviso lo muestra él
+    setVisible(!ADSENSE_CMP && !leerConsentimiento());
   }, []);
 
   function decidir(valor) {

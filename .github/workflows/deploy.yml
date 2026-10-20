@@ -42,6 +42,7 @@ jobs:
           NEXT_PUBLIC_EMAIL_CONTACTO: ${{ vars.NEXT_PUBLIC_EMAIL_CONTACTO }}
           NEXT_PUBLIC_ADSENSE_CLIENT: ${{ vars.NEXT_PUBLIC_ADSENSE_CLIENT }}
           NEXT_PUBLIC_ADSENSE_SLOT: ${{ vars.NEXT_PUBLIC_ADSENSE_SLOT }}
+          NEXT_PUBLIC_ADSENSE_CMP: ${{ vars.NEXT_PUBLIC_ADSENSE_CMP }}
         run: npm run build
 
       - name: Enlaces internos rotos
