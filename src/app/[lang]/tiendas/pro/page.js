@@ -2,6 +2,7 @@ import Link from '@/components/Enlace';
 import { Check } from 'lucide-react';
 import { traducir } from '@/i18n/traducir';
 import { alternativas } from '@/lib/seo';
+import { PAGO_ACTIVO } from '@/lib/planPro';
 
 const EMAIL = process.env.NEXT_PUBLIC_EMAIL_CONTACTO || 'krill@tankily.com';
 
@@ -28,7 +29,8 @@ export default async function ProPage({ params }) {
       detalle: t('pro.proDetalle'),
       destacado: true,
       ventajas: t('pro.proVentajas'),
-      accion: [t('pro.proAccion'), `mailto:${EMAIL}?subject=${encodeURIComponent(t('pro.proAsunto'))}`],
+      // Con el pago de Stripe activo se contrata desde el panel de la tienda; si no, se pide por email
+      accion: [t('pro.proAccion'), PAGO_ACTIVO ? '/tiendas/gestionar/' : `mailto:${EMAIL}?subject=${encodeURIComponent(t('pro.proAsunto'))}`],
     },
   ];
 

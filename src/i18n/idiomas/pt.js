@@ -319,9 +319,9 @@ export default {
     texto: 'No Tankily, os hobbistas registram seus aquários, perguntam no fórum e procuram onde comprar. Tenha seu perfil grátis e, se quiser mais visibilidade, mude para o plano Pro.',
     gratis: 'Grátis', gratisPrecio: '0 €', gratisDetalle: 'para sempre',
     gratisVentajas: ['Perfil da loja com mapa, horário e contato', 'Avaliações de clientes', 'Publique seus produtos nos classificados', 'Mensagens diretas com aquaristas'],
-    gratisAccion: 'Criar perfil grátis', proNombre: 'Pro', proPrecio: '29 €', proDetalle: 'por mês + impostos',
+    gratisAccion: 'Criar perfil grátis', proNombre: 'Pro', proPrecio: '19 €', proDetalle: 'por mês · ou 190 € por ano (2 meses grátis). Sem fidelização.',
     proVentajas: ['Tudo do plano grátis', 'Selo de loja verificada', 'Primeiras posições no diretório da sua região', 'Anúncios em destaque nos classificados', 'Banner no feed, no fórum e nos classificados', 'Estatísticas de visitas, contatos e cliques no seu site'],
-    proAccion: 'Solicitar plano Pro', proAsunto: 'Plano Pro para minha loja', marcasTitulo: 'Marcas ou distribuidores?',
+    proAccion: 'Assinar Pro', proAsunto: 'Plano Pro para minha loja', marcasTitulo: 'Marcas ou distribuidores?',
     marcasTexto: 'Oferecemos campanhas sob medida por tipo de aquário (marinho, plantado, camarões…) e por país ou região. Escreva para',
   },
   legal: {

@@ -420,3 +420,7 @@ verify_jwt = false
 # Notificaciones push: la llaman los triggers por pg_net con la clave x-avisos
 [functions.push]
 verify_jwt = false
+
+# Avisos de Stripe (plan Pro): los protege la firma de Stripe, no un JWT de Supabase
+[functions.stripe]
+verify_jwt = false

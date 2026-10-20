@@ -337,9 +337,9 @@ export default {
     texto: 'Auf Tankily erfassen Hobbyisten ihre Becken, fragen im Forum und suchen, wo sie kaufen können. Hol dir einen kostenlosen Eintrag und wechsle für mehr Sichtbarkeit zu Pro.',
     gratis: 'Kostenlos', gratisPrecio: '0 €', gratisDetalle: 'für immer',
     gratisVentajas: ['Geschäftsprofil mit Karte, Öffnungszeiten und Kontakt', 'Kundenbewertungen', 'Stell deine Produkte in den Marktplatz', 'Direktnachrichten mit Aquarianern'],
-    gratisAccion: 'Kostenlos eintragen', proNombre: 'Pro', proPrecio: '29 €', proDetalle: 'pro Monat zzgl. MwSt.',
+    gratisAccion: 'Kostenlos eintragen', proNombre: 'Pro', proPrecio: '19 €', proDetalle: 'pro Monat · oder 190 € im Jahr (2 Monate gratis). Jederzeit kündbar.',
     proVentajas: ['Alles aus dem kostenlosen Tarif', 'Abzeichen „Verifizierter Händler“', 'Top-Platzierung im Verzeichnis deiner Gegend', 'Hervorgehobene Anzeigen im Marktplatz', 'Banner im Feed, im Forum und im Marktplatz', 'Statistiken zu Besuchen, Kontakten und Klicks auf deine Website'],
-    proAccion: 'Pro-Tarif anfragen', proAsunto: 'Pro-Tarif für mein Geschäft', marcasTitulo: 'Marken oder Großhändler?',
+    proAccion: 'Pro buchen', proAsunto: 'Pro-Tarif für mein Geschäft', marcasTitulo: 'Marken oder Großhändler?',
     marcasTexto: 'Wir bieten maßgeschneiderte Kampagnen nach Beckentyp (Riff, Pflanzen, Garnelen…) und nach Land oder Region. Schreib uns an',
   },
   legal: {

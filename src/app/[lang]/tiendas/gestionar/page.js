@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Link, { useNavegar } from '@/components/Enlace';
 import { BadgeCheck, Crown } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
@@ -16,6 +16,7 @@ import { esPro } from '@/lib/tiendas';
 import { geocodificarTienda } from '@/lib/geocodificar';
 import Selector from '@/components/Selector';
 import RecortarImagen from '@/components/RecortarImagen';
+import PlanPro from '@/components/tiendas/PlanPro';
 
 // Logo cuadrado y portada 3:1
 const RECORTES = {
@@ -111,9 +112,9 @@ export default function GestionarTienda() {
             {existente.verificada ? <><BadgeCheck size={18} style={{ color: 'var(--agua)' }} /> {t('tiendas.gestionar.verificada')}</> : t('tiendas.gestionar.sinVerificar')}
             <span className="texto-3">·</span>
             <span>{t('tiendas.gestionar.plan', { plan: esPro(existente) ? t('tiendas.gestionar.pro') : t('tiendas.gestionar.gratuito') })}</span>
-            {!esPro(existente) && <Link href="/tiendas/pro/" className="btn btn-s" style={{ marginLeft: 'auto' }}><Crown size={14} /> {t('tiendas.gestionar.pasarPro')}</Link>}
           </div>
         )}
+        {existente && <Suspense><PlanPro tienda={existente} onActualizada={setExistente} /></Suspense>}
         {existente && <EstadisticasTienda tienda={existente} />}
 
         <section className="cristal" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>

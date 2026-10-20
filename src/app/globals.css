@@ -1540,6 +1540,14 @@ h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
 .admin-lista > li { padding: 14px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .admin-acciones { display: flex; gap: 6px; flex-wrap: wrap; }
 
+/* Plan Pro en el panel de la tienda */
+.plan-pro-panel { padding: 20px; display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 2; }
+.plan-pro-panel h2 { display: flex; align-items: center; gap: 8px; }
+.plan-pro-panel h2 svg { color: var(--aviso); }
+.plan-pro-opciones { display: flex; gap: 10px; flex-wrap: wrap; }
+.plan-pro-opciones .chip { margin-left: 4px; height: 22px; font-size: 0.72rem; }
+.texto-aviso { color: var(--aviso); }
+
 /* Contenido propio ocultado por denuncias */
 .chip.etiqueta-oculto { color: var(--aviso); border-color: color-mix(in oklab, var(--aviso) 40%, transparent); cursor: help; }
 

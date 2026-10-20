@@ -324,9 +324,9 @@ export default {
     texto: 'Sur Tankily, les passionnés enregistrent leurs bacs, posent leurs questions sur le forum et cherchent où acheter. Profite d’une fiche gratuite et passe en Pro pour plus de visibilité.',
     gratis: 'Gratuite', gratisPrecio: '0 €', gratisDetalle: 'pour toujours',
     gratisVentajas: ['Fiche magasin avec carte, horaires et contact', 'Avis clients', 'Publie tes produits dans les annonces', 'Messages directs avec les aquariophiles'],
-    gratisAccion: 'Créer une fiche gratuite', proNombre: 'Pro', proPrecio: '29 €', proDetalle: 'par mois HT',
+    gratisAccion: 'Créer une fiche gratuite', proNombre: 'Pro', proPrecio: '19 €', proDetalle: 'par mois · ou 190 € par an (2 mois offerts). Sans engagement.',
     proVentajas: ['Tout ce qu’offre la version gratuite', 'Badge de magasin vérifié', 'Premières places dans l’annuaire de ta région', 'Annonces à la une', 'Bannière dans le fil, le forum et les annonces', 'Statistiques de visites, de contacts et de clics vers votre site'],
-    proAccion: 'Demander l’offre Pro', proAsunto: 'Offre Pro pour mon magasin', marcasTitulo: 'Marques ou distributeurs ?',
+    proAccion: 'Passer à Pro', proAsunto: 'Offre Pro pour mon magasin', marcasTitulo: 'Marques ou distributeurs ?',
     marcasTexto: 'Nous proposons des campagnes sur mesure par type de bac (récifal, planté, crevettes…) et par pays ou région. Écris-nous à',
   },
   legal: {

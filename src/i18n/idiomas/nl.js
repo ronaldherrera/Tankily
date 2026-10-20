@@ -309,9 +309,9 @@ export default {
     texto: 'Op Tankily leggen hobbyisten hun bakken vast, stellen ze vragen op het forum en zoeken ze waar ze kunnen kopen. Krijg een gratis vermelding en upgrade naar Pro voor meer zichtbaarheid.',
     gratis: 'Gratis', gratisPrecio: '€ 0', gratisDetalle: 'voor altijd',
     gratisVentajas: ['Winkelprofiel met kaart, openingstijden en contact', 'Klantbeoordelingen', 'Zet je producten op de marktplaats', 'Directe berichten met aquarianen'],
-    gratisAccion: 'Gratis vermelding maken', proNombre: 'Pro', proPrecio: '€ 29', proDetalle: 'per maand excl. btw',
+    gratisAccion: 'Gratis vermelding maken', proNombre: 'Pro', proPrecio: '€ 19', proDetalle: 'per maand · of € 190 per jaar (2 maanden gratis). Altijd opzegbaar.',
     proVentajas: ['Alles uit het gratis abonnement', 'Badge “Geverifieerde winkel”', 'Toppositie in de gids van je regio', 'Uitgelichte advertenties op de marktplaats', 'Banner op de tijdlijn, het forum en de marktplaats', 'Statistieken over bezoeken, contacten en klikken naar je website'],
-    proAccion: 'Pro-abonnement aanvragen', proAsunto: 'Pro-abonnement voor mijn winkel', marcasTitulo: 'Merken of groothandels?',
+    proAccion: 'Pro nemen', proAsunto: 'Pro-abonnement voor mijn winkel', marcasTitulo: 'Merken of groothandels?',
     marcasTexto: 'We bieden campagnes op maat per type bak (rif, planten, garnalen…) en per land of regio. Mail ons op',
   },
   legal: {

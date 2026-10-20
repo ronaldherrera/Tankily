@@ -312,9 +312,9 @@ export default {
     texto: 'Su Tankily gli appassionati registrano le loro vasche, chiedono nel forum e cercano dove comprare. Ottieni una scheda gratuita e passa a Pro per avere più visibilità.',
     gratis: 'Gratis', gratisPrecio: '0 €', gratisDetalle: 'per sempre',
     gratisVentajas: ['Scheda del negozio con mappa, orari e contatti', 'Recensioni dei clienti', 'Pubblica i tuoi prodotti nel mercatino', 'Messaggi diretti con gli acquariofili'],
-    gratisAccion: 'Crea scheda gratuita', proNombre: 'Pro', proPrecio: '29 €', proDetalle: 'al mese + IVA',
+    gratisAccion: 'Crea scheda gratuita', proNombre: 'Pro', proPrecio: '19 €', proDetalle: 'al mese · o 190 € all’anno (2 mesi gratis). Senza vincoli.',
     proVentajas: ['Tutto ciò che offre il piano gratuito', 'Badge di negozio verificato', 'Prime posizioni nell’elenco della tua zona', 'Annunci in evidenza nel mercatino', 'Banner in bacheca, nel forum e nel mercatino', 'Statistiche di visite, contatti e clic sul tuo sito'],
-    proAccion: 'Richiedi il piano Pro', proAsunto: 'Piano Pro per il mio negozio', marcasTitulo: 'Marchi o distributori?',
+    proAccion: 'Attiva Pro', proAsunto: 'Piano Pro per il mio negozio', marcasTitulo: 'Marchi o distributori?',
     marcasTexto: 'Offriamo campagne su misura per tipo di vasca (reef, piantumato, gamberetti…) e per paese o regione. Scrivici a',
   },
   legal: {

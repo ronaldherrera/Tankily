@@ -314,9 +314,9 @@ export default {
     texto: 'W Tankily hobbyści zapisują swoje zbiorniki, pytają na forum i szukają, gdzie kupić. Skorzystaj z darmowego wpisu, a dla większej widoczności przejdź na plan Pro.',
     gratis: 'Darmowy', gratisPrecio: '0 €', gratisDetalle: 'na zawsze',
     gratisVentajas: ['Profil sklepu z mapą, godzinami otwarcia i kontaktem', 'Opinie klientów', 'Dodawaj swoje produkty do ogłoszeń', 'Bezpośrednie wiadomości z akwarystami'],
-    gratisAccion: 'Utwórz darmowy wpis', proNombre: 'Pro', proPrecio: '29 €', proDetalle: 'miesięcznie + VAT',
+    gratisAccion: 'Utwórz darmowy wpis', proNombre: 'Pro', proPrecio: '19 €', proDetalle: 'miesięcznie · lub 190 € rocznie (2 miesiące gratis). Bez zobowiązań.',
     proVentajas: ['Wszystko z planu darmowego', 'Odznaka zweryfikowanego sklepu', 'Najwyższe pozycje w katalogu twojej okolicy', 'Wyróżnione ogłoszenia', 'Baner w aktualnościach, na forum i w ogłoszeniach', 'Statystyki wizyt, kontaktów i kliknięć w Twoją stronę'],
-    proAccion: 'Poproś o plan Pro', proAsunto: 'Plan Pro dla mojego sklepu', marcasTitulo: 'Marki lub dystrybutorzy?',
+    proAccion: 'Kup Pro', proAsunto: 'Plan Pro dla mojego sklepu', marcasTitulo: 'Marki lub dystrybutorzy?',
     marcasTexto: 'Przygotowujemy kampanie na miarę według typu zbiornika (rafa, roślinne, krewetki…) oraz kraju lub regionu. Napisz do nas na adres',
   },
   legal: {
