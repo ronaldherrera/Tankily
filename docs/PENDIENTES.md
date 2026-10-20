@@ -23,6 +23,8 @@ Cosas que no puedo hacer yo porque necesitan tus cuentas, tus datos, dinero o tu
 
 ## 🟠 Primeras semanas
 
+- [ ] **Vídeos cortos en las publicaciones** (20/10/2026): R2 activado, bucket `tankily-media` creado, Worker desplegado en `https://tankily-media.tankily.workers.dev` (subdominio de la cuenta: tankily.workers.dev) y migraciones de la columna `video` aplicadas. **Falta:** poner la variable **`NEXT_PUBLIC_MEDIA_URL` = `https://tankily-media.tankily.workers.dev`** en GitHub → Settings → Secrets and variables → Actions → Variables, hacer commit y push, y probar a subir un vídeo desde el móvil. Para volver a desplegar el Worker: `cd worker/media && npx wrangler deploy`.
+
 - [ ] **Difusión en grupos de Facebook** (empezada el 20/10/2026; kit, normas de cada grupo y registro en `marca/redes/difusion/GRUPOS-FACEBOOK.txt`):
   - [ ] **ACUARIOS MARINOS ESPAÑA**: la publicación de Ronald está pendiente de aprobación. Cuando la aprueben, poner el primer comentario con `https://tankily.com` (puede hacerlo Claude).
   - [ ] **Responder los comentarios** de las publicaciones del 20/10 en acuarios plantados, Quito, Perú y Valencia y Castellón (publicadas como la página Tankily), sobre todo en las primeras horas.

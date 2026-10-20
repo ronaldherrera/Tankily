@@ -1,0 +1,14 @@
+# Worker de los vídeos de Tankily (ver src/index.js). Desplegar: npx wrangler deploy (desde worker/media)
+name = "tankily-media"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "tankily-media"
+
+[vars]
+SUPABASE_URL = "https://ivizkgmogzvscygcxepy.supabase.co"
+# Clave publicable de Supabase: es pública (la misma que lleva la web), no es un secreto
+SUPABASE_ANON_KEY = "sb_publishable_QKt7_9_6pPr8JluoOfnrXQ_MrPZHiUq"
+ORIGENES = "https://tankily.com,https://www.tankily.com,http://localhost:3210"

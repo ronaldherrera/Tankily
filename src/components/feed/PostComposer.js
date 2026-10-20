@@ -11,12 +11,16 @@ import { detectarIdioma } from '@/lib/traduccion';
 import { mensajeError } from '@/lib/errores';
 import Selector from '@/components/Selector';
 import { evento } from '@/lib/analitica';
+import SubidorVideo from './SubidorVideo';
 
 export default function PostComposer({ onPublicado, tanqueFijo = null }) {
   const { usuario, perfil } = useSesion();
   const { t, lang } = useT();
   const [texto, setTexto] = useState('');
   const [imagenes, setImagenes] = useState([]);
+  // Un vídeo o fotos, no las dos cosas (como en la mayoría de redes)
+  const [video, setVideo] = useState(null);
+  const [preparandoVideo, setPreparandoVideo] = useState(false);
   const [tanques, setTanques] = useState([]);
   const [tanqueId, setTanqueId] = useState(tanqueFijo ? String(tanqueFijo) : '');
   const [enviando, setEnviando] = useState(false);
@@ -31,7 +35,7 @@ export default function PostComposer({ onPublicado, tanqueFijo = null }) {
   if (!usuario) return null;
 
   const tanqueElegido = tanques.find((t) => String(t.id) === tanqueId);
-  const puedePublicar = (texto.trim() || imagenes.length) && !enviando;
+  const puedePublicar = (texto.trim() || imagenes.length || video) && !enviando && !preparandoVideo;
 
   async function publicar(e) {
     e.preventDefault();
@@ -40,7 +44,7 @@ export default function PostComposer({ onPublicado, tanqueFijo = null }) {
     setError('');
     const { data, error } = await supabase
       .from('publicaciones')
-      .insert({ contenido: texto.trim(), imagenes, tanque_id: tanqueId ? Number(tanqueId) : null, idioma: await detectarIdioma(texto, lang) })
+      .insert({ contenido: texto.trim(), imagenes, video, tanque_id: tanqueId ? Number(tanqueId) : null, idioma: await detectarIdioma(texto, lang) })
       .select(SELECT_POST)
       .single();
     setEnviando(false);
@@ -48,9 +52,10 @@ export default function PostComposer({ onPublicado, tanqueFijo = null }) {
       setError(t('compositor.error', { error: mensajeError(error, t) }));
       return;
     }
-    evento('publicacion', { tipo: imagenes.length ? 'con_fotos' : 'texto' });
+    evento('publicacion', { tipo: video ? 'con_video' : imagenes.length ? 'con_fotos' : 'texto' });
     setTexto('');
     setImagenes([]);
+    setVideo(null);
     onPublicado?.(data);
   }
 
@@ -67,7 +72,10 @@ export default function PostComposer({ onPublicado, tanqueFijo = null }) {
           aria-label={t('compositor.etiqueta')}
         />
       </div>
-      <SubidorImagenes valor={imagenes} onCambio={setImagenes} carpeta="posts" compacto={false} />
+      <div className="compositor-adjuntos">
+        {!video && !preparandoVideo && <SubidorImagenes valor={imagenes} onCambio={setImagenes} carpeta="posts" compacto={false} />}
+        {!imagenes.length && <SubidorVideo valor={video} onCambio={setVideo} onOcupado={setPreparandoVideo} />}
+      </div>
       {error && <p className="aviso error">{error}</p>}
       <div className="compositor-pie">
         {!tanqueFijo && tanques.length > 0 && (

@@ -68,3 +68,6 @@ marca/redes/salida-v2/
 marca/redes/publicaciones/
 # Vídeos de Wikimedia Commons para los ganchos (se vuelven a descargar desde creditos.json)
 marca/redes/videos/*.webm
+
+# Cloudflare Worker de los vídeos: caché local de wrangler
+worker/media/.wrangler/

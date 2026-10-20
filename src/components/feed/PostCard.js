@@ -15,6 +15,8 @@ import CommentSection, { precargarComentarios } from './CommentSection';
 import Reportar from '@/components/Reportar';
 import { usePresencia } from '@/lib/presencia';
 import { borrarImagenes } from '@/lib/imagenes';
+import { borrarVideo } from '@/lib/videos';
+import VideoPost from './VideoPost';
 import { evento } from '@/lib/analitica';
 import { enlaceTanque } from '@/lib/enlaces';
 
@@ -39,6 +41,7 @@ function Contenido({ post, sinEnlaces = false }) {
         <TextoTraducible tabla="publicaciones" id={post.id} texto={post.contenido} idioma={post.idioma} sinEnlaces={sinEnlaces} />
       )}
       <Galeria imagenes={post.imagenes} sinEnlaces={sinEnlaces} />
+      <VideoPost video={post.video} />
     </>
   );
 }
@@ -147,7 +150,7 @@ export default function PostCard({ post, meGusta = false, miEco, onBorrado, dest
   async function borrar() {
     setMenu(false);
     const { error } = await supabase.from('publicaciones').delete().eq('id', post.id);
-    if (!error) borrarImagenes(post.imagenes);
+    if (!error) { borrarImagenes(post.imagenes); borrarVideo(post.video); }
     if (!error) {
       tostada(t('post.eliminada'));
       onBorrado?.(post.id);

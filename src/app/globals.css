@@ -928,6 +928,24 @@ select.entrada option { background: var(--superficie); }
 .compositor { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
 .compositor-texto { border: 0; background: transparent; padding: 8px 0; min-height: 64px; font-size: 1.05rem; box-shadow: none !important; }
 .compositor-pie { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--linea); padding-top: 12px; position: relative; z-index: 2; }
+.compositor-adjuntos { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; position: relative; z-index: 2; }
+/* Vídeo de publicación: tamaño natural (vertical u horizontal) sin pasarse de alto; arranca sin sonido al verse */
+.video-post { position: relative; margin-top: 10px; width: 100%; max-width: 420px; aspect-ratio: var(--proporcion); max-height: 70dvh; border-radius: var(--radio-m); overflow: hidden; background: #000; z-index: 2; }
+.video-post video { width: 100%; height: 100%; object-fit: contain; display: block; cursor: pointer; }
+.video-post-sonido { position: absolute; right: 10px; bottom: 10px; width: 34px; height: 34px; border: 0; border-radius: 50%; display: grid; place-items: center; background: rgba(0, 0, 0, 0.55); color: #fff; cursor: pointer; }
+.editor-video { display: flex; flex-direction: column; gap: 12px; }
+.editor-video-marco { position: relative; width: 100%; max-height: 52dvh; margin: 0 auto; border-radius: 12px; overflow: hidden; background: #000; touch-action: none; }
+.editor-video-marco video { width: 100%; height: 100%; display: block; pointer-events: none; }
+.editor-video-marco.movible { cursor: grab; }
+.editor-video-tramo { display: flex; flex-direction: column; gap: 6px; }
+.editor-video-tramo label { display: flex; flex-direction: column; gap: 2px; }
+.editor-video-tramo input[type='range'] { width: 100%; accent-color: var(--agua); }
+.subidor-video { position: relative; width: 160px; border-radius: 12px; overflow: hidden; background: #000; }
+.subidor-video video { width: 100%; max-height: 220px; display: block; }
+.subidor-video-quitar { position: absolute; top: 4px; right: 4px; width: 26px !important; height: 26px !important; background: rgba(0, 0, 0, 0.65); }
+.subidor-video-progreso { display: flex; flex-direction: column; gap: 6px; min-width: 220px; }
+.barra-progreso { height: 6px; border-radius: 3px; background: rgba(var(--c-tinta), 0.1); overflow: hidden; }
+.barra-progreso > div { height: 100%; background: var(--agua); transition: width 0.2s; }
 
 .pildora-nuevos { position: sticky; top: calc(16px + var(--seg-arriba)); z-index: 20; align-self: center; box-shadow: 0 10px 30px -8px var(--agua); }
 @media (max-width: 720px) { .pildora-nuevos { top: 70px; } }

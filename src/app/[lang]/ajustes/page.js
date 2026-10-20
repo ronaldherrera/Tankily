@@ -10,6 +10,7 @@ import { SelectorIdiomaLista } from '@/components/shell/SelectorIdioma';
 import SelectorUnidades from '@/components/shell/SelectorUnidades';
 import { useT } from '@/i18n/IdiomaProvider';
 import { borrarMisArchivos } from '@/lib/imagenes';
+import { borrarMisVideos } from '@/lib/videos';
 
 const TABLAS_PROPIAS = [
   ['perfiles', 'id'], ['tanques', 'usuario_id'], ['publicaciones', 'usuario_id'], ['comentarios', 'usuario_id'],
@@ -62,6 +63,7 @@ export default function AjustesPage() {
   async function eliminarCuenta() {
     // Primero las fotos (no se borran en cascada); si fallan, la cuenta se elimina igualmente
     try { await borrarMisArchivos(usuario.id); } catch { /* sigue */ }
+    await borrarMisVideos(); // los vídeos están en Cloudflare R2, no en Supabase
     const { error } = await supabase.rpc('eliminar_mi_cuenta');
     if (error) return tostada(t('ajustes.errorEliminar', { error: error.message }));
     await supabase.auth.signOut();
