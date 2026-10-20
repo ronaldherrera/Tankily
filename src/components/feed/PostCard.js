@@ -76,6 +76,16 @@ export default function PostCard({ post, meGusta = false, miEco, onBorrado, dest
     return () => { document.removeEventListener('pointerdown', fuera); document.removeEventListener('keydown', escape); };
   }, [menuEco]);
 
+  // Menú de opciones (⋯): en táctil no hay «salir con el ratón», así que también se cierra al tocar fuera o con Escape
+  const cajaMenu = useRef(null);
+  useEffect(() => {
+    if (!menu) return undefined;
+    const fuera = (e) => !cajaMenu.current?.contains(e.target) && setMenu(false);
+    const escape = (e) => e.key === 'Escape' && setMenu(false);
+    document.addEventListener('pointerdown', fuera);
+    document.addEventListener('keydown', escape);
+    return () => { document.removeEventListener('pointerdown', fuera); document.removeEventListener('keydown', escape); };
+  }, [menu]);
 
   async function alternarGusta() {
     if (!usuario) return tostada(t('post.entraGusta'));
@@ -165,7 +175,7 @@ export default function PostCard({ post, meGusta = false, miEco, onBorrado, dest
           </div>
           <ChipTanque tanque={objetivo.tanque} />
         </div>
-        <div style={{ position: 'relative' }}>
+        <div ref={cajaMenu} style={{ position: 'relative' }}>
           <button className="btn btn-fantasma btn-icono btn-s" onClick={() => setMenu(!menu)} aria-label={t('comun.opciones')} aria-expanded={menu}>
             <MoreHorizontal size={18} />
           </button>

@@ -358,8 +358,9 @@ export default function AppShell({ children }) {
         <div className="barra-movil-pestanas">
           <Link href="/" aria-current={pathname === '/' ? 'page' : undefined}><Waves size={22} />{t('nav.muro')}</Link>
           <Link href="/tanques/" aria-current={activo(pathname, '/tanques/') || pathname.startsWith('/tanque') ? 'page' : undefined}><Fish size={22} />{t('nav.tanques')}</Link>
+          {/* La wiki va en la barra (es lo que más busca quien llega de fuera); el mercado, en "Más" */}
+          <Link href="/wiki/" aria-current={activo(pathname, '/wiki/') ? 'page' : undefined}><BookOpen size={22} />{t('nav.wiki')}</Link>
           <Link href="/foro/" aria-current={activo(pathname, '/foro/') ? 'page' : undefined}><MessagesSquare size={22} />{t('nav.foro')}</Link>
-          <Link href="/mercado/" aria-current={activo(pathname, '/mercado/') ? 'page' : undefined}><Tag size={22} />{t('nav.mercado')}</Link>
           <button
             type="button"
             onClick={() => setMasAbierto((v) => !v)}

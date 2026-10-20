@@ -97,7 +97,9 @@ export default function Selector({
     if (!abierto) { preparado.current = false; return; }
     if (!pos || preparado.current) return;
     preparado.current = true;
-    (conBuscador ? buscador.current : lista.current)?.focus({ preventScroll: true });
+    // En táctil no se enfoca el buscador: sacaría el teclado y taparía la lista aunque solo se quiera elegir
+    const tactil = window.matchMedia?.('(hover: none) and (pointer: coarse)').matches;
+    (conBuscador && !tactil ? buscador.current : lista.current)?.focus({ preventScroll: true });
     lista.current?.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: 'nearest' });
   }, [abierto, pos, conBuscador]);
 

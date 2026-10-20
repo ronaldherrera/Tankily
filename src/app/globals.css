@@ -420,6 +420,8 @@ html.refraccion :is(.modal, .ficha-especie).cristal-refracta {
     gap: 6px;
   }
   .menu-mas-lista { display: flex; flex-direction: column; gap: 2px; }
+  /* Separa los grupos del menú "Más": cuenta, secciones, secundario y preferencias */
+  .menu-mas-separador { border: 0; height: 1px; margin: 4px 12px; background: var(--linea); }
   .menu-mas-unidades { padding: 10px 12px 12px; border-top: 1px solid var(--linea); }
   /* Las filas brotan una tras otra mientras la barra se estira */
   .barra-movil.abierta .barra-movil-desplazable [style*='--i'] {
@@ -515,7 +517,7 @@ html.refraccion :is(.modal, .ficha-especie).cristal-refracta {
 }
 .entrada-ojo:hover, .entrada-ojo:focus-visible { color: var(--texto); background: rgba(var(--c-tinta), 0.08); }
 .campo small.campo-error { color: #ff8a8a; }
-.campo > span, .campo > legend, .compat-herramienta .campo > label { font-size: 0.85rem; font-weight: 600; color: var(--texto-2); }
+.campo > span, .campo > legend, .campo > label > span, .compat-herramienta .campo > label { font-size: 0.85rem; font-weight: 600; color: var(--texto-2); }
 .campo > legend { padding: 0; margin-bottom: 6px; }
 .campo > small { color: var(--texto-3); font-size: 0.78rem; }
 .entrada {
@@ -1747,8 +1749,17 @@ h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
 .burbuja-admin-menu.a-la-izquierda { transform-origin: top right; }
 .burbuja-admin-menu.hacia-arriba { transform-origin: bottom left; }
 .burbuja-admin-menu.hacia-arriba.a-la-izquierda { transform-origin: bottom right; }
-.burbuja-admin-menu a { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; color: var(--texto-2); font-size: 0.9rem; position: relative; z-index: 2; }
-.burbuja-admin-menu a:hover { background: rgba(var(--c-tinta), 0.08); color: var(--texto); }
+.burbuja-admin-menu a, .burbuja-admin-menu button { width: 100%; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; }
+.burbuja-admin-menu a, .burbuja-admin-menu button { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; color: var(--texto-2); font-size: 0.9rem; position: relative; z-index: 2; }
+.burbuja-admin-menu a:hover, .burbuja-admin-menu button:hover { background: rgba(var(--c-tinta), 0.08); color: var(--texto); }
 .burbuja-admin-menu a .insignia { margin-left: auto; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #ff6b81; color: #fff; font-size: 0.66rem; font-weight: 700; display: grid; place-items: center; }
 .burbuja-admin-titulo { padding: 6px 12px 4px; color: var(--texto-3); text-transform: uppercase; letter-spacing: 0.06em; position: relative; z-index: 2; }
 
+/* En pantallas táctiles (sobre todo iPhone), un campo con letra de menos de 16 px hace zoom al tocarlo y descoloca la
+   página: ningún campo baja de 16 px ahí, aunque su estilo pida menos */
+@media (hover: none) and (pointer: coarse) {
+  input, textarea, select { font-size: max(16px, 1em) !important; }
+  /* Botones pequeños: 34 px se tocan mal con el dedo */
+  .btn-s { height: 40px; }
+  .btn-icono.btn-s { width: 40px; }
+}

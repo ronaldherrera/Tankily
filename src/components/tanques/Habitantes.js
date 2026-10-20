@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import Link from '@/components/Enlace';
 import { BookOpen, Trash2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
@@ -41,6 +41,16 @@ function FormularioHabitante({ tanque, habitantes, mediciones, onGuardado, onCer
   const [h, setH] = useState({ nombre: '', nombre_cientifico: '', categoria: 'pez', cantidad: 1, wiki_ruta: null, notas: '' });
   const [abierto, setAbierto] = useState(false);
   const [guardando, setGuardando] = useState(false);
+  const idEspecie = useId();
+  const zonaEspecie = useRef(null);
+
+  // Tocar fuera del buscador cierra las sugerencias (si no, se quedaban tapando los campos de debajo)
+  useEffect(() => {
+    if (!abierto) return undefined;
+    const fuera = (e) => { if (!zonaEspecie.current?.contains(e.target)) setAbierto(false); };
+    document.addEventListener('pointerdown', fuera);
+    return () => document.removeEventListener('pointerdown', fuera);
+  }, [abierto]);
 
   const sugerencias = useMemo(() => {
     const q = normalizar(h.nombre.trim());
@@ -84,30 +94,35 @@ function FormularioHabitante({ tanque, habitantes, mediciones, onGuardado, onCer
   return (
     <Modal titulo={t('habitantesForm.anadir')} onCerrar={onCerrar}>
       <form onSubmit={guardar} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <label className="campo" style={{ position: 'relative' }}>
-          <span>{t('habitantesForm.especie')}</span>
-          <input
-            className="entrada"
-            required
-            maxLength={80}
-            autoComplete="off"
-            value={h.nombre}
-            onChange={(e) => { setH({ ...h, nombre: e.target.value, wiki_ruta: null }); setAbierto(true); }}
-            onFocus={() => setAbierto(true)}
-            placeholder={t('habitantesForm.especieEj')}
-          />
+        {/* Un div y no un <label>: dentro de un label, tocar una sugerencia volvía a enfocar el campo y reabría la lista */}
+        <div className="campo">
+          <label htmlFor={idEspecie}><span>{t('habitantesForm.especie')}</span></label>
+          <div ref={zonaEspecie} style={{ position: 'relative' }}>
+            <input
+              id={idEspecie}
+              className="entrada"
+              required
+              maxLength={80}
+              autoComplete="off"
+              value={h.nombre}
+              onChange={(e) => { setH({ ...h, nombre: e.target.value, wiki_ruta: null }); setAbierto(true); }}
+              onFocus={() => { if (!h.wiki_ruta) setAbierto(true); }}
+              onKeyDown={(e) => { if (e.key === 'Escape' && abierto) { e.stopPropagation(); setAbierto(false); } }}
+              placeholder={t('habitantesForm.especieEj')}
+            />
+            {abierto && sugerencias.length > 0 && (
+              <div className="sugerencias cristal">
+                {sugerencias.map((e) => (
+                  <button type="button" key={e.nombre} onClick={() => elegir(e)}>
+                    <img loading="lazy" src={encodeURI(e.imagen)} alt="" />
+                    <span>{e.comun && e.comun !== e.nombre && <>{e.comun} </>}<em>{e.nombre}</em><br /><span className="mini texto-3">{t(`habitantes.${e.categoria}`)} · WikiTank</span></span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <small>{t('habitantesForm.enlazara')}</small>
-          {abierto && sugerencias.length > 0 && (
-            <div className="sugerencias cristal">
-              {sugerencias.map((e) => (
-                <button type="button" key={e.nombre} onClick={() => elegir(e)}>
-                  <img loading="lazy" src={encodeURI(e.imagen)} alt="" />
-                  <span>{e.comun && e.comun !== e.nombre && <>{e.comun} </>}<em>{e.nombre}</em><br /><span className="mini texto-3">{t(`habitantes.${e.categoria}`)} · WikiTank</span></span>
-                </button>
-              ))}
-            </div>
-          )}
-        </label>
+        </div>
         <div className="fila-campos">
           <label className="campo">
             <span>{t('habitantesForm.categoria')}</span>
