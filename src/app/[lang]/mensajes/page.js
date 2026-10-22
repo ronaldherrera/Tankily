@@ -11,11 +11,12 @@ import { Avatar, RequiereSesion, Vacio, Cargando, useTostada } from '@/component
 import { useT } from '@/i18n/IdiomaProvider';
 import { useMensajeria, perfilDe } from '@/lib/mensajeria';
 import { mensajeError } from '@/lib/errores';
+import TextoTraducible from '@/components/feed/TextoTraducible';
 
 function Bandeja() {
   const { usuario, cargando } = useSesion();
   const router = useNavegar();
-  const { t } = useT();
+  const { t, lang } = useT();
   const tostada = useTostada();
   const params = useSearchParams();
   const con = params.get('con');
@@ -57,7 +58,7 @@ function Bandeja() {
     if (!contenido || !con) return;
     setTexto('');
     try {
-      await enviarMensaje({ con, contenido, anuncioId: anuncioId && !hilo.length ? anuncioId : null });
+      await enviarMensaje({ con, contenido, anuncioId: anuncioId && !hilo.length ? anuncioId : null, lang });
     } catch (error) {
       setTexto(contenido);
       tostada(mensajeError(error, t));
@@ -77,7 +78,7 @@ function Bandeja() {
                 <Avatar perfil={c.persona} tamano={40} />
                 <span style={{ flex: 1, minWidth: 0 }}>
                   <strong style={{ display: 'block' }}>{c.persona.nombre || c.persona.usuario}</strong>
-                  <span className="mini texto-3" style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.ultimo.contenido}</span>
+                  <span className="mini texto-3" style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}><TextoTraducible compacto tabla="mensajes" id={c.ultimo.id} texto={c.ultimo.contenido} idioma={c.ultimo.emisor_id === usuario.id ? null : c.ultimo.idioma} render={(x) => x} /></span>
                 </span>
                 {c.sinLeer > 0 ? <b className="insignia-mensajes">{c.sinLeer}</b> : <span className="mini texto-3">{formatRelativeTime(c.ultimo.creado_en)}</span>}
               </Link>
@@ -98,7 +99,7 @@ function Bandeja() {
                 {hilo.map((m) => (
                   <div key={m.id} className={`burbuja${m.emisor_id === usuario.id ? ' mia' : ''}${m.enviando ? ' enviando' : ''}`}>
                     {m.anuncio && <Link href={`/mercado/anuncio/?id=${m.anuncio.id}`} className="mini" style={{ display: 'flex', gap: 4, alignItems: 'center', opacity: 0.8 }}><Tag size={12} /> {m.anuncio.titulo}</Link>}
-                    <p className="prosa">{m.contenido}</p>
+                    <p className="prosa"><TextoTraducible tabla="mensajes" id={m.id} texto={m.contenido} idioma={m.emisor_id === usuario.id ? null : m.idioma} render={(x) => x} /></p>
                     <span className="mini" style={{ opacity: 0.6 }}>{formatRelativeTime(m.creado_en)}</span>
                   </div>
                 ))}

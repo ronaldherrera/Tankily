@@ -8,6 +8,7 @@
 // responda el servidor.
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from './supabase';
+import { detectarIdioma } from './traduccion';
 
 export const PERFIL_CHAT = 'id, usuario, nombre, avatar_url';
 const SELECT = `*, emisor:perfiles!emisor_id(${PERFIL_CHAT}), receptor:perfiles!receptor_id(${PERFIL_CHAT}), anuncio:anuncios(id, titulo)`;
@@ -72,8 +73,9 @@ export function useMensajeria(usuario, activo = true) {
     [mensajes],
   );
 
-  // Se pinta al instante (marcado como "enviando") y se sustituye por el real cuando responde el servidor
-  const enviar = useCallback(async ({ con, contenido, anuncioId = null }) => {
+  // Se pinta al instante (marcado como "enviando") y se sustituye por el real cuando responde el servidor.
+  // Se guarda en qué idioma está escrito (lang: el de la interfaz, si no se detecta) para traducirlo a quien lo lee
+  const enviar = useCallback(async ({ con, contenido, anuncioId = null, lang }) => {
     const provisional = {
       id: `enviando-${Date.now()}`, emisor_id: usuario?.id, receptor_id: con, contenido, leido: false,
       creado_en: new Date().toISOString(), anuncio_id: anuncioId ? Number(anuncioId) : null, enviando: true,
@@ -89,7 +91,7 @@ export function useMensajeria(usuario, activo = true) {
       return [...(ms || []), provisional];
     });
     const { data, error } = await supabase.from('mensajes')
-      .insert({ receptor_id: con, contenido, anuncio_id: anuncioId ? Number(anuncioId) : null })
+      .insert({ receptor_id: con, contenido, anuncio_id: anuncioId ? Number(anuncioId) : null, idioma: await detectarIdioma(contenido, lang) })
       .select(SELECT).single();
     if (error) {
       setMensajes((ms) => (ms || []).filter((m) => m.id !== provisional.id));

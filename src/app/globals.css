@@ -687,6 +687,8 @@ select.entrada option { background: var(--superficie); }
   overflow: hidden;
   box-shadow: 0 0 0 1px var(--linea-fuerte);
 }
+/* Sin foto: silueta neutra con los colores de la marca */
+.avatar-defecto svg { fill: var(--agua-texto); opacity: 0.85; }
 
 .separador { height: 1px; background: var(--linea); border: 0; }
 
@@ -1597,6 +1599,33 @@ h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
 .admin-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .admin-lista > li { padding: 14px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .admin-acciones { display: flex; gap: 6px; flex-wrap: wrap; }
+.admin-cifras > .cifra-enlace { display: flex; flex-direction: column; gap: 2px; padding: 14px; border-radius: var(--radio-m); background: rgba(var(--c-tinta), 0.05); border: 1px solid var(--linea); text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.admin-cifras > .cifra-enlace:hover { border-color: color-mix(in oklab, var(--agua) 50%, transparent); }
+.admin-filtros { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.admin-usuarios { list-style: none; margin: 0; padding: 0; border-radius: var(--radio-m); }
+.admin-usuario { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; }
+.admin-usuario + .admin-usuario { border-top: 1px solid var(--linea); }
+/* Panel de administración: menú lateral por grupos (lib/adminSecciones.js) y la sección elegida a la derecha;
+   en pantallas estrechas se cambia por un desplegable (.admin-nav-movil) */
+.admin-marco { display: grid; grid-template-columns: 196px minmax(0, 1fr); gap: 20px; align-items: start; }
+.admin-nav { position: sticky; top: calc(var(--seg-arriba, 0px) + 16px); display: flex; flex-direction: column; gap: 10px; padding: 8px; border-radius: 18px; }
+.admin-nav-grupo { display: flex; flex-direction: column; gap: 2px; }
+.admin-nav-titulo { margin: 0; padding: 4px 10px 2px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--texto-3); }
+.admin-nav a { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; color: var(--texto-2); font-weight: 600; font-size: 0.9rem; transition: background 0.2s, color 0.2s; }
+.admin-nav a:hover { background: rgba(var(--c-tinta), 0.06); color: var(--texto); }
+.admin-nav a[aria-current='page'] { background: rgba(var(--c-tinta), 0.10); color: var(--texto); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+.admin-nav a[aria-current='page'] svg { color: var(--agua); }
+.admin-nav-movil { display: none; }
+@media (max-width: 900px) {
+  .admin-marco { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .admin-nav { display: none; }
+  .admin-nav-movil { display: block; }
+}
+.admin-pasos { display: flex; gap: 6px; flex-wrap: wrap; }
+.admin-pasos .chip { font-size: 0.75rem; padding: 2px 8px; opacity: 0.55; }
+.admin-pasos .chip.hecho { opacity: 1; background: color-mix(in oklab, var(--ok) 16%, transparent); border-color: color-mix(in oklab, var(--ok) 45%, transparent); color: var(--ok-texto); }
+.admin-usuario-lado { flex: none; display: flex; flex-direction: column; align-items: flex-end; text-align: right; gap: 1px; min-width: 96px; }
+@media (max-width: 560px) { .admin-usuario { flex-wrap: wrap; } .admin-usuario-lado { align-items: flex-start; text-align: left; flex-basis: 100%; padding-left: 50px; } }
 
 /* Plan Pro en el panel de la tienda */
 .plan-pro-panel { padding: 20px; display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 2; }

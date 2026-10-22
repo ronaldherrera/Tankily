@@ -6,11 +6,12 @@
 // Es una herramienta interna: sus textos están en español e inglés aquí mismo, no en los diccionarios.
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { ShieldCheck, Trash2, Check, X, BadgeCheck, Crown, Eye, Plus, Pencil, ExternalLink, CalendarClock } from 'lucide-react';
-import Link from '@/components/Enlace';
+import Link, { useNavegar } from '@/components/Enlace';
+import { GRUPOS_ADMIN, SECCIONES_ADMIN } from '@/lib/adminSecciones';
 import { supabase } from '@/lib/supabase';
 import { useSesion } from '@/lib/sesion';
 import { useT } from '@/i18n/IdiomaProvider';
-import { Pestanas, Vacio, Cargando, Modal, useTostada } from '@/components/ui';
+import { Avatar, Vacio, Cargando, Modal, useTostada } from '@/components/ui';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
 import Selector from '@/components/Selector';
 import { useSearchParams } from 'next/navigation';
@@ -45,6 +46,13 @@ const TEXTOS = {
     nuevaCampana: 'Nueva campaña', tituloCampana: 'Título', texto: 'Texto', imagen: 'URL de la imagen', enlace: 'Enlace',
     ubicacion: 'Ubicación', prioridad: 'Prioridad', fin: 'Termina el', tienda: 'Tienda (opcional)', ninguna: 'Ninguna',
     crear: 'Crear campaña', activa: 'Activa', pausada: 'Pausada', activar: 'Activar', pausar: 'Pausar', sinCampanas: 'Aún no hay campañas.',
+    ultimasAltas: 'Últimas altas reales', verTodos: 'Ver todos', sinAltas: 'Aún no se ha registrado nadie de verdad.',
+    filtroReales: 'Reales', filtroDemo: 'Demo', filtroTodos: 'Todos', buscar: 'Buscar por usuario, nombre o correo',
+    ordenAlta: 'Más recientes', ordenActividad: 'Última actividad', nUsuarios: '{n} usuarios', nActivos: '{n} activos esta semana',
+    sinResultados: 'Nadie coincide con la búsqueda.', alta: 'alta', ultimaVez: 'Última vez', nunca: 'nunca ha vuelto', hoy: 'hoy', ayer: 'ayer', haceDias: 'hace {n} días',
+    diasActivo: '{n} días activo', sinConfirmar: 'correo sin confirmar', escribir: 'Escribir', verPerfil: 'Ver perfil',
+    pasoTanques: 'Tanques', pasoApuntes: 'Apuntes', pasoPublica: 'Publicaciones', pasoForo: 'Foro', pasoComenta: 'Comentarios', pasoPush: 'Push', pasoResumen: 'Resumen semanal',
+    proveedorAcceso: { email: 'correo', google: 'Google', apple: 'Apple' }, idiomaWeb: 'Idioma en que usa la web',
   },
   en: {
     titulo: 'Administration', soloAdmin: 'This section is for administrators only.',
@@ -75,6 +83,13 @@ const TEXTOS = {
     nuevaCampana: 'New campaign', tituloCampana: 'Title', texto: 'Text', imagen: 'Image URL', enlace: 'Link',
     ubicacion: 'Placement', prioridad: 'Priority', fin: 'Ends on', tienda: 'Store (optional)', ninguna: 'None',
     crear: 'Create campaign', activa: 'Active', pausada: 'Paused', activar: 'Activate', pausar: 'Pause', sinCampanas: 'No campaigns yet.',
+    ultimasAltas: 'Latest real sign-ups', verTodos: 'See all', sinAltas: 'No real users have signed up yet.',
+    filtroReales: 'Real', filtroDemo: 'Demo', filtroTodos: 'All', buscar: 'Search by username, name or email',
+    ordenAlta: 'Newest', ordenActividad: 'Last active', nUsuarios: '{n} users', nActivos: '{n} active this week',
+    sinResultados: 'Nobody matches the search.', alta: 'joined', ultimaVez: 'Last seen', nunca: 'never came back', hoy: 'today', ayer: 'yesterday', haceDias: '{n} days ago',
+    diasActivo: '{n} active days', sinConfirmar: 'email not confirmed', escribir: 'Email', verPerfil: 'View profile',
+    pasoTanques: 'Tanks', pasoApuntes: 'Logs', pasoPublica: 'Posts', pasoForo: 'Forum', pasoComenta: 'Comments', pasoPush: 'Push', pasoResumen: 'Weekly digest',
+    proveedorAcceso: { email: 'email', google: 'Google', apple: 'Apple' }, idiomaWeb: 'Language they use the site in',
   },
 };
 
@@ -90,15 +105,127 @@ const OBJETO = {
   mensaje: {},
 };
 
-function Resumen({ x }) {
+// Cifras generales y las últimas altas reales; las cifras con pestaña propia llevan a ella
+function Resumen({ x, onIr }) {
   const [r, setR] = useState(null);
-  useEffect(() => { supabase.rpc('admin_resumen').then(({ data }) => setR(data)); }, []);
+  const [altas, setAltas] = useState(null);
+  useEffect(() => {
+    supabase.rpc('admin_resumen').then(({ data }) => setR(data));
+    supabase.rpc('admin_usuarios', { p_demo: false }).then(({ data }) => setAltas((data || []).slice(0, 5)));
+  }, []);
   if (!r) return <Cargando alto={90} n={2} />;
-  const cifras = [['usuarios', r.usuarios], ['usuarios7d', r.usuarios_7d], ['tanques', r.tanques], ['publicaciones7d', r.publicaciones_7d],
-    ['hilos7d', r.hilos_7d], ['anunciosActivos', r.anuncios_activos], ['tiendasPro', `${r.tiendas_pro} / ${r.tiendas}`], ['reportesPendientes', r.reportes_pendientes]];
+  const cifras = [['usuarios', r.usuarios, 'usuarios'], ['usuarios7d', r.usuarios_7d, 'usuarios'], ['tanques', r.tanques], ['publicaciones7d', r.publicaciones_7d],
+    ['hilos7d', r.hilos_7d], ['anunciosActivos', r.anuncios_activos], ['tiendasPro', `${r.tiendas_pro} / ${r.tiendas}`, 'tiendas'], ['reportesPendientes', r.reportes_pendientes, 'denuncias']];
   return (
-    <div className="admin-cifras">
-      {cifras.map(([k, v]) => <div key={k} className={k === 'reportesPendientes' && r.reportes_pendientes > 0 ? 'alerta' : ''}><span className="cifra">{v}</span><span className="mini texto-3">{x[k]}</span></div>)}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+      <div className="admin-cifras">
+        {cifras.map(([k, v, destino]) => {
+          const contenido = <><span className="cifra">{v}</span><span className="mini texto-3">{x[k]}</span></>;
+          const clase = k === 'reportesPendientes' && r.reportes_pendientes > 0 ? 'alerta' : '';
+          return destino
+            ? <button key={k} type="button" className={`cifra-enlace ${clase}`} onClick={() => onIr(destino)}>{contenido}</button>
+            : <div key={k} className={clase}>{contenido}</div>;
+        })}
+      </div>
+      <section className="cristal-suave admin-bloque">
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+          <h2 className="titulo-s" style={{ flex: 1 }}>{x.ultimasAltas}</h2>
+          <button type="button" className="btn btn-s btn-fantasma" onClick={() => onIr('usuarios')}>{x.verTodos}</button>
+        </div>
+        {!altas ? <Cargando alto={50} n={2} /> : !altas.length ? <p className="texto-2 pequeno">{x.sinAltas}</p> : (
+          <ul className="admin-usuarios">{altas.map((u) => <FilaUsuario key={u.id} u={u} x={x} />)}</ul>
+        )}
+      </section>
+    </div>
+  );
+}
+
+// "hoy", "ayer", "hace 5 días" a partir de un día (AAAA-MM-DD)
+function haceDias(dia, x) {
+  if (!dia) return x.nunca;
+  const n = Math.round((new Date(new Date().toDateString()) - new Date(`${dia}T00:00:00`)) / 86400000);
+  return n <= 0 ? x.hoy : n === 1 ? x.ayer : x.haceDias.replace('{n}', n);
+}
+
+// Una persona: quién es, cómo y cuándo entró, cuándo volvió y qué ha hecho (en verde lo que ya ha hecho)
+function FilaUsuario({ u, x }) {
+  const { lang } = useT();
+  // Idioma con el que usa la web (el último elegido), con su nombre en el idioma del panel: "portugués"
+  const idioma = (() => { try { return new Intl.DisplayNames([lang], { type: 'language' }).of(u.idioma); } catch { return u.idioma; } })();
+  const pasos = [['pasoTanques', u.tanques], ['pasoApuntes', u.apuntes], ['pasoPublica', u.publicaciones], ['pasoForo', u.foro], ['pasoComenta', u.comentarios]];
+  const extra = [['pasoPush', u.push], ['pasoResumen', u.resumen]];
+  return (
+    <li className="admin-usuario">
+      <Avatar perfil={u} tamano={38} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p style={{ margin: 0 }}>
+          <Link href={`/u/?n=${u.usuario}`} target="_blank"><strong>@{u.usuario}</strong></Link>
+          {u.nombre && <span className="texto-2"> · {u.nombre}</span>}
+          {u.es_admin && <span className="chip" style={{ marginLeft: 6 }}>admin</span>}
+          {u.demo && <span className="chip" style={{ marginLeft: 6 }}>demo</span>}
+        </p>
+        <p className="mini texto-3" style={{ margin: '2px 0 6px' }}>
+          {u.email}{!u.confirmado && <span className="texto-aviso"> ({x.sinConfirmar})</span>}
+          {' · '}{x.proveedorAcceso[u.proveedor] || u.proveedor}{u.idioma && <> · <span title={x.idiomaWeb}>{idioma}</span></>}{u.pais && <> · {u.pais}</>}{' · '}{x.alta} {formatRelativeTime(u.creado_en)}
+        </p>
+        <div className="admin-pasos">
+          {pasos.map(([k, n]) => <span key={k} className={`chip${n > 0 ? ' hecho' : ''}`}>{x[k]} {n}</span>)}
+          {extra.map(([k, si]) => <span key={k} className={`chip${si ? ' hecho' : ''}`}>{si ? <Check size={12} aria-hidden /> : <X size={12} aria-hidden />} {x[k]}</span>)}
+        </div>
+      </div>
+      <div className="admin-usuario-lado">
+        <span className="mini texto-3">{x.ultimaVez}</span>
+        <strong className="pequeno">{haceDias(u.ultimo_dia, x)}</strong>
+        <span className="mini texto-3">{x.diasActivo.replace('{n}', u.dias_activo)}</span>
+        {!u.demo && <a href={`mailto:${u.email}`} className="btn btn-s btn-fantasma" style={{ marginTop: 4 }}>{x.escribir}</a>}
+      </div>
+    </li>
+  );
+}
+
+const FILTROS_USUARIOS = { reales: false, demo: true, todos: null };
+
+function Usuarios({ x }) {
+  const [filtro, setFiltro] = useState('reales');
+  const [orden, setOrden] = useState('alta');
+  const [busca, setBusca] = useState('');
+  // carga: { filtro, lista, semana } — semana = hace 6 días (AAAA-MM-DD), para "activos esta semana".
+  // Mientras llega la del filtro elegido, lista es null (se ve "Cargando")
+  const [carga, setCarga] = useState(null);
+  useEffect(() => {
+    supabase.rpc('admin_usuarios', { p_demo: FILTROS_USUARIOS[filtro] }).then(({ data }) => setCarga({
+      filtro, lista: data || [], semana: new Date(Date.now() - 6 * 86400000).toISOString().slice(0, 10),
+    }));
+  }, [filtro]);
+  const lista = carga?.filtro === filtro ? carga.lista : null;
+  const semana = carga?.semana || '';
+
+  const q = busca.trim().toLowerCase();
+  const visibles = (lista || [])
+    .filter((u) => !q || [u.usuario, u.nombre, u.email].some((v) => v?.toLowerCase().includes(q)))
+    .sort((a, b) => orden === 'actividad' ? (b.ultimo_dia || '').localeCompare(a.ultimo_dia || '') : b.creado_en.localeCompare(a.creado_en));
+  const activos = (lista || []).filter((u) => u.ultimo_dia && u.ultimo_dia >= semana).length;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div className="admin-filtros">
+        <div className="chips">
+          {[['reales', x.filtroReales], ['demo', x.filtroDemo], ['todos', x.filtroTodos]].map(([k, t]) =>
+            <button key={k} type="button" className="chip" aria-pressed={filtro === k} onClick={() => setFiltro(k)}>{t}</button>)}
+        </div>
+        <input className="entrada" type="search" value={busca} onChange={(e) => setBusca(e.target.value)} placeholder={x.buscar} aria-label={x.buscar} style={{ flex: 1, minWidth: 200 }} />
+        <Selector value={orden} onChange={(e) => setOrden(e.target.value)} aria-label={x.ordenAlta}>
+          <option value="alta">{x.ordenAlta}</option><option value="actividad">{x.ordenActividad}</option>
+        </Selector>
+      </div>
+      {!lista ? <Cargando alto={80} n={4} /> : (
+        <>
+          <p className="mini texto-3">{x.nUsuarios.replace('{n}', lista.length)} · {x.nActivos.replace('{n}', activos)}</p>
+          {!visibles.length
+            ? <Vacio titulo={lista.length ? x.sinResultados : x.sinAltas} />
+            : <ul className="admin-usuarios cristal-suave">{visibles.map((u) => <FilaUsuario key={u.id} u={u} x={x} />)}</ul>}
+        </>
+      )}
     </div>
   );
 }
@@ -362,7 +489,7 @@ function Campanas({ x }) {
   );
 }
 
-const PESTANAS = ['resumen', 'crecimiento', 'denuncias', 'tiendas', 'campanas', 'proveedores'];
+
 
 export default function AdminPage() {
   return <Suspense><Admin /></Suspense>;
@@ -501,13 +628,13 @@ function Proveedores({ x }) {
 
 function Admin() {
   const { perfil, cargando } = useSesion();
-  const { lang } = useT();
+  const { lang, t } = useT();
+  const navegar = useNavegar();
   const x = TEXTOS[lang] || TEXTOS.en;
-  // La pestaña puede venir en el enlace (?s=denuncias), p. ej. desde la burbuja de administración
+  // La sección va en el enlace (?s=denuncias): se puede recargar o compartir, y la burbuja lleva directo a ella
   const s = useSearchParams().get('s');
-  const [pestana, setPestana] = useState(PESTANAS.includes(s) ? s : 'resumen');
-  const [sPrevio, setSPrevio] = useState(s);
-  if (s !== sPrevio) { setSPrevio(s); if (PESTANAS.includes(s)) setPestana(s); }
+  const seccion = SECCIONES_ADMIN.includes(s) ? s : 'resumen';
+  const ir = (clave) => navegar.push(`/admin/?s=${clave}`);
 
   if (cargando) return null;
   if (!perfil?.es_admin) return <div className="contenido"><div className="columna"><Vacio titulo={x.soloAdmin} /></div></div>;
@@ -516,14 +643,37 @@ function Admin() {
     <div className="contenido ancho">
       <div className="columna">
         <h1 className="titulo-l" style={{ paddingTop: 12, display: 'flex', alignItems: 'center', gap: 10 }}><ShieldCheck size={26} style={{ color: 'var(--agua)' }} /> {x.titulo}</h1>
-        <Pestanas etiqueta={x.titulo} valor={pestana} onCambio={setPestana}
-          opciones={[['resumen', x.resumen], ['crecimiento', x.crecimiento], ['denuncias', x.denuncias], ['tiendas', x.tiendas], ['campanas', x.campanas], ['proveedores', x.proveedores]]} />
-        {pestana === 'resumen' && <Resumen x={x} />}
-        {pestana === 'crecimiento' && <Crecimiento x={x} />}
-        {pestana === 'denuncias' && <Denuncias x={x} />}
-        {pestana === 'tiendas' && <Tiendas x={x} />}
-        {pestana === 'campanas' && <Campanas x={x} />}
-        {pestana === 'proveedores' && <Proveedores x={x} />}
+        <div className="admin-marco">
+          <nav className="admin-nav cristal-suave" aria-label={x.titulo}>
+            {GRUPOS_ADMIN.map(([grupo, secciones]) => (
+              <div key={grupo} className="admin-nav-grupo">
+                <p className="admin-nav-titulo mini">{t(`administracion.grupos.${grupo}`)}</p>
+                {secciones.map(([clave, Icono]) => (
+                  <Link key={clave} href={`/admin/?s=${clave}`} aria-current={seccion === clave ? 'page' : undefined}>
+                    <Icono size={16} aria-hidden /> <span>{t(`administracion.${clave}`)}</span>
+                  </Link>
+                ))}
+              </div>
+            ))}
+          </nav>
+          {/* En el móvil, en lugar del menú lateral: un desplegable con todas las secciones a la vista */}
+          <div className="admin-nav-movil">
+            <Selector value={seccion} onChange={(e) => ir(e.target.value)} aria-label={x.titulo}>
+              {GRUPOS_ADMIN.flatMap(([, secciones]) => secciones).map(([clave]) => (
+                <option key={clave} value={clave}>{t(`administracion.${clave}`)}</option>
+              ))}
+            </Selector>
+          </div>
+          <div style={{ minWidth: 0 }}>
+            {seccion === 'resumen' && <Resumen x={x} onIr={ir} />}
+            {seccion === 'usuarios' && <Usuarios x={x} />}
+            {seccion === 'crecimiento' && <Crecimiento x={x} />}
+            {seccion === 'denuncias' && <Denuncias x={x} />}
+            {seccion === 'tiendas' && <Tiendas x={x} />}
+            {seccion === 'campanas' && <Campanas x={x} />}
+            {seccion === 'proveedores' && <Proveedores x={x} />}
+          </div>
+        </div>
       </div>
     </div>
   );

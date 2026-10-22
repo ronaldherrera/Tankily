@@ -123,7 +123,8 @@ export function useTraduccion({ tabla, id, campo = 'contenido', texto, idioma },
   }, [necesita, tabla, id, campo, texto, idioma, lang]);
 
   // "Ver traducción": con el gesto del usuario Chrome puede descargar el idioma;
-  // si no hay traductor en el navegador, se abre Google Translate en otra pestaña.
+  // si no hay traductor en el navegador, se abre Google Translate en otra pestaña
+  // (nunca con un mensaje privado: su texto iría en la dirección de Google).
   const traducirAhora = useCallback(async () => {
     const chrome = await traductorChrome(idioma, lang);
     if (['available', 'downloadable', 'downloading'].includes(chrome.estado)) {
@@ -135,8 +136,9 @@ export function useTraduccion({ tabla, id, campo = 'contenido', texto, idioma },
         return;
       } catch { setEstado('manual'); }
     }
+    if (tabla === 'mensajes') { setEstado('error'); return; }
     window.open(`https://translate.google.com/?sl=${idioma}&tl=${lang}&text=${encodeURIComponent(texto)}&op=translate`, '_blank', 'noopener');
-  }, [idioma, lang, texto]);
+  }, [tabla, idioma, lang, texto]);
 
   return { necesita, estado, traducido, traducirAhora };
 }

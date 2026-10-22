@@ -11,12 +11,17 @@ import { subirImagen } from '@/lib/imagenes';
 import { DURACION_SALIDA } from '@/lib/presencia';
 
 export function Avatar({ perfil, tamano = 40 }) {
-  const inicial = (perfil?.nombre || perfil?.usuario || '?').trim().charAt(0).toUpperCase();
-  const estilo = { width: tamano, height: tamano, fontSize: tamano * 0.42 };
-  if (perfil?.avatar_url) {
-    return <img className="avatar" src={perfil.avatar_url} alt="" style={estilo} loading="lazy" />;
+  // Sin foto, o si no carga, se ve la silueta por defecto
+  const [fallida, setFallida] = useState(null);
+  const estilo = { width: tamano, height: tamano };
+  if (perfil?.avatar_url && fallida !== perfil.avatar_url) {
+    return <img className="avatar" src={perfil.avatar_url} alt="" style={estilo} loading="lazy" referrerPolicy="no-referrer" onError={() => setFallida(perfil.avatar_url)} />;
   }
-  return <span className="avatar" style={estilo} aria-hidden="true">{inicial}</span>;
+  return (
+    <span className="avatar avatar-defecto" style={estilo} aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="100%" height="100%"><circle cx="20" cy="15.5" r="7" /><path d="M6 40a14 13 0 0 1 28 0z" /></svg>
+    </span>
+  );
 }
 
 export function NombreAutor({ perfil, conUsuario = true }) {

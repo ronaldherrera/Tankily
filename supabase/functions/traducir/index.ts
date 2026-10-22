@@ -1,4 +1,4 @@
-// Traduce un texto de Tankily (publicación, comentario, hilo o respuesta del foro).
+// Traduce un texto de Tankily (publicación, comentario, hilo o respuesta del foro, o mensaje privado).
 // Recibe { tabla, id, campo, idioma } y nunca un texto libre: lee el original de la base de datos,
 // así nadie puede usar esta función como traductor gratuito. Guarda el resultado en la caché
 // compartida `traducciones` para que cada texto se traduzca una sola vez por idioma.
@@ -14,6 +14,7 @@ const CAMPOS: Record<string, string[]> = {
   comentarios: ['contenido'],
   foro_hilos: ['titulo', 'contenido'],
   foro_respuestas: ['contenido'],
+  mensajes: ['contenido'], // la RLS solo deja leerlo al emisor y al receptor
 };
 // Idiomas de la interfaz → código de destino de DeepL
 const DESTINO: Record<string, string> = { es: 'ES', en: 'EN-US', de: 'DE', pt: 'PT-BR', fr: 'FR', it: 'IT', nl: 'NL', pl: 'PL' };

@@ -2,24 +2,17 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { ShieldCheck, LayoutDashboard, Flag, Store, Megaphone, TrendingUp, Plug, BarChart3 } from 'lucide-react';
+import { ShieldCheck, BarChart3 } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
 import { useSesion } from '@/lib/sesion';
 import { useT } from '@/i18n/IdiomaProvider';
 import { usePresencia } from '@/lib/presencia';
+import { GRUPOS_ADMIN } from '@/lib/adminSecciones';
 
 const CLAVE = 'tk-admin-burbuja';
 const TAM = 48;
 const MARGEN = 12;
-const SECCIONES = [
-  ['resumen', LayoutDashboard],
-  ['crecimiento', TrendingUp],
-  ['denuncias', Flag],
-  ['tiendas', Store],
-  ['campanas', Megaphone],
-  ['proveedores', Plug],
-];
 
 const leer = () => { try { return JSON.parse(localStorage.getItem(CLAVE)) || null; } catch { return null; } };
 const guardar = (v) => { try { localStorage.setItem(CLAVE, JSON.stringify(v)); } catch {} };
@@ -162,13 +155,15 @@ function Burbuja() {
           style={estiloPanel}
           role="menu"
         >
-          <p className="burbuja-admin-titulo mini">{t('administracion.titulo')}</p>
-          {SECCIONES.map(([clave, Icono]) => (
-            <Link key={clave} role="menuitem" href={`/admin/?s=${clave}`} onClick={() => setAbierto(false)}>
-              <Icono size={16} aria-hidden /> <span>{t(`administracion.${clave}`)}</span>
-              {clave === 'denuncias' && pendientes > 0 && <b className="insignia">{pendientes}</b>}
-            </Link>
-          ))}
+          {GRUPOS_ADMIN.map(([grupo, secciones]) => [
+            <p key={grupo} className="burbuja-admin-titulo mini">{t(`administracion.grupos.${grupo}`)}</p>,
+            ...secciones.map(([clave, Icono]) => (
+              <Link key={clave} role="menuitem" href={`/admin/?s=${clave}`} onClick={() => setAbierto(false)}>
+                <Icono size={16} aria-hidden /> <span>{t(`administracion.${clave}`)}</span>
+                {clave === 'denuncias' && pendientes > 0 && <b className="insignia">{pendientes}</b>}
+              </Link>
+            )),
+          ])}
           <p className="burbuja-admin-titulo mini">{t('administracion.ajustes')}</p>
           <button type="button" role="menuitemcheckbox" aria-checked={contando} onClick={cambiarAnalitica}>
             <BarChart3 size={16} aria-hidden /> <span>{t('administracion.contarVisitas')}</span>
