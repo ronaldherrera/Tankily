@@ -98,6 +98,13 @@ _Lista generada por Claude. Lo que vaya surgiendo mientras trabajo se añade aba
 - [ ] **Límites del freno antispam**: los he puesto holgados (punto 40 del informe). Si en la práctica alguien legítimo choca con ellos, se suben en un minuto.
 - [ ] **(Contenido de WikiTank) Salinidad de las fichas marinas.** Muchas fichas dan 1,023–1,025 de densidad (≈31–33 ppt), algo por debajo de los ~35 ppt (1,026) habituales en reef. La web ya lo tolera (punto 45 del informe), pero si quieres que el "agua ideal" que muestra coincida con la práctica, habría que revisar esos rangos en los .md (yo no los toco).
 - [x] **(Contenido) Más especies en WikiTank.** (19/10/2026: el catálogo ya tiene 1.848 especies, con ficha en los 8 idiomas.) ~~**(Contenido) Más especies en WikiTank.** Hoy hay 167 fichas de especie (Fishipedia, 2.314). Cada ficha nueva que añadas en una carpeta "Especies habituales" (con el formato de siempre: `### Nombre común (Nombre científico)`, foto y líneas `**Campo**: valor`) aparece sola en el catálogo, con su página, en el buscador y en las herramientas. Si quieres, puedo **redactarte borradores** de fichas nuevas (las especies más buscadas que faltan) para que tú los revises y los añadas; no los meto yo en la wiki.~~
+- [ ] **(SEO, aplazado 22/10/2026) Plan para crecer hacia los 3M visitas/mes**, por orden de impacto:
+  1. Páginas de compatibilidad por parejas («¿pueden vivir juntos X e Y?») generadas con los datos de las fichas, solo especies populares del mismo tipo de acuario (5–20k por idioma), en es y en a la vez.
+  2. Preguntas y respuestas en cada ficha (datos estructurados FAQ).
+  3. SEO de imágenes: alt y nombres de archivo por idioma + sitemap de imágenes.
+  4. Empujar herramientas y compatibilidad en Reddit/foros/redes para conseguir enlaces.
+  5. Fomentar contenido de usuarios (diarios de tanques, foro): retos, «tanque del mes».
+  6. Revisar Search Console cuando haya datos y reforzar lo que funcione.
 
 ## 📱 Ver la web desde fuera de casa
 

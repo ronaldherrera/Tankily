@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { Thermometer, Droplet, Box, Ruler, Gauge, Users, HeartHandshake, Waves, ShieldCheck, ArrowLeft } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { traducir } from '@/i18n/traducir';
-import { LOCALES, IDIOMAS_WIKI } from '@/i18n/config';
+import { LOCALES, IDIOMAS_FICHAS } from '@/i18n/config';
 import { catalogoEspecies, especiePorSlug } from '@/lib/catalogoEspecies';
 import { fichaTraducida, separarFicha } from '@/lib/especiesTraduccion';
 import { JsonLd, migas } from '@/lib/datosEstructurados';
@@ -14,7 +14,7 @@ import Publicidad from '@/components/Publicidad';
 const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
 
 // Una página por especie de WikiTank (/wiki/especies/amphiprion-ocellaris/), generada en el build desde
-// los Markdown de la wiki. El contenido está en español; en los idiomas de IDIOMAS_WIKI, las fichas que ya están
+// los Markdown de la wiki. El contenido está en español; en los idiomas de IDIOMAS_FICHAS, las fichas que ya están
 // traducidas enteras (lib/especiesTraduccion.js) se muestran e indexan en ese idioma, y las demás siguen en
 // español con noindex y la versión española como canónica
 export function generateStaticParams() {
@@ -29,11 +29,11 @@ const formato = (locale) => (n) => Number(n).toLocaleString(locale, { maximumFra
 
 // La ficha en el idioma de la página: la española o, si está traducida entera, la traducida (con `lang`)
 function fichaEnIdioma(e, lang) {
-  const tr = lang !== 'es' && IDIOMAS_WIKI.includes(lang) ? fichaTraducida(e, lang) : null;
+  const tr = lang !== 'es' && IDIOMAS_FICHAS.includes(lang) ? fichaTraducida(e, lang) : null;
   return tr ? { ...e, ...tr, lang } : { ...e, ...separarFicha(e.contenido), lang: 'es' };
 }
 // Idiomas en los que existe la ficha (español siempre)
-const idiomasFicha = (e) => ['es', ...IDIOMAS_WIKI.filter((l) => fichaTraducida(e, l))];
+const idiomasFicha = (e) => ['es', ...IDIOMAS_FICHAS.filter((l) => fichaTraducida(e, l))];
 
 // "Neón Cardenal (Paracheirodon axelrodi): 24–28 °C, pH 4,5–7, desde 60 l, dificultad 2/5…"
 function descripcion(e) {

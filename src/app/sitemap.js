@@ -1,4 +1,4 @@
-import { IDIOMAS, LOCALES } from '@/i18n/config';
+import { IDIOMAS, LOCALES, IDIOMAS_FICHAS } from '@/i18n/config';
 import { wikiTankTree } from '@/lib/wikiData';
 import { catalogoEspecies } from '@/lib/catalogoEspecies';
 import { HERRAMIENTAS } from '@/lib/herramientas';
@@ -55,11 +55,11 @@ export default async function sitemap() {
     return idiomas.map((l) => ({ url: url(l), lastModified: ahora, changeFrequency: 'monthly', priority: 0.6, alternates }));
   });
   // Catálogo y fichas de especies de WikiTank: en español y, las que están traducidas enteras, en los idiomas de
-  // IDIOMAS_WIKI (con sus alternativas)
+  // IDIOMAS_FICHAS (con sus alternativas)
   const especies = [
     { url: `${URL_SITIO}/es/wiki/especies/`, lastModified: ahora, changeFrequency: 'weekly', priority: 0.8 },
     ...catalogoEspecies().flatMap((e) => {
-      const idiomas = ['es', ...IDIOMAS_WIKI.filter((l) => fichaTraducida(e, l))];
+      const idiomas = ['es', ...IDIOMAS_FICHAS.filter((l) => fichaTraducida(e, l))];
       const url = (l) => `${URL_SITIO}/${l}/wiki/especies/${e.slug}/`;
       const alternates = idiomas.length > 1 ? { languages: Object.fromEntries(idiomas.map((l) => [LOCALES[l], url(l)])) } : undefined;
       return idiomas.map((l) => ({ url: url(l), lastModified: ahora, changeFrequency: 'monthly', priority: 0.7, alternates }));
