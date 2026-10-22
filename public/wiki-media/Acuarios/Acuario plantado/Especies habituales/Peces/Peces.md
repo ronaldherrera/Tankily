@@ -140,7 +140,7 @@ Peces pacíficos que no dañen plantas, con preferencia por los que ayudan en el
 
 ---
 
-### Escalara / Pez Ángel (Pterophyllum scalare)
+### Escalar / Pez Ángel (Pterophyllum scalare)
 ![](Pterophyllum_scalare.webp)
 
 **Familia**: Cichlidae

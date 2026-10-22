@@ -16,6 +16,7 @@ export const es = {
     dificultad: 'Dificultad', grupo: 'Vive en grupo', grupoDe: 'de {n} o más', comportamiento: 'Carácter',
     pacifico: 'Pacífico', semiagresivo: 'Semiagresivo', agresivo: 'Agresivo', reef: 'Apto para arrecife', si: 'Sí', no: 'No', precaucion: 'Con precaución',
     agua: 'Agua', dulce: 'Dulce', marina: 'Marina', otrosNombres: 'También llamado', foto: 'Foto', contenidoEnEspanol: 'La ficha está en español.',
+    metaDescripcion: 'Ficha de {nombre}{datos}. Cuidados, alimentación, comportamiento y con qué especies puede convivir.', metaDesde: 'acuario desde {l} l', metaAdulto: '{cm} cm de adulto', metaDificultad: 'dificultad {d}/5',
   },
 };
 export const en = {
@@ -35,6 +36,7 @@ export const en = {
     dificultad: 'Difficulty', grupo: 'Lives in a group', grupoDe: 'of {n} or more', comportamiento: 'Temperament',
     pacifico: 'Peaceful', semiagresivo: 'Semi-aggressive', agresivo: 'Aggressive', reef: 'Reef safe', si: 'Yes', no: 'No', precaucion: 'With caution',
     agua: 'Water', dulce: 'Fresh', marina: 'Marine', otrosNombres: 'Also called', foto: 'Photo', contenidoEnEspanol: 'This profile is in Spanish.',
+    metaDescripcion: '{nombre} care guide{datos}. Care, diet, behaviour and which species it can live with.', metaDesde: 'tank from {l} l', metaAdulto: '{cm} cm as an adult', metaDificultad: 'difficulty {d}/5',
   },
 };
 export const de = {
@@ -54,6 +56,7 @@ export const de = {
     dificultad: 'Schwierigkeit', grupo: 'Lebt in Gruppen', grupoDe: 'ab {n} Tieren', comportamiento: 'Verhalten',
     pacifico: 'Friedlich', semiagresivo: 'Teilweise aggressiv', agresivo: 'Aggressiv', reef: 'Rifftauglich', si: 'Ja', no: 'Nein', precaucion: 'Mit Vorsicht',
     agua: 'Wasser', dulce: 'Süßwasser', marina: 'Meerwasser', otrosNombres: 'Auch genannt', foto: 'Foto', contenidoEnEspanol: 'Der Steckbrief ist auf Spanisch.',
+    metaDescripcion: 'Steckbrief {nombre}{datos}. Pflege, Ernährung, Verhalten und mit welchen Arten er zusammenleben kann.', metaDesde: 'Aquarium ab {l} l', metaAdulto: '{cm} cm ausgewachsen', metaDificultad: 'Schwierigkeit {d}/5',
   },
 };
 export const pt = {
@@ -73,6 +76,7 @@ export const pt = {
     dificultad: 'Dificuldade', grupo: 'Vive em grupo', grupoDe: 'de {n} ou mais', comportamiento: 'Temperamento',
     pacifico: 'Pacífico', semiagresivo: 'Semiagressivo', agresivo: 'Agressivo', reef: 'Seguro para recife', si: 'Sim', no: 'Não', precaucion: 'Com cuidado',
     agua: 'Água', dulce: 'Doce', marina: 'Salgada', otrosNombres: 'Também chamado', foto: 'Foto', contenidoEnEspanol: 'A ficha está em espanhol.',
+    metaDescripcion: 'Ficha de {nombre}{datos}. Cuidados, alimentação, comportamento e com que espécies pode conviver.', metaDesde: 'aquário a partir de {l} l', metaAdulto: '{cm} cm em adulto', metaDificultad: 'dificuldade {d}/5',
   },
 };
 export const fr = {
@@ -92,6 +96,7 @@ export const fr = {
     dificultad: 'Difficulté', grupo: 'Vit en groupe', grupoDe: 'de {n} ou plus', comportamiento: 'Caractère',
     pacifico: 'Paisible', semiagresivo: 'Semi-agressif', agresivo: 'Agressif', reef: 'Compatible récifal', si: 'Oui', no: 'Non', precaucion: 'Avec prudence',
     agua: 'Eau', dulce: 'Douce', marina: 'Marine', otrosNombres: 'Aussi appelé', foto: 'Photo', contenidoEnEspanol: 'La fiche est en espagnol.',
+    metaDescripcion: 'Fiche {nombre}{datos}. Soins, alimentation, comportement et avec quelles espèces il peut cohabiter.', metaDesde: 'aquarium dès {l} l', metaAdulto: '{cm} cm à l’âge adulte', metaDificultad: 'difficulté {d}/5',
   },
 };
 export const it = {
@@ -111,6 +116,7 @@ export const it = {
     dificultad: 'Difficoltà', grupo: 'Vive in gruppo', grupoDe: 'di {n} o più', comportamiento: 'Carattere',
     pacifico: 'Pacifico', semiagresivo: 'Semi-aggressivo', agresivo: 'Aggressivo', reef: 'Adatto al reef', si: 'Sì', no: 'No', precaucion: 'Con cautela',
     agua: 'Acqua', dulce: 'Dolce', marina: 'Marina', otrosNombres: 'Detto anche', foto: 'Foto', contenidoEnEspanol: 'La scheda è in spagnolo.',
+    metaDescripcion: 'Scheda di {nombre}{datos}. Cura, alimentazione, comportamento e con quali specie può convivere.', metaDesde: 'acquario da {l} l', metaAdulto: '{cm} cm da adulto', metaDificultad: 'difficoltà {d}/5',
   },
 };
 export const nl = {
@@ -130,6 +136,7 @@ export const nl = {
     dificultad: 'Moeilijkheid', grupo: 'Leeft in groep', grupoDe: 'van {n} of meer', comportamiento: 'Karakter',
     pacifico: 'Vreedzaam', semiagresivo: 'Semi-agressief', agresivo: 'Agressief', reef: 'Rifveilig', si: 'Ja', no: 'Nee', precaucion: 'Met voorzichtigheid',
     agua: 'Water', dulce: 'Zoet', marina: 'Zout', otrosNombres: 'Ook genoemd', foto: 'Foto', contenidoEnEspanol: 'De fiche is in het Spaans.',
+    metaDescripcion: 'Fiche van {nombre}{datos}. Verzorging, voeding, gedrag en met welke soorten hij kan samenleven.', metaDesde: 'aquarium vanaf {l} l', metaAdulto: '{cm} cm volwassen', metaDificultad: 'moeilijkheid {d}/5',
   },
 };
 export const pl = {
@@ -149,5 +156,6 @@ export const pl = {
     dificultad: 'Trudność', grupo: 'Żyje w grupie', grupoDe: 'od {n}', comportamiento: 'Charakter',
     pacifico: 'Spokojny', semiagresivo: 'Półagresywny', agresivo: 'Agresywny', reef: 'Bezpieczny dla rafy', si: 'Tak', no: 'Nie', precaucion: 'Ostrożnie',
     agua: 'Woda', dulce: 'Słodka', marina: 'Morska', otrosNombres: 'Inne nazwy', foto: 'Zdjęcie', contenidoEnEspanol: 'Karta jest po hiszpańsku.',
+    metaDescripcion: 'Karta gatunku {nombre}{datos}. Pielęgnacja, żywienie, zachowanie i z jakimi gatunkami może żyć.', metaDesde: 'akwarium od {l} l', metaAdulto: '{cm} cm w dorosłości', metaDificultad: 'trudność {d}/5',
   },
 };

@@ -226,7 +226,7 @@
 
 ---
 
-### Ancistrus sp. (Ancistrus / Busycon)
+### Ancistrus sp. (Ancistrus)
 ![](Ancistrus_sp.webp)
 
 **Familia**: Loricariidae
@@ -358,7 +358,7 @@
 
 ---
 
-### Apistogramma cacatuoides (Ciclido Cacatúa)
+### Apistogramma cacatuoides (Cíclido Cacatúa)
 ![](Apistogramma_cacatuoides.webp)
 
 **Familia**: Cichlidae

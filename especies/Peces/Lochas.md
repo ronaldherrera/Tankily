@@ -420,7 +420,7 @@
 
 ---
 
-### Loch Tigre (Acanthocobitis botia)
+### Locha Tigre (Acanthocobitis botia)
 **Familia**: Nemacheilidae
 **Origen**: India, Bangladés y Birmania
 **Tamaño**: 8 cm

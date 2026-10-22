@@ -2,8 +2,9 @@ import { notFound } from 'next/navigation';
 import { Thermometer, Droplet, Box, Ruler, Gauge, Users, HeartHandshake, Waves, ShieldCheck, ArrowLeft } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { traducir } from '@/i18n/traducir';
-import { LOCALES } from '@/i18n/config';
+import { LOCALES, IDIOMAS_WIKI } from '@/i18n/config';
 import { catalogoEspecies, especiePorSlug } from '@/lib/catalogoEspecies';
+import { fichaTraducida, separarFicha } from '@/lib/especiesTraduccion';
 import { JsonLd, migas } from '@/lib/datosEstructurados';
 import FichaEspecieContenido from '@/components/wiki/FichaEspecieContenido';
 import AnadirATanque from '@/components/wiki/AnadirATanque';
@@ -13,7 +14,9 @@ import Publicidad from '@/components/Publicidad';
 const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
 
 // Una página por especie de WikiTank (/wiki/especies/amphiprion-ocellaris/), generada en el build desde
-// los Markdown de la wiki. Como el resto de WikiTank, el contenido está en español: se indexa la versión
+// los Markdown de la wiki. El contenido está en español; en los idiomas de IDIOMAS_WIKI, las fichas que ya están
+// traducidas enteras (lib/especiesTraduccion.js) se muestran e indexan en ese idioma, y las demás siguen en
+// español con noindex y la versión española como canónica
 export function generateStaticParams() {
   return catalogoEspecies().map((e) => ({ especie: e.slug }));
 }
@@ -23,33 +26,46 @@ const nombrePrincipal = (e) => e.comun || e.cientifico;
 const GRUPO_CATEGORIA = { pez: 'Peces', planta: 'Plantas', coral: 'Corales', invertebrado: 'Invertebrados' };
 
 const formato = (locale) => (n) => Number(n).toLocaleString(locale, { maximumFractionDigits: 2 });
-const enEspanol = formato('es-ES');
+
+// La ficha en el idioma de la página: la española o, si está traducida entera, la traducida (con `lang`)
+function fichaEnIdioma(e, lang) {
+  const tr = lang !== 'es' && IDIOMAS_WIKI.includes(lang) ? fichaTraducida(e, lang) : null;
+  return tr ? { ...e, ...tr, lang } : { ...e, ...separarFicha(e.contenido), lang: 'es' };
+}
+// Idiomas en los que existe la ficha (español siempre)
+const idiomasFicha = (e) => ['es', ...IDIOMAS_WIKI.filter((l) => fichaTraducida(e, l))];
 
 // "Neón Cardenal (Paracheirodon axelrodi): 24–28 °C, pH 4,5–7, desde 60 l, dificultad 2/5…"
 function descripcion(e) {
+  const t = (clave, vars) => traducir(e.lang, clave, vars);
   const f = e.ficha || {};
-  const n = enEspanol;
+  const n = formato(LOCALES[e.lang]);
   const partes = [];
   if (f.t) partes.push(`${n(f.t[0])}–${n(f.t[1])} °C`);
   if (f.ph) partes.push(`pH ${n(f.ph[0])}–${n(f.ph[1])}`);
-  if (f.l) partes.push(`acuario desde ${f.l} l`);
-  if (f.cm) partes.push(`${f.cm} cm de adulto`);
-  if (f.dif) partes.push(`dificultad ${f.dif}/5`);
+  if (f.l) partes.push(t('fichaEsp.metaDesde', { l: f.l }));
+  if (f.cm) partes.push(t('fichaEsp.metaAdulto', { cm: n(f.cm) }));
+  if (f.dif) partes.push(t('fichaEsp.metaDificultad', { d: f.dif }));
   const nombre = e.comun && e.cientifico ? `${e.comun} (${e.cientifico})` : nombrePrincipal(e);
   const datos = partes.length ? `: ${partes.join(', ')}` : '';
-  return `Ficha de ${nombre}${datos}. Cuidados, alimentación, comportamiento y con qué especies puede convivir.`.slice(0, 300);
+  return t('fichaEsp.metaDescripcion', { nombre, datos }).slice(0, 300);
 }
 
 export async function generateMetadata({ params }) {
   const { lang, especie } = await params;
-  const e = especiePorSlug(especie);
-  if (!e) return {};
+  const base = especiePorSlug(especie);
+  if (!base) return {};
+  const e = fichaEnIdioma(base, lang);
   const titulo = e.comun && e.cientifico ? `${e.comun} (${e.cientifico})` : nombrePrincipal(e);
+  const idiomas = idiomasFicha(base);
   return {
     title: `${titulo} · WikiTank`,
     description: descripcion(e),
-    alternates: { canonical: `/es/wiki/especies/${e.slug}/` },
-    robots: lang === 'es' ? undefined : { index: false, follow: true },
+    alternates: {
+      canonical: `/${e.lang}/wiki/especies/${e.slug}/`,
+      ...(idiomas.length > 1 ? { languages: Object.fromEntries([...idiomas.map((l) => [LOCALES[l], `/${l}/wiki/especies/${e.slug}/`]), ['x-default', `/es/wiki/especies/${e.slug}/`]]) } : {}),
+    },
+    robots: e.lang === lang ? undefined : { index: false, follow: true },
     openGraph: e.imagen ? { images: [encodeURI(e.imagen)] } : undefined,
   };
 }
@@ -88,14 +104,16 @@ function DatosClave({ ficha, t, n }) {
 
 export default async function PaginaEspecie({ params }) {
   const { lang, especie } = await params;
-  const e = especiePorSlug(especie);
-  if (!e) notFound();
+  const base = especiePorSlug(especie);
+  if (!base) notFound();
+  const e = fichaEnIdioma(base, lang);
+  const traducida = e.lang !== 'es';
   const t = (clave, vars) => traducir(lang, clave, vars);
   const nombre = nombrePrincipal(e);
   // Relacionadas: misma categoría y algún tipo de acuario en común (o, en las fichas ampliadas, el mismo
   // grupo y después el mismo tipo de agua), primero las que tienen foto
   const rutas = new Set(e.acuarios.map((a) => a.ruta));
-  const parecida = (x) => (rutas.size ? x.acuarios.some((a) => rutas.has(a.ruta)) : x.grupo === e.grupo) ? 2
+  const parecida = (x) => (rutas.size ? x.acuarios.some((a) => rutas.has(a.ruta)) : x.grupo === base.grupo) ? 2
     : x.ficha?.agua && x.ficha.agua === e.ficha?.agua ? 1 : 0;
   const relacionadas = catalogoEspecies()
     .filter((x) => x.slug !== e.slug && x.categoria === e.categoria && parecida(x) > 0)
@@ -103,23 +121,23 @@ export default async function PaginaEspecie({ params }) {
     .slice(0, 6);
   const tieneFicha = !!(e.ficha?.t || e.ficha?.ph);
 
-  const canonica = `/es/wiki/especies/${e.slug}/`;
+  const canonica = `/${e.lang}/wiki/especies/${e.slug}/`;
   const articulo = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: e.comun && e.cientifico ? `${e.comun} (${e.cientifico})` : nombre,
     description: descripcion(e),
-    inLanguage: 'es',
+    inLanguage: e.lang,
     url: `${URL_SITIO}${canonica}`,
     ...(e.imagen ? { image: `${URL_SITIO}${encodeURI(e.imagen)}` } : {}),
     about: { '@type': 'Thing', name: e.cientifico || nombre, ...(e.comun ? { alternateName: [e.comun, ...e.otrosNombres] } : {}) },
-    isPartOf: { '@type': 'WebSite', name: 'WikiTank · Tankily', url: `${URL_SITIO}/es/wiki/` },
+    isPartOf: { '@type': 'WebSite', name: 'WikiTank · Tankily', url: `${URL_SITIO}/${e.lang}/wiki/` },
     publisher: { '@type': 'Organization', name: 'Tankily', logo: { '@type': 'ImageObject', url: `${URL_SITIO}/icons/icon-512.png` } },
   };
 
   return (
-    <article className="especie-pagina" lang="es">
-      <JsonLd datos={[articulo, migas([['WikiTank', '/es/wiki/'], [t('catalogo.titulo'), '/es/wiki/especies/'], [nombre, canonica]])]} />
+    <article className="especie-pagina" lang={e.lang}>
+      <JsonLd datos={[articulo, migas([['WikiTank', `/${e.lang}/wiki/`], [t('catalogo.titulo'), `/${e.lang}/wiki/especies/`], [nombre, canonica]])]} />
 
       <nav className="especie-migas mini" aria-label={t('wiki.ruta')} lang={lang}>
         <Link href="/wiki/" className="enlace">WikiTank</Link> / <Link href="/wiki/especies/" className="enlace">{t('catalogo.titulo')}</Link> / <span className="texto-3">{nombre}</span>
@@ -128,7 +146,7 @@ export default async function PaginaEspecie({ params }) {
       <header className="especie-hero">
         {e.imagen && <img src={encodeURI(e.imagen)} alt={nombre} />}
         <div className="especie-hero-panel cristal cristal-refracta">
-          <span className="etiqueta-agua" lang={lang}>{e.grupo}</span>
+          <span className="etiqueta-agua" lang={e.lang}>{e.grupo}</span>
           <h1>{nombre}</h1>
           {e.comun && e.cientifico && <p className="especie-cientifico"><em>{e.cientifico}</em></p>}
           {e.otrosNombres.length > 0 && <p className="mini texto-3"><span lang={lang}>{t('fichaEsp.otrosNombres')}</span>: {e.otrosNombres.join(', ')}</p>}
@@ -144,14 +162,14 @@ export default async function PaginaEspecie({ params }) {
         </p>
       )}
 
-      {lang !== 'es' && <p className="aviso" lang={lang}>{t('fichaEsp.contenidoEnEspanol')}</p>}
+      {lang !== e.lang && <p className="aviso" lang={lang}>{t('fichaEsp.contenidoEnEspanol')}</p>}
 
       <div lang={lang}><DatosClave ficha={e.ficha} t={t} n={formato(LOCALES[lang])} /></div>
 
       <div className="especie-cuerpo">
         <section className="cristal-suave especie-ficha" aria-labelledby="ficha-completa">
           <h2 id="ficha-completa" className="titulo-s" lang={lang}>{t('fichaEsp.fichaCompleta')}</h2>
-          <FichaEspecieContenido contenido={e.contenido} />
+          <FichaEspecieContenido datos={e.datos} texto={e.texto} />
         </section>
 
         <aside className="especie-lateral" lang={lang}>
@@ -165,7 +183,7 @@ export default async function PaginaEspecie({ params }) {
           )}
           {tieneFicha && (
             <div>
-              <AnadirATanque titulo={e.titulo} grupo={e.acuarios.length ? e.grupo : GRUPO_CATEGORIA[e.categoria]} />
+              <AnadirATanque titulo={e.titulo} grupo={base.acuarios.length ? base.grupo : GRUPO_CATEGORIA[e.categoria]} />
               <TanquesConEspecie titulo={e.titulo} />
             </div>
           )}
@@ -177,17 +195,20 @@ export default async function PaginaEspecie({ params }) {
         <section aria-labelledby="relacionadas" lang={lang}>
           <h2 id="relacionadas" className="titulo-s" style={{ marginBottom: 10 }}>{t('fichaEsp.relacionadas', { grupo: e.grupo.toLowerCase() })}</h2>
           <ul className="catalogo-rejilla">
-            {relacionadas.map((x) => (
+            {relacionadas.map((original) => {
+              const x = traducida ? fichaEnIdioma(original, lang) : { ...original, lang: 'es' };
+              return (
               <li key={x.slug}>
                 <Link href={`/wiki/especies/${x.slug}/`} className="tarjeta-especie cristal-suave">
                   <span className="tarjeta-especie-foto">{x.imagen && <img src={encodeURI(x.imagen)} alt="" loading="lazy" />}</span>
-                  <span className="tarjeta-especie-texto" lang="es">
+                  <span className="tarjeta-especie-texto" lang={x.lang}>
                     <strong>{x.comun || x.cientifico}</strong>
                     {x.comun && x.cientifico && <em>{x.cientifico}</em>}
                   </span>
                 </Link>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </section>
       )}

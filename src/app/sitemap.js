@@ -5,6 +5,7 @@ import { HERRAMIENTAS } from '@/lib/herramientas';
 import { FORO_CATEGORIAS, TIPOS_TANQUE, slugTipo } from '@/lib/constantes';
 import { rutasPublicas } from '@/lib/paginasPublicas';
 import { IDIOMAS_WIKI, nodoTraducible, titulosTraducidos } from '@/lib/wikiTraduccion';
+import { fichaTraducida } from '@/lib/especiesTraduccion';
 
 // sitemap.xml: páginas indexables en todos los idiomas (con sus alternativas hreflang), WikiTank (de momento
 // solo en español) y el contenido público de la comunidad (lib/paginasPublicas.js).
@@ -53,10 +54,16 @@ export default async function sitemap() {
     const alternates = idiomas.length > 1 ? { languages: Object.fromEntries(idiomas.map((l) => [l, url(l)])) } : undefined;
     return idiomas.map((l) => ({ url: url(l), lastModified: ahora, changeFrequency: 'monthly', priority: 0.6, alternates }));
   });
-  // Catálogo y fichas de especies de WikiTank (en español, como el resto de la wiki)
+  // Catálogo y fichas de especies de WikiTank: en español y, las que están traducidas enteras, en los idiomas de
+  // IDIOMAS_WIKI (con sus alternativas)
   const especies = [
     { url: `${URL_SITIO}/es/wiki/especies/`, lastModified: ahora, changeFrequency: 'weekly', priority: 0.8 },
-    ...catalogoEspecies().map((e) => ({ url: `${URL_SITIO}/es/wiki/especies/${e.slug}/`, lastModified: ahora, changeFrequency: 'monthly', priority: 0.7 })),
+    ...catalogoEspecies().flatMap((e) => {
+      const idiomas = ['es', ...IDIOMAS_WIKI.filter((l) => fichaTraducida(e, l))];
+      const url = (l) => `${URL_SITIO}/${l}/wiki/especies/${e.slug}/`;
+      const alternates = idiomas.length > 1 ? { languages: Object.fromEntries(idiomas.map((l) => [LOCALES[l], url(l)])) } : undefined;
+      return idiomas.map((l) => ({ url: url(l), lastModified: ahora, changeFrequency: 'monthly', priority: 0.7, alternates }));
+    }),
   ];
   // Tanques públicos, hilos del foro y anuncios activos (cada uno en su idioma; se actualiza cada noche)
   const comunidad = (await rutasPublicas()).map(({ ruta, fecha }) => ({

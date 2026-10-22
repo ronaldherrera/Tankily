@@ -59,9 +59,10 @@ export default async function RootLayout({ children, params }) {
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_INSTALAR }} />
         {/* Casi todas las páginas piden datos a Supabase al cargar: se abre la conexión cuanto antes */}
-        {/* Analítica sin cookies (src/lib/analitica.js); data-domains: no cuenta las visitas en local */}
+        {/* Analítica sin cookies (src/lib/analitica.js); data-domains: no cuenta las visitas en local;
+            data-exclude-hash: al volver de iniciar sesión el token de Supabase va tras el # y no debe salir de la web */}
         {UMAMI_ID && <script dangerouslySetInnerHTML={{ __html: SCRIPT_SIN_ANALITICA }} />}
-        {UMAMI_ID && <script defer src={UMAMI_SCRIPT} data-website-id={UMAMI_ID} data-domains="tankily.com" />}
+        {UMAMI_ID && <script defer src={UMAMI_SCRIPT} data-website-id={UMAMI_ID} data-domains="tankily.com" data-exclude-hash="true" />}
         {process.env.NEXT_PUBLIC_SUPABASE_URL && <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} crossOrigin="anonymous" />}
       </head>
       <body>
