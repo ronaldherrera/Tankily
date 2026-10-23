@@ -39,8 +39,13 @@ export function useMensajeria(usuario, activo = true) {
       if (vivo && data) setMensajes((ms) => fusionar(ms, [data]));
     };
     // Nombre de canal único: la página y el chat flotante pueden convivir un instante
+    // Mis mensajes que la otra persona acaba de leer: pasan a doble check
+    const alLeerlos = ({ new: fila }) => {
+      if (vivo) setMensajes((ms) => (ms || []).map((m) => (m.id === fila.id ? { ...m, leido: fila.leido } : m)));
+    };
     const canal = supabase.channel(`mensajes-${usuario.id}-${Math.random().toString(36).slice(2, 8)}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensajes', filter: `receptor_id=eq.${usuario.id}` }, alLlegar)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'mensajes', filter: `emisor_id=eq.${usuario.id}` }, alLeerlos)
       .subscribe();
 
     // La otra vista (página o chat flotante) marcó una conversación como leída: se refleja aquí sin recargar
@@ -113,6 +118,31 @@ export function useMensajeria(usuario, activo = true) {
 
   const totalSinLeer = conversaciones.reduce((s, c) => s + c.sinLeer, 0);
   return { mensajes, conversaciones, hiloCon, enviar, marcarLeidos, totalSinLeer };
+}
+
+// Estado de la otra persona de una conversación (función estado_chat): el idioma en que usa la web, que es al
+// que se le traducen tus mensajes, y si está en línea o cuándo se conectó por última vez. Se refresca cada 30 s.
+const EN_LINEA_MS = 150000; // la web apunta la conexión cada minuto mientras está a la vista
+export function useEstadoChat(con) {
+  const [estado, setEstado] = useState(null);
+  useEffect(() => {
+    if (!con) return undefined;
+    let vivo = true;
+    const pedir = () => supabase.rpc('estado_chat', { p_con: con }).then(({ data }) => {
+      if (!vivo) return;
+      const hace = data?.visto_en ? Date.now() - new Date(data.visto_en).getTime() : null;
+      // Sin hora exacta, el último día que entró (en UTC, como actividad_diaria): 'hoy', 'ayer' o la fecha
+      const ahora = new Date();
+      const ayer = new Date(ahora.getTime() - 86400000).toISOString().slice(0, 10);
+      const dia = data?.ultimo_dia;
+      const ultimoDia = !dia ? null : dia === ahora.toISOString().slice(0, 10) ? 'hoy' : dia === ayer ? 'ayer' : dia;
+      setEstado({ con, idioma: data?.idioma || null, vistoEn: data?.visto_en || null, enLinea: hace !== null && hace < EN_LINEA_MS, hace, ultimoDia });
+    });
+    pedir();
+    const intervalo = setInterval(pedir, 30000);
+    return () => { vivo = false; clearInterval(intervalo); };
+  }, [con]);
+  return estado?.con === con ? estado : null;
 }
 
 // Perfil de alguien con quien aún no hay conversación

@@ -21,6 +21,7 @@ import SelectorIdioma from './SelectorIdioma';
 import { cargarScriptAdsense } from '@/lib/adsense';
 import { CICLO, estadoLogo } from '@/lib/logoAnimado';
 import { useCargando } from '@/lib/cargando';
+import { anunciarPresencia } from '@/lib/enLinea';
 
 // Símbolo de Tankily: la t con una ola por travesaño y una burbuja por punto.
 // Con `conNombre`, la t hace de inicial de "ankily" (logotipo); el recorte del
@@ -226,6 +227,19 @@ export default function AppShell({ children }) {
     supabase.from('avisos_email').upsert({ usuario_id: usuario.id, idioma: lang }, { onConflict: 'usuario_id' })
       .then(({ error }) => { if (!error) try { localStorage.setItem('tk-idioma-avisos', marca); } catch { /* nada */ } });
   }, [usuario, lang]);
+
+  // Aro de "en línea" en los avatares de toda la web (lib/enLinea.js)
+  useEffect(() => (usuario ? anunciarPresencia(usuario.id) : undefined), [usuario]);
+
+  // "En línea" / "últ. vez" del chat: se apunta la conexión al entrar y cada minuto mientras la web está a la vista
+  useEffect(() => {
+    if (!usuario) return undefined;
+    const marcar = () => { if (document.visibilityState === 'visible') supabase.rpc('marcar_conexion').then(() => {}); };
+    marcar();
+    const intervalo = setInterval(marcar, 60000);
+    document.addEventListener('visibilitychange', marcar);
+    return () => { clearInterval(intervalo); document.removeEventListener('visibilitychange', marcar); };
+  }, [usuario]);
 
   // Un apunte al día por persona con sesión (solo la fecha): activos y retención del panel de administración
   useEffect(() => {

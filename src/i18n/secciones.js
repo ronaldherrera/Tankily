@@ -41,10 +41,11 @@ import * as avisos from './textos/avisos.js';
 import * as moderacion from './textos/moderacion.js';
 import * as planPro from './textos/planPro.js';
 import * as video from './textos/video.js';
+import * as captacion from './textos/captacion.js';
 
 const SECCIONES = [comun, muro, tanques, cuenta, foro, mercado, tiendas, legal, wiki];
 // Funciones nuevas con los 8 idiomas en el mismo archivo
-const MULTI = [cuidado, herramientas, chat, traduccion, social, pasos, anadir, logros, estadisticas, guardados, relacionados, bienvenida, seo, conEspecie, invitacion, errores, cercania, distancia, catalogo, instalar, apoyar, contrasena, selector, recorte, seguimiento, cita, administracion, verificar, avisos, moderacion, planPro, video];
+const MULTI = [cuidado, herramientas, chat, traduccion, social, pasos, anadir, logros, estadisticas, guardados, relacionados, bienvenida, seo, conEspecie, invitacion, errores, cercania, distancia, catalogo, instalar, apoyar, contrasena, selector, recorte, seguimiento, cita, administracion, verificar, avisos, moderacion, planPro, video, captacion];
 
 export const conMulti = (lang, base) => Object.assign({}, base, ...MULTI.map((s) => s[lang]));
 export const desdeSecciones = (lang) => conMulti(lang, Object.assign({}, ...SECCIONES.map((s) => s[lang])));

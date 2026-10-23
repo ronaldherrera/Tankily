@@ -1514,6 +1514,13 @@ button.cifra-perfil:hover, button.cifra-perfil:focus-visible { background: rgba(
 .chat-avatares { display: flex; margin-left: auto; }
 .chat-avatares .avatar { box-shadow: 0 0 0 2px rgba(var(--c-superficie), 1); }
 .chat-avatares .avatar + .avatar { margin-left: -8px; }
+/* La conversación más reciente (la primera) queda delante de las demás */
+.chat-avatares .avatar { position: relative; }
+.chat-avatares .avatar:nth-child(1) { z-index: 3; }
+.chat-avatares .avatar:nth-child(2) { z-index: 2; }
+.chat-avatares .avatar:nth-child(3) { z-index: 1; }
+/* Ahí solo salen personas en línea: el aro sobra */
+.chat-avatares .avatar.en-linea { outline: none; }
 .chat-persona { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .chat-persona strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 650; }
 .chat-cuerpo { position: relative; z-index: 2; }
@@ -1527,7 +1534,25 @@ button.cifra-perfil:hover, button.cifra-perfil:focus-visible { background: rgba(
 .chat-hilo .burbuja { max-width: 85%; font-size: 0.92rem; }
 .chat-escribir { display: flex; gap: 8px; padding: 10px; border-top: 1px solid var(--linea); }
 .chat-escribir .entrada { flex: 1; padding: 9px 12px; }
+/* Ampliado: más ancho y casi toda la altura de la pantalla */
+.chat-flotante { transition: width 0.4s var(--muelle-suave); }
+.chat-flotante.grande { width: min(560px, calc(100vw - 48px)); }
+.chat-flotante.grande.abierto .chat-interior { height: min(760px, calc(100dvh - 110px)); }
+.chat-flotante.grande .chat-hilo .burbuja { max-width: 75%; }
+.chat-persona .linea-conexion { display: block; }
 @media (max-width: 960px) { .chat-flotante { display: none; } }
+/* Chat (página y flotante): hora + reloj / check / doble check, en línea y a qué idioma se traduce */
+.burbuja-pie { display: flex; align-items: center; justify-content: flex-end; gap: 4px; opacity: 0.6; }
+.burbuja:not(.mia) .burbuja-pie { justify-content: flex-start; }
+.marca-envio { flex: none; }
+.marca-envio.leido { color: var(--agua); }
+.burbuja-pie:has(.marca-envio.leido) { opacity: 0.85; }
+.linea-conexion { display: block; color: var(--texto-3); font-weight: 500; }
+.linea-conexion.en-linea { color: var(--ok-texto); }
+.linea-conexion.en-linea::before { content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: var(--ok); vertical-align: 1px; }
+/* El aviso va dentro de la zona de escribir: la línea divisoria pasa por encima del aviso, no entre él y la caja */
+.aviso-traduccion-chat { display: flex; align-items: center; gap: 6px; margin: 0; padding: 8px 12px 0; color: var(--texto-3); border-top: 1px solid var(--linea); }
+.aviso-traduccion-chat + .chat-escribir, .aviso-traduccion-chat + .hilo-escribir { border-top: 0; padding-top: 6px; }
 /* El botón del glosario de la wiki sube para no quedar debajo de la barra del chat */
 @media (min-width: 961px) { body:has(.chat-flotante) .glosario-fab { bottom: 76px; } }
 
@@ -1697,6 +1722,21 @@ h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
    --------------------------------------------------------------------- */
 .portada-confianza { max-width: 46ch; line-height: 1.55; }
 .portada-confianza strong { color: var(--texto); font-weight: 600; }
+/* "Pruébalo ya, sin cuenta": herramientas útiles antes de pedir el registro */
+.probar-sin-cuenta { display: flex; flex-direction: column; gap: 8px; max-width: 46ch; }
+.probar-sin-cuenta ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.probar-tarjeta { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 14px; transition: background 0.2s, transform 0.2s; }
+.probar-tarjeta > span { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.probar-tarjeta > svg:first-child { color: var(--agua-texto); flex-shrink: 0; }
+.probar-tarjeta > svg:last-child { color: var(--texto-3); flex-shrink: 0; }
+.probar-tarjeta:hover { transform: translateX(2px); }
+/* WikiTank: invitación ligada a la especie (visitantes sin cuenta) y tanque preparado antes de registrarse */
+.invita-especie { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 16px 18px; border-radius: var(--radio-l); border: 1px solid color-mix(in oklab, var(--agua) 30%, transparent); }
+.invita-especie > div:first-child { display: flex; flex-direction: column; gap: 4px; max-width: 60ch; }
+.invita-especie-acciones { display: flex; gap: 8px; flex-wrap: wrap; }
+.tanque-pendiente { padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; border: 1px solid color-mix(in oklab, var(--agua) 30%, transparent); }
+/* Entrar y registro dentro del navegador de Facebook, Instagram… */
+.aviso-navegador-app { display: flex; flex-direction: column; gap: 6px; text-align: left; }
 .beneficios { max-width: 1080px; margin: 0 auto; padding: 24px 28px 56px; display: flex; flex-direction: column; gap: 28px; }
 .beneficios .titulo-l { max-width: 22ch; }
 .beneficios-rejilla { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
@@ -1848,3 +1888,15 @@ h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
   .btn-s { height: 40px; }
   .btn-icono.btn-s { width: 40px; }
 }
+/* Mensaje propio: "Ver en portugués" a la izquierda del pie (ver cómo le llega a la otra persona), con el tono de la hora */
+.boton-idioma { display: inline-flex; align-items: center; gap: 4px; padding: 1px 4px; margin: 0 auto 0 -4px; border: 0; border-radius: 6px; background: none; color: inherit; font: inherit; cursor: pointer; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 2px; }
+.boton-idioma:hover { text-decoration-color: currentColor; }
+.boton-idioma:focus-visible { background: rgba(var(--c-tinta), 0.1); }
+.boton-idioma.activo { color: var(--agua); }
+/* Avatar de alguien en línea (lib/enLinea.js): aro verde fino separado de la foto. Con outline, que sigue el
+   círculo y no choca con las sombras que cada sitio pone a sus avatares */
+.avatar.en-linea { outline: 2px solid var(--ok); outline-offset: 1.5px; }
+
+/* Perfil de una cuenta de muestra: "muestra ⓘ", mismo gris que el @usuario */
+.marca-muestra { display: inline-flex; vertical-align: -2px; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; }
+.marca-muestra-texto { display: block; margin-top: 4px; }

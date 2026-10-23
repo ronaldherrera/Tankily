@@ -10,6 +10,7 @@ import { useTostada } from '@/components/ui';
 import { analizarCompatibilidad, especieDe, ultimasMediciones } from '@/lib/compatibilidad';
 import { ListaAvisos } from '@/components/tanques/Compatibilidad';
 import Selector from '@/components/Selector';
+import { guardarPendiente, tipoParaEspecie } from '@/lib/tanquePendiente';
 
 const CATEGORIA = { peces: 'pez', 'otros peces': 'pez', corales: 'coral', plantas: 'planta', macroalgas: 'planta', invertebrados: 'invertebrado' };
 const menciona = (a, nombre) => [a.especie, a.a?.nombre, a.b?.nombre, ...(a.especies || [])].includes(nombre);
@@ -21,15 +22,28 @@ export function nombresDe(titulo) {
   return { comun: m[1].split('/')[0].trim() || m[2].trim(), cientifico: m[2].split('/')[0].trim() };
 }
 
+// Especie de WikiTank y categoría de habitante a partir del título y el grupo de una ficha
+export function especieDeFicha(titulo, grupo) {
+  const { comun, cientifico } = nombresDe(titulo);
+  const especie = especieDe({ nombre: comun, nombre_cientifico: cientifico });
+  return { comun, cientifico, especie, categoria: especie?.categoria || CATEGORIA[(grupo || '').toLowerCase()] || 'otro' };
+}
+
+// Visitante sin cuenta: deja la especie preparada para su primer tanque (lib/tanquePendiente.js) antes del registro
+export function prepararEspecie({ comun, cientifico, especie, categoria }) {
+  guardarPendiente({
+    tipo: tipoParaEspecie(especie),
+    habitantes: [{ nombre: comun, nombre_cientifico: cientifico, wiki_ruta: especie?.ruta || null, categoria, cantidad: especie?.ficha?.grupo || 1 }],
+  });
+}
+
 // "Añadir a mi tanque" en la ficha de una especie de WikiTank: convierte una visita de la wiki
 // en un habitante del tanque (o en una cuenta nueva), comprobando antes si encaja.
 export default function AnadirATanque({ titulo, grupo }) {
   const { usuario, cargando } = useSesion();
   const { t } = useT();
   const tostada = useTostada();
-  const { comun, cientifico } = useMemo(() => nombresDe(titulo), [titulo]);
-  const especie = useMemo(() => especieDe({ nombre: comun, nombre_cientifico: cientifico }), [comun, cientifico]);
-  const categoria = especie?.categoria || CATEGORIA[(grupo || '').toLowerCase()] || 'otro';
+  const { comun, cientifico, especie, categoria } = useMemo(() => especieDeFicha(titulo, grupo), [titulo, grupo]);
 
   const [tanques, setTanques] = useState(null);
   const [tanqueId, setTanqueId] = useState('');
@@ -82,7 +96,7 @@ export default function AnadirATanque({ titulo, grupo }) {
       {!usuario ? (
         <>
           <p className="pequeno texto-2">{t('anadir.sinCuenta')}</p>
-          <Link href="/registro/" className="btn btn-primario" style={{ alignSelf: 'flex-start' }}>{t('anadir.crearCuenta')}</Link>
+          <Link href="/registro/" className="btn btn-primario" style={{ alignSelf: 'flex-start' }} onClick={() => prepararEspecie({ comun, cientifico, especie, categoria })}>{t('anadir.crearCuenta')}</Link>
         </>
       ) : tanques === null ? null : tanques.length === 0 ? (
         <>

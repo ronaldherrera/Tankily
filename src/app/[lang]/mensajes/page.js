@@ -9,9 +9,10 @@ import { useSesion } from '@/lib/sesion';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
 import { Avatar, RequiereSesion, Vacio, Cargando, useTostada } from '@/components/ui';
 import { useT } from '@/i18n/IdiomaProvider';
-import { useMensajeria, perfilDe } from '@/lib/mensajeria';
+import { useMensajeria, useEstadoChat, perfilDe } from '@/lib/mensajeria';
 import { mensajeError } from '@/lib/errores';
 import TextoTraducible from '@/components/feed/TextoTraducible';
+import { LineaConexion, AvisoTraduccion, MensajePropio } from '@/components/ChatEstado';
 
 function Bandeja() {
   const { usuario, cargando } = useSesion();
@@ -26,6 +27,7 @@ function Bandeja() {
   const [texto, setTexto] = useState('');
   const fin = useRef(null);
   const hilo = hiloCon(con);
+  const estado = useEstadoChat(con);
 
   useEffect(() => {
     if (!con) { setOtro(null); return; }
@@ -93,18 +95,31 @@ function Bandeja() {
             <>
               <header className="hilo-cabecera">
                 <button className="btn btn-fantasma btn-icono btn-s solo-movil" onClick={() => router.push('/mensajes/')} aria-label={t('mensajes.volver')}><ArrowLeft size={18} /></button>
-                {otro && <><Avatar perfil={otro} tamano={34} /><Link href={`/u/?n=${otro.usuario}`}><strong>{otro.nombre || otro.usuario}</strong> <span className="texto-3 pequeno">@{otro.usuario}</span></Link></>}
+                {otro && (
+                  <>
+                    <Avatar perfil={otro} tamano={34} />
+                    <span style={{ minWidth: 0 }}>
+                      <Link href={`/u/?n=${otro.usuario}`}><strong>{otro.nombre || otro.usuario}</strong> <span className="texto-3 pequeno">@{otro.usuario}</span></Link>
+                      <LineaConexion estado={estado} />
+                    </span>
+                  </>
+                )}
               </header>
               <div className="hilo-mensajes">
                 {hilo.map((m) => (
                   <div key={m.id} className={`burbuja${m.emisor_id === usuario.id ? ' mia' : ''}${m.enviando ? ' enviando' : ''}`}>
                     {m.anuncio && <Link href={`/mercado/anuncio/?id=${m.anuncio.id}`} className="mini" style={{ display: 'flex', gap: 4, alignItems: 'center', opacity: 0.8 }}><Tag size={12} /> {m.anuncio.titulo}</Link>}
-                    <p className="prosa"><TextoTraducible tabla="mensajes" id={m.id} texto={m.contenido} idioma={m.emisor_id === usuario.id ? null : m.idioma} render={(x) => x} /></p>
-                    <span className="mini" style={{ opacity: 0.6 }}>{formatRelativeTime(m.creado_en)}</span>
+                    {m.emisor_id === usuario.id ? <MensajePropio m={m} destino={estado?.idioma} /> : (
+                      <>
+                        <p className="prosa"><TextoTraducible tabla="mensajes" id={m.id} texto={m.contenido} idioma={m.idioma} render={(x) => x} /></p>
+                        <span className="burbuja-pie mini">{formatRelativeTime(m.creado_en)}</span>
+                      </>
+                    )}
                   </div>
                 ))}
                 <div ref={fin} />
               </div>
+              <AvisoTraduccion estado={estado} />
               <form onSubmit={enviar} className="hilo-escribir">
                 <input className="entrada" value={texto} maxLength={2000} onChange={(e) => setTexto(e.target.value)} placeholder={t('mensajes.escribe')} aria-label={t('mensajes.etiqueta')} />
                 <button className="btn btn-primario btn-icono" disabled={!texto.trim()} aria-label={t('mensajes.enviar')}><Send size={16} /></button>

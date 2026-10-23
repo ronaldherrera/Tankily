@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useT } from '@/i18n/IdiomaProvider';
 import { useProveedores, entrarCon } from '@/lib/autenticacion';
+import { navegadorDeApp } from '@/lib/navegadorApp';
+import { evento } from '@/lib/analitica';
+import AvisoNavegadorApp from './AvisoNavegadorApp';
 
 const NOMBRES = { google: 'Google', apple: 'Apple', facebook: 'Facebook', azure: 'Microsoft' };
 
@@ -47,10 +50,19 @@ function Logo({ proveedor }) {
 // Si no hay ningún proveedor activado en Supabase, no se muestra nada.
 export default function AccesoSocial({ registro = false }) {
   const { t, lang } = useT();
-  const proveedores = useProveedores(lang);
+  const todos = useProveedores(lang);
   const [yendo, setYendo] = useState(null);
   const [error, setError] = useState('');
-  if (!proveedores?.length) return null;
+  // Dentro de Facebook, Instagram… Google rechaza el acceso: se quita su botón y se explica cómo salir del visor.
+  // Se mira tras montar para que el HTML estático coincida al hidratar.
+  const [app, setApp] = useState(null);
+  useEffect(() => {
+    const nombre = navegadorDeApp();
+    setApp(nombre);
+    if (nombre) evento('navegador_app', { app: nombre });
+  }, []);
+  const proveedores = todos && (app ? todos.filter((p) => p !== 'google') : todos);
+  if (!proveedores?.length) return app ? <><AvisoNavegadorApp app={app} /><div className="auth-separador"><span>{t('social.oEmail')}</span></div></> : null;
 
   async function ir(p) {
     setYendo(p);
@@ -61,6 +73,7 @@ export default function AccesoSocial({ registro = false }) {
 
   return (
     <div className="acceso-social">
+      {app && <AvisoNavegadorApp app={app} />}
       {proveedores.map((p) => (
         <button key={p} type="button" className={`btn btn-bloque boton-social social-${p}`} onClick={() => ir(p)} disabled={!!yendo}>
           <Logo proveedor={p} />

@@ -18,6 +18,7 @@ import Lateral from '@/components/Lateral';
 import Reportar from '@/components/Reportar';
 import InvitacionRegistro from '@/components/InvitacionRegistro';
 import Seguimientos, { SeguidoPor, cargarMisSeguidos, cargarComunes } from '@/components/perfil/Seguimientos';
+import MarcaMuestra from '@/components/perfil/MarcaMuestra';
 
 // Usa el índice de especies de la wiki: solo se descarga al abrir la lista
 const EspeciesCuidadas = dynamic(() => import('@/components/perfil/EspeciesCuidadas'), { ssr: false });
@@ -130,7 +131,7 @@ function Perfil() {
         <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div>
             <h1 className="titulo-l">{perfil.nombre || perfil.usuario}</h1>
-            <p className="texto-3">@{perfil.usuario}{perfil.nivel ? ` · ${t(`perfil.niveles.${perfil.nivel}`)}` : ''}</p>
+            <p className="texto-3">@{perfil.usuario}{perfil.nivel ? ` · ${t(`perfil.niveles.${perfil.nivel}`)}` : ''}{perfil.muestra && <> · <MarcaMuestra /></>}</p>
           </div>
           {perfil.bio && <p className="prosa">{perfil.bio}</p>}
           {!esYo && <SeguidoPor comunes={comunes} onAbrir={() => setLista('comun')} />}

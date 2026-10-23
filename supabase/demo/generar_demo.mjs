@@ -1,8 +1,8 @@
 // Genera supabase/demo/datos_demo.sql con una comunidad de demostración:
-// usuarios de 10 países y todos los niveles, tiendas (gratis, Pro y verificadas), tanques con
+// usuarios de 10 países y todos los niveles, tanques con
 // habitantes, mediciones, diario y tareas, publicaciones, comentarios, me gusta, seguidores,
-// hilos del foro con respuestas, votos y soluciones, anuncios en varias monedas, reseñas,
-// mensajes y una campaña propia.
+// hilos del foro con respuestas, votos y soluciones y mensajes. Sin mercado ni tiendas (decisión del 23/10/2026):
+// las cuatro cuentas de tienda siguen en la lista para no mover los ids, pero no se crean (SIN_TIENDAS).
 //
 // Todo cuelga de usuarios con correo @demo.tankily.invalid y SIN contraseña (no se puede entrar
 // con ellos). limpiar_demo.sql los borra y, en cascada, todo su contenido.
@@ -76,32 +76,20 @@ const usuarios = [
 ];
 usuarios.forEach(([usuario], i) => { U[usuario] = `de300000-0000-4000-a000-${String(i + 1).padStart(12, '0')}`; });
 
+// Cuentas de tienda: no se crean ni ellas ni nada suyo
+const SIN_TIENDAS = new Set(['lumen_reef', 'raiz_roca', 'cantabrico_azul', 'pecera_viva']);
 const sql = [];
 const out = (s) => sql.push(s);
 out('-- Generado por supabase/demo/generar_demo.mjs. Datos de DEMOSTRACIÓN: bórralos con limpiar_demo.sql antes del lanzamiento.');
 out('begin;');
 
 usuarios.forEach(([usuario, nombre, pais, provincia, nivel, bio, avatar, portada], i) => {
+  if (SIN_TIENDAS.has(usuario)) return;
   const id = U[usuario];
   const alta = hace(120 - i * 4);
   out(`insert into auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, confirmation_token, recovery_token, email_change_token_new, email_change)
 values ('00000000-0000-0000-0000-000000000000', ${q(id)}, 'authenticated', 'authenticated', ${q(`${usuario}@${DOMINIO}`)}, '', ${q(alta)}, '{"provider":"email","providers":["email"],"demo":true}', ${q(JSON.stringify({ usuario, nombre }))}, ${q(alta)}, ${q(alta)}, '', '', '', '');`);
-  out(`update public.perfiles set nombre = ${q(nombre)}, bio = ${q(bio)}, pais = ${q(pais)}, provincia = ${q(provincia)}, nivel = ${q(nivel)}, avatar_url = ${q(img(avatar))}, portada_url = ${q(FOTOS[portada])}, creado_en = ${q(alta)} where id = ${q(id)};`);
-});
-
-// --- Tiendas ----------------------------------------------------------------
-const T = {};
-const tiendas = [
-  ['lumen_reef', 'lumen-reef-studio', 'Lumen Reef Studio', 'Corales de cultivo propio (SPS, LPS y blandos), iluminación LED, reactores y química marina. Te ayudamos a montar tu primer arrecife y hacemos análisis ICP con asesoramiento.', 'Valencia', 'Valencia', 'ES', ['marino', 'corales', 'equipamiento'], true, 'Lunes a sábado de 10:00 a 14:00 y de 17:00 a 20:30', 'pro', true, 'Acropora spp', 'reef'],
-  ['raiz_roca', 'raiz-y-roca', 'Raíz & Roca', 'Todo para aquascaping: plantas in vitro, rocas, maderas, sustratos y CO₂. Diseñamos y montamos layouts por encargo.', 'Madrid', 'Madrid', 'ES', ['plantado', 'gambas', 'equipamiento'], true, 'Martes a sábado de 11:00 a 20:00', 'pro', false, 'Anubias barteri', 'aquascape'],
-  ['cantabrico_azul', 'cantabrico-azul', 'Acuarios Cantábrico Azul', 'Tienda de barrio con peces de agua dulce, agua fría y estanques. Consejo sin prisas y mantenimiento a domicilio en Santander.', 'Santander', 'Cantabria', 'ES', ['dulce', 'estanques', 'alimentacion'], false, 'Lunes a viernes de 10:00 a 13:30 y de 16:30 a 20:00', 'gratis', false, 'Paracheirodon innesi', 'goldfish'],
-  ['pecera_viva', 'pecera-viva-cdmx', 'Pecera Viva', 'Peces de agua dulce, plantas y accesorios. Envíos a toda la república.', 'Ciudad de México', 'Ciudad de México', 'MX', ['dulce', 'plantado', 'alimentacion'], true, 'Lunes a domingo de 11:00 a 19:00', 'gratis', false, 'Corydoras aeneus', 'plantado'],
-];
-tiendas.forEach(([dueno, slug, nombre, descripcion, ciudad, provincia, pais, esp, online, horario, plan, verificada, logo, portada], i) => {
-  const id = ID0 + 100 + i;
-  T[dueno] = id;
-  out(`insert into public.tiendas (id, propietario_id, slug, nombre, descripcion, logo_url, portada_url, ciudad, provincia, pais, especialidades, venta_online, horario, plan, pro_hasta, verificada, creado_en)
-overriding system value values (${id}, ${q(U[dueno])}, ${q(slug)}, ${q(nombre)}, ${q(descripcion)}, ${q(img(logo))}, ${q(FOTOS[portada])}, ${q(ciudad)}, ${q(provincia)}, ${q(pais)}, ${arr(esp)}, ${online}, ${q(horario)}, ${q(plan)}, ${plan === 'pro' ? q(new Date(ahora + 300 * DIA).toISOString().slice(0, 10)) : 'null'}, ${verificada}, ${q(hace(100 - i * 5))});`);
+  out(`update public.perfiles set nombre = ${q(nombre)}, bio = ${q(bio)}, pais = ${q(pais)}, provincia = ${q(provincia)}, nivel = ${q(nivel)}, avatar_url = ${q(img(avatar))}, portada_url = ${q(FOTOS[portada])}, creado_en = ${q(alta)}, muestra = true where id = ${q(id)};`);
 });
 
 // --- Tanques ------------------------------------------------------------------
@@ -209,6 +197,7 @@ aficionados.forEach((a, i) => {
 let n = 0;
 for (const par of seguir) {
   const [a, b] = par.split('>');
+  if (SIN_TIENDAS.has(a) || SIN_TIENDAS.has(b)) continue;
   out(`insert into public.seguidores (seguidor_id, seguido_id, creado_en) values (${q(U[a])}, ${q(U[b])}, ${q(hace(90 - (n++ % 80)))});`);
 }
 
@@ -220,7 +209,7 @@ const segTanque = [
   ['kasia_krewetki', 'claire_crevettes:Crevettier 54 l'], ['sanne_nano', 'dani_plantados:Nano de gambas'], ['pablo_goldfish', 'carmen_koi:Estanque del jardín'],
   ['laura_reef', 'jake_reefs:Mixed reef 120 gal'], ['dani_plantados', 'lukas_scapes:Iwagumi 60P'], ['ana_paludario', 'lukas_scapes:Iwagumi 60P'],
 ];
-segTanque.forEach(([u, t], i) => out(`insert into public.tanque_seguidores (usuario_id, tanque_id, creado_en) values (${q(U[u])}, ${TQ[t]}, ${q(hace(60 - i * 3))});`));
+segTanque.filter(([u]) => !SIN_TIENDAS.has(u)).forEach(([u, t], i) => out(`insert into public.tanque_seguidores (usuario_id, tanque_id, creado_en) values (${q(U[u])}, ${TQ[t]}, ${q(hace(60 - i * 3))});`));
 
 // --- Publicaciones ------------------------------------------------------------------
 // [autor, tanque o null, contenido, imágenes, días atrás]
@@ -241,7 +230,7 @@ const posts = [
   ['sanne_nano', 'Mijn eerste nano', 'Mijn eerste garnalen zijn binnen! Twaalf blauwe Neocaridina. Tips zijn welkom 💙 #garnalen', [img('Neocaridina davidi Blue')], 2],
   ['kasia_krewetki', 'Krewetkarium 30 l', 'Nowe CBS w krewetkarium. Parametry stabilne od tygodnia, TDS 240. #krewetki', [img('Caridina cantonensis CBS')], 3],
   ['laura_reef', null, 'Consejo rápido: antes de culpar a la luz, mide fosfatos y nitratos. El 80 % de los problemas de color en SPS que veo son de nutrientes. @tomas_nano tú lo sabes bien 😉 #reef', [FOTOS.tests], 8],
-  ['dani_plantados', null, 'Taller gratuito de aquascaping este sábado en Madrid con @raiz_roca. Traed vuestras dudas sobre CO₂ y abonado. #quedada #aquascaping', [FOTOS.co2], 9],
+  ['dani_plantados', null, 'Taller gratuito de aquascaping este sábado en Madrid. Traed vuestras dudas sobre CO₂ y abonado. #quedada #aquascaping', [FOTOS.co2], 9],
   ['lumen_reef', null, 'Nuevos frags de Acropora de cultivo propio en tienda, aclimatados a LED. Todos con ficha de parámetros. #reef #corales', [img('Acropora spp')], 2],
   ['raiz_roca', null, 'Llegaron rocas Seiryu y maderas de manzanita. Ideal para iwagumi como el de @lukas_scapes. #aquascaping', [FOTOS.tecnicas], 5],
   ['marta_empieza', null, 'Pregunta tonta: ¿cada cuánto limpiáis el filtro? El mío tiene la esponja marrón y me da miedo tocarlo. #principiantes', [], 6],
@@ -256,6 +245,7 @@ const P = [];
 posts.forEach(([autor, tanque, contenido, imagenes, dias], i) => {
   const id = ID0 + 400 + i;
   P.push({ id, autor });
+  if (SIN_TIENDAS.has(autor)) return;
   out(`insert into public.publicaciones (id, usuario_id, tanque_id, contenido, imagenes, creado_en) overriding system value values (${id}, ${q(U[autor])}, ${tanque ? TQ[`${autor}:${tanque}`] : 'null'}, ${q(contenido)}, ${arr(imagenes)}, ${q(hace(dias, i % 9))});`);
 });
 // Un eco (compartir)
@@ -264,6 +254,7 @@ out(`insert into public.publicaciones (id, usuario_id, contenido, tipo, eco_de, 
 // Me gusta
 let likes = 0;
 P.forEach(({ id, autor }, i) => {
+  if (SIN_TIENDAS.has(autor)) return;
   const cuantos = 3 + Math.floor(azar() * 9);
   for (let k = 0; k < cuantos; k++) {
     const u = aficionados[(i * 5 + k * 7) % aficionados.length];
@@ -289,6 +280,7 @@ const comentarios = [
   [21, 'laura_reef', 'Amén. Cuarentena siempre.'], [24, 'laura_reef', 'Si no tiene anémona, la Stylophora es la sustituta oficial 😂'], [25, 'dani_plantados', 'Muy importante. La mitad de mis algas del primer año fueron por eso.'],
 ];
 comentarios.forEach(([i, autor, texto], k) => {
+  if (SIN_TIENDAS.has(autor) || SIN_TIENDAS.has(P[i].autor)) return;
   out(`insert into public.comentarios (id, publicacion_id, usuario_id, contenido, creado_en) overriding system value values (${ID0 + 600 + k}, ${P[i].id}, ${q(U[autor])}, ${q(texto)}, ${q(hace(Math.max(posts[i][4] - 0.1 - k * 0.002, 0.02)))});`);
 });
 
@@ -315,7 +307,7 @@ const hilos = [
     [['dani_plantados', 'Sí, pero usa espuma sin fungicidas y deja curar 48 h antes de llenar. Luego silicona y fibra de coco.', 5]], -1],
   ['presentaciones', 'kasia_krewetki', 'Krewetkarium 30 l', 'Cześć! Krewetkarium z Krakowa', 'Cześć wszystkim! Mam krewetkarium 30 l z CRS i CBS. Miło was poznać!', 50,
     [['claire_crevettes', 'Bienvenue Kasia ! Superbe bac.', 2], ['sanne_nano', 'Welkom! Mooie garnalen.', 1]], -1],
-  ['quedadas', 'dani_plantados', null, 'Quedada de aquascaping en Madrid (sábado)', 'Organizamos un taller gratuito con Raíz & Roca: montaje de un layout de 60 l en directo y preguntas sobre CO₂.', 9,
+  ['quedadas', 'dani_plantados', null, 'Quedada de aquascaping en Madrid (sábado)', 'Organizo un taller gratuito: montaje de un layout de 60 l en directo y preguntas sobre CO₂.', 9,
     [['marta_empieza', '¡Allí estaré!', 1], ['javi_discos', 'Si me pilla en Madrid, me paso.', 0]], -1],
   ['nano-marino', 'tomas_nano', 'Nano reef Palermo', '¿Skimmer en un nano de 60 l?', '¿Merece la pena un skimmer en un all-in-one de 60 l o con cambios semanales basta?', 6,
     [['laura_reef', 'Con cambios semanales del 10 % y poca carga, no es imprescindible. Si añades peces, sí.', 4]], -1],
@@ -342,6 +334,7 @@ hilos.forEach(([cat, autor, tanque, titulo, contenido, dias, respuestas, solucio
   const ids = [];
   respuestas.forEach(([ra, texto, votos], k) => {
     const rid = idResp++;
+    if (SIN_TIENDAS.has(ra)) { ids.push(null); return; }
     ids.push(rid);
     out(`insert into public.foro_respuestas (id, hilo_id, usuario_id, contenido, creado_en) overriding system value values (${rid}, ${id}, ${q(U[ra])}, ${q(texto)}, ${q(hace(dias - 0.3 - k * 0.4))});`);
     for (let v = 0; v < votos; v++) {
@@ -350,55 +343,12 @@ hilos.forEach(([cat, autor, tanque, titulo, contenido, dias, respuestas, solucio
     }
   });
   out(`update public.foro_hilos set ultima_actividad = ${q(hace(dias - 0.3 - (respuestas.length - 1) * 0.4))} where id = ${id};`);
-  if (solucion >= 0) out(`update public.foro_hilos set solucion_id = ${ids[solucion]} where id = ${id};`);
+  if (solucion >= 0 && ids[solucion]) out(`update public.foro_hilos set solucion_id = ${ids[solucion]} where id = ${id};`);
 });
-
-// --- Mercado -------------------------------------------------------------------------
-// [autor, tienda?, título, descripción, categoría, modalidad, precio, país, moneda, provincia, envío, imágenes, estado, destacado, días]
-const anuncios = [
-  ['laura_reef', false, 'Frags de Acropora millepora', 'Frags de 3-4 cm de mi reef, aclimatados a LED. Entrega en mano en Valencia.', 'corales', 'venta', 25, 'ES', 'EUR', 'Valencia', false, [img('Acropora millepora')], 'activo', false, 2],
-  ['dani_plantados', false, 'Esquejes de hygrophila y anubias', 'Restos de poda sanos y sin caracoles. Lote de 10 tallos + 2 anubias pequeñas.', 'plantas', 'venta', 12, 'ES', 'EUR', 'Madrid', true, [img('Hygrophila difformis')], 'activo', false, 3],
-  ['dani_plantados', false, 'Cherry rojas (lote de 10)', 'Neocaridina davidi de mi colonia. Envío en bolsa térmica de martes a miércoles.', 'invertebrados', 'venta', 15, 'ES', 'EUR', 'Madrid', true, [img('Neocaridina davidi')], 'reservado', false, 5],
-  ['marta_empieza', false, 'Regalo goldfish oranda a buen hogar', 'Me equivoqué al meterlo con tropicales. Busco a alguien con acuario de agua fría.', 'peces', 'regalo', null, 'ES', 'EUR', 'Sevilla', false, [img('Goldfish oranda')], 'activo', false, 1],
-  ['javi_discos', false, 'Filtro externo Eheim 2217 usado', 'Funciona perfecto, con cubetas y material biológico maduro.', 'filtracion', 'venta', 70, 'ES', 'EUR', 'Barcelona', true, [FOTOS.filtros], 'activo', false, 8],
-  ['pablo_goldfish', false, 'Cambio acuario de 100 l por uno de 200 l', 'Acuario de 100 l con mueble. Busco cambiar por uno más grande, pongo la diferencia.', 'acuarios', 'cambio', null, 'ES', 'EUR', 'Zaragoza', false, [FOTOS.goldfish], 'activo', false, 10],
-  ['sofia_acuarios', false, 'Corydoras aeneus criados en casa', 'Ejemplares de 3 cm criados por mí. Entrega en Guadalajara.', 'peces', 'venta', 60, 'MX', 'MXN', 'Jalisco', false, [img('Corydoras aeneus')], 'activo', false, 4],
-  ['tomas_nano', false, 'Pantalla LED para nano reef', 'Pantalla LED para nano, espectro completo, con soporte. Un año de uso.', 'iluminacion', 'venta', 180000, 'AR', 'ARS', 'Buenos Aires', true, [FOTOS.luz], 'activo', false, 6],
-  ['jake_reefs', false, 'Acropora frag pack (5 frags)', 'Five mixed Acropora frags from my reef. Local pickup in Tampa.', 'corales', 'venta', 120, 'US', 'USD', 'Florida', false, [img('Acropora spp')], 'activo', false, 3],
-  ['lukas_scapes', false, 'Seiryu-Steine (8 kg)', 'Übrig gebliebene Seiryu-Steine aus meinem Iwagumi. Abholung in München.', 'otros', 'venta', 35, 'DE', 'EUR', 'Bayern', false, [FOTOS.tecnicas], 'activo', false, 7],
-  ['ana_paludario', false, 'Mudas de Ficus pumila', 'Mudas enraizadas para paludário. Envio para todo o Brasil.', 'plantas', 'venta', 25, 'BR', 'BRL', 'São Paulo', true, [img('Ficus pumila')], 'activo', false, 9],
-  ['kasia_krewetki', false, 'Krewetki CRS (10 szt.)', 'Krewetki Crystal Red z własnej hodowli. Odbiór w Krakowie.', 'invertebrados', 'venta', 80, 'PL', 'PLN', 'Małopolskie', false, [img('Caridina cantonensis CRS')], 'activo', false, 4],
-  ['marco_discus', false, 'Coppia di discus (riproduttori)', 'Coppia formata che ha già deposto. Solo ritiro di persona.', 'peces', 'venta', 250, 'IT', 'EUR', 'Lombardia', false, [img('Symphysodon aequifasciatus')], 'vendido', false, 20],
-  ['lumen_reef', true, 'Pack inicio reef: roca de cultivo 10 kg', 'Roca de cultivo libre de plagas, lista para montar. Incluye bacterias y guía de ciclado.', 'otros', 'venta', 149, 'ES', 'EUR', 'Valencia', true, [FOTOS.reef], 'activo', true, 2],
-  ['raiz_roca', true, 'Kit de iniciación aquascaping 60 l', 'Sustrato, rocas, plantas in vitro y abono. Te ayudamos con el diseño.', 'plantas', 'venta', 89, 'ES', 'EUR', 'Madrid', true, [FOTOS.aquascape], 'activo', true, 3],
-  ['cantabrico_azul', true, 'Neones (lote de 10)', 'Paracheirodon innesi en cuarentena desde hace dos semanas. Solo recogida en tienda.', 'peces', 'venta', 18, 'ES', 'EUR', 'Cantabria', false, [img('Paracheirodon innesi')], 'activo', false, 5],
-  ['pecera_viva', true, 'Corydoras sterbai', 'Corydoras sterbai de 3-4 cm. Envíos a toda la república.', 'peces', 'venta', 95, 'MX', 'MXN', 'Ciudad de México', true, [img('Corydoras sterbai')], 'activo', false, 6],
-];
-const A = [];
-anuncios.forEach(([autor, deTienda, titulo, desc, cat, modo, precio, pais, moneda, prov, envio, imagenes, estado, destacado, dias], i) => {
-  const id = ID0 + 800 + i;
-  A.push({ id, autor });
-  out(`insert into public.anuncios (id, usuario_id, tienda_id, titulo, descripcion, categoria, modalidad, precio, pais, moneda, provincia, envio, imagenes, estado, destacado, creado_en, actualizado_en) overriding system value values (${id}, ${q(U[autor])}, ${deTienda ? T[autor] : 'null'}, ${q(titulo)}, ${q(desc)}, ${q(cat)}, ${q(modo)}, ${precio === null ? 'null' : precio}, ${q(pais)}, ${q(moneda)}, ${q(prov)}, ${envio}, ${arr(imagenes)}, ${q(estado)}, ${destacado}, ${q(hace(dias))}, ${q(hace(dias))});`);
-});
-
-// --- Reseñas -----------------------------------------------------------------------------
-const resenas = [
-  ['lumen_reef', 'laura_reef', 5, 'Los frags llegan perfectos y con sus parámetros apuntados. El análisis ICP me salvó el reef.'],
-  ['lumen_reef', 'tomas_nano', 5, 'Me asesoraron por mensaje para mi nano aunque estoy en Argentina. Un lujo.'],
-  ['lumen_reef', 'jake_reefs', 4, 'Great corals and advice. Shipping to the US is expensive, but worth it.'],
-  ['raiz_roca', 'dani_plantados', 5, 'Mi tienda de referencia para rocas y maderas. Saben de lo que hablan.'],
-  ['raiz_roca', 'marta_empieza', 5, 'Me ayudaron a elegir plantas fáciles para empezar. Muy pacientes.'],
-  ['raiz_roca', 'lukas_scapes', 4, 'Gute Auswahl an Steinen. Versand nach Deutschland hat etwas gedauert.'],
-  ['cantabrico_azul', 'pablo_goldfish', 5, 'Tienda de las de antes: te explican todo sin prisas.'],
-  ['cantabrico_azul', 'carmen_koi', 4, 'Buen surtido para estanque. Echo de menos más variedades de koi.'],
-  ['pecera_viva', 'sofia_acuarios', 5, 'Peces sanos y bien aclimatados. Mis corydoras vienen de aquí.'],
-  ['pecera_viva', 'ana_paludario', 4, 'Boa variedade de plantas, entrega rápida.'],
-];
-resenas.forEach(([tienda, autor, puntos, texto], i) => out(`insert into public.tienda_resenas (tienda_id, usuario_id, puntuacion, texto, creado_en) values (${T[tienda]}, ${q(U[autor])}, ${puntos}, ${q(texto)}, ${q(hace(40 - i * 3))});`));
 
 // --- Mensajes -------------------------------------------------------------------------------
 const mensajes = [
-  ['pablo_goldfish', 'marta_empieza', 3, 'Hola Marta, he visto tu anuncio del oranda. Tengo un acuario de agua fría de 240 l y estaría encantado de adoptarlo.', true, 0.9],
+  ['pablo_goldfish', 'marta_empieza', 3, 'Hola Marta, he visto tu publicación del oranda. Tengo un acuario de agua fría de 240 l y estaría encantado de adoptarlo.', true, 0.9],
   ['marta_empieza', 'pablo_goldfish', 3, '¡Qué bien! ¿Te viene bien recogerlo el sábado en Sevilla? Si no, buscamos otra forma.', true, 0.8],
   ['pablo_goldfish', 'marta_empieza', 3, 'Estoy en Zaragoza, pero mi hermano vive en Sevilla y puede pasar a por él. Te escribo el viernes.', false, 0.6],
   ['tomas_nano', 'lumen_reef', null, 'Hola, ¿hacéis análisis ICP con envío desde Argentina?', true, 12],
@@ -406,11 +356,10 @@ const mensajes = [
   ['marta_empieza', 'dani_plantados', 2, 'Hola Dani, ¿las cherry siguen disponibles? Me gustaría para mi acuario.', true, 4],
   ['dani_plantados', 'marta_empieza', 2, 'Están reservadas, pero en dos semanas tendré otra tanda. Ojo: con el oranda se las comería 😅', false, 3.9],
 ];
-mensajes.forEach(([de, para, anuncio, texto, leido, dias], i) => out(`insert into public.mensajes (id, emisor_id, receptor_id, anuncio_id, contenido, leido, creado_en) overriding system value values (${ID0 + 900 + i}, ${q(U[de])}, ${q(U[para])}, ${anuncio === null ? 'null' : A[anuncio].id}, ${q(texto)}, ${leido}, ${q(hace(dias))});`));
-
-// --- Campaña propia de una tienda Pro --------------------------------------------------------
-out(`insert into public.campanas (tienda_id, titulo, texto, imagen_url, enlace, ubicacion, prioridad) values (${T.lumen_reef}, 'Corales de cultivo aclimatados a LED', 'Frags de Acropora, Montipora y LPS con su ficha de parámetros. Envío en 24 h a la península.', ${q(img('Acropora spp'))}, '/es/tiendas/tienda/?s=lumen-reef-studio', 'feed', 5);`);
-out(`insert into public.campanas (tienda_id, titulo, texto, imagen_url, enlace, ubicacion, prioridad) values (${T.raiz_roca}, 'Taller de aquascaping gratuito', 'Este sábado en Madrid: montamos un layout de 60 l en directo.', ${q(FOTOS.aquascape)}, '/es/tiendas/tienda/?s=raiz-y-roca', 'lateral', 3);`);
+mensajes.forEach(([de, para, , texto, leido, dias], i) => {
+  if (SIN_TIENDAS.has(de) || SIN_TIENDAS.has(para)) return;
+  out(`insert into public.mensajes (id, emisor_id, receptor_id, contenido, leido, creado_en) overriding system value values (${ID0 + 900 + i}, ${q(U[de])}, ${q(U[para])}, ${q(texto)}, ${leido}, ${q(hace(dias))});`);
+});
 
 // Idioma de cada texto (detectado con el detector de idioma de Chrome): todo en español salvo estas excepciones
 const IDIOMAS_DEMO = 'publ900410pt publ900412it publ900414pl publ900408en publ900409de publ900411fr publ900413nl publ900421en publ900425de come900602en come900603de come900610it come900614fr come900618en come900620pl come900621nl come900622fr come900623pl foro900705en foro900706it foro900707de foro900708pt foro900709pl foro903004en foro903007de foro903008fr foro903009pl foro903017it foro903021en foro903022nl foro900716de foro900718pl foro903027en foro903035fr foro903036pl foro903037fr';
@@ -427,5 +376,5 @@ out('commit;');
 
 fs.writeFileSync(new URL('./datos_demo.sql', import.meta.url), sql.join('\n') + '\n');
 fs.writeFileSync(new URL('./limpiar_demo.sql', import.meta.url), `-- Borra la comunidad de demostración. Al eliminar los usuarios de demo se borran en cascada\n-- sus perfiles, tanques, publicaciones, tiendas, anuncios, mensajes, campañas y demás.\ndelete from auth.users where email like '%@${DOMINIO}';\n`);
-console.log(`${usuarios.length} usuarios, ${tiendas.length} tiendas, ${tanques.length} tanques, ${posts.length + 1} publicaciones, ${comentarios.length} comentarios, ~${likes} me gusta, ${seguir.size} seguimientos, ${hilos.length} hilos, ${anuncios.length} anuncios, ${resenas.length} reseñas, ${mensajes.length} mensajes`);
+console.log(`${usuarios.length - SIN_TIENDAS.size} usuarios, ${tanques.length} tanques, ${posts.filter((x) => !SIN_TIENDAS.has(x[0])).length + 1} publicaciones, ~${likes} me gusta, ${hilos.length} hilos`);
 console.log(`${sql.length} sentencias → supabase/demo/datos_demo.sql`);

@@ -69,17 +69,20 @@ export function MisTanques() {
 
 export function Tendencias() {
   const [etiquetas, setEtiquetas] = useState([]);
-  const { t } = useT();
+  const { t, lang } = useT();
 
+  // Solo etiquetas de publicaciones en el idioma de la web (o sin idioma detectado): #manutenzione no pinta nada
+  // en el muro en español
   useEffect(() => {
     const hace7 = new Date(Date.now() - 7 * 86400000).toISOString();
-    supabase.from('publicaciones').select('etiquetas').gte('creado_en', hace7).neq('etiquetas', '{}').limit(300)
+    supabase.from('publicaciones').select('etiquetas').gte('creado_en', hace7).neq('etiquetas', '{}')
+      .or(`idioma.eq.${lang},idioma.is.null`).limit(300)
       .then(({ data }) => {
         const cuenta = {};
         (data || []).forEach((p) => p.etiquetas.forEach((e) => { cuenta[e] = (cuenta[e] || 0) + 1; }));
         setEtiquetas(Object.entries(cuenta).sort((a, b) => b[1] - a[1]).slice(0, 8));
       });
-  }, []);
+  }, [lang]);
 
   if (!etiquetas.length) return null;
   return (

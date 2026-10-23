@@ -7,6 +7,8 @@ import { useT } from '@/i18n/IdiomaProvider';
 import { useUnidades } from '@/lib/unidades';
 import { especiesWiki } from '@/lib/especiesWiki';
 import Compatibilidad from '@/components/tanques/Compatibilidad';
+import { useSesion } from '@/lib/sesion';
+import { guardarPendiente } from '@/lib/tanquePendiente';
 
 const normalizar = (s = '') => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 
@@ -27,6 +29,7 @@ const comoHabitante = (e, cantidad) => ({
 // análisis que el panel de cada tanque, con un tanque imaginario (tipo + litros) y sin mediciones.
 export default function CompatibilidadEspecies() {
   const { t } = useT();
+  const { usuario } = useSesion();
   const u = useUnidades();
   const idBuscar = useId();
   const [agua, setAgua] = useState('dulce');
@@ -134,7 +137,8 @@ export default function CompatibilidadEspecies() {
 
       <div className="compat-cta">
         <p className="pequeno texto-2">{h('guardarTexto')}</p>
-        <Link href="/registro/" className="btn btn-primario">{h('guardar')}</Link>
+        {/* Lo elegido se guarda para que el primer tanque, tras registrarse, nazca ya con estas especies */}
+        <Link href={usuario ? '/tanques/nuevo/' : '/registro/'} className="btn btn-primario" onClick={() => guardarPendiente({ ...tanque, habitantes })}>{h('guardar')}</Link>
       </div>
     </div>
   );

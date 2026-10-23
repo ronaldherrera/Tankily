@@ -21,7 +21,7 @@ const CON_PREFIJO = new RegExp(`^/(${IDIOMAS.join('|')})(/|$)`);
 export const IDIOMAS_WIKI = ['en', 'de', 'fr'];
 // Fichas de especies: se muestran e indexan en estos idiomas cuando están traducidas enteras
 // (WikiTank-traducciones/especies-<idioma>.json); pueden ir por delante de los artículos
-export const IDIOMAS_FICHAS = [...IDIOMAS_WIKI, 'pt'];
+export const IDIOMAS_FICHAS = [...IDIOMAS_WIKI, 'pt', 'it'];
 const SOLO_ESPANOL = /^\/wiki\/explorer\//;
 
 export function conIdioma(href, lang) {

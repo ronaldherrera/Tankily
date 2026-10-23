@@ -32,7 +32,7 @@ export default function NotificacionesPage() {
     (async () => {
       const { data } = await supabase
         .from('notificaciones')
-        .select('*, actor:perfiles!actor_id(usuario, nombre, avatar_url), tienda:tiendas(slug)')
+        .select('*, actor:perfiles!actor_id(id, usuario, nombre, avatar_url), tienda:tiendas(slug)')
         .eq('usuario_id', usuario.id)
         .order('creado_en', { ascending: false })
         .limit(80);

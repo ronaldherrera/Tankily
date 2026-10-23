@@ -6,7 +6,7 @@ import { useT } from '@/i18n/IdiomaProvider';
 import TextoTraducible from '@/components/feed/TextoTraducible';
 import { enlaceHilo } from '@/lib/enlaces';
 
-export const SELECT_HILO = 'id, titulo, categoria, num_respuestas, ultima_actividad, creado_en, solucion_id, fijado, cerrado, idioma, autor:perfiles!usuario_id(usuario, nombre, avatar_url)';
+export const SELECT_HILO = 'id, titulo, categoria, num_respuestas, ultima_actividad, creado_en, solucion_id, fijado, cerrado, idioma, autor:perfiles!usuario_id(id, usuario, nombre, avatar_url)';
 
 // nuevaPestana: abre el hilo aparte (p. ej. desde el formulario de un hilo nuevo, para no perder lo escrito)
 export default function FilaHilo({ hilo, conCategoria = false, nuevaPestana = false }) {

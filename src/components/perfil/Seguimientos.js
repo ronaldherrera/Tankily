@@ -17,7 +17,7 @@ const CONSULTAS = {
   seguidores: (id) => supabase.from('seguidores').select(`creado_en, perfil:perfiles!seguidor_id(${PERFIL})`).eq('seguido_id', id),
   siguiendo: (id) => supabase.from('seguidores').select(`creado_en, perfil:perfiles!seguido_id(${PERFIL})`).eq('seguidor_id', id),
   tanques: (id) => supabase.from('tanque_seguidores')
-    .select('creado_en, tanque:tanques!inner(id, nombre, tipo, foto_url, autor:perfiles!usuario_id(usuario, nombre, avatar_url))').eq('usuario_id', id),
+    .select('creado_en, tanque:tanques!inner(id, nombre, tipo, foto_url, autor:perfiles!usuario_id(id, usuario, nombre, avatar_url))').eq('usuario_id', id),
 };
 
 // Ids de las personas que sigue quien mira (para los botones y "en común")

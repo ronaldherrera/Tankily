@@ -105,6 +105,7 @@ _Lista generada por Claude. Lo que vaya surgiendo mientras trabajo se añade aba
   4. Empujar herramientas y compatibilidad en Reddit/foros/redes para conseguir enlaces.
   5. Fomentar contenido de usuarios (diarios de tanques, foro): retos, «tanque del mes».
   6. Revisar Search Console cuando haya datos y reforzar lo que funcione.
+- [ ] **(Aplazado 23/10/2026) Vídeo de presentación para LinkedIn** (HyperFrames), brief ya acordado: historia de fundador (problema → Tankily con funciones reales → «construido por Ronald» + probarla), ~90 s, cuadrado 1:1, voz de Krill en español (ElevenLabs «Krill castellano», más pausada, serena y seria) con subtítulos quemados en español, la web real dentro de mockups de móvil/ordenador/tableta (sin Krill en pantalla), capturas de localhost con cuentas demo, diseño de marca, música tranquila; revisión con guion + storyboard antes de montar; flujo automático (product-launch-video).
 
 ## 📱 Ver la web desde fuera de casa
 

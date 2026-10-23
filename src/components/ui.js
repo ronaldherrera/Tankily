@@ -9,16 +9,19 @@ import { useT } from '@/i18n/IdiomaProvider';
 import { ImagePlus, X, Loader2, EyeOff } from 'lucide-react';
 import { subirImagen } from '@/lib/imagenes';
 import { DURACION_SALIDA } from '@/lib/presencia';
+import { useEnLinea } from '@/lib/enLinea';
 
 export function Avatar({ perfil, tamano = 40 }) {
-  // Sin foto, o si no carga, se ve la silueta por defecto
+  // Sin foto, o si no carga, se ve la silueta por defecto. Si la persona está en línea, un aro verde fino
   const [fallida, setFallida] = useState(null);
+  const enLinea = useEnLinea(perfil?.id);
   const estilo = { width: tamano, height: tamano };
+  const clase = `avatar${enLinea ? ' en-linea' : ''}`;
   if (perfil?.avatar_url && fallida !== perfil.avatar_url) {
-    return <img className="avatar" src={perfil.avatar_url} alt="" style={estilo} loading="lazy" referrerPolicy="no-referrer" onError={() => setFallida(perfil.avatar_url)} />;
+    return <img className={clase} src={perfil.avatar_url} alt="" style={estilo} loading="lazy" referrerPolicy="no-referrer" onError={() => setFallida(perfil.avatar_url)} />;
   }
   return (
-    <span className="avatar avatar-defecto" style={estilo} aria-hidden="true">
+    <span className={`${clase} avatar-defecto`} style={estilo} aria-hidden="true">
       <svg viewBox="0 0 40 40" width="100%" height="100%"><circle cx="20" cy="15.5" r="7" /><path d="M6 40a14 13 0 0 1 28 0z" /></svg>
     </span>
   );

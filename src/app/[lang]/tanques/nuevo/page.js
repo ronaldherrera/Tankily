@@ -11,6 +11,7 @@ import { TIPOS_TANQUE, VISIBILIDADES, colorAgua } from '@/lib/constantes';
 import { tareasIniciales, cambioAguaSugerido } from '@/lib/tareas';
 import { RequiereSesion, SubidorImagenes, useTostada } from '@/components/ui';
 import { evento } from '@/lib/analitica';
+import { leerPendiente, borrarPendiente, resumenPendiente } from '@/lib/tanquePendiente';
 
 const EQUIPO = ['iluminacion', 'filtracion', 'calentador', 'skimmer', 'co2', 'sustrato'];
 
@@ -31,6 +32,17 @@ function Formulario() {
   const [tq, setTq] = useState(VACIO);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState('');
+  // Especies que dejó preparadas antes de registrarse (compatibilizador o ficha de WikiTank): se añaden al crear
+  const [pendiente, setPendiente] = useState(null);
+
+  useEffect(() => {
+    if (id) return;
+    const p = leerPendiente();
+    if (!p) return;
+    setPendiente(p);
+    setTq((x) => ({ ...x, tipo: p.tipo || x.tipo, litros: p.litros ? String(Math.round(u.deLitros(p.litros))) : x.litros }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo al llegar a la página
+  }, [id]);
 
   useEffect(() => {
     if (!id) return;
@@ -87,6 +99,14 @@ function Formulario() {
       // Recordatorios sugeridos: cuentan desde hoy, salvo el test del agua (anima a la primera medición)
       const hoy = new Date().toISOString();
       await supabase.from('tareas').insert(tareasIniciales(tq.tipo).map((x) => ({ ...x, tanque_id: res.data.id, ultima_vez: x.tipo === 'test' ? null : hoy })));
+      if (pendiente) {
+        const { error: e } = await supabase.from('habitantes').insert(pendiente.habitantes.map((h) => ({ ...h, tanque_id: res.data.id })));
+        if (!e) {
+          await supabase.from('tanque_eventos').insert(pendiente.habitantes.map((h) => ({ tanque_id: res.data.id, tipo: 'alta', nota: `${h.cantidad} × ${h.nombre}` })));
+          borrarPendiente();
+          evento('tanque_pendiente_creado', { especies: pendiente.habitantes.length });
+        }
+      }
     }
     setGuardando(false);
     if (res.error) {
@@ -110,6 +130,7 @@ function Formulario() {
     <div className="contenido" style={{ '--agua': colorAgua(tq.tipo) }}>
       <form className="columna" onSubmit={guardar} style={{ gap: 20 }}>
         <h1 className="titulo-l" style={{ paddingTop: 12 }}>{id ? t('formTanque.editar') : t('formTanque.nuevo')}</h1>
+        {pendiente && <p className="aviso">{t('pendiente.seAnadiran', { lista: resumenPendiente(pendiente) })}</p>}
 
         <section className="cristal" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
           <label className="campo">

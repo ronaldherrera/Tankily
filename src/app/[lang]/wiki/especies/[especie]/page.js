@@ -9,6 +9,7 @@ import { JsonLd, migas } from '@/lib/datosEstructurados';
 import FichaEspecieContenido from '@/components/wiki/FichaEspecieContenido';
 import AnadirATanque from '@/components/wiki/AnadirATanque';
 import TanquesConEspecie from '@/components/wiki/TanquesConEspecie';
+import InvitacionEspecie from '@/components/wiki/InvitacionEspecie';
 import Publicidad from '@/components/Publicidad';
 
 const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
@@ -165,6 +166,8 @@ export default async function PaginaEspecie({ params }) {
       {lang !== e.lang && <p className="aviso" lang={lang}>{t('fichaEsp.contenidoEnEspanol')}</p>}
 
       <div lang={lang}><DatosClave ficha={e.ficha} t={t} n={formato(LOCALES[lang])} /></div>
+
+      {tieneFicha && <div lang={lang}><InvitacionEspecie titulo={e.titulo} grupo={base.acuarios.length ? base.grupo : GRUPO_CATEGORIA[e.categoria]} nombre={nombre} /></div>}
 
       <div className="especie-cuerpo">
         <section className="cristal-suave especie-ficha" aria-labelledby="ficha-completa">

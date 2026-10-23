@@ -31,7 +31,7 @@ function Resultados({ q }) {
     const patron = `%${t}%`;
     Promise.all([
       supabase.from('perfiles').select('id, usuario, nombre, avatar_url, bio').or(`usuario.ilike.${patron},nombre.ilike.${patron}`).limit(8),
-      supabase.from('tanques').select('id, nombre, tipo, litros, foto_url, visibilidad, idioma, creado_en, autor:perfiles!usuario_id(usuario, nombre, avatar_url)').ilike('nombre', patron).limit(8),
+      supabase.from('tanques').select('id, nombre, tipo, litros, foto_url, visibilidad, idioma, creado_en, autor:perfiles!usuario_id(id, usuario, nombre, avatar_url)').ilike('nombre', patron).limit(8),
       supabase.from('foro_hilos').select('id, titulo, num_respuestas, categoria, idioma, creado_en').or(`titulo.ilike.${patron},contenido.ilike.${patron}`).order('ultima_actividad', { ascending: false }).limit(8),
       supabase.from('anuncios').select('id, titulo, precio, moneda, modalidad, provincia, imagenes, estado, idioma, creado_en').eq('estado', 'activo').ilike('titulo', patron).limit(8),
       supabase.from('tiendas').select('id, slug, nombre, ciudad, provincia, logo_url').or(`nombre.ilike.${patron},ciudad.ilike.${patron}`).limit(6),

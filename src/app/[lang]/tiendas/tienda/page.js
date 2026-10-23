@@ -58,7 +58,7 @@ function Tienda() {
 
   useEffect(() => {
     if (!slug) return;
-    supabase.from('tiendas').select('*, propietario:perfiles!propietario_id(usuario, nombre, avatar_url)').eq('slug', slug).maybeSingle().then(({ data }) => {
+    supabase.from('tiendas').select('*, propietario:perfiles!propietario_id(id, usuario, nombre, avatar_url)').eq('slug', slug).maybeSingle().then(({ data }) => {
       setTienda(data);
       if (!data) return;
       // Estadísticas de la tienda (no cuentan las visitas del propio dueño)

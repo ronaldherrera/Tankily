@@ -12,8 +12,9 @@ import PostComposer from '@/components/feed/PostComposer';
 import Lateral, { MisTanques, Tendencias } from '@/components/Lateral';
 import PanelHoy from '@/components/tanques/PanelHoy';
 import PrimerosPasos from '@/components/PrimerosPasos';
+import TanquePendiente from '@/components/TanquePendiente';
 import TiendasCerca from '@/components/tiendas/TiendasCerca';
-import { ChartLine, ShieldCheck, MessagesSquare, Tag } from 'lucide-react';
+import { ChartLine, ShieldCheck, MessagesSquare, Tag, Fish, BookOpen, ArrowRight } from 'lucide-react';
 
 // Ficha de ejemplo: enseña en un vistazo qué es Tankily (un tanque con su diario de agua)
 const FICHA = [
@@ -39,6 +40,38 @@ function Linea({ valores }) {
 const CIFRAS = ['especies', 'articulos', 'calculadoras', 'idiomas'];
 const BENEFICIOS = [['agua', ChartLine], ['compat', ShieldCheck], ['foro', MessagesSquare], ['mercado', Tag]];
 
+// Casi todos los que llegan (sobre todo desde Facebook, en el móvil) se iban en unos 20 s sin tocar nada: antes de
+// pedirles una cuenta, se les ofrece lo que sirve ya sin ella. Desde ahí, el compatibilizador y las fichas invitan
+// a registrarse con lo elegido guardado (lib/tanquePendiente.js).
+const PROBAR = [
+  ['compat', ShieldCheck, '/herramientas/compatibilidad/'],
+  ['especies', Fish, '/herramientas/especies/'],
+  ['wiki', BookOpen, '/wiki/especies/'],
+];
+
+function PruebaSinCuenta({ especies }) {
+  const { t } = useT();
+  return (
+    <nav className="probar-sin-cuenta" aria-labelledby="probar-titulo">
+      <p id="probar-titulo" className="mini texto-3">{t('probar.titulo')}</p>
+      <ul>
+        {PROBAR.map(([clave, Icono, href]) => (
+          <li key={clave}>
+            <Link href={href} className="probar-tarjeta cristal-suave">
+              <Icono size={20} aria-hidden="true" />
+              <span>
+                <strong className="pequeno">{t(`probar.${clave}.titulo`, { n: formatNumero(especies, 0) })}</strong>
+                <span className="mini texto-3">{t(`probar.${clave}.texto`)}</span>
+              </span>
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
 function Portada({ cifras }) {
   const { t } = useT();
   const u = useUnidades();
@@ -53,6 +86,7 @@ function Portada({ cifras }) {
           <Link href="/registro/" className="btn btn-primario">{t('portada.crearCuenta')}</Link>
           <Link href="/tanques/" className="btn">{t('portada.verTanques')}</Link>
         </div>
+        <PruebaSinCuenta especies={cifras?.especies} />
         {cifras && (
           <p className="portada-confianza mini texto-3">
             <strong>{t('bienvenida.gratis')}</strong>{' '}
@@ -129,6 +163,7 @@ export default function MuroCliente({ cifras }) {
             modo={usuario ? modo : 'todos'}
             cabecera={(alPublicar) => usuario && (
               <>
+                <TanquePendiente />
                 <PrimerosPasos />
                 <PanelHoy />
                 <PostComposer onPublicado={alPublicar} />
