@@ -2,6 +2,7 @@
 // la portada, invitación en las fichas de WikiTank y el tanque que se deja preparado antes de registrarse.
 // {app}: Facebook, Instagram… · {nombre}: nombre de la especie · {lista}: "6 × Neón, 1 × Betta" · {n}: número
 export const es = {
+  intereses: { titulo: 'Qué quieres ver', todo: 'Todo', marino: 'Marino', dulce: 'Agua dulce', plantado: 'Plantados', gambas: 'Gambas', ciclidos: 'Cíclidos', fria: 'Agua fría', vacio: 'Aún no hay publicaciones de este tema.', vacioTexto: 'Prueba con otro o vuelve a «Todo».' },
   muestra: { palabra: 'muestra', ayuda: 'Qué es una cuenta de muestra', info: 'Tankily está empezando: esta cuenta enseña cómo se usa la web.' },
   navegadorApp: {
     titulo: 'Estás en el navegador de {app}',
@@ -33,6 +34,7 @@ export const es = {
 };
 
 export const en = {
+  intereses: { titulo: 'What do you want to see', todo: 'All', marino: 'Marine', dulce: 'Freshwater', plantado: 'Planted', gambas: 'Shrimp', ciclidos: 'Cichlids', fria: 'Coldwater', vacio: 'No posts on this topic yet.', vacioTexto: 'Try another one or go back to “All”.' },
   muestra: { palabra: 'sample', ayuda: 'What is a sample account', info: 'Tankily is just getting started: this account shows how the site works.' },
   navegadorApp: {
     titulo: 'You’re in the {app} browser',
@@ -64,6 +66,7 @@ export const en = {
 };
 
 export const de = {
+  intereses: { titulo: 'Was möchtest du sehen', todo: 'Alles', marino: 'Meerwasser', dulce: 'Süßwasser', plantado: 'Pflanzen', gambas: 'Garnelen', ciclidos: 'Buntbarsche', fria: 'Kaltwasser', vacio: 'Zu diesem Thema gibt es noch keine Beiträge.', vacioTexto: 'Probier ein anderes oder geh zurück zu „Alles“.' },
   muestra: { palabra: 'Beispiel', ayuda: 'Was ist ein Beispielkonto', info: 'Tankily steht noch am Anfang: Dieses Konto zeigt, wie die Seite funktioniert.' },
   navegadorApp: {
     titulo: 'Du bist im Browser von {app}',
@@ -95,6 +98,7 @@ export const de = {
 };
 
 export const pt = {
+  intereses: { titulo: 'O que você quer ver', todo: 'Tudo', marino: 'Marinho', dulce: 'Água doce', plantado: 'Plantados', gambas: 'Camarões', ciclidos: 'Ciclídeos', fria: 'Água fria', vacio: 'Ainda não há publicações sobre este tema.', vacioTexto: 'Tente outro ou volte para “Tudo”.' },
   muestra: { palabra: 'amostra', ayuda: 'O que é uma conta de amostra', info: 'O Tankily está começando: esta conta mostra como o site funciona.' },
   navegadorApp: {
     titulo: 'Você está no navegador do {app}',
@@ -126,6 +130,7 @@ export const pt = {
 };
 
 export const fr = {
+  intereses: { titulo: 'Que voulez-vous voir', todo: 'Tout', marino: 'Marin', dulce: 'Eau douce', plantado: 'Plantés', gambas: 'Crevettes', ciclidos: 'Cichlidés', fria: 'Eau froide', vacio: 'Pas encore de publications sur ce thème.', vacioTexto: 'Essayez-en un autre ou revenez à « Tout ».' },
   muestra: { palabra: 'exemple', ayuda: 'Qu’est-ce qu’un compte d’exemple', info: 'Tankily démarre : ce compte montre comment fonctionne le site.' },
   navegadorApp: {
     titulo: 'Vous êtes dans le navigateur de {app}',
@@ -157,6 +162,7 @@ export const fr = {
 };
 
 export const it = {
+  intereses: { titulo: 'Cosa vuoi vedere', todo: 'Tutto', marino: 'Marino', dulce: 'Acqua dolce', plantado: 'Piantumati', gambas: 'Gamberetti', ciclidos: 'Ciclidi', fria: 'Acqua fredda', vacio: 'Ancora nessun post su questo tema.', vacioTexto: 'Provane un altro o torna a «Tutto».' },
   muestra: { palabra: 'esempio', ayuda: 'Cos’è un account di esempio', info: 'Tankily è agli inizi: questo account mostra come funziona il sito.' },
   navegadorApp: {
     titulo: 'Sei nel browser di {app}',
@@ -188,6 +194,7 @@ export const it = {
 };
 
 export const nl = {
+  intereses: { titulo: 'Wat wil je zien', todo: 'Alles', marino: 'Zeewater', dulce: 'Zoetwater', plantado: 'Beplant', gambas: 'Garnalen', ciclidos: 'Cichliden', fria: 'Koudwater', vacio: 'Nog geen berichten over dit onderwerp.', vacioTexto: 'Probeer een ander of ga terug naar ‘Alles’.' },
   muestra: { palabra: 'voorbeeld', ayuda: 'Wat is een voorbeeldaccount', info: 'Tankily is net begonnen: dit account laat zien hoe de site werkt.' },
   navegadorApp: {
     titulo: 'Je zit in de browser van {app}',
@@ -219,6 +226,7 @@ export const nl = {
 };
 
 export const pl = {
+  intereses: { titulo: 'Co chcesz oglądać', todo: 'Wszystko', marino: 'Morskie', dulce: 'Słodkowodne', plantado: 'Roślinne', gambas: 'Krewetki', ciclidos: 'Pielęgnice', fria: 'Zimnowodne', vacio: 'Brak jeszcze wpisów na ten temat.', vacioTexto: 'Wybierz inny albo wróć do „Wszystko”.' },
   muestra: { palabra: 'przykład', ayuda: 'Czym jest konto przykładowe', info: 'Tankily dopiero startuje: to konto pokazuje, jak działa serwis.' },
   navegadorApp: {
     titulo: 'Jesteś w przeglądarce aplikacji {app}',

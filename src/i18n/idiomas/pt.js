@@ -13,7 +13,7 @@ export default {
   },
   nav: {
     principal: 'Principal', saltar: 'Pular para o conteúdo', muro: 'Feed', tanques: 'Aquários', foro: 'Fórum', mercado: 'Classificados',
-    tiendas: 'Lojas', wiki: 'WikiTank', buscar: 'Buscar', notificaciones: 'Notificações', mensajes: 'Mensagens', nuevoTanque: 'Novo aquário',
+    tiendas: 'Lojas', wiki: 'WikiTank', buscar: 'Explorar', notificaciones: 'Notificações', mensajes: 'Mensagens', nuevoTanque: 'Novo aquário',
     miPerfil: 'Meu perfil', crearCuenta: 'Criar conta', entrar: 'Entrar', mas: 'Mais', ajustes: 'Configurações', paraTiendas: 'Tankily para lojas',
     normas: 'Regras da comunidade', entrarOCrear: 'Entrar ou criar conta', masSecciones: 'Mais seções',
   },

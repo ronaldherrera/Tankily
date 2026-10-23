@@ -14,7 +14,7 @@ export default {
   },
   nav: {
     principal: 'Menu główne', saltar: 'Przejdź do treści', muro: 'Aktualności', tanques: 'Zbiorniki', foro: 'Forum', mercado: 'Ogłoszenia', tiendas: 'Sklepy',
-    wiki: 'WikiTank', buscar: 'Szukaj', notificaciones: 'Powiadomienia', mensajes: 'Wiadomości', nuevoTanque: 'Nowy zbiornik', miPerfil: 'Mój profil',
+    wiki: 'WikiTank', buscar: 'Odkrywaj', notificaciones: 'Powiadomienia', mensajes: 'Wiadomości', nuevoTanque: 'Nowy zbiornik', miPerfil: 'Mój profil',
     crearCuenta: 'Załóż konto', entrar: 'Zaloguj się', mas: 'Więcej', ajustes: 'Ustawienia', paraTiendas: 'Tankily dla sklepów', normas: 'Zasady społeczności',
     entrarOCrear: 'Zaloguj się lub załóż konto', masSecciones: 'Więcej sekcji',
   },

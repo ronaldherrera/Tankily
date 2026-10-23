@@ -13,7 +13,7 @@ export default {
   },
   nav: {
     principal: 'Hoofdmenu', saltar: 'Naar inhoud', muro: 'Tijdlijn', tanques: 'Bakken', foro: 'Forum', mercado: 'Marktplaats', tiendas: 'Winkels', wiki: 'WikiTank',
-    buscar: 'Zoeken', notificaciones: 'Meldingen', mensajes: 'Berichten', nuevoTanque: 'Nieuwe bak', miPerfil: 'Mijn profiel', crearCuenta: 'Account maken',
+    buscar: 'Ontdekken', notificaciones: 'Meldingen', mensajes: 'Berichten', nuevoTanque: 'Nieuwe bak', miPerfil: 'Mijn profiel', crearCuenta: 'Account maken',
     entrar: 'Inloggen', mas: 'Meer', ajustes: 'Instellingen', paraTiendas: 'Tankily voor winkels', normas: 'Communityregels', entrarOCrear: 'Inloggen of account maken',
     masSecciones: 'Meer onderdelen',
   },

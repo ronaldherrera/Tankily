@@ -13,7 +13,7 @@ export default {
   },
   nav: {
     principal: 'Principal', saltar: 'Aller au contenu', muro: 'Fil', tanques: 'Bacs', foro: 'Forum', mercado: 'Annonces', tiendas: 'Magasins',
-    wiki: 'WikiTank', buscar: 'Rechercher', notificaciones: 'Notifications', mensajes: 'Messages', nuevoTanque: 'Nouveau bac', miPerfil: 'Mon profil',
+    wiki: 'WikiTank', buscar: 'Explorer', notificaciones: 'Notifications', mensajes: 'Messages', nuevoTanque: 'Nouveau bac', miPerfil: 'Mon profil',
     crearCuenta: 'Créer un compte', entrar: 'Se connecter', mas: 'Plus', ajustes: 'Paramètres', paraTiendas: 'Tankily pour les magasins',
     normas: 'Règles de la communauté', entrarOCrear: 'Se connecter ou créer un compte', masSecciones: 'Autres rubriques',
   },

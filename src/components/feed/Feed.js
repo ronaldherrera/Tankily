@@ -16,8 +16,11 @@ const POR_PAGINA = 15;
 const PUBLI_CADA = 6;
 
 // Construye la consulta según el modo del muro
-async function consulta({ modo, usuarioId, etiqueta, autorId, tanqueId }, desde) {
-  let q = supabase.from('publicaciones').select(SELECT_POST);
+async function consulta({ modo, usuarioId, etiqueta, autorId, tanqueId, tipos }, desde) {
+  // Con temas (Explorar), solo publicaciones ligadas a un tanque de esos tipos: el join pasa a ser obligatorio
+  const select = tipos?.length ? `*, ${AUTOR}, ${TANQUE.replace('tanques(', 'tanques!inner(')}, original:eco_de(*, ${AUTOR}, ${TANQUE})` : SELECT_POST;
+  let q = supabase.from('publicaciones').select(select);
+  if (tipos?.length) q = q.in('tanque.tipo', tipos);
   if (modo === 'siguiendo' && usuarioId) {
     const { data } = await supabase.from('seguidores').select('seguido_id').eq('seguidor_id', usuarioId);
     q = q.in('usuario_id', [usuarioId, ...(data || []).map((s) => s.seguido_id)]);
@@ -28,7 +31,7 @@ async function consulta({ modo, usuarioId, etiqueta, autorId, tanqueId }, desde)
   return q.order('creado_en', { ascending: false }).range(desde, desde + POR_PAGINA - 1);
 }
 
-export default function Feed({ modo = 'todos', etiqueta, autorId, tanqueId, cabecera, vacio, conPublicidad = true }) {
+export default function Feed({ modo = 'todos', etiqueta, autorId, tanqueId, tipos, cabecera, vacio, conPublicidad = true }) {
   const { usuario, cargando: cargandoSesion } = useSesion();
   const { t } = useT();
   const [posts, setPosts] = useState(null);
@@ -39,7 +42,7 @@ export default function Feed({ modo = 'todos', etiqueta, autorId, tanqueId, cabe
   const [nuevos, setNuevos] = useState(0);
   const [fallo, setFallo] = useState(false); // la última carga falló (sin conexión, error del servidor)
   const centinela = useRef(null);
-  const filtros = { modo, usuarioId: usuario?.id, etiqueta, autorId, tanqueId };
+  const filtros = { modo, usuarioId: usuario?.id, etiqueta, autorId, tanqueId, tipos };
   const clave = JSON.stringify(filtros);
 
   const marcarGustados = useCallback(async (lista) => {

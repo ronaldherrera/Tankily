@@ -1900,3 +1900,8 @@ h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
 /* Perfil de una cuenta de muestra: "muestra ⓘ", mismo gris que el @usuario */
 .marca-muestra { display: inline-flex; vertical-align: -2px; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; }
 .marca-muestra-texto { display: block; margin-top: 4px; }
+
+/* Explorar: "Qué quieres ver" (temas del muro) */
+.selector-intereses { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.selector-intereses::-webkit-scrollbar { display: none; }
+.selector-intereses .chip { flex-shrink: 0; }

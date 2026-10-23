@@ -14,6 +14,8 @@ import Lateral, { Tendencias } from '@/components/Lateral';
 import { useT } from '@/i18n/IdiomaProvider';
 import { HERRAMIENTAS } from '@/lib/herramientas';
 import { enlaceHilo, enlaceAnuncio } from '@/lib/enlaces';
+import { useSesion } from '@/lib/sesion';
+import { INTERESES, leerIntereses, guardarIntereses, interesesDeTanques, tiposDe } from '@/lib/intereses';
 
 const normalizar = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 // Evita que comas o paréntesis rompan el filtro or() de PostgREST
@@ -136,6 +138,35 @@ function Resultados({ q }) {
   );
 }
 
+// "Qué quieres ver": temas del muro de Explorar. La elección se guarda en este navegador; si nunca eligió, se parte
+// de los tanques que tiene (quien solo tiene un reef ve "Marino" directamente). Sin ninguno marcado, todo.
+function useIntereses() {
+  const { usuario } = useSesion();
+  const [intereses, setIntereses] = useState(null);
+  useEffect(() => {
+    const guardados = leerIntereses();
+    if (guardados) { setIntereses(guardados); return; }
+    if (!usuario) { setIntereses([]); return; }
+    supabase.from('tanques').select('tipo').eq('usuario_id', usuario.id)
+      .then(({ data }) => setIntereses(interesesDeTanques((data || []).map((x) => x.tipo))));
+  }, [usuario]);
+  const cambiar = (lista) => { setIntereses(lista); guardarIntereses(lista); };
+  return [intereses, cambiar];
+}
+
+function SelectorIntereses({ intereses, onCambio }) {
+  const { t } = useT();
+  const alternar = (k) => onCambio(intereses.includes(k) ? intereses.filter((x) => x !== k) : [...intereses, k]);
+  return (
+    <div className="chips selector-intereses" role="group" aria-label={t('intereses.titulo')}>
+      <button type="button" className={`chip${intereses.length ? '' : ' activo'}`} aria-pressed={!intereses.length} onClick={() => onCambio([])}>{t('intereses.todo')}</button>
+      {Object.keys(INTERESES).map((k) => (
+        <button key={k} type="button" className={`chip${intereses.includes(k) ? ' activo' : ''}`} aria-pressed={intereses.includes(k)} onClick={() => alternar(k)}>{t(`intereses.${k}`)}</button>
+      ))}
+    </div>
+  );
+}
+
 function Explorar() {
   const params = useSearchParams();
   const router = useNavegar();
@@ -143,6 +174,7 @@ function Explorar() {
   const { t } = useT();
   const [q, setQ] = useState(params.get('q') || '');
   const [busqueda, setBusqueda] = useState(params.get('q') || '');
+  const [intereses, setIntereses] = useIntereses();
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -168,10 +200,26 @@ function Explorar() {
             <label className="buscador cristal">
               <Search size={20} className="texto-3" />
               <span className="sr-only">{t('explorar.buscar')}</span>
-              <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('explorar.placeholder')} />
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('explorar.placeholder')} />
             </label>
+            {/* Sin búsqueda, el muro de toda la comunidad (como la portada sin sesión): quien acaba de llegar y aún
+                no sigue a nadie siempre tiene algo que ver y gente a la que seguir */}
             {busqueda.trim().length >= 2 ? <Resultados q={busqueda.trim()} /> : (
-              <div className="solo-movil"><Tendencias /></div>
+              <>
+                <div className="solo-movil"><Tendencias /></div>
+                {intereses && (
+                  <>
+                    <SelectorIntereses intereses={intereses} onCambio={setIntereses} />
+                    <Feed
+                      modo="todos"
+                      tipos={tiposDe(intereses)}
+                      vacio={intereses.length
+                        ? <Vacio titulo={t('intereses.vacio')}>{t('intereses.vacioTexto')}</Vacio>
+                        : <Vacio titulo={t('muro.vacioTitulo')}>{t('muro.vacioTexto')}</Vacio>}
+                    />
+                  </>
+                )}
+              </>
             )}
           </>
         )}

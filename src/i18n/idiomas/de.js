@@ -13,7 +13,7 @@ export default {
   },
   nav: {
     principal: 'Hauptmenü', saltar: 'Zum Inhalt springen', muro: 'Feed', tanques: 'Becken', foro: 'Forum', mercado: 'Marktplatz',
-    tiendas: 'Händler', wiki: 'WikiTank', buscar: 'Suche', notificaciones: 'Benachrichtigungen', mensajes: 'Nachrichten',
+    tiendas: 'Händler', wiki: 'WikiTank', buscar: 'Entdecken', notificaciones: 'Benachrichtigungen', mensajes: 'Nachrichten',
     nuevoTanque: 'Neues Becken', miPerfil: 'Mein Profil', crearCuenta: 'Registrieren', entrar: 'Anmelden', mas: 'Mehr',
     ajustes: 'Einstellungen', paraTiendas: 'Tankily für Händler', normas: 'Community-Regeln', entrarOCrear: 'Anmelden oder registrieren',
     masSecciones: 'Weitere Bereiche',

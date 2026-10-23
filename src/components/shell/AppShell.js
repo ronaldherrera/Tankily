@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import {
-  Waves, Fish, MessagesSquare, Tag, Store, BookOpen, Calculator, Search, Bell, Mail, Menu, Plus, LogIn, X, Coffee,
+  Waves, Fish, MessagesSquare, Tag, Store, BookOpen, Calculator, Search, Compass, Bell, Mail, Menu, Plus, LogIn, X, Coffee,
 } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
@@ -149,6 +149,7 @@ function FiltrosAgua() {
 const NAV = [
   { href: '/', clave: 'nav.muro', icono: Waves },
   { href: '/tanques/', clave: 'nav.tanques', icono: Fish },
+  { href: '/explorar/', clave: 'nav.buscar', icono: Compass },
   { href: '/foro/', clave: 'nav.foro', icono: MessagesSquare },
   { href: '/mercado/', clave: 'nav.mercado', icono: Tag },
   { href: '/tiendas/', clave: 'nav.tiendas', icono: Store },
@@ -288,9 +289,6 @@ export default function AppShell({ children }) {
               </Link>
             ))}
             <div style={{ height: 12 }} />
-            <Link href="/explorar/" className="nav-item" aria-current={activo(pathname, '/explorar/') ? 'page' : undefined}>
-              <Search size={20} /><span>{t('nav.buscar')}</span>
-            </Link>
             <Link href="/apoyar/" className="nav-item" aria-current={activo(pathname, '/apoyar/') ? 'page' : undefined}>
               <Coffee size={20} /><span>{t('apoyar.nav')}</span>
             </Link>
