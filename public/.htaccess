@@ -6,8 +6,6 @@ AddType application/manifest+json .webmanifest
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  # Artículos de WikiTank: en español, inglés, alemán y francés; en el resto, a la versión española
-  RewriteRule ^(pt|it|nl|pl)/wiki/(explorer/.*)$ /es/wiki/$2 [R=301,L]
   # Páginas de tanques, hilos y anuncios que aún no existen (creados después de la última publicación,
   # con el título cambiado o en otro idioma): a la versión con ?id=, que funciona siempre
   RewriteCond %{REQUEST_FILENAME} !-f

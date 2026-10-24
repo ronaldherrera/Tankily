@@ -1,4 +1,4 @@
-import { IDIOMAS, LOCALES, IDIOMAS_FICHAS } from '@/i18n/config';
+import { IDIOMAS, IDIOMAS_FICHAS } from '@/i18n/config';
 import { wikiTankTree } from '@/lib/wikiData';
 import { catalogoEspecies } from '@/lib/catalogoEspecies';
 import { HERRAMIENTAS } from '@/lib/herramientas';
@@ -45,7 +45,7 @@ export default async function sitemap() {
     lastModified: ahora,
     changeFrequency: frecuencia,
     priority: prioridad,
-    alternates: { languages: Object.fromEntries(IDIOMAS.map((l) => [LOCALES[l], `${URL_SITIO}/${l}${ruta}`])) },
+    alternates: { languages: Object.fromEntries(IDIOMAS.map((l) => [l, `${URL_SITIO}/${l}${ruta}`])) },
   })));
   // WikiTank: en español y, si están traducidas, en los idiomas de IDIOMAS_WIKI (con sus alternativas)
   const wiki = rutasWiki(wikiTankTree).flatMap(([ruta, traducible, titulo]) => {
@@ -57,11 +57,14 @@ export default async function sitemap() {
   // Catálogo y fichas de especies de WikiTank: en español y, las que están traducidas enteras, en los idiomas de
   // IDIOMAS_FICHAS (con sus alternativas)
   const especies = [
-    { url: `${URL_SITIO}/es/wiki/especies/`, lastModified: ahora, changeFrequency: 'weekly', priority: 0.8 },
+    ...['es', ...IDIOMAS_FICHAS].map((l, _, todos) => ({
+      url: `${URL_SITIO}/${l}/wiki/especies/`, lastModified: ahora, changeFrequency: 'weekly', priority: 0.8,
+      alternates: { languages: Object.fromEntries(todos.map((o) => [o, `${URL_SITIO}/${o}/wiki/especies/`])) },
+    })),
     ...catalogoEspecies().flatMap((e) => {
       const idiomas = ['es', ...IDIOMAS_FICHAS.filter((l) => fichaTraducida(e, l))];
       const url = (l) => `${URL_SITIO}/${l}/wiki/especies/${e.slug}/`;
-      const alternates = idiomas.length > 1 ? { languages: Object.fromEntries(idiomas.map((l) => [LOCALES[l], url(l)])) } : undefined;
+      const alternates = idiomas.length > 1 ? { languages: Object.fromEntries(idiomas.map((l) => [l, url(l)])) } : undefined;
       return idiomas.map((l) => ({ url: url(l), lastModified: ahora, changeFrequency: 'monthly', priority: 0.7, alternates }));
     }),
   ];

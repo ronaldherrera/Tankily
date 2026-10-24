@@ -64,7 +64,7 @@ export async function generateMetadata({ params }) {
     description: descripcion(e),
     alternates: {
       canonical: `/${e.lang}/wiki/especies/${e.slug}/`,
-      ...(idiomas.length > 1 ? { languages: Object.fromEntries([...idiomas.map((l) => [LOCALES[l], `/${l}/wiki/especies/${e.slug}/`]), ['x-default', `/es/wiki/especies/${e.slug}/`]]) } : {}),
+      ...(idiomas.length > 1 ? { languages: Object.fromEntries([...idiomas.map((l) => [l, `/${l}/wiki/especies/${e.slug}/`]), ['x-default', `/es/wiki/especies/${e.slug}/`]]) } : {}),
     },
     robots: e.lang === lang ? undefined : { index: false, follow: true },
     openGraph: e.imagen ? { images: [encodeURI(e.imagen)] } : undefined,

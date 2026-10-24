@@ -128,7 +128,7 @@ export default function CatalogoCliente({ especies }) {
             <li key={e.slug}>
               <Link href={`/wiki/especies/${e.slug}/`} className="tarjeta-especie cristal-suave">
                 <span className="tarjeta-especie-foto">{e.imagen && <img src={encodeURI(e.imagen)} alt="" loading="lazy" />}</span>
-                <span className="tarjeta-especie-texto" lang="es">
+                <span className="tarjeta-especie-texto" lang={e.lang}>
                   <strong>{e.comun || e.cientifico}</strong>
                   {e.comun && e.cientifico && <em>{e.cientifico}</em>}
                   {e.ficha && (

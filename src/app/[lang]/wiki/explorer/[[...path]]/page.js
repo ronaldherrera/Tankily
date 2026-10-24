@@ -87,10 +87,10 @@ function enIdioma(nodo, pathArray, lang) {
 }
 
 // Generar todos los caminos posibles para exportación estática: en español y en los idiomas con
-// traducción (IDIOMAS_WIKI). En los demás no se genera (el .htaccess y conIdioma llevan a /es/).
+// traducción (IDIOMAS_WIKI). En los demás no se genera (conIdioma lleva a /es/).
 export async function generateStaticParams({ params }) {
   const { lang } = await params;
-  // Next exige al menos una ruta por idioma: en los demás, una vacía que da 404 (el .htaccess redirige a /es/)
+  // Next exige al menos una ruta por idioma: en los demás, una vacía que da 404
   if (lang !== 'es' && !IDIOMAS_WIKI.includes(lang)) return [{ path: ['_'] }];
   const paths = [];
 
