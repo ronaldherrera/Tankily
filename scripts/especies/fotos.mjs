@@ -1,5 +1,5 @@
 // Busca foto para las especies del catálogo que no la tienen: imagen principal (P18) del taxón en
-// Wikidata → archivo de Wikimedia Commons. Solo licencias que permiten uso comercial (CC0, dominio
+// Wikidata → archivo de Wikimedia Commons (y si no, iNaturalist). Solo licencias que permiten uso comercial (CC0, dominio
 // público, CC BY y CC BY-SA); nunca NC ni ND. Guarda la foto en public/especies/<slug>.webp y el
 // crédito (autor, licencia, enlace) en especies/fotos.json, que la ficha muestra junto a la foto.
 // Uso: node --import ./tests/resolver.mjs scripts/especies/fotos.mjs [--max 50]
@@ -12,6 +12,9 @@ import { RAIZ, pedir, esperar } from './comun.mjs';
 const DESTINO = path.join(RAIZ, 'public', 'especies');
 const CREDITOS = path.join(RAIZ, 'especies', 'fotos.json');
 const max = Number(process.argv[process.argv.indexOf('--max') + 1]) || Infinity;
+// --nc: solo iNaturalist y aceptando también CC BY-NC y CC BY-NC-SA (nunca ND). Esas fotos se marcan con
+// nc: true y solo salen en su propia ficha, que se muestra sin publicidad (ver lib/catalogoEspecies.js)
+const NC = process.argv.includes('--nc');
 fs.mkdirSync(DESTINO, { recursive: true });
 fs.mkdirSync(path.dirname(CREDITOS), { recursive: true });
 const creditos = fs.existsSync(CREDITOS) ? JSON.parse(fs.readFileSync(CREDITOS, 'utf8')) : {};
@@ -92,7 +95,52 @@ async function sinonimos(nombre) {
   const r = await pedir(`https://api.gbif.org/v1/species/${clave}/synonyms?limit=20`);
   return [...new Set((r?.results || []).map((s) => s.canonicalName).filter((n) => n && n.split(' ').length === 2 && n !== nombre))].slice(0, 5);
 }
+// Si Commons no tiene nada libre: iNaturalist, primero las fotos del taxón y luego las de observaciones
+// de grado investigación (identificación confirmada por la comunidad), solo con licencia libre
+const INAT_LIBRE = { cc0: 'CC0', 'cc-by': 'CC BY 4.0', 'cc-by-sa': 'CC BY-SA 4.0', ...(NC ? { 'cc-by-nc': 'CC BY-NC 4.0', 'cc-by-nc-sa': 'CC BY-NC-SA 4.0' } : {}) };
+const INAT_URL = { cc0: 'https://creativecommons.org/publicdomain/zero/1.0/', 'cc-by': 'https://creativecommons.org/licenses/by/4.0/', 'cc-by-sa': 'https://creativecommons.org/licenses/by-sa/4.0/', 'cc-by-nc': 'https://creativecommons.org/licenses/by-nc/4.0/', 'cc-by-nc-sa': 'https://creativecommons.org/licenses/by-nc-sa/4.0/' };
+const fotoInat = (p) => p && INAT_LIBRE[p.license_code] && {
+  url: (p.large_url || p.url || '').replace(/\/(square|small|medium)\./, '/large.'),
+  licencia: INAT_LIBRE[p.license_code], urlLicencia: INAT_URL[p.license_code],
+  autor: sinHtml(p.attribution_name) || sinHtml(p.attribution).replace(/^\(c\)\s*/i, '').replace(/,.*$/, ''),
+  fuente: `https://www.inaturalist.org/photos/${p.id}`,
+  ...(p.license_code.includes('-nc') ? { nc: true } : {}),
+};
+async function buscarEnInat(nombre) {
+  const r = await pedir(`https://api.inaturalist.org/v1/taxa?q=${encodeURIComponent(nombre)}&per_page=10`);
+  const taxon = (r?.results || []).find((t) => t.name.toLowerCase() === nombre.toLowerCase());
+  await esperar(1100);
+  if (!taxon) return null;
+  const t = await pedir(`https://api.inaturalist.org/v1/taxa/${taxon.id}`);
+  await esperar(1100);
+  for (const tp of t?.results?.[0]?.taxon_photos || []) {
+    const f = fotoInat(tp.photo);
+    if (f && !descartadas.has(f.fuente)) return f;
+  }
+  const o = await pedir(`https://api.inaturalist.org/v1/observations?taxon_id=${taxon.id}&photo_license=${Object.keys(INAT_LIBRE).join(',')}&quality_grade=research&per_page=10&order_by=votes`);
+  await esperar(1100);
+  for (const obs of o?.results || []) for (const p of obs.photos || []) {
+    const f = fotoInat(p);
+    if (f && !descartadas.has(f.fuente)) return f;
+  }
+  return null;
+}
+
 async function elegirFoto(nombre) {
+  if (NC) return buscarEnInat(nombre);
+  const commons = await elegirFotoCommons(nombre);
+  if (commons) {
+    const meta = commons.ii.extmetadata || {};
+    return {
+      url: commons.ii.thumburl || commons.ii.url, licencia: commons.licencia, urlLicencia: meta.LicenseUrl?.value || null,
+      // "No machine-readable author provided. Haplochromis assumed (…)" → "Haplochromis"
+      autor: sinHtml(meta.Artist?.value).replace(/^No machine-readable author provided\.\s*(.+?)\s+assumed.*$/i, '$1'),
+      fuente: commons.ii.descriptionurl,
+    };
+  }
+  return buscarEnInat(nombre);
+}
+async function elegirFotoCommons(nombre) {
   let encontradas = await buscarEnCommons(nombre);
   if (!imagenes.get(nombre) && !encontradas.length) {
     for (const otro of await sinonimos(nombre)) encontradas = [...encontradas, ...(await buscarEnCommons(otro))];
@@ -113,11 +161,9 @@ const rechazadas = [];
 for (const e of pendientes) {
   const elegida = await elegirFoto(binomio(e.cientifico));
   if (!elegida) continue;
-  const { ii, licencia } = elegida;
-  const meta = ii.extmetadata || {};
-  // "No machine-readable author provided. Haplochromis assumed (…)" → "Haplochromis"
-  const autor = sinHtml(meta.Artist?.value).replace(/^No machine-readable author provided\.\s*(.+?)\s+assumed.*$/i, '$1') || 'Autor desconocido';
-  const res = await pedir(ii.thumburl || ii.url, { json: false });
+  const { licencia } = elegida;
+  const autor = elegida.autor || 'Autor desconocido';
+  const res = await pedir(elegida.url, { json: false });
   if (!res) continue;
   const slug = slugEspecie(e.cientifico);
   try {
@@ -126,7 +172,7 @@ for (const e of pendientes) {
   } catch (err) { console.warn(`  ⚠ ${e.cientifico}: ${err.message}`); continue; }
   creditos[slug] = {
     archivo: `${slug}.webp`, autor: autor.slice(0, 120), licencia,
-    urlLicencia: meta.LicenseUrl?.value || null, fuente: ii.descriptionurl,
+    urlLicencia: elegida.urlLicencia, fuente: elegida.fuente, ...(elegida.nc ? { nc: true } : {}),
   };
   await guardarCreditos();
   nuevas++;

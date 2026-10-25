@@ -10,6 +10,7 @@ import FichaEspecieContenido from '@/components/wiki/FichaEspecieContenido';
 import AnadirATanque from '@/components/wiki/AnadirATanque';
 import TanquesConEspecie from '@/components/wiki/TanquesConEspecie';
 import InvitacionEspecie from '@/components/wiki/InvitacionEspecie';
+import FotoEspecie from '@/components/wiki/FotoEspecie';
 import Publicidad from '@/components/Publicidad';
 
 const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
@@ -145,7 +146,7 @@ export default async function PaginaEspecie({ params }) {
       </nav>
 
       <header className="especie-hero">
-        {e.imagen && <img src={encodeURI(e.imagen)} alt={nombre} />}
+        {(e.imagen || e.imagenNC) && <FotoEspecie src={encodeURI(e.imagen || e.imagenNC)} alt={nombre} textoAmpliar={t('fichaEsp.verFoto')} textoCerrar={t('comun.cerrar')} />}
         <div className="especie-hero-panel cristal cristal-refracta">
           <span className="etiqueta-agua" lang={e.lang}>{e.grupo}</span>
           <h1>{nombre}</h1>
@@ -155,11 +156,11 @@ export default async function PaginaEspecie({ params }) {
       </header>
 
       {e.credito && (
-        // Las licencias de Wikimedia Commons piden citar autor y licencia junto a la foto
+        // Las licencias libres (Wikimedia Commons, iNaturalist) piden citar autor y licencia junto a la foto
         <p className="especie-credito mini texto-3" lang={lang}>
           {t('fichaEsp.foto')}: {e.credito.autor} ·{' '}
           {e.credito.urlLicencia ? <a href={e.credito.urlLicencia} rel="license noopener" target="_blank" className="enlace">{e.credito.licencia}</a> : e.credito.licencia} ·{' '}
-          <a href={e.credito.fuente} rel="noopener" target="_blank" className="enlace">Wikimedia Commons</a>
+          <a href={e.credito.fuente} rel="noopener" target="_blank" className="enlace">{e.credito.fuente.includes('inaturalist.org') ? 'iNaturalist' : 'Wikimedia Commons'}</a>
         </p>
       )}
 
@@ -190,7 +191,8 @@ export default async function PaginaEspecie({ params }) {
               <TanquesConEspecie titulo={e.titulo} />
             </div>
           )}
-          <Publicidad ubicacion="wiki" />
+          {/* Sin anuncios en las fichas con foto de licencia no comercial (CC BY-NC) */}
+          {!e.imagenNC && <Publicidad ubicacion="wiki" />}
         </aside>
       </div>
 

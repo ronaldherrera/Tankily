@@ -168,12 +168,14 @@ export function catalogoEspecies() {
     }
   }
 
-  // Fotos de Wikimedia Commons (scripts/especies/fotos.mjs) para las que no tienen foto en la wiki
+  // Fotos de Wikimedia Commons e iNaturalist (scripts/especies/fotos.mjs) para las que no tienen foto en la wiki
   const fotos = leerFotos();
   for (const e of porClave.values()) {
     if (e.imagen) continue;
     const foto = fotos[slugEspecie(e.cientifico || e.comun)];
-    if (foto) Object.assign(e, { imagen: `/especies/${foto.archivo}`, credito: foto });
+    // Las fotos con licencia no comercial (nc) solo se usan en su propia ficha, que va sin publicidad:
+    // van en imagenNC y no en imagen, para que no salgan en el catálogo, el buscador ni los tanques
+    if (foto) Object.assign(e, { [foto.nc ? 'imagenNC' : 'imagen']: `/especies/${foto.archivo}`, credito: foto });
   }
 
   const usados = new Set();
