@@ -11,6 +11,7 @@ import AnadirATanque from '@/components/wiki/AnadirATanque';
 import TanquesConEspecie from '@/components/wiki/TanquesConEspecie';
 import InvitacionEspecie from '@/components/wiki/InvitacionEspecie';
 import FotoEspecie from '@/components/wiki/FotoEspecie';
+import { guiaEspecie } from '@/lib/guiaEspecie';
 import Publicidad from '@/components/Publicidad';
 
 const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
@@ -122,6 +123,30 @@ export default async function PaginaEspecie({ params }) {
     .sort((a, b) => parecida(b) - parecida(a) || Number(!!b.imagen) - Number(!!a.imagen))
     .slice(0, 6);
   const tieneFicha = !!(e.ficha?.t || e.ficha?.ph);
+  // Preguntas frecuentes y especies compatibles generadas con los datos de la ficha (lib/guiaEspecie.js)
+  const guia = guiaEspecie(e, e.lang, nombre);
+  const enGuia = new Set(guia.compatibles.map((x) => x.slug));
+  const otras = relacionadas.filter((x) => !enGuia.has(x.slug));
+  const faq = guia.preguntas.length >= 2 && {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: e.lang,
+    mainEntity: guia.preguntas.map(({ p, r }) => ({ '@type': 'Question', name: p, acceptedAnswer: { '@type': 'Answer', text: r } })),
+  };
+  const tarjeta = (original) => {
+    const x = traducida ? fichaEnIdioma(original, lang) : { ...original, lang: 'es' };
+    return (
+      <li key={x.slug}>
+        <Link href={`/wiki/especies/${x.slug}/`} className="tarjeta-especie cristal-suave">
+          <span className="tarjeta-especie-foto">{x.imagen && <img src={encodeURI(x.imagen)} alt="" loading="lazy" />}</span>
+          <span className="tarjeta-especie-texto" lang={x.lang}>
+            <strong>{x.comun || x.cientifico}</strong>
+            {x.comun && x.cientifico && <em>{x.cientifico}</em>}
+          </span>
+        </Link>
+      </li>
+    );
+  };
 
   const canonica = `/${e.lang}/wiki/especies/${e.slug}/`;
   const articulo = {
@@ -139,7 +164,7 @@ export default async function PaginaEspecie({ params }) {
 
   return (
     <article className="especie-pagina" lang={e.lang}>
-      <JsonLd datos={[articulo, migas([['WikiTank', `/${e.lang}/wiki/`], [t('catalogo.titulo'), `/${e.lang}/wiki/especies/`], [nombre, canonica]])]} />
+      <JsonLd datos={[articulo, ...(faq ? [faq] : []), migas([['WikiTank', `/${e.lang}/wiki/`], [t('catalogo.titulo'), `/${e.lang}/wiki/especies/`], [nombre, canonica]])]} />
 
       <nav className="especie-migas mini" aria-label={t('wiki.ruta')} lang={lang}>
         <Link href="/wiki/" className="enlace">WikiTank</Link> / <Link href="/wiki/especies/" className="enlace">{t('catalogo.titulo')}</Link> / <span className="texto-3">{nombre}</span>
@@ -196,25 +221,31 @@ export default async function PaginaEspecie({ params }) {
         </aside>
       </div>
 
-      {relacionadas.length > 0 && (
+      {guia.preguntas.length >= 2 && (
+        <section className="cristal-suave especie-faq" aria-labelledby="preguntas">
+          <h2 id="preguntas" className="titulo-s">{guia.titulo}</h2>
+          <dl>
+            {guia.preguntas.map(({ p, r }) => (
+              <div key={p}>
+                <dt>{p}</dt>
+                <dd>{r}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+
+      {guia.compatibles.length >= 3 && (
+        <section aria-labelledby="compatibles">
+          <h2 id="compatibles" className="titulo-s" style={{ marginBottom: 10 }}>{guia.compatiblesTitulo}</h2>
+          <ul className="catalogo-rejilla">{guia.compatibles.map(tarjeta)}</ul>
+        </section>
+      )}
+
+      {otras.length > 0 && (
         <section aria-labelledby="relacionadas" lang={lang}>
           <h2 id="relacionadas" className="titulo-s" style={{ marginBottom: 10 }}>{t('fichaEsp.relacionadas', { grupo: e.grupo.toLowerCase() })}</h2>
-          <ul className="catalogo-rejilla">
-            {relacionadas.map((original) => {
-              const x = traducida ? fichaEnIdioma(original, lang) : { ...original, lang: 'es' };
-              return (
-              <li key={x.slug}>
-                <Link href={`/wiki/especies/${x.slug}/`} className="tarjeta-especie cristal-suave">
-                  <span className="tarjeta-especie-foto">{x.imagen && <img src={encodeURI(x.imagen)} alt="" loading="lazy" />}</span>
-                  <span className="tarjeta-especie-texto" lang={x.lang}>
-                    <strong>{x.comun || x.cientifico}</strong>
-                    {x.comun && x.cientifico && <em>{x.cientifico}</em>}
-                  </span>
-                </Link>
-              </li>
-              );
-            })}
-          </ul>
+          <ul className="catalogo-rejilla">{otras.map(tarjeta)}</ul>
         </section>
       )}
 

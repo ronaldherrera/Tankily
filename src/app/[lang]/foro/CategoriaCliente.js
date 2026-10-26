@@ -17,14 +17,15 @@ const POR_PAGINA = 30;
 const cache = new Map();
 
 // Lista de hilos de una categoría del foro. La página (/foro/<categoría>/) es estática y le pasa el slug.
-export default function CategoriaCliente({ slug }) {
+// inicial: hilos leídos al construir la página, para que el HTML ya los traiga
+export default function CategoriaCliente({ slug, inicial = null }) {
   const { usuario } = useSesion();
   const cat = categoriaForo(slug);
   const { t } = useT();
   const nombreCat = cat ? t(`foro.categorias.${cat.slug}.nombre`) : t('foro.categoria.noEncontrada');
   const [filtro, setFiltro] = useState('recientes');
-  const [hilos, setHilos] = useState(() => cache.get(`${slug}:recientes`) || null);
-  const [hayMas, setHayMas] = useState(false);
+  const [hilos, setHilos] = useState(() => cache.get(`${slug}:recientes`) || inicial);
+  const [hayMas, setHayMas] = useState(() => (inicial || []).length === POR_PAGINA);
   const [fallo, setFallo] = useState(false);
 
   async function cargar(desde = 0) {
@@ -44,7 +45,7 @@ export default function CategoriaCliente({ slug }) {
 
   useEffect(() => {
     if (!slug) return;
-    setHilos(cache.get(`${slug}:${filtro}`) || null);
+    setHilos(cache.get(`${slug}:${filtro}`) || (filtro === 'recientes' ? inicial : null));
     cargar(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, filtro]);
