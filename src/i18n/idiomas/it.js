@@ -126,7 +126,7 @@ export default {
     sinCambios: 'Non hai ancora registrato cambi d’acqua.', hanPasado: { uno: '1 giorno dall’ultimo cambio d’acqua.', otros: '{n} giorni dall’ultimo cambio d’acqua.' },
     hechoHoy: 'Fatto oggi', cambioAnotado: 'Cambio d’acqua registrato', secciones: 'Sezioni della vasca', resumen: 'Panoramica', parametros: 'Valori',
     habitantesPestana: 'Abitanti', diario: 'Diario', publicaciones: 'Post', agua: 'Acqua', anadirMedicion: 'Aggiungi misurazione',
-    sinMediciones: 'Ancora nessuna misurazione.', ultimoCambio: 'Ultimo cambio d’acqua: {fecha}', sobre: 'Questa vasca', fichaTecnica: 'Scheda tecnica',
+    sinMediciones: 'Ancora nessuna misurazione.', ultimoCambio: 'Ultimo cambio d’acqua: {fecha}', sobre: 'Questa vasca', fichaTecnica: 'Scheda tecnica', quienVive: 'Chi ci vive', habitantesResumen: { uno: 'Qui vivono {total} esemplari di 1 specie.', otros: 'Qui vivono {total} esemplari di {n} specie diverse.' },
     medidas: 'Misure', montado: 'Allestita', sinPublicaciones: 'Nessun post su questa vasca',
     sinPublicacionesDueno: 'Condividi foto e novità: compariranno qui e nella bacheca.', sinPublicacionesOtro: 'Quando il proprietario pubblicherà qualcosa su questa vasca, lo vedrai qui.',
   },

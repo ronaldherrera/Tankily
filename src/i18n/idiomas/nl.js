@@ -125,7 +125,7 @@ export default {
     sinCambios: 'Je hebt nog geen waterverversing genoteerd.', hanPasado: { uno: '1 dag sinds de laatste waterverversing.', otros: '{n} dagen sinds de laatste waterverversing.' },
     hechoHoy: 'Vandaag gedaan', cambioAnotado: 'Waterverversing genoteerd', secciones: 'Onderdelen van de bak', resumen: 'Overzicht', parametros: 'Waterwaarden',
     habitantesPestana: 'Bewoners', diario: 'Logboek', publicaciones: 'Berichten', agua: 'Water', anadirMedicion: 'Meting toevoegen', sinMediciones: 'Nog geen metingen.',
-    ultimoCambio: 'Laatste waterverversing: {fecha}', sobre: 'Over deze bak', fichaTecnica: 'Technische gegevens', medidas: 'Afmetingen', montado: 'Ingericht',
+    ultimoCambio: 'Laatste waterverversing: {fecha}', sobre: 'Over deze bak', fichaTecnica: 'Technische gegevens', quienVive: 'Wie hier woont', habitantesResumen: { uno: 'Hier leven {total} dieren en planten van 1 soort.', otros: 'Hier leven {total} dieren en planten van {n} verschillende soorten.' }, medidas: 'Afmetingen', montado: 'Ingericht',
     sinPublicaciones: 'Geen berichten over deze bak', sinPublicacionesDueno: 'Deel foto’s en nieuws: ze verschijnen hier en op de tijdlijn.',
     sinPublicacionesOtro: 'Als de eigenaar iets over deze bak plaatst, zie je het hier.',
   },

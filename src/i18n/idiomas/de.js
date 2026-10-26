@@ -135,7 +135,7 @@ export default {
     hechoHoy: 'Heute erledigt', cambioAnotado: 'Wasserwechsel eingetragen', secciones: 'Bereiche des Beckens', resumen: 'Übersicht',
     parametros: 'Wasserwerte', habitantesPestana: 'Bewohner', diario: 'Logbuch', publicaciones: 'Beiträge', agua: 'Wasser',
     anadirMedicion: 'Messung hinzufügen', sinMediciones: 'Noch keine Messungen.', ultimoCambio: 'Letzter Wasserwechsel: {fecha}',
-    sobre: 'Über dieses Becken', fichaTecnica: 'Technische Daten', medidas: 'Maße', montado: 'Eingerichtet',
+    sobre: 'Über dieses Becken', fichaTecnica: 'Technische Daten', quienVive: 'Wer hier lebt', habitantesResumen: { uno: 'Hier leben {total} Tiere und Pflanzen von 1 Art.', otros: 'Hier leben {total} Tiere und Pflanzen von {n} verschiedenen Arten.' }, medidas: 'Maße', montado: 'Eingerichtet',
     sinPublicaciones: 'Keine Beiträge zu diesem Becken', sinPublicacionesDueno: 'Teile Fotos und Neuigkeiten: Sie erscheinen hier und im Feed.',
     sinPublicacionesOtro: 'Wenn der Besitzer etwas zu diesem Becken postet, siehst du es hier.',
   },

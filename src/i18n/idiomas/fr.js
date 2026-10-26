@@ -130,7 +130,7 @@ export default {
     hanPasado: { uno: '1 jour depuis le dernier changement d’eau.', otros: '{n} jours depuis le dernier changement d’eau.' }, hechoHoy: 'Fait aujourd’hui',
     cambioAnotado: 'Changement d’eau noté', secciones: 'Sections du bac', resumen: 'Aperçu', parametros: 'Paramètres', habitantesPestana: 'Habitants',
     diario: 'Carnet', publicaciones: 'Publications', agua: 'Eau', anadirMedicion: 'Ajouter une mesure', sinMediciones: 'Pas encore de mesures.',
-    ultimoCambio: 'Dernier changement d’eau : {fecha}', sobre: 'À propos de ce bac', fichaTecnica: 'Fiche technique', medidas: 'Dimensions',
+    ultimoCambio: 'Dernier changement d’eau : {fecha}', sobre: 'À propos de ce bac', fichaTecnica: 'Fiche technique', quienVive: 'Qui vit ici', habitantesResumen: { uno: '{total} individus d’1 espèce vivent ici.', otros: '{total} individus de {n} espèces différentes vivent ici.' }, medidas: 'Dimensions',
     montado: 'Mis en eau', sinPublicaciones: 'Aucune publication sur ce bac', sinPublicacionesDueno: 'Partage des photos et des nouvelles : elles apparaîtront ici et dans le fil.',
     sinPublicacionesOtro: 'Quand le propriétaire publiera sur ce bac, tu le verras ici.',
   },

@@ -126,7 +126,7 @@ export default {
     hanPasado: { uno: 'Minął 1 dzień od ostatniej podmiany wody.', pocos: 'Minęły {n} dni od ostatniej podmiany wody.', muchos: 'Minęło {n} dni od ostatniej podmiany wody.', otros: 'Minęło {n} dnia od ostatniej podmiany wody.' },
     hechoHoy: 'Zrobione dziś', cambioAnotado: 'Podmiana wody zapisana', secciones: 'Sekcje zbiornika', resumen: 'Podsumowanie', parametros: 'Parametry',
     habitantesPestana: 'Mieszkańcy', diario: 'Dziennik', publicaciones: 'Wpisy', agua: 'Woda', anadirMedicion: 'Dodaj pomiar', sinMediciones: 'Brak pomiarów.',
-    ultimoCambio: 'Ostatnia podmiana wody: {fecha}', sobre: 'O tym zbiorniku', fichaTecnica: 'Dane techniczne', medidas: 'Wymiary', montado: 'Założony',
+    ultimoCambio: 'Ostatnia podmiana wody: {fecha}', sobre: 'O tym zbiorniku', fichaTecnica: 'Dane techniczne', quienVive: 'Kto tu mieszka', habitantesResumen: { uno: 'Mieszka tu {total} okazów 1 gatunku.', pocos: 'Mieszka tu {total} okazów {n} różnych gatunków.', muchos: 'Mieszka tu {total} okazów {n} różnych gatunków.', otros: 'Mieszka tu {total} okazów {n} różnych gatunków.' }, medidas: 'Wymiary', montado: 'Założony',
     sinPublicaciones: 'Brak wpisów o tym zbiorniku', sinPublicacionesDueno: 'Udostępniaj zdjęcia i nowości: pojawią się tutaj i w aktualnościach.',
     sinPublicacionesOtro: 'Gdy właściciel opublikuje coś o tym zbiorniku, zobaczysz to tutaj.',
   },

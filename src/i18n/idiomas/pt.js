@@ -129,7 +129,7 @@ export default {
     hanPasado: { uno: '1 dia desde a última troca de água.', otros: '{n} dias desde a última troca de água.' }, hechoHoy: 'Feito hoje',
     cambioAnotado: 'Troca de água registrada', secciones: 'Seções do aquário', resumen: 'Resumo', parametros: 'Parâmetros', habitantesPestana: 'Habitantes',
     diario: 'Diário', publicaciones: 'Publicações', agua: 'Água', anadirMedicion: 'Adicionar medição', sinMediciones: 'Ainda não há medições.',
-    ultimoCambio: 'Última troca de água: {fecha}', sobre: 'Sobre este aquário', fichaTecnica: 'Ficha técnica', medidas: 'Medidas', montado: 'Montado',
+    ultimoCambio: 'Última troca de água: {fecha}', sobre: 'Sobre este aquário', fichaTecnica: 'Ficha técnica', quienVive: 'Quem vive aqui', habitantesResumen: { uno: 'Vivem aqui {total} exemplares de 1 espécie.', otros: 'Vivem aqui {total} exemplares de {n} espécies diferentes.' }, medidas: 'Medidas', montado: 'Montado',
     sinPublicaciones: 'Nenhuma publicação deste aquário', sinPublicacionesDueno: 'Compartilhe fotos e novidades: elas vão aparecer aqui e no feed.',
     sinPublicacionesOtro: 'Quando o dono publicar algo sobre este aquário, você verá aqui.',
   },

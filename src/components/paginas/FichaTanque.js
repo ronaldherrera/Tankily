@@ -21,10 +21,12 @@ import InvitacionRegistro from '@/components/InvitacionRegistro';
 
 // Ficha de un tanque. La usan /tanque/?id= (cualquier tanque, al momento) y /tanque/<slug>/ (página indexable,
 // que la recibe ya rellena en `inicial` para que el HTML lleve el contenido; luego se actualiza al momento).
-export default function FichaTanque({ id, inicial }) {
+// fichas: { id de habitante → { slug, t, ph, cm } de su ficha de especie } (solo en la página indexable, calculado al construirla)
+export default function FichaTanque({ id, inicial, fichas = {} }) {
   const { usuario, cargando: cargandoSesion } = useSesion();
   const tostada = useTostada();
-  const { t } = useT();
+  const { t, locale } = useT();
+  const num = (v) => Number(v).toLocaleString(locale, { maximumFractionDigits: 1 });
   const u = useUnidades();
   const [tanque, setTanque] = useState(inicial?.tanque ?? undefined);
   const [habitantes, setHabitantes] = useState(inicial?.habitantes ?? []);
@@ -150,6 +152,27 @@ export default function FichaTanque({ id, inicial }) {
               <section className="cristal-suave" style={{ padding: 16 }}>
                 <h2 className="titulo-s" style={{ marginBottom: 8 }}>{t('tanque.sobre')}</h2>
                 <p className="prosa texto-2">{tanque.descripcion}</p>
+              </section>
+            )}
+
+            {habitantes.length > 0 && (
+              <section className="cristal-suave" style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <h2 className="titulo-s">{t('tanque.quienVive')}</h2>
+                <p className="pequeno texto-2">{t('tanque.habitantesResumen', { n: new Set(habitantes.map((h) => h.nombre_cientifico || h.nombre)).size, total: totalHabitantes })}</p>
+                <ul className="lista-filas">
+                  {habitantes.map((h) => {
+                    const f = fichas[h.id];
+                    const nombre = `${h.cantidad > 1 ? `${h.cantidad} × ` : ''}${h.nombre}`;
+                    // Datos clave de su ficha: temperatura, pH y tamaño adulto
+                    const datos = f && [f.t && `${num(f.t[0])}–${num(f.t[1])} °C`, f.ph && `pH ${num(f.ph[0])}–${num(f.ph[1])}`, f.cm && `${num(f.cm)} cm`].filter(Boolean).join(' · ');
+                    return (
+                      <li key={h.id} style={{ justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+                        {f ? <Link href={`/wiki/especies/${f.slug}/`} className="enlace">{nombre}</Link> : <span>{nombre}</span>}
+                        {datos && <span className="mini texto-3">{datos}</span>}
+                      </li>
+                    );
+                  })}
+                </ul>
               </section>
             )}
 
