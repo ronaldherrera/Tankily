@@ -19,10 +19,16 @@ export default function TanqueCard({ tanque, conAutor = true }) {
         <div style={{ minWidth: 0, flex: 1 }}>
           <span className="etiqueta-agua"><span>{t(`tipos.${tanque.tipo}`)}</span></span>
           <strong className="titulo-s" style={{ display: 'block', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tanque.nombre}</strong>
+          {/* De quién es (sin enlace propio: toda la tarjeta ya lleva al tanque) */}
+          {conAutor && tanque.autor && (
+            <span className="tarjeta-tanque-autor mini">
+              <Avatar perfil={tanque.autor} tamano={20} />
+              <span>{tanque.autor.nombre || `@${tanque.autor.usuario}`}</span>
+            </span>
+          )}
         </div>
         {tanque.visibilidad === 'privado' && <Lock size={16} className="texto-3" aria-label={t('tanques.privado')} />}
         {tanque.visibilidad === 'seguidores' && <Users size={16} className="texto-3" aria-label={t('tanques.soloSeguidores')} />}
-        {conAutor && tanque.autor && <Avatar perfil={tanque.autor} tamano={28} />}
       </div>
     </Link>
   );

@@ -32,7 +32,11 @@ export default function TanquesCliente({ tipo = '' }) {
     if (vista === 'mios' && usuario) q = q.eq('usuario_id', usuario.id).order('creado_en');
     else q = q.eq('visibilidad', 'publico').order('creado_en', { ascending: false }).limit(60);
     if (tipo) q = q.eq('tipo', tipo);
-    q.then(({ data, error }) => { setFallo(!!error); setTanques(error ? [] : data || []); });
+    // Solo vale la respuesta de la vista actual: al entrar con sesión se pide primero la comunidad y
+    // enseguida "Mis tanques"; si la primera llegaba tarde, pisaba la lista y salían tanques ajenos
+    let vigente = true;
+    q.then(({ data, error }) => { if (!vigente) return; setFallo(!!error); setTanques(error ? [] : data || []); });
+    return () => { vigente = false; };
   }, [vista, tipo, usuario, cargando, intento]);
 
   return (

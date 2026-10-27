@@ -282,9 +282,9 @@ export default function AppShell({ children }) {
       <div className="shell">
         <aside className="rail">
           <nav className="rail-interior cristal cristal-fijo" aria-label={t('nav.principal')}>
-            <Link href="/" className="marca" aria-label="Tankily"><Marca conNombre animable animar={cargando} /></Link>
+            <Link href="/" prefetch className="marca" aria-label="Tankily"><Marca conNombre animable animar={cargando} /></Link>
             {NAV.map(({ href, clave, icono: Icono }) => (
-              <Link key={href} href={href} className="nav-item" aria-current={activo(pathname, href) ? 'page' : undefined}>
+              <Link key={href} href={href} prefetch className="nav-item" aria-current={activo(pathname, href) ? 'page' : undefined}>
                 <Icono size={20} /><span>{t(clave)}</span>
               </Link>
             ))}
@@ -294,10 +294,10 @@ export default function AppShell({ children }) {
             </Link>
             {usuario && (
               <>
-                <Link href="/notificaciones/" className="nav-item" aria-current={activo(pathname, '/notificaciones/') ? 'page' : undefined}>
+                <Link href="/notificaciones/" prefetch className="nav-item" aria-current={activo(pathname, '/notificaciones/') ? 'page' : undefined}>
                   <Bell size={20} /><span>{t('nav.notificaciones')}</span><Insignia n={noLeidos.notificaciones} />
                 </Link>
-                <Link href="/mensajes/" className="nav-item" aria-current={activo(pathname, '/mensajes/') ? 'page' : undefined}>
+                <Link href="/mensajes/" prefetch className="nav-item" aria-current={activo(pathname, '/mensajes/') ? 'page' : undefined}>
                   <Mail size={20} /><span>{t('nav.mensajes')}</span><Insignia n={noLeidos.mensajes} />
                 </Link>
               </>

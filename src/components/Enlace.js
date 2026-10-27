@@ -5,10 +5,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useT } from '@/i18n/IdiomaProvider';
 
-// Igual que next/link, pero añade el prefijo de idioma a las rutas internas (/foro/ → /en/foro/)
-const Enlace = forwardRef(function Enlace({ href, ...props }, ref) {
+// Igual que next/link, pero añade el prefijo de idioma a las rutas internas (/foro/ → /en/foro/).
+// Sin precarga salvo que se pida (prefetch): next/link descarga de antemano la página de cada enlace
+// visible y en el muro eran más de 150 descargas compitiendo con los datos al abrir la web.
+// El menú principal sí precarga (son pocas rutas y las más usadas).
+const Enlace = forwardRef(function Enlace({ href, prefetch = false, ...props }, ref) {
   const { ruta } = useT();
-  return <Link ref={ref} href={typeof href === 'string' ? ruta(href) : href} {...props} />;
+  return <Link ref={ref} href={typeof href === 'string' ? ruta(href) : href} prefetch={prefetch} {...props} />;
 });
 
 export default Enlace;

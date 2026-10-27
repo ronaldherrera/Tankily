@@ -1046,6 +1046,8 @@ select.entrada option { background: var(--superficie); }
   display: flex; align-items: center; gap: 10px;
   padding: 10px 12px; border-radius: 16px;
 }
+.tarjeta-tanque-autor { display: flex; align-items: center; gap: 6px; margin-top: 6px; color: var(--texto-2); min-width: 0; }
+.tarjeta-tanque-autor > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .grafica { display: flex; flex-direction: column; gap: 8px; padding: 16px; }
 .tooltip-grafica {
@@ -1169,12 +1171,15 @@ select.entrada option { background: var(--superficie); }
 .seguimientos-tanque img { width: 100%; height: 100%; object-fit: cover; }
 
 /* Perfil */
+/* 3:1, la misma proporción del recorte: la foto subida (style backgroundImage, una sola capa)
+   se ve entera y centrada, sin heredar el tamaño "auto" de la primera capa del degradado */
 .perfil-portada {
-  height: 200px; border-radius: var(--radio-xl);
-  background: radial-gradient(80% 120% at 20% 0%, color-mix(in oklab, var(--agua) 35%, transparent), transparent 60%), linear-gradient(160deg, var(--grad-a), var(--grad-b)) center / cover;
+  aspect-ratio: 3 / 1; border-radius: var(--radio-xl);
+  background: radial-gradient(80% 120% at 20% 0%, color-mix(in oklab, var(--agua) 35%, transparent), transparent 60%), linear-gradient(160deg, var(--grad-a), var(--grad-b));
+  background-size: cover; background-position: center;
   box-shadow: inset 0 0 0 1px var(--linea);
 }
-@media (max-width: 720px) { .perfil-portada { height: 140px; border-radius: var(--radio-l); } }
+@media (max-width: 720px) { .perfil-portada { border-radius: var(--radio-l); } }
 .perfil-cabecera { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: -48px; padding: 0 16px; }
 .perfil-cabecera .avatar { box-shadow: 0 0 0 4px var(--abismo), 0 0 0 5px var(--linea-fuerte); }
 .cifras-perfil {
@@ -1651,6 +1656,32 @@ h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
 .admin-pasos .chip.hecho { opacity: 1; background: color-mix(in oklab, var(--ok) 16%, transparent); border-color: color-mix(in oklab, var(--ok) 45%, transparent); color: var(--ok-texto); }
 .admin-usuario-lado { flex: none; display: flex; flex-direction: column; align-items: flex-end; text-align: right; gap: 1px; min-width: 96px; }
 @media (max-width: 560px) { .admin-usuario { flex-wrap: wrap; } .admin-usuario-lado { align-items: flex-start; text-align: left; flex-basis: 100%; padding-left: 50px; } }
+/* Contactar y seguir desde la lista de usuarios */
+.admin-marca { flex: none; width: 18px; height: 18px; margin-top: 10px; accent-color: var(--agua); cursor: pointer; }
+.admin-usuario.marcado { background: color-mix(in oklab, var(--agua) 8%, transparent); }
+.admin-usuario-acciones { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.admin-seleccion { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; min-height: 34px; position: sticky; top: calc(var(--seg-arriba, 0px) + 8px); z-index: 3; }
+.admin-seleccion:has(strong) { padding: 8px 12px; border-radius: var(--radio-m); background: var(--superficie-2); border: 1px solid var(--linea-fuerte); }
+.admin-previa { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: var(--radio-m); background: rgba(var(--c-tinta), 0.04); border: 1px dashed var(--linea-fuerte); }
+.previa-mensaje { align-self: flex-start; max-width: 85%; padding: 10px 14px; border-radius: 18px 18px 18px 6px; background: var(--superficie-2); white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.92rem; }
+.previa-push { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 14px; background: var(--superficie-2); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); max-width: 380px; }
+.previa-push img { border-radius: 8px; flex: none; }
+.previa-push p { margin: 2px 0; font-size: 0.88rem; color: var(--texto-2); }
+.previa-correo { padding: 14px; border-radius: 12px; background: #eef6fa; }
+.previa-correo-tarjeta { background: #fff; border-radius: 14px; padding: 18px 16px; border-top: 4px solid #4fc3e8; color: #3c5266; font-size: 0.9rem; line-height: 1.55; }
+.previa-correo-tarjeta h3 { margin: 0 0 8px; color: #0b1f33; font-size: 1.1rem; }
+.previa-correo-tarjeta p { margin: 0 0 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.previa-correo-boton { display: inline-block; margin-top: 4px; padding: 8px 16px; border-radius: 999px; background: #0b1f33; color: #fff; font-weight: 600; font-size: 0.85rem; }
+.admin-envios { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.admin-envios li { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; }
+.admin-envios li + li { border-top: 1px solid var(--linea); }
+.admin-envio-texto { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-pasos button.chip { cursor: pointer; font: inherit; font-size: 0.75rem; }
+.admin-pasos button.chip[aria-expanded='true'] { box-shadow: 0 0 0 2px color-mix(in oklab, var(--ok) 55%, transparent); }
+.admin-detalle { list-style: none; margin: 10px 0 0; padding: 4px 12px; border-radius: var(--radio-m); background: rgba(var(--c-tinta), 0.04); border: 1px solid var(--linea); max-height: 360px; overflow-y: auto; }
+.admin-detalle li { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; }
+.admin-detalle li + li { border-top: 1px solid var(--linea); }
+.admin-detalle-texto { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
 
 /* Plan Pro en el panel de la tienda */
 .plan-pro-panel { padding: 20px; display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 2; }

@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { BellRing, CalendarDays, Droplets, Loader2, MessageCircle, MessagesSquare, Sparkles } from 'lucide-react';
+import { BellRing, CalendarDays, Droplets, Loader2, Megaphone, MessageCircle, MessagesSquare, Sparkles } from 'lucide-react';
 import Link from '@/components/Enlace';
 import { supabase } from '@/lib/supabase';
 import { useSesion } from '@/lib/sesion';
@@ -12,12 +12,12 @@ import { activarPush, desactivarPush, estadoPush } from '@/lib/push';
 import { evento } from '@/lib/analitica';
 
 // [columna de avisos_email, texto, icono]
-const EMAIL = [['mensajes', 'mensajes', MessageCircle], ['foro', 'foro', MessagesSquare], ['recordatorios', 'recordatorios', Droplets], ['resumen', 'resumen', CalendarDays]];
-const PUSH = [['push_mensajes', 'mensajes', MessageCircle], ['push_foro', 'foro', MessagesSquare], ['push_recordatorios', 'recordatorios', Droplets], ['push_actividad', 'actividad', Sparkles]];
+const EMAIL = [['mensajes', 'mensajes', MessageCircle], ['foro', 'foro', MessagesSquare], ['recordatorios', 'recordatorios', Droplets], ['resumen', 'resumen', CalendarDays], ['novedades', 'novedades', Megaphone]];
+const PUSH = [['push_mensajes', 'mensajes', MessageCircle], ['push_foro', 'foro', MessagesSquare], ['push_recordatorios', 'recordatorios', Droplets], ['push_actividad', 'actividad', Sparkles], ['push_novedades', 'novedades', Megaphone]];
 const COLUMNAS = [...EMAIL, ...PUSH].map(([c]) => c);
-const POR_DEFECTO = { mensajes: true, foro: true, recordatorios: true, resumen: false, push_mensajes: true, push_foro: true, push_recordatorios: true, push_actividad: true };
+const POR_DEFECTO = { mensajes: true, foro: true, recordatorios: true, resumen: false, novedades: true, push_mensajes: true, push_foro: true, push_recordatorios: true, push_actividad: true, push_novedades: true };
 const AVISO_PUSH = { bloqueadas: 'avisos.pushBloqueadas', instalar: 'avisos.pushInstalar', no: 'avisos.pushNo' };
-const TIPOS_BAJA = ['mensajes', 'foro', 'resumen', 'recordatorios', 'todo'];
+const TIPOS_BAJA = ['mensajes', 'foro', 'resumen', 'recordatorios', 'novedades', 'todo'];
 
 // Baja con el enlace del correo: funciona sin iniciar sesión (el token solo sirve para quitar avisos)
 function Baja({ token, tipo }) {

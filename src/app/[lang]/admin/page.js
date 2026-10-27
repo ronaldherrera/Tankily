@@ -1,11 +1,12 @@
 "use client";
 
-// Panel de administración: resumen, denuncias, tiendas (Pro y verificación) y campañas propias.
+// Panel de administración: resumen, usuarios (contactar por mensaje, push o correo y seguir), denuncias,
+// tiendas (Pro y verificación) y campañas propias.
 // Solo para perfiles con es_admin. Los cambios protegidos van por funciones admin_* de la base de
 // datos, que vuelven a comprobar que quien llama es administrador.
 // Es una herramienta interna: sus textos están en español e inglés aquí mismo, no en los diccionarios.
 import { Suspense, useCallback, useEffect, useState } from 'react';
-import { ShieldCheck, Trash2, Check, X, BadgeCheck, Crown, Eye, Plus, Pencil, ExternalLink, CalendarClock } from 'lucide-react';
+import { ShieldCheck, Trash2, Check, X, BadgeCheck, Crown, Eye, Plus, Pencil, ExternalLink, CalendarClock, Send, UserCheck, UserPlus, UserMinus, MessageCircle, BellRing, Mail } from 'lucide-react';
 import Link, { useNavegar } from '@/components/Enlace';
 import { GRUPOS_ADMIN, SECCIONES_ADMIN } from '@/lib/adminSecciones';
 import { supabase } from '@/lib/supabase';
@@ -53,6 +54,21 @@ const TEXTOS = {
     diasActivo: '{n} días activo', sinConfirmar: 'correo sin confirmar', escribir: 'Escribir', verPerfil: 'Ver perfil',
     pasoTanques: 'Tanques', pasoApuntes: 'Apuntes', pasoPublica: 'Publicaciones', pasoForo: 'Foro', pasoComenta: 'Comentarios', pasoPush: 'Push', pasoResumen: 'Resumen semanal',
     proveedorAcceso: { email: 'correo', google: 'Google', apple: 'Apple' }, idiomaWeb: 'Idioma en que usa la web',
+    contactar: 'Contactar', seguir: 'Seguir', siguiendo: 'Siguiendo', dejarSeguir: 'Dejar de seguir', seleccionar: 'Seleccionar a @{u}',
+    nSeleccionados: '{n} seleccionados', seleccionarTodos: 'Seleccionar los {n} de la lista', quitarSeleccion: 'Quitar selección',
+    seguidos: 'Ahora sigues a {n}', dejados: 'Has dejado de seguir a {n}',
+    contactarA: 'Contactar', para: 'Para', canal: 'Canal', canales: { mensaje: 'Mensaje', push: 'Push', correo: 'Correo' },
+    canalAyuda: {
+      mensaje: 'Le llega a Mensajes desde tu cuenta. Si tiene activados los avisos de mensajes, también por push o email.',
+      push: 'Notificación al momento en sus dispositivos. Solo a quien tiene las push activadas y no ha quitado las novedades.',
+      correo: 'Correo desde krill@tankily.com con el diseño de Tankily y enlace de baja. Solo a quien no ha quitado las novedades.',
+    },
+    llegaA: 'Llega a {n} de {total}', nadie: 'Con este canal no le llega a nadie de la selección.',
+    tituloAviso: 'Título', textoAviso: 'Texto', enlaceAviso: 'Enlace (opcional)', enlaceAyuda: 'Ruta de la web sin idioma, por ejemplo /calculadoras/. Se abre en el idioma de cada persona.',
+    vistaPrevia: 'Vista previa', abrirTankily: 'Abrir Tankily', correoPersonal: 'O escríbele desde tu correo',
+    enviarA: 'Enviar a {n}', confirmarEnvio: 'Pulsa otra vez para enviar a {n} personas', enviado: 'Enviado a {n}', enCola: 'Correo en cola para {n}: sale en unos minutos',
+    oculto: 'oculto', nApuntes: '{n} apuntes', nFotos: '{n} fotos', video: 'vídeo', sinTexto: '(sin texto)', respuestaEn: 'Respuesta en',
+    ultimosEnvios: 'Últimos envíos', sinEnvios: 'Aún no has enviado nada desde aquí.', enviadosDe: '{a} de {b}',
   },
   en: {
     titulo: 'Administration', soloAdmin: 'This section is for administrators only.',
@@ -90,6 +106,21 @@ const TEXTOS = {
     diasActivo: '{n} active days', sinConfirmar: 'email not confirmed', escribir: 'Email', verPerfil: 'View profile',
     pasoTanques: 'Tanks', pasoApuntes: 'Logs', pasoPublica: 'Posts', pasoForo: 'Forum', pasoComenta: 'Comments', pasoPush: 'Push', pasoResumen: 'Weekly digest',
     proveedorAcceso: { email: 'email', google: 'Google', apple: 'Apple' }, idiomaWeb: 'Language they use the site in',
+    contactar: 'Contact', seguir: 'Follow', siguiendo: 'Following', dejarSeguir: 'Unfollow', seleccionar: 'Select @{u}',
+    nSeleccionados: '{n} selected', seleccionarTodos: 'Select all {n} in the list', quitarSeleccion: 'Clear selection',
+    seguidos: 'You now follow {n}', dejados: 'You unfollowed {n}',
+    contactarA: 'Contact', para: 'To', canal: 'Channel', canales: { mensaje: 'Message', push: 'Push', correo: 'Email' },
+    canalAyuda: {
+      mensaje: 'Arrives in Messages from your account. If they have message notifications on, also by push or email.',
+      push: 'Instant notification on their devices. Only for people with push on who haven’t turned off news.',
+      correo: 'Email from krill@tankily.com with Tankily’s design and an unsubscribe link. Only for people who haven’t turned off news.',
+    },
+    llegaA: 'Reaches {n} of {total}', nadie: 'This channel doesn’t reach anyone in the selection.',
+    tituloAviso: 'Title', textoAviso: 'Text', enlaceAviso: 'Link (optional)', enlaceAyuda: 'Site path without language, e.g. /calculadoras/. Opens in each person’s language.',
+    vistaPrevia: 'Preview', abrirTankily: 'Open Tankily', correoPersonal: 'Or write from your own email',
+    enviarA: 'Send to {n}', confirmarEnvio: 'Press again to send to {n} people', enviado: 'Sent to {n}', enCola: 'Email queued for {n}: it goes out in a few minutes',
+    oculto: 'hidden', nApuntes: '{n} logs', nFotos: '{n} photos', video: 'video', sinTexto: '(no text)', respuestaEn: 'Reply in',
+    ultimosEnvios: 'Recent sends', sinEnvios: 'You haven’t sent anything from here yet.', enviadosDe: '{a} of {b}',
   },
 };
 
@@ -147,15 +178,22 @@ function haceDias(dia, x) {
   return n <= 0 ? x.hoy : n === 1 ? x.ayer : x.haceDias.replace('{n}', n);
 }
 
-// Una persona: quién es, cómo y cuándo entró, cuándo volvió y qué ha hecho (en verde lo que ya ha hecho)
-function FilaUsuario({ u, x }) {
+// Una persona: quién es, cómo y cuándo entró, cuándo volvió y qué ha hecho (en verde lo que ya ha hecho).
+// En la pestaña Usuarios se puede marcar, contactar y seguir (onMarcar, onContactar, onSeguir)
+function FilaUsuario({ u, x, marcado, onMarcar, onContactar, onSeguir }) {
   const { lang } = useT();
   // Idioma con el que usa la web (el último elegido), con su nombre en el idioma del panel: "portugués"
   const idioma = (() => { try { return new Intl.DisplayNames([lang], { type: 'language' }).of(u.idioma); } catch { return u.idioma; } })();
-  const pasos = [['pasoTanques', u.tanques], ['pasoApuntes', u.apuntes], ['pasoPublica', u.publicaciones], ['pasoForo', u.foro], ['pasoComenta', u.comentarios]];
+  // [texto, cuántos, qué detalle se abre al pulsarlo (admin_usuario_detalle)]
+  const pasos = [['pasoTanques', u.tanques, 'tanques'], ['pasoApuntes', u.apuntes, 'apuntes'], ['pasoPublica', u.publicaciones, 'publicaciones'],
+    ['pasoForo', u.foro, 'foro'], ['pasoComenta', u.comentarios, 'comentarios']];
   const extra = [['pasoPush', u.push], ['pasoResumen', u.resumen]];
+  const [abierto, setAbierto] = useState(null);
   return (
-    <li className="admin-usuario">
+    <li className={`admin-usuario${marcado ? ' marcado' : ''}`}>
+      {onMarcar && !u.demo && (
+        <input type="checkbox" className="admin-marca" checked={!!marcado} onChange={() => onMarcar(u.id)} aria-label={x.seleccionar.replace('{u}', u.usuario)} />
+      )}
       <Avatar perfil={u} tamano={38} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <p style={{ margin: 0 }}>
@@ -169,17 +207,70 @@ function FilaUsuario({ u, x }) {
           {' · '}{x.proveedorAcceso[u.proveedor] || u.proveedor}{u.idioma && <> · <span title={x.idiomaWeb}>{idioma}</span></>}{u.pais && <> · {u.pais}</>}{' · '}{x.alta} {formatRelativeTime(u.creado_en)}
         </p>
         <div className="admin-pasos">
-          {pasos.map(([k, n]) => <span key={k} className={`chip${n > 0 ? ' hecho' : ''}`}>{x[k]} {n}</span>)}
+          {pasos.map(([k, n, tipo]) => (n > 0
+            ? <button key={k} type="button" className="chip hecho" aria-expanded={abierto === tipo} onClick={() => setAbierto(abierto === tipo ? null : tipo)}>{x[k]} {n}</button>
+            : <span key={k} className="chip">{x[k]} {n}</span>))}
           {extra.map(([k, si]) => <span key={k} className={`chip${si ? ' hecho' : ''}`}>{si ? <Check size={12} aria-hidden /> : <X size={12} aria-hidden />} {x[k]}</span>)}
         </div>
+        {abierto && <DetalleUsuario key={abierto} usuario={u.id} tipo={abierto} x={x} />}
       </div>
       <div className="admin-usuario-lado">
         <span className="mini texto-3">{x.ultimaVez}</span>
         <strong className="pequeno">{haceDias(u.ultimo_dia, x)}</strong>
         <span className="mini texto-3">{x.diasActivo.replace('{n}', u.dias_activo)}</span>
-        {!u.demo && <a href={`mailto:${u.email}`} className="btn btn-s btn-fantasma" style={{ marginTop: 4 }}>{x.escribir}</a>}
+        {!u.demo && !onContactar && <a href={`mailto:${u.email}`} className="btn btn-s btn-fantasma" style={{ marginTop: 4 }}>{x.escribir}</a>}
+        {!u.demo && !u.es_admin && onContactar && (
+          <div className="admin-usuario-acciones">
+            <button type="button" className="btn btn-s btn-fantasma" onClick={() => onContactar([u])}><Send size={14} aria-hidden /> {x.contactar}</button>
+            <button type="button" className={`btn btn-s ${u.sigo ? '' : 'btn-fantasma'}`} aria-pressed={!!u.sigo} onClick={() => onSeguir([u.id], !u.sigo)}>
+              {u.sigo ? <UserCheck size={14} aria-hidden /> : <UserPlus size={14} aria-hidden />} {u.sigo ? x.siguiendo : x.seguir}
+            </button>
+          </div>
+        )}
       </div>
     </li>
+  );
+}
+
+// Lo que ha hecho una persona de un tipo (tanques, apuntes, publicaciones, foro o comentarios), lo último primero
+function DetalleUsuario({ usuario, tipo, x }) {
+  const { locale } = useT();
+  const [lista, setLista] = useState(null);
+  const [error, setError] = useState('');
+  useEffect(() => {
+    supabase.rpc('admin_usuario_detalle', { p_usuario: usuario, p_tipo: tipo })
+      .then(({ data, error: e }) => { if (e) setError(e.message); else setLista(data || []); });
+  }, [usuario, tipo]);
+  if (error) return <p className="mini texto-aviso">{error}</p>;
+  if (!lista) return <Cargando alto={40} n={2} />;
+
+  const fecha = (d) => new Date(d).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
+  const oculto = (f) => f.oculto && <span className="chip etiqueta-oculto">{x.oculto}</span>;
+  const fila = (clave, enlace, titulo, texto, lado, extra) => (
+    <li key={clave}>
+      <span style={{ flex: 1, minWidth: 0 }}>
+        {enlace ? <Link href={enlace} target="_blank"><strong className="pequeno">{titulo}</strong></Link> : <strong className="pequeno">{titulo}</strong>}
+        {extra}
+        {texto && <span className="mini texto-2 admin-detalle-texto">{texto}</span>}
+      </span>
+      <span className="mini texto-3" style={{ textAlign: 'right', flex: 'none' }}>{lado}</span>
+    </li>
+  );
+
+  return (
+    <ul className="admin-detalle">
+      {lista.map((f, i) => {
+        if (tipo === 'tanques') return fila(f.id, `/tanque/?id=${f.id}`, f.nombre, `${f.tipo} · ${f.litros ?? '?'} L · ${x.nApuntes.replace('{n}', f.apuntes)}`,
+          fecha(f.creado_en), f.visibilidad !== 'publico' && <span className="chip" style={{ marginLeft: 6 }}>{f.visibilidad}</span>);
+        if (tipo === 'apuntes') return fila(i, `/tanque/?id=${f.tanque_id}`, f.clase === 'medicion' ? `${f.que}: ${Number(f.valor)}` : f.que,
+          [f.tanque, f.nota].filter(Boolean).join(' · '), fecha(f.fecha));
+        if (tipo === 'publicaciones') return fila(f.id, `/post/?id=${f.id}`, f.contenido || (f.video ? x.video : x.sinTexto),
+          [f.imagenes && x.nFotos.replace('{n}', f.imagenes), f.video && x.video, `♥ ${f.num_me_gusta}`, `💬 ${f.num_comentarios}`].filter(Boolean).join(' · '), fecha(f.creado_en), oculto(f));
+        if (tipo === 'foro') return fila(i, `/foro/hilo/?id=${f.hilo_id}`, f.clase === 'hilo' ? f.titulo : `${x.respuestaEn} «${f.titulo}»`,
+          f.contenido, fecha(f.creado_en), oculto(f));
+        return fila(f.id, `/post/?id=${f.publicacion_id}`, f.contenido, null, fecha(f.creado_en), oculto(f));
+      })}
+    </ul>
   );
 }
 
@@ -206,6 +297,22 @@ function Usuarios({ x }) {
     .sort((a, b) => orden === 'actividad' ? (b.ultimo_dia || '').localeCompare(a.ultimo_dia || '') : b.creado_en.localeCompare(a.creado_en));
   const activos = (lista || []).filter((u) => u.ultimo_dia && u.ultimo_dia >= semana).length;
 
+  // Selección para contactar o seguir a varios a la vez (nunca demo ni administradores)
+  const tostada = useTostada();
+  const [marcados, setMarcados] = useState(() => new Set());
+  const [contacto, setContacto] = useState(null); // personas a las que se escribe
+  const [envios, setEnvios] = useState(0); // sube tras cada envío para recargar el historial
+  const elegibles = visibles.filter((u) => !u.demo && !u.es_admin);
+  const seleccion = (lista || []).filter((u) => marcados.has(u.id));
+  const marcar = (id) => setMarcados((m) => { const n = new Set(m); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+
+  async function seguir(ids, si) {
+    const { data, error } = await supabase.rpc('admin_seguir', { p_usuarios: ids, p_seguir: si });
+    if (error) return tostada(error.message);
+    setCarga((c) => ({ ...c, lista: c.lista.map((u) => (ids.includes(u.id) ? { ...u, sigo: si } : u)) }));
+    tostada((si ? x.seguidos : x.dejados).replace('{n}', data ?? ids.length));
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       <div className="admin-filtros">
@@ -221,12 +328,180 @@ function Usuarios({ x }) {
       {!lista ? <Cargando alto={80} n={4} /> : (
         <>
           <p className="mini texto-3">{x.nUsuarios.replace('{n}', lista.length)} · {x.nActivos.replace('{n}', activos)}</p>
+          <div className="admin-seleccion">
+            {seleccion.length ? (
+              <>
+                <strong className="pequeno">{x.nSeleccionados.replace('{n}', seleccion.length)}</strong>
+                <button type="button" className="btn btn-s btn-primario" onClick={() => setContacto(seleccion)}><Send size={14} aria-hidden /> {x.contactar}</button>
+                <button type="button" className="btn btn-s" onClick={() => seguir(seleccion.map((u) => u.id), true)}><UserPlus size={14} aria-hidden /> {x.seguir}</button>
+                <button type="button" className="btn btn-s btn-fantasma" onClick={() => seguir(seleccion.map((u) => u.id), false)}><UserMinus size={14} aria-hidden /> {x.dejarSeguir}</button>
+                <button type="button" className="btn btn-s btn-fantasma" onClick={() => setMarcados(new Set())}>{x.quitarSeleccion}</button>
+              </>
+            ) : elegibles.length > 0 && (
+              <button type="button" className="btn btn-s btn-fantasma" onClick={() => setMarcados(new Set(elegibles.map((u) => u.id)))}>{x.seleccionarTodos.replace('{n}', elegibles.length)}</button>
+            )}
+          </div>
           {!visibles.length
             ? <Vacio titulo={lista.length ? x.sinResultados : x.sinAltas} />
-            : <ul className="admin-usuarios cristal-suave">{visibles.map((u) => <FilaUsuario key={u.id} u={u} x={x} />)}</ul>}
+            : (
+              <ul className="admin-usuarios cristal-suave">
+                {visibles.map((u) => (
+                  <FilaUsuario key={u.id} u={u} x={x} marcado={marcados.has(u.id)} onMarcar={u.es_admin ? null : marcar} onContactar={setContacto} onSeguir={seguir} />
+                ))}
+              </ul>
+            )}
+          <UltimosEnvios x={x} recarga={envios} />
         </>
       )}
+      {contacto && (
+        <Contactar x={x} personas={contacto} onCerrar={() => setContacto(null)}
+          onEnviado={() => { setContacto(null); setMarcados(new Set()); setEnvios((n) => n + 1); }} />
+      )}
     </div>
+  );
+}
+
+// A quién le llega cada canal: lo mismo que filtra admin_enviar en la base de datos
+const LLEGA = {
+  mensaje: () => true,
+  push: (u) => u.push && u.push_novedades,
+  correo: (u) => u.confirmado && u.novedades,
+};
+const ICONO_CANAL = { mensaje: MessageCircle, push: BellRing, correo: Mail };
+
+// Escribir a una persona o a varias: canal, texto, vista previa y envío (admin_enviar)
+function Contactar({ x, personas, onCerrar, onEnviado }) {
+  const { lang } = useT();
+  const tostada = useTostada();
+  const [canal, setCanal] = useState('mensaje');
+  const [titulo, setTitulo] = useState('');
+  const [texto, setTexto] = useState('');
+  const [enlace, setEnlace] = useState('');
+  const [confirmar, setConfirmar] = useState(false);
+  const [enviando, setEnviando] = useState(false);
+
+  const llegan = personas.filter(LLEGA[canal]);
+  const ruta = enlace.trim() ? `/${enlace.trim().replace(/^\/+/, '')}` : '';
+  const conTitulo = canal !== 'mensaje';
+  const listo = llegan.length > 0 && texto.trim() && (!conTitulo || titulo.trim());
+  const elegir = (c) => { setCanal(c); setConfirmar(false); };
+
+  async function enviar(e) {
+    e.preventDefault();
+    if (!listo) return;
+    // Para varias personas, el primer clic solo pide confirmación
+    if (llegan.length > 1 && !confirmar) return setConfirmar(true);
+    setEnviando(true);
+    const { data, error } = await supabase.rpc('admin_enviar', {
+      p_canal: canal, p_usuarios: personas.map((u) => u.id), p_titulo: titulo, p_texto: texto, p_enlace: ruta || null, p_idioma: lang,
+    });
+    setEnviando(false);
+    if (error) return tostada(error.message);
+    tostada((canal === 'correo' ? x.enCola : x.enviado).replace('{n}', data.destinatarios));
+    onEnviado();
+  }
+
+  const nombres = personas.slice(0, 6).map((u) => `@${u.usuario}`).join(', ') + (personas.length > 6 ? ` +${personas.length - 6}` : '');
+  const parrafos = texto.trim().split(/\n{2,}/).filter(Boolean);
+
+  return (
+    <Modal titulo={x.contactarA} onCerrar={onCerrar} ancho={620}>
+      <form onSubmit={enviar} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <p className="pequeno" style={{ margin: 0 }}><span className="texto-3">{x.para}:</span> {nombres}</p>
+
+        <div className="chips" role="group" aria-label={x.canal}>
+          {Object.keys(LLEGA).map((c) => {
+            const Icono = ICONO_CANAL[c];
+            return <button key={c} type="button" className="chip" aria-pressed={canal === c} onClick={() => elegir(c)}><Icono size={14} aria-hidden /> {x.canales[c]} · {personas.filter(LLEGA[c]).length}</button>;
+          })}
+        </div>
+        <p className="mini texto-3" style={{ margin: 0 }}>{x.canalAyuda[canal]}</p>
+        <p className={`pequeno ${llegan.length ? '' : 'texto-aviso'}`} style={{ margin: 0 }}>
+          {llegan.length ? x.llegaA.replace('{n}', llegan.length).replace('{total}', personas.length) : x.nadie}
+        </p>
+
+        {conTitulo && (
+          <label className="campo"><span>{x.tituloAviso}</span>
+            <input className="entrada" value={titulo} maxLength={canal === 'push' ? 60 : 120} required onChange={(e) => { setTitulo(e.target.value); setConfirmar(false); }} />
+          </label>
+        )}
+        <label className="campo"><span>{x.textoAviso}</span>
+          <textarea className="entrada" rows={canal === 'push' ? 3 : 6} maxLength={canal === 'push' ? 200 : 2000} required value={texto}
+            onChange={(e) => { setTexto(e.target.value); setConfirmar(false); }} />
+        </label>
+        <label className="campo"><span>{x.enlaceAviso}</span>
+          <input className="entrada" value={enlace} maxLength={200} placeholder="/calculadoras/"
+            onChange={(e) => { setEnlace(e.target.value); setConfirmar(false); }} />
+          <span className="mini texto-3">{x.enlaceAyuda}</span>
+        </label>
+
+        <section className="admin-previa" aria-label={x.vistaPrevia}>
+          <span className="mini texto-3">{x.vistaPrevia}</span>
+          {canal === 'mensaje' && (
+            <div className="previa-mensaje">{texto.trim() || '…'}{ruta && <><br /><br />https://tankily.com{ruta}</>}</div>
+          )}
+          {canal === 'push' && (
+            <div className="previa-push">
+              <img src="/icons/icon-192.png" alt="" width={36} height={36} />
+              <div><strong>{titulo.trim() || 'Tankily'}</strong><p>{texto.trim() || '…'}</p><span className="mini texto-3">tankily.com</span></div>
+            </div>
+          )}
+          {canal === 'correo' && (
+            <div className="previa-correo">
+              <p className="mini" style={{ margin: '0 0 8px', color: '#7a8fa3' }}>Tankily &lt;krill@tankily.com&gt; · {titulo.trim() || '…'}</p>
+              <div className="previa-correo-tarjeta">
+                <h3>{titulo.trim() || '…'}</h3>
+                {(parrafos.length ? parrafos : ['…']).map((p, i) => <p key={i}>{p}</p>)}
+                <span className="previa-correo-boton">{x.abrirTankily}</span>
+              </div>
+            </div>
+          )}
+        </section>
+
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+          {canal === 'correo' && personas.length === 1
+            ? <a href={`mailto:${personas[0].email}`} className="mini">{x.correoPersonal}</a>
+            : <span />}
+          <button className={`btn ${confirmar ? 'btn-peligro' : 'btn-primario'}`} disabled={!listo || enviando}>
+            <Send size={15} aria-hidden /> {confirmar ? x.confirmarEnvio.replace('{n}', llegan.length) : x.enviarA.replace('{n}', llegan.length)}
+          </button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
+
+// Lo último que se ha mandado desde el panel, para comprobar a cuántos llegó
+function UltimosEnvios({ x, recarga }) {
+  const [lista, setLista] = useState(null);
+  useEffect(() => {
+    supabase.from('admin_envios').select('id, canal, titulo, texto, pedidos, enviados, destinatarios, creado_en')
+      .order('creado_en', { ascending: false }).limit(10).then(({ data }) => setLista(data || []));
+  }, [recarga]);
+  if (!lista) return null;
+  return (
+    <section className="cristal-suave admin-bloque">
+      <h2 className="titulo-s">{x.ultimosEnvios}</h2>
+      {!lista.length ? <p className="texto-2 pequeno">{x.sinEnvios}</p> : (
+        <ul className="admin-envios">
+          {lista.map((e) => {
+            const Icono = ICONO_CANAL[e.canal];
+            return (
+              <li key={e.id}>
+                <Icono size={16} aria-hidden className="texto-3" />
+                <span style={{ flex: 1, minWidth: 0 }}>
+                  <strong className="pequeno">{e.titulo || x.canales[e.canal]}</strong>
+                  <span className="mini texto-3 admin-envio-texto">{e.texto}</span>
+                </span>
+                <span className="mini texto-3" style={{ textAlign: 'right' }}>
+                  {x.enviadosDe.replace('{a}', e.enviados ?? '…').replace('{b}', e.destinatarios.length)}<br />{formatRelativeTime(e.creado_en)}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
   );
 }
 

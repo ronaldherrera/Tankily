@@ -3,6 +3,7 @@
 // mantenimiento, también por push, y empujón a quien no ha creado su tanque) y los lunes ({ tipo: 'resumen' }) con la cabecera
 // x-avisos (clave compartida guardada en Vault y en el secreto AVISOS_CLAVE). Qué enviar lo decide la base
 // de datos (avisos_por_enviar); aquí solo se redacta y se envía por SMTP desde krill@tankily.com.
+// El panel de administración la llama con { tipo: 'admin', envio } para los correos de novedades (admin_enviar).
 //
 // También atiende la baja de un clic de Gmail/Outlook (List-Unsubscribe-Post): POST ?baja=<token>&tipo=<tipo>.
 //
@@ -32,6 +33,7 @@ const T: Record<string, any> = {
     foro: { asunto: 'Nuevas respuestas en «{h}»', titulo: 'Respuestas en el foro', texto: '{a} ha respondido en «{h}».', boton: 'Ver respuestas' },
     resumen: { asunto: 'Tu semana en Tankily', titulo: 'Tu semana en Tankily', texto: 'Esto es lo que te espera:', boton: 'Abrir Tankily' },
     lineas: { mensajes: 'Mensajes sin leer', tareas: 'Tareas de mantenimiento esta semana', me_gusta: 'Me gusta', comentario: 'Comentarios', seguidor: 'Seguidores nuevos', eco: 'Ecos', mencion: 'Menciones', respuesta_foro: 'Respuestas en el foro', solucion: 'Soluciones aceptadas', resena: 'Reseñas de tu tienda', seguidor_tanque: 'Seguidores de tus tanques' },
+    novedades: { pie: 'Recibes este correo porque tienes activadas las novedades de Tankily.', baja: 'No quiero más novedades' },
     pie: 'Recibes este correo porque tienes activados los avisos por email.', ajustes: 'Elegir avisos', baja: 'No quiero más correos así', lema: 'La comunidad de los acuarios',
   },
   en: {
@@ -42,6 +44,7 @@ const T: Record<string, any> = {
     foro: { asunto: 'New replies in “{h}”', titulo: 'Forum replies', texto: '{a} replied in “{h}”.', boton: 'View replies' },
     resumen: { asunto: 'Your week on Tankily', titulo: 'Your week on Tankily', texto: 'Here’s what’s waiting for you:', boton: 'Open Tankily' },
     lineas: { mensajes: 'Unread messages', tareas: 'Maintenance tasks this week', me_gusta: 'Likes', comentario: 'Comments', seguidor: 'New followers', eco: 'Reposts', mencion: 'Mentions', respuesta_foro: 'Forum replies', solucion: 'Accepted solutions', resena: 'Shop reviews', seguidor_tanque: 'Tank followers' },
+    novedades: { pie: 'You’re getting this email because Tankily news is on.', baja: 'Stop Tankily news' },
     pie: 'You’re getting this email because email notifications are on.', ajustes: 'Choose notifications', baja: 'Stop these emails', lema: 'The aquarium community',
   },
   de: {
@@ -52,6 +55,7 @@ const T: Record<string, any> = {
     foro: { asunto: 'Neue Antworten in „{h}“', titulo: 'Antworten im Forum', texto: '{a} hat in „{h}“ geantwortet.', boton: 'Antworten ansehen' },
     resumen: { asunto: 'Deine Woche auf Tankily', titulo: 'Deine Woche auf Tankily', texto: 'Das wartet auf dich:', boton: 'Tankily öffnen' },
     lineas: { mensajes: 'Ungelesene Nachrichten', tareas: 'Wartungsaufgaben diese Woche', me_gusta: 'Gefällt mir', comentario: 'Kommentare', seguidor: 'Neue Follower', eco: 'Reposts', mencion: 'Erwähnungen', respuesta_foro: 'Antworten im Forum', solucion: 'Akzeptierte Lösungen', resena: 'Shop-Bewertungen', seguidor_tanque: 'Follower deiner Becken' },
+    novedades: { pie: 'Du erhältst diese E-Mail, weil du Neuigkeiten von Tankily aktiviert hast.', baja: 'Keine Neuigkeiten mehr' },
     pie: 'Du erhältst diese E-Mail, weil deine E-Mail-Benachrichtigungen aktiv sind.', ajustes: 'Benachrichtigungen wählen', baja: 'Keine solchen E-Mails mehr', lema: 'Die Aquarium-Community',
   },
   pt: {
@@ -62,6 +66,7 @@ const T: Record<string, any> = {
     foro: { asunto: 'Novas respostas em “{h}”', titulo: 'Respostas no fórum', texto: '{a} respondeu em “{h}”.', boton: 'Ver respostas' },
     resumen: { asunto: 'Sua semana no Tankily', titulo: 'Sua semana no Tankily', texto: 'Veja o que espera por você:', boton: 'Abrir o Tankily' },
     lineas: { mensajes: 'Mensagens não lidas', tareas: 'Tarefas de manutenção desta semana', me_gusta: 'Curtidas', comentario: 'Comentários', seguidor: 'Novos seguidores', eco: 'Ecos', mencion: 'Menções', respuesta_foro: 'Respostas no fórum', solucion: 'Soluções aceitas', resena: 'Avaliações da sua loja', seguidor_tanque: 'Seguidores dos seus aquários' },
+    novedades: { pie: 'Você recebe este e-mail porque as novidades do Tankily estão ativadas.', baja: 'Não quero mais novidades' },
     pie: 'Você recebe este e-mail porque os avisos por e-mail estão ativados.', ajustes: 'Escolher avisos', baja: 'Não quero mais e-mails assim', lema: 'A comunidade dos aquários',
   },
   fr: {
@@ -72,6 +77,7 @@ const T: Record<string, any> = {
     foro: { asunto: 'Nouvelles réponses dans « {h} »', titulo: 'Réponses sur le forum', texto: '{a} a répondu dans « {h} ».', boton: 'Voir les réponses' },
     resumen: { asunto: 'Ta semaine sur Tankily', titulo: 'Ta semaine sur Tankily', texto: 'Voici ce qui t’attend :', boton: 'Ouvrir Tankily' },
     lineas: { mensajes: 'Messages non lus', tareas: 'Tâches d’entretien cette semaine', me_gusta: 'J’aime', comentario: 'Commentaires', seguidor: 'Nouveaux abonnés', eco: 'Échos', mencion: 'Mentions', respuesta_foro: 'Réponses sur le forum', solucion: 'Solutions acceptées', resena: 'Avis sur ta boutique', seguidor_tanque: 'Abonnés à tes bacs' },
+    novedades: { pie: 'Tu reçois cet e-mail car les nouveautés de Tankily sont activées.', baja: 'Ne plus recevoir les nouveautés' },
     pie: 'Tu reçois cet e-mail car les notifications par e-mail sont activées.', ajustes: 'Choisir les notifications', baja: 'Ne plus recevoir ces e-mails', lema: 'La communauté des aquariums',
   },
   it: {
@@ -82,6 +88,7 @@ const T: Record<string, any> = {
     foro: { asunto: 'Nuove risposte in «{h}»', titulo: 'Risposte nel forum', texto: '{a} ha risposto in «{h}».', boton: 'Vedi le risposte' },
     resumen: { asunto: 'La tua settimana su Tankily', titulo: 'La tua settimana su Tankily', texto: 'Ecco cosa ti aspetta:', boton: 'Apri Tankily' },
     lineas: { mensajes: 'Messaggi non letti', tareas: 'Attività di manutenzione questa settimana', me_gusta: 'Mi piace', comentario: 'Commenti', seguidor: 'Nuovi follower', eco: 'Echi', mencion: 'Menzioni', respuesta_foro: 'Risposte nel forum', solucion: 'Soluzioni accettate', resena: 'Recensioni del negozio', seguidor_tanque: 'Follower delle tue vasche' },
+    novedades: { pie: 'Ricevi questa email perché hai attivato le novità di Tankily.', baja: 'Non voglio più novità' },
     pie: 'Ricevi questa email perché hai attivato gli avvisi via email.', ajustes: 'Scegli gli avvisi', baja: 'Non voglio più queste email', lema: 'La community degli acquari',
   },
   nl: {
@@ -92,6 +99,7 @@ const T: Record<string, any> = {
     foro: { asunto: 'Nieuwe reacties in ‘{h}’', titulo: 'Reacties op het forum', texto: '{a} heeft gereageerd in ‘{h}’.', boton: 'Reacties bekijken' },
     resumen: { asunto: 'Jouw week op Tankily', titulo: 'Jouw week op Tankily', texto: 'Dit staat voor je klaar:', boton: 'Tankily openen' },
     lineas: { mensajes: 'Ongelezen berichten', tareas: 'Onderhoudstaken deze week', me_gusta: 'Likes', comentario: 'Reacties', seguidor: 'Nieuwe volgers', eco: 'Reposts', mencion: 'Vermeldingen', respuesta_foro: 'Reacties op het forum', solucion: 'Geaccepteerde oplossingen', resena: 'Winkelbeoordelingen', seguidor_tanque: 'Volgers van je aquaria' },
+    novedades: { pie: 'Je krijgt deze e-mail omdat nieuws van Tankily aanstaat.', baja: 'Geen nieuws meer' },
     pie: 'Je krijgt deze e-mail omdat e-mailmeldingen aanstaan.', ajustes: 'Meldingen kiezen', baja: 'Geen e-mails zoals deze meer', lema: 'De aquariumcommunity',
   },
   pl: {
@@ -102,6 +110,7 @@ const T: Record<string, any> = {
     foro: { asunto: 'Nowe odpowiedzi w „{h}”', titulo: 'Odpowiedzi na forum', texto: '{a} odpowiedział(a) w „{h}”.', boton: 'Zobacz odpowiedzi' },
     resumen: { asunto: 'Twój tydzień w Tankily', titulo: 'Twój tydzień w Tankily', texto: 'Oto co na ciebie czeka:', boton: 'Otwórz Tankily' },
     lineas: { mensajes: 'Nieprzeczytane wiadomości', tareas: 'Zadania konserwacyjne w tym tygodniu', me_gusta: 'Polubienia', comentario: 'Komentarze', seguidor: 'Nowi obserwujący', eco: 'Udostępnienia', mencion: 'Wzmianki', respuesta_foro: 'Odpowiedzi na forum', solucion: 'Zaakceptowane rozwiązania', resena: 'Opinie o sklepie', seguidor_tanque: 'Obserwujący twoje akwaria' },
+    novedades: { pie: 'Otrzymujesz tę wiadomość, bo masz włączone nowości Tankily.', baja: 'Nie chcę więcej nowości' },
     pie: 'Otrzymujesz tę wiadomość, bo masz włączone powiadomienia e-mail.', ajustes: 'Wybierz powiadomienia', baja: 'Nie chcę więcej takich e-maili', lema: 'Społeczność akwarystów',
   },
 };
@@ -139,22 +148,7 @@ function redactar(tipo: Tipo, f: Fila) {
     texto = `${t.recordatorios.texto}\n${lista.map((x) => `· ${x.tarea} — ${x.tanque}`).join('\n')}`;
   }
 
-  const html = `<!doctype html>
-<html lang="${lang}"><body style="margin:0;padding:0;background:${C.fondo};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.fondo};padding:32px 16px;"><tr><td align="center">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;">
-    <tr><td style="padding:0 8px 16px;"><a href="${SITIO}/${lang}/" style="text-decoration:none;"><img src="${SITIO}/icons/logo-animado.gif" width="48" height="48" alt="Tankily" style="display:block;border:0;border-radius:10px;"></a></td></tr>
-    <tr><td style="background:${C.tarjeta};border-radius:18px;padding:32px 28px;border-top:4px solid ${C.ola};">
-      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:${C.tinta};font-weight:700;">${esc(t[tipo].titulo)}</h1>
-      ${cuerpo}
-      <p style="margin:0;"><a href="${url}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:${C.boton};color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">${esc(t[tipo].boton)}</a></p>
-    </td></tr>
-    <tr><td style="padding:16px 8px 0;font-size:12px;line-height:1.6;color:${C.suave};text-align:center;">
-      ${esc(t.pie)}<br><a href="${SITIO}/${lang}/avisos/" style="color:${C.suave};">${esc(t.ajustes)}</a> · <a href="${baja}" style="color:${C.suave};">${esc(t.baja)}</a><br>Tankily · ${esc(t.lema)}
-    </td></tr>
-  </table>
-</td></tr></table>
-</body></html>`;
+  const html = plantilla(lang, t[tipo].titulo, cuerpo, url, t[tipo].boton, t.pie, baja, t.baja);
 
   return {
     asunto: rellenar(t[tipo].asunto, v),
@@ -163,6 +157,45 @@ function redactar(tipo: Tipo, f: Fila) {
     unsubscribe: `${FUNCION}?baja=${f.baja}&tipo=${BAJA[tipo]}`,
     // Para la notificación push de los recordatorios
     push: { titulo: rellenar(t[tipo].asunto, v), cuerpo: [...new Set(lista.map((x) => x.tanque))].join(' · '), url },
+  };
+}
+
+// Marco común de todos los correos: logo, tarjeta con título, cuerpo y botón, y pie con la baja
+function plantilla(lang: string, titulo: string, cuerpo: string, url: string, boton: string, pie: string, baja: string, bajaTexto: string) {
+  const t = T[lang];
+  return `<!doctype html>
+<html lang="${lang}"><body style="margin:0;padding:0;background:${C.fondo};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.fondo};padding:32px 16px;"><tr><td align="center">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;">
+    <tr><td style="padding:0 8px 16px;"><a href="${SITIO}/${lang}/" style="text-decoration:none;"><img src="${SITIO}/icons/logo-animado.gif" width="48" height="48" alt="Tankily" style="display:block;border:0;border-radius:10px;"></a></td></tr>
+    <tr><td style="background:${C.tarjeta};border-radius:18px;padding:32px 28px;border-top:4px solid ${C.ola};">
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.25;color:${C.tinta};font-weight:700;">${esc(titulo)}</h1>
+      ${cuerpo}
+      <p style="margin:0;"><a href="${url}" style="display:inline-block;padding:12px 22px;border-radius:999px;background:${C.boton};color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">${esc(boton)}</a></p>
+    </td></tr>
+    <tr><td style="padding:16px 8px 0;font-size:12px;line-height:1.6;color:${C.suave};text-align:center;">
+      ${esc(pie)}<br><a href="${SITIO}/${lang}/avisos/" style="color:${C.suave};">${esc(t.ajustes)}</a> · <a href="${baja}" style="color:${C.suave};">${esc(bajaTexto)}</a><br>Tankily · ${esc(t.lema)}
+    </td></tr>
+  </table>
+</td></tr></table>
+</body></html>`;
+}
+
+// Correo escrito desde el panel de administración (admin_enviar): el mismo texto para todos,
+// con el marco, el enlace y la baja de "novedades" en el idioma de cada persona
+type Envio = { titulo: string; texto: string; enlace: string | null };
+function redactarAdmin(e: Envio, f: { idioma: string; baja: string }) {
+  const lang = T[f.idioma] ? f.idioma : 'es';
+  const t = T[lang];
+  const url = `${SITIO}/${lang}${e.enlace || '/'}`;
+  const baja = `${SITIO}/${lang}/avisos/?baja=${f.baja}&tipo=novedades`;
+  const cuerpo = e.texto.split(/\n{2,}/).map((p) =>
+    `<p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${C.texto};">${esc(p).replace(/\n/g, '<br>')}</p>`).join('') + '<div style="height:8px"></div>';
+  return {
+    asunto: e.titulo,
+    html: plantilla(lang, e.titulo, cuerpo, url, t.resumen.boton, t.novedades.pie, baja, t.novedades.baja),
+    texto: `${e.titulo}\n\n${e.texto}\n\n${t.resumen.boton}: ${url}\n\n—\n${t.novedades.pie}\n${t.ajustes}: ${SITIO}/${lang}/avisos/\n${t.novedades.baja}: ${baja}`,
+    unsubscribe: `${FUNCION}?baja=${f.baja}&tipo=novedades`,
   };
 }
 
@@ -205,13 +238,37 @@ Deno.serve(async (req) => {
   const clave = Deno.env.get('AVISOS_CLAVE');
   if (req.method !== 'POST' || !clave || req.headers.get('x-avisos') !== clave) return new Response('', { status: 401 });
 
-  const { tipo } = await req.json().catch(() => ({}));
+  const { tipo, envio } = await req.json().catch(() => ({}));
   const tipos: Tipo[] = tipo === 'resumen' ? ['resumen'] : tipo === 'diario' ? ['recordatorios', 'empujon'] : ['mensajes', 'foro'];
 
   const correo = nodemailer.createTransport({
     host: 'smtp.hostinger.com', port: 465, secure: true,
     auth: { user: REMITENTE, pass: Deno.env.get('SMTP_PASS') },
   });
+
+  if (tipo === 'admin') {
+    if (!Number.isInteger(envio)) return new Response('', { status: 400 });
+    const { data: e, error } = await sb.rpc('admin_envio_correos', { p_envio: envio });
+    if (error || !e) return new Response(error?.message || '', { status: 404 });
+    let ok = 0, fallos = 0;
+    for (const f of (e.filas || []).slice(0, MAXIMO)) {
+      try {
+        const baja = f.baja || (await sb.rpc('admin_token_baja', { p_usuario: f.usuario_id })).data;
+        const m = redactarAdmin(e, { idioma: f.idioma, baja });
+        await correo.sendMail({
+          from: { name: 'Tankily', address: REMITENTE }, to: f.email, subject: m.asunto, text: m.texto, html: m.html,
+          headers: { 'List-Unsubscribe': `<${m.unsubscribe}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' },
+        });
+        ok++;
+      } catch (err) {
+        console.error('envío admin', (err as Error).message);
+        fallos++;
+      }
+    }
+    correo.close();
+    await sb.from('admin_envios').update({ enviados: ok }).eq('id', envio);
+    return new Response(JSON.stringify({ enviados: ok, fallos }), { headers: { 'Content-Type': 'application/json' } });
+  }
 
   const resultado: Record<string, { enviados: number; fallos: number }> = {};
   let enviados = 0;
