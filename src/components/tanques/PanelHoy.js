@@ -20,7 +20,7 @@ export default function PanelHoy() {
     (async () => {
       const { data: tanques } = await supabase
         .from('tanques')
-        .select('id, nombre, cambio_agua_cada_dias, creado_en, eventos:tanque_eventos(fecha, tipo)')
+        .select('id, nombre, cambio_agua_cada_dias, cambio_agua_proximo, creado_en, eventos:tanque_eventos(fecha, tipo)')
         .eq('usuario_id', usuario.id)
         .eq('eventos.tipo', 'cambio_agua')
         .order('fecha', { referencedTable: 'eventos', ascending: false })
@@ -47,7 +47,7 @@ export default function PanelHoy() {
     setDatos((d) => {
       if (tarea.virtual) {
         // Cambio de agua: su "última vez" vive en los eventos del tanque
-        return { ...d, tanques: d.tanques.map((tq) => (tq.id === tarea.tanque_id ? { ...tq, eventos: [{ fecha: tarea.ultima_vez, tipo: 'cambio_agua' }] } : tq)) };
+        return { ...d, tanques: d.tanques.map((tq) => (tq.id === tarea.tanque_id ? { ...tq, cambio_agua_proximo: null, eventos: [{ fecha: tarea.ultima_vez, tipo: 'cambio_agua' }] } : tq)) };
       }
       return { ...d, tareas: d.tareas.map((x) => (x.id === tarea.id ? tarea : x)) };
     });

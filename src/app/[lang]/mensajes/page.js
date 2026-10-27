@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import Link, { useNavegar } from '@/components/Enlace';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, Send, Tag } from 'lucide-react';
+import { ArrowLeft, Flag, Send, Tag } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useSesion } from '@/lib/sesion';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
@@ -12,6 +12,7 @@ import { useT } from '@/i18n/IdiomaProvider';
 import { useMensajeria, useEstadoChat, perfilDe } from '@/lib/mensajeria';
 import { mensajeError } from '@/lib/errores';
 import TextoTraducible from '@/components/feed/TextoTraducible';
+import Reportar from '@/components/Reportar';
 import { LineaConexion, AvisoTraduccion, MensajePropio } from '@/components/ChatEstado';
 
 function Bandeja() {
@@ -25,6 +26,7 @@ function Bandeja() {
   const { mensajes, conversaciones, hiloCon, enviar: enviarMensaje, marcarLeidos } = useMensajeria(usuario);
   const [otro, setOtro] = useState(null);
   const [texto, setTexto] = useState('');
+  const [reportando, setReportando] = useState(null); // id del mensaje recibido que se denuncia
   const fin = useRef(null);
   const hilo = hiloCon(con);
   const estado = useEstadoChat(con);
@@ -112,7 +114,10 @@ function Bandeja() {
                     {m.emisor_id === usuario.id ? <MensajePropio m={m} destino={estado?.idioma} /> : (
                       <>
                         <p className="prosa"><TextoTraducible tabla="mensajes" id={m.id} texto={m.contenido} idioma={m.idioma} render={(x) => x} /></p>
-                        <span className="burbuja-pie mini">{formatRelativeTime(m.creado_en)}</span>
+                        <span className="burbuja-pie mini">
+                          {formatRelativeTime(m.creado_en)}
+                          <button type="button" className="burbuja-reportar" onClick={() => setReportando(m.id)} aria-label={t('comun.reportar')} title={t('comun.reportar')}><Flag size={12} /></button>
+                        </span>
                       </>
                     )}
                   </div>
@@ -120,6 +125,7 @@ function Bandeja() {
                 <div ref={fin} />
               </div>
               <AvisoTraduccion estado={estado} />
+              {reportando && <Reportar tipo="mensaje" objetoId={reportando} onCerrar={() => setReportando(null)} />}
               <form onSubmit={enviar} className="hilo-escribir">
                 <input className="entrada" value={texto} maxLength={2000} onChange={(e) => setTexto(e.target.value)} placeholder={t('mensajes.escribe')} aria-label={t('mensajes.etiqueta')} />
                 <button className="btn btn-primario btn-icono" disabled={!texto.trim()} aria-label={t('mensajes.enviar')}><Send size={16} /></button>

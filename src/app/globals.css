@@ -1414,7 +1414,7 @@ button.cifra-perfil:hover, button.cifra-perfil:focus-visible { background: rgba(
    Mantenimiento: tareas del tanque y panel "Hoy" de la portada
    --------------------------------------------------------------------- */
 .mantenimiento, .panel-hoy { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-.mantenimiento-cabecera, .panel-hoy-cabecera { display: flex; align-items: center; gap: 10px; }
+.mantenimiento-cabecera, .panel-hoy-cabecera { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .mantenimiento-cabecera h2, .panel-hoy-cabecera h2 { flex: 1; }
 .panel-hoy-cabecera > svg { color: var(--agua); flex-shrink: 0; }
 .panel-hoy-cuenta { font-size: 0.8rem; font-weight: 600; color: var(--aviso); }
@@ -1425,15 +1425,55 @@ button.cifra-perfil:hover, button.cifra-perfil:focus-visible { background: rgba(
 .tarea-icono { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; background: var(--agua-tinta); color: var(--agua-texto); }
 .tarea-texto { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
 .tarea-texto strong { font-weight: 600; font-size: 0.95rem; }
-.tarea-estado { font-size: 0.8rem; font-weight: 600; white-space: nowrap; color: var(--texto-3); font-variant-numeric: tabular-nums; }
-.tarea-toca .tarea-estado { color: var(--aviso); }
-.tarea-atrasada .tarea-estado { color: var(--peligro); }
+/* Estado como etiqueta: gris si falta, ámbar si toca hoy, rojo si va atrasada */
+.tarea-estado {
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px;
+  font-size: 0.78rem; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums;
+  color: var(--texto-3); background: rgba(var(--c-tinta), 0.06);
+}
+.tarea-toca .tarea-estado { color: var(--aviso); background: color-mix(in oklab, var(--aviso) 14%, transparent); }
+.tarea-atrasada .tarea-estado { color: var(--peligro); background: color-mix(in oklab, var(--peligro) 14%, transparent); }
+.tarea-toca .tarea-icono { background: color-mix(in oklab, var(--aviso) 16%, transparent); color: var(--aviso); }
 .tarea-atrasada .tarea-icono { background: color-mix(in oklab, var(--peligro) 16%, transparent); color: var(--peligro); }
+/* Acciones con ancho fijo: el botón de hecho queda en la misma columna en todas las filas */
+.tarea-acciones { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.tarea-hecho {
+  width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  border: 1.5px solid var(--linea-fuerte); background: transparent; color: var(--texto-3);
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s var(--muelle-suave);
+}
+.tarea-hecho:hover { border-color: var(--agua); color: var(--agua); transform: scale(1.06); }
+.tarea-hecho.urgente { background: var(--agua); border-color: var(--agua); color: var(--abismo); }
+.tarea-hecho.urgente:hover { filter: brightness(1.1); color: var(--abismo); }
+.tarea-hecho:disabled { opacity: 0.5; cursor: default; transform: none; }
 @media (max-width: 520px) {
   .tarea { flex-wrap: wrap; }
-  .tarea-texto { flex-basis: calc(100% - 46px); }
-  .tarea-estado { margin-left: 46px; flex: 1; }
+  .tarea-texto { flex-basis: calc(100% - 46px - 84px); }
+  .tarea-estado { order: 3; margin-left: 46px; }
 }
+
+/* Calendario de mantenimiento */
+.calendario-tareas { display: flex; flex-direction: column; gap: 12px; }
+.calendario-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.calendario-rejilla { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.calendario-semana { text-align: center; text-transform: uppercase; padding-bottom: 2px; }
+.calendario-dia {
+  min-height: 46px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 2px;
+  padding: 5px 2px; border-radius: 10px; border: 1px solid transparent; background: rgba(var(--c-tinta), 0.04);
+  color: var(--texto); font: inherit; cursor: pointer; transition: background 0.2s, border-color 0.2s;
+}
+.calendario-dia:hover { background: rgba(var(--c-tinta), 0.09); }
+.calendario-dia.pasado { opacity: 0.45; }
+.calendario-dia.hoy .calendario-num { background: var(--agua); color: var(--abismo); border-radius: 999px; padding: 0 6px; }
+.calendario-dia[aria-selected='true'] { border-color: var(--agua); background: var(--agua-tinta); }
+.calendario-num { font-size: 0.82rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.calendario-puntos { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; color: var(--agua-texto); }
+.calendario-detalle { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: var(--radio-m); background: rgba(var(--c-tinta), 0.04); border: 1px solid var(--linea); }
+.calendario-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; }
+.calendario-lista li { display: flex; align-items: center; gap: 8px; }
+.calendario-lista svg { color: var(--agua-texto); }
+.calendario-programar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.calendario-programar > :first-child { flex: 1; min-width: 160px; }
 
 /* ---------------------------------------------------------------------
    Calculadoras (/herramientas/)
@@ -1549,6 +1589,10 @@ button.cifra-perfil:hover, button.cifra-perfil:focus-visible { background: rgba(
 /* Chat (página y flotante): hora + reloj / check / doble check, en línea y a qué idioma se traduce */
 .burbuja-pie { display: flex; align-items: center; justify-content: flex-end; gap: 4px; opacity: 0.6; }
 .burbuja:not(.mia) .burbuja-pie { justify-content: flex-start; }
+.burbuja-reportar { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-left: 4px; border: 0; border-radius: 50%; background: none; color: inherit; cursor: pointer; opacity: 0; transition: opacity 0.2s, background 0.2s; }
+.burbuja:hover .burbuja-reportar, .burbuja-reportar:focus-visible { opacity: 1; }
+.burbuja-reportar:hover { background: rgba(var(--c-tinta), 0.1); }
+@media (hover: none) { .burbuja-reportar { opacity: 0.7; } }
 .marca-envio { flex: none; }
 .marca-envio.leido { color: var(--agua); }
 .burbuja-pie:has(.marca-envio.leido) { opacity: 0.85; }
@@ -1676,6 +1720,10 @@ h1 .nota-traduccion { font-size: 0.8rem; font-weight: 400; letter-spacing: 0; }
 .admin-envios li { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; }
 .admin-envios li + li { border-top: 1px solid var(--linea); }
 .admin-envio-texto { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-conversacion { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; padding: 12px; border-radius: var(--radio-m); background: rgba(var(--c-tinta), 0.04); border: 1px solid var(--linea); max-height: 420px; overflow-y: auto; }
+.admin-burbuja { align-self: flex-start; max-width: 85%; padding: 8px 12px; border-radius: 14px; background: var(--superficie-2); white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.9rem; }
+.admin-burbuja.otro { align-self: flex-end; background: var(--agua-tinta); }
+.admin-burbuja.denunciado { box-shadow: 0 0 0 2px var(--peligro); }
 .admin-pasos button.chip { cursor: pointer; font: inherit; font-size: 0.75rem; }
 .admin-pasos button.chip[aria-expanded='true'] { box-shadow: 0 0 0 2px color-mix(in oklab, var(--ok) 55%, transparent); }
 .admin-detalle { list-style: none; margin: 10px 0 0; padding: 4px 12px; border-radius: var(--radio-m); background: rgba(var(--c-tinta), 0.04); border: 1px solid var(--linea); max-height: 360px; overflow-y: auto; }

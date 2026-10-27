@@ -67,6 +67,7 @@ const TEXTOS = {
     tituloAviso: 'Título', textoAviso: 'Texto', enlaceAviso: 'Enlace (opcional)', enlaceAyuda: 'Ruta de la web sin idioma, por ejemplo /calculadoras/. Se abre en el idioma de cada persona.',
     vistaPrevia: 'Vista previa', abrirTankily: 'Abrir Tankily', correoPersonal: 'O escríbele desde tu correo',
     enviarA: 'Enviar a {n}', confirmarEnvio: 'Pulsa otra vez para enviar a {n} personas', enviado: 'Enviado a {n}', enCola: 'Correo en cola para {n}: sale en unos minutos',
+    verConversacion: 'Ver conversación', ocultarConversacion: 'Ocultar conversación', borrarMensaje: 'Borrar mensaje', confirmarBorrarMensaje: '¿Borrar este mensaje? No se puede deshacer.', mensajeBorrado: 'Mensaje borrado', mensajeNoExiste: 'El mensaje ya no existe.', avisoPrivado: 'Mensajes privados: solo los ves porque este ha sido denunciado. Úsalo solo para moderar.',
     oculto: 'oculto', nApuntes: '{n} apuntes', nFotos: '{n} fotos', video: 'vídeo', sinTexto: '(sin texto)', respuestaEn: 'Respuesta en',
     ultimosEnvios: 'Últimos envíos', sinEnvios: 'Aún no has enviado nada desde aquí.', enviadosDe: '{a} de {b}',
   },
@@ -119,6 +120,7 @@ const TEXTOS = {
     tituloAviso: 'Title', textoAviso: 'Text', enlaceAviso: 'Link (optional)', enlaceAyuda: 'Site path without language, e.g. /calculadoras/. Opens in each person’s language.',
     vistaPrevia: 'Preview', abrirTankily: 'Open Tankily', correoPersonal: 'Or write from your own email',
     enviarA: 'Send to {n}', confirmarEnvio: 'Press again to send to {n} people', enviado: 'Sent to {n}', enCola: 'Email queued for {n}: it goes out in a few minutes',
+    verConversacion: 'View conversation', ocultarConversacion: 'Hide conversation', borrarMensaje: 'Delete message', confirmarBorrarMensaje: 'Delete this message? This can’t be undone.', mensajeBorrado: 'Message deleted', mensajeNoExiste: 'The message no longer exists.', avisoPrivado: 'Private messages: you can only see them because this one was reported. Use this only for moderation.',
     oculto: 'hidden', nApuntes: '{n} logs', nFotos: '{n} photos', video: 'video', sinTexto: '(no text)', respuestaEn: 'Reply in',
     ultimosEnvios: 'Recent sends', sinEnvios: 'You haven’t sent anything from here yet.', enviadosDe: '{a} of {b}',
   },
@@ -589,9 +591,36 @@ function Crecimiento({ x }) {
   );
 }
 
+// Un mensaje privado denunciado con la conversación que lo rodea (admin_mensaje_denunciado)
+function MensajeDenunciado({ id, x }) {
+  const [d, setD] = useState(undefined);
+  const [error, setError] = useState('');
+  useEffect(() => {
+    supabase.rpc('admin_mensaje_denunciado', { p_mensaje: Number(id) })
+      .then(({ data, error: e }) => { if (e) setError(e.message); else setD(data); });
+  }, [id]);
+  if (error) return <p className="mini texto-aviso">{error}</p>;
+  if (d === undefined) return <Cargando alto={40} n={2} />;
+  if (!d) return <p className="mini texto-3">{x.mensajeNoExiste}</p>;
+  const nombre = (p) => (p ? `@${p.usuario}` : '?');
+  return (
+    <div className="admin-conversacion">
+      <p className="mini texto-3" style={{ margin: 0 }}>{x.avisoPrivado}</p>
+      <p className="pequeno" style={{ margin: 0 }}><strong>{nombre(d.emisor)}</strong> → <strong>{nombre(d.receptor)}</strong></p>
+      {d.conversacion.map((m) => (
+        <div key={m.id} className={`admin-burbuja${m.emisor_id === d.receptor?.id ? ' otro' : ''}${m.id === d.mensaje ? ' denunciado' : ''}`}>
+          <span className="mini texto-3">{nombre(m.emisor_id === d.emisor?.id ? d.emisor : d.receptor)} · {formatRelativeTime(m.creado_en)}</span>
+          <p style={{ margin: 0 }}>{m.contenido}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function Denuncias({ x }) {
   const tostada = useTostada();
   const [lista, setLista] = useState(null);
+  const [abierta, setAbierta] = useState(null); // denuncia de mensaje con la conversación a la vista
   const cargar = useCallback(() => {
     supabase.from('reportes').select('*, autor:perfiles!usuario_id(usuario)').eq('estado', 'pendiente').order('creado_en', { ascending: false }).limit(100)
       .then(({ data }) => setLista(data || []));
@@ -620,6 +649,14 @@ function Denuncias({ x }) {
     cargar();
   }
 
+  async function borrarMensaje(r) {
+    if (!window.confirm(x.confirmarBorrarMensaje)) return;
+    const { error } = await supabase.rpc('admin_borrar_mensaje', { p_mensaje: Number(r.objeto_id) });
+    if (error) return tostada(error.message);
+    tostada(x.mensajeBorrado);
+    cargar();
+  }
+
   if (!lista) return <Cargando alto={70} n={3} />;
   if (!lista.length) return <Vacio titulo={x.sinDenuncias} />;
   return (
@@ -632,11 +669,18 @@ function Denuncias({ x }) {
               <strong>{x.motivo[r.motivo] || r.motivo}</strong> <span className="chip">{r.tipo} #{r.objeto_id.slice(0, 8)}</span>
               {r.detalle && <p className="pequeno texto-2" style={{ marginTop: 4 }}>{r.detalle}</p>}
               <p className="mini texto-3">{x.denunciadoPor.replace('{u}', r.autor?.usuario || '?')} · {formatRelativeTime(r.creado_en)}</p>
+              {r.tipo === 'mensaje' && abierta === r.id && <MensajeDenunciado id={r.objeto_id} x={x} />}
             </div>
             <div className="admin-acciones">
               {o.enlace && <Link href={o.enlace(r.objeto_id)} className="btn btn-s" target="_blank">{x.verContenido}</Link>}
               {o.tabla && <button type="button" className="btn btn-s" onClick={() => mostrar(r)}><Eye size={14} /> {x.mostrar}</button>}
               {o.tabla && <button type="button" className="btn btn-s btn-peligro" onClick={() => borrar(r)}><Trash2 size={14} /> {x.borrar}</button>}
+              {r.tipo === 'mensaje' && (
+                <>
+                  <button type="button" className="btn btn-s" onClick={() => setAbierta(abierta === r.id ? null : r.id)}><Eye size={14} /> {abierta === r.id ? x.ocultarConversacion : x.verConversacion}</button>
+                  <button type="button" className="btn btn-s btn-peligro" onClick={() => borrarMensaje(r)}><Trash2 size={14} /> {x.borrarMensaje}</button>
+                </>
+              )}
               <button type="button" className="btn btn-s" onClick={() => estado(r, 'revisado')}><Check size={14} /> {x.revisado}</button>
               <button type="button" className="btn btn-s btn-fantasma" onClick={() => estado(r, 'descartado')}><X size={14} /> {x.descartar}</button>
             </div>

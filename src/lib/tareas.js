@@ -1,6 +1,8 @@
 // Tareas de mantenimiento: estado (cuándo toca) y registro al marcarlas como hechas.
 // El cambio de agua es una tarea "virtual": su frecuencia vive en tanques.cambio_agua_cada_dias
 // y su última vez es el último evento cambio_agua del diario.
+// Una fecha programada (tareas.proxima, tanques.cambio_agua_proximo) manda sobre "última vez + cada N
+// días" hasta que se marca como hecha (lo mismo que public.toca_tarea en la base de datos).
 import { supabase } from './supabase';
 
 // Tipos con su frecuencia sugerida (días) y el evento del diario que generan al hacerse
@@ -24,15 +26,36 @@ export function diasParaTocar(ultimaVez, cadaDias, ahora = Date.now()) {
   return Math.round((inicioDia(ultimaVez) + cadaDias * DIA - inicioDia(ahora)) / DIA);
 }
 
+// "AAAA-MM-DD" (columna date) → fecha local a las 00:00, y al revés
+export const deFechaISO = (f) => { const [a, m, d] = f.split('-').map(Number); return new Date(a, m - 1, d); };
+export const aFechaISO = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const diasHasta = (fecha, ahora = Date.now()) => Math.round((deFechaISO(fecha).getTime() - inicioDia(ahora)) / DIA);
+
+// Fechas (AAAA-MM-DD) en que toca una tarea entre dos días: la próxima y las siguientes cada N días.
+// Si está atrasada, la primera es hoy.
+export function fechasDeTarea(tarea, desde, hasta) {
+  const hoy = inicioDia(Date.now());
+  let d = Math.max(hoy + tarea.dias * DIA, hoy);
+  const fin = inicioDia(hasta);
+  const lista = [];
+  while (d <= fin && lista.length < 400) {
+    if (d >= inicioDia(desde)) lista.push(aFechaISO(new Date(d)));
+    d = inicioDia(d + tarea.cada_dias * DIA + DIA / 2); // + medio día: los cambios de hora no la mueven
+  }
+  return lista;
+}
+
 // Lista de tareas de un tanque (incluido el cambio de agua), ordenada por urgencia
 export function tareasDelTanque(tanque, tareas = [], ultimoCambioAgua = null) {
-  const lista = tareas.filter((t) => t.tanque_id === tanque.id).map((t) => ({ ...t, dias: diasParaTocar(t.ultima_vez, t.cada_dias) }));
+  const lista = tareas.filter((t) => t.tanque_id === tanque.id)
+    .map((t) => ({ ...t, dias: t.proxima ? diasHasta(t.proxima) : diasParaTocar(t.ultima_vez, t.cada_dias) }));
   if (tanque.cambio_agua_cada_dias) {
+    const proxima = tanque.cambio_agua_proximo || null;
     lista.push({
       id: `agua-${tanque.id}`, virtual: true, tanque_id: tanque.id, tipo: 'cambio_agua',
-      cada_dias: tanque.cambio_agua_cada_dias, ultima_vez: ultimoCambioAgua,
+      cada_dias: tanque.cambio_agua_cada_dias, ultima_vez: ultimoCambioAgua, proxima, desde: tanque.creado_en,
       // Sin cambios anotados, el plazo cuenta desde que el tanque se registró
-      dias: diasParaTocar(ultimoCambioAgua || tanque.creado_en, tanque.cambio_agua_cada_dias),
+      dias: proxima ? diasHasta(proxima) : diasParaTocar(ultimoCambioAgua || tanque.creado_en, tanque.cambio_agua_cada_dias),
     });
   }
   return lista.sort((a, b) => a.dias - b.dias);
@@ -51,10 +74,28 @@ export async function marcarHecha(tarea) {
     if (error) throw error;
     evento = data;
   }
-  if (tarea.virtual) return { tarea: { ...tarea, ultima_vez: ahora, dias: tarea.cada_dias }, evento };
-  const { data, error } = await supabase.from('tareas').update({ ultima_vez: ahora }).eq('id', tarea.id).select().single();
+  // Hecha: la fecha programada ya se ha cumplido y la tarea vuelve a su ritmo desde hoy
+  if (tarea.virtual) {
+    if (tarea.proxima) await supabase.from('tanques').update({ cambio_agua_proximo: null }).eq('id', tarea.tanque_id);
+    return { tarea: { ...tarea, ultima_vez: ahora, proxima: null, dias: tarea.cada_dias }, evento };
+  }
+  const { data, error } = await supabase.from('tareas').update({ ultima_vez: ahora, proxima: null }).eq('id', tarea.id).select().single();
   if (error) throw error;
   return { tarea: { ...data, dias: diasParaTocar(data.ultima_vez, data.cada_dias) }, evento };
+}
+
+// Cambiar la frecuencia o programar la próxima vez (fecha AAAA-MM-DD o null para volver al ritmo normal).
+// Devuelve la tarea con sus días recalculados.
+export async function programarTarea(tarea, { cadaDias, proxima }) {
+  if (tarea.virtual) {
+    const { error } = await supabase.from('tanques').update({ cambio_agua_cada_dias: cadaDias, cambio_agua_proximo: proxima }).eq('id', tarea.tanque_id);
+    if (error) throw error;
+    const t = { ...tarea, cada_dias: cadaDias, proxima };
+    return { ...t, dias: proxima ? diasHasta(proxima) : diasParaTocar(tarea.ultima_vez || tarea.desde, cadaDias) };
+  }
+  const { data, error } = await supabase.from('tareas').update({ cada_dias: cadaDias, proxima }).eq('id', tarea.id).select().single();
+  if (error) throw error;
+  return { ...data, dias: data.proxima ? diasHasta(data.proxima) : diasParaTocar(data.ultima_vez, data.cada_dias) };
 }
 
 // Recordatorios con los que nace un tanque nuevo, según su tipo, para que el panel "Hoy"

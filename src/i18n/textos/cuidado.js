@@ -51,6 +51,7 @@ export const es = {
     nombreEj: 'Ej. Revisar el skimmer',
     frecuencia: 'Cada cuántos días',
     guardar: 'Guardar tarea',
+    editar: 'Editar {tarea}', proximaVez: 'Próxima vez', proximaAyuda: 'Ese día te avisamos. Después de hacerla, sigue con su frecuencia normal.', sinFecha: 'Sin fecha: toca según la frecuencia. Elige un día si quieres programarla.', quitarFecha: 'Quitar fecha', borrarTarea: 'Borrar tarea', guardado: 'Cambios guardados', lista: 'Lista', calendario: 'Calendario', mesAnterior: 'Mes anterior', mesSiguiente: 'Mes siguiente', nadaEseDia: 'Nada programado este día.', elegirTarea: 'Elige una tarea…', programarAqui: 'Programar este día', programadaPara: '{tarea}: programada para el {fecha}.',
     cambioAgua: 'La frecuencia del cambio de agua se ajusta al editar el tanque.',
   },
   hoy: {
@@ -110,6 +111,7 @@ export const en = {
     nombreEj: 'E.g. Check the skimmer',
     frecuencia: 'Every how many days',
     guardar: 'Save task',
+    editar: 'Edit {tarea}', proximaVez: 'Next time', proximaAyuda: 'We’ll remind you that day. After you do it, it goes back to its usual frequency.', sinFecha: 'No date: due according to the frequency. Pick a day to schedule it.', quitarFecha: 'Clear date', borrarTarea: 'Delete task', guardado: 'Changes saved', lista: 'List', calendario: 'Calendar', mesAnterior: 'Previous month', mesSiguiente: 'Next month', nadaEseDia: 'Nothing scheduled this day.', elegirTarea: 'Choose a task…', programarAqui: 'Schedule on this day', programadaPara: '{tarea}: scheduled for {fecha}.',
     cambioAgua: 'Set how often you change the water when editing the tank.',
   },
   hoy: {
@@ -169,6 +171,7 @@ export const de = {
     nombreEj: 'z. B. Abschäumer prüfen',
     frecuencia: 'Alle wie viele Tage',
     guardar: 'Aufgabe speichern',
+    editar: '{tarea} bearbeiten', proximaVez: 'Nächstes Mal', proximaAyuda: 'An diesem Tag erinnern wir dich. Danach geht es im üblichen Rhythmus weiter.', sinFecha: 'Kein Datum: fällig nach dem Rhythmus. Wähle einen Tag, um sie zu planen.', quitarFecha: 'Datum entfernen', borrarTarea: 'Aufgabe löschen', guardado: 'Änderungen gespeichert', lista: 'Liste', calendario: 'Kalender', mesAnterior: 'Vorheriger Monat', mesSiguiente: 'Nächster Monat', nadaEseDia: 'An diesem Tag ist nichts geplant.', elegirTarea: 'Aufgabe wählen…', programarAqui: 'An diesem Tag planen', programadaPara: '{tarea}: geplant für {fecha}.',
     cambioAgua: 'Wie oft du das Wasser wechselst, stellst du beim Bearbeiten des Beckens ein.',
   },
   hoy: {
@@ -228,6 +231,7 @@ export const pt = {
     nombreEj: 'Ex. Revisar o skimmer',
     frecuencia: 'A cada quantos dias',
     guardar: 'Salvar tarefa',
+    editar: 'Editar {tarea}', proximaVez: 'Próxima vez', proximaAyuda: 'Nesse dia avisamos você. Depois de feita, segue com a frequência normal.', sinFecha: 'Sem data: vence conforme a frequência. Escolha um dia para programar.', quitarFecha: 'Remover data', borrarTarea: 'Apagar tarefa', guardado: 'Alterações salvas', lista: 'Lista', calendario: 'Calendário', mesAnterior: 'Mês anterior', mesSiguiente: 'Próximo mês', nadaEseDia: 'Nada programado neste dia.', elegirTarea: 'Escolha uma tarefa…', programarAqui: 'Programar neste dia', programadaPara: '{tarea}: programada para {fecha}.',
     cambioAgua: 'A frequência da troca de água é definida ao editar o aquário.',
   },
   hoy: {
@@ -287,6 +291,7 @@ export const fr = {
     nombreEj: 'Ex. Vérifier l’écumeur',
     frecuencia: 'Tous les combien de jours',
     guardar: 'Enregistrer la tâche',
+    editar: 'Modifier {tarea}', proximaVez: 'Prochaine fois', proximaAyuda: 'On te le rappelle ce jour-là. Une fois faite, elle reprend sa fréquence habituelle.', sinFecha: 'Sans date : selon la fréquence. Choisis un jour pour la programmer.', quitarFecha: 'Retirer la date', borrarTarea: 'Supprimer la tâche', guardado: 'Modifications enregistrées', lista: 'Liste', calendario: 'Calendrier', mesAnterior: 'Mois précédent', mesSiguiente: 'Mois suivant', nadaEseDia: 'Rien de prévu ce jour-là.', elegirTarea: 'Choisis une tâche…', programarAqui: 'Programmer ce jour', programadaPara: '{tarea} : programmée pour le {fecha}.',
     cambioAgua: 'La fréquence des changements d’eau se règle en modifiant l’aquarium.',
   },
   hoy: {
@@ -346,6 +351,7 @@ export const it = {
     nombreEj: 'Es. Controllare lo schiumatoio',
     frecuencia: 'Ogni quanti giorni',
     guardar: 'Salva attività',
+    editar: 'Modifica {tarea}', proximaVez: 'Prossima volta', proximaAyuda: 'Quel giorno te lo ricordiamo. Dopo averla fatta, riprende la frequenza normale.', sinFecha: 'Senza data: segue la frequenza. Scegli un giorno per programmarla.', quitarFecha: 'Togli data', borrarTarea: 'Elimina attività', guardado: 'Modifiche salvate', lista: 'Elenco', calendario: 'Calendario', mesAnterior: 'Mese precedente', mesSiguiente: 'Mese successivo', nadaEseDia: 'Niente in programma questo giorno.', elegirTarea: 'Scegli un’attività…', programarAqui: 'Programma in questo giorno', programadaPara: '{tarea}: programmata per il {fecha}.',
     cambioAgua: 'La frequenza del cambio d’acqua si imposta modificando l’acquario.',
   },
   hoy: {
@@ -405,6 +411,7 @@ export const nl = {
     nombreEj: 'Bijv. Eiwitafschuimer controleren',
     frecuencia: 'Om de hoeveel dagen',
     guardar: 'Taak opslaan',
+    editar: '{tarea} bewerken', proximaVez: 'Volgende keer', proximaAyuda: 'Die dag herinneren we je eraan. Daarna gaat het verder met de gewone frequentie.', sinFecha: 'Geen datum: volgens de frequentie. Kies een dag om in te plannen.', quitarFecha: 'Datum wissen', borrarTarea: 'Taak verwijderen', guardado: 'Wijzigingen opgeslagen', lista: 'Lijst', calendario: 'Kalender', mesAnterior: 'Vorige maand', mesSiguiente: 'Volgende maand', nadaEseDia: 'Niets gepland op deze dag.', elegirTarea: 'Kies een taak…', programarAqui: 'Op deze dag plannen', programadaPara: '{tarea}: gepland voor {fecha}.',
     cambioAgua: 'Hoe vaak je het water ververst, stel je in bij het bewerken van het aquarium.',
   },
   hoy: {
@@ -464,6 +471,7 @@ export const pl = {
     nombreEj: 'Np. Sprawdzić odpieniacz',
     frecuencia: 'Co ile dni',
     guardar: 'Zapisz zadanie',
+    editar: 'Edytuj: {tarea}', proximaVez: 'Następnym razem', proximaAyuda: 'Przypomnimy ci tego dnia. Potem wraca do zwykłej częstotliwości.', sinFecha: 'Bez daty: według częstotliwości. Wybierz dzień, aby zaplanować.', quitarFecha: 'Usuń datę', borrarTarea: 'Usuń zadanie', guardado: 'Zmiany zapisane', lista: 'Lista', calendario: 'Kalendarz', mesAnterior: 'Poprzedni miesiąc', mesSiguiente: 'Następny miesiąc', nadaEseDia: 'Nic nie zaplanowano na ten dzień.', elegirTarea: 'Wybierz zadanie…', programarAqui: 'Zaplanuj na ten dzień', programadaPara: '{tarea}: zaplanowano na {fecha}.',
     cambioAgua: 'Częstotliwość podmian wody ustawisz podczas edycji akwarium.',
   },
   hoy: {
