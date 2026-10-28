@@ -282,9 +282,9 @@ export default function AppShell({ children }) {
       <div className="shell">
         <aside className="rail">
           <nav className="rail-interior cristal cristal-fijo" aria-label={t('nav.principal')}>
-            <Link href="/" prefetch className="marca" aria-label="Tankily"><Marca conNombre animable animar={cargando} /></Link>
+            <Link href="/" prefetch="auto" className="marca" aria-label="Tankily"><Marca conNombre animable animar={cargando} /></Link>
             {NAV.map(({ href, clave, icono: Icono }) => (
-              <Link key={href} href={href} prefetch className="nav-item" aria-current={activo(pathname, href) ? 'page' : undefined}>
+              <Link key={href} href={href} prefetch="auto" className="nav-item" aria-current={activo(pathname, href) ? 'page' : undefined}>
                 <Icono size={20} /><span>{t(clave)}</span>
               </Link>
             ))}
@@ -294,10 +294,10 @@ export default function AppShell({ children }) {
             </Link>
             {usuario && (
               <>
-                <Link href="/notificaciones/" prefetch className="nav-item" aria-current={activo(pathname, '/notificaciones/') ? 'page' : undefined}>
+                <Link href="/notificaciones/" prefetch="auto" className="nav-item" aria-current={activo(pathname, '/notificaciones/') ? 'page' : undefined}>
                   <Bell size={20} /><span>{t('nav.notificaciones')}</span><Insignia n={noLeidos.notificaciones} />
                 </Link>
-                <Link href="/mensajes/" prefetch className="nav-item" aria-current={activo(pathname, '/mensajes/') ? 'page' : undefined}>
+                <Link href="/mensajes/" prefetch="auto" className="nav-item" aria-current={activo(pathname, '/mensajes/') ? 'page' : undefined}>
                   <Mail size={20} /><span>{t('nav.mensajes')}</span><Insignia n={noLeidos.mensajes} />
                 </Link>
               </>
@@ -405,6 +405,7 @@ function PieLegal() {
       <Link href="/tiendas/pro/">{t('pie.tiendas')}</Link>
       <Link href="/apoyar/">{t('apoyar.nav')}</Link>
       <Link href="/legal/aviso-legal/">{t('pie.avisoLegal')}</Link>
+      <Link href="/legal/terminos/">{t('pie.terminos')}</Link>
       <Link href="/legal/privacidad/">{t('pie.privacidad')}</Link>
       <Link href="/legal/cookies/">{t('pie.cookies')}</Link>
       <Link href="/legal/normas/">{t('pie.normas')}</Link>

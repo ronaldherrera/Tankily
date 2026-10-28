@@ -17,8 +17,9 @@ export default {
     entrar: 'Inloggen', mas: 'Meer', ajustes: 'Instellingen', paraTiendas: 'Tankily voor winkels', normas: 'Communityregels', entrarOCrear: 'Inloggen of account maken',
     masSecciones: 'Meer onderdelen',
   },
-  pie: { tiendas: 'Voor winkels', avisoLegal: 'Juridische informatie', privacidad: 'Privacy', cookies: 'Cookies', normas: 'Communityregels' },
+  pie: { tiendas: 'Voor winkels', avisoLegal: 'Juridische informatie', terminos: 'Gebruiksvoorwaarden', privacidad: 'Privacy', cookies: 'Cookies', normas: 'Communityregels' },
   comun: {
+    verFoto: 'Foto vergroten',
     sinLeer: '{n} ongelezen', cambiarIdioma: 'Overschakelen naar {idioma}', idioma: 'Taal', cerrar: 'Sluiten', cuentaEliminada: 'Verwijderd account',
     quitarImagen: 'Afbeelding verwijderen', anadirFotos: 'Foto’s toevoegen', subiendo: 'Uploaden…', necesitasCuenta: 'Hiervoor heb je een account nodig.',
     guardar: 'Opslaan', guardando: 'Opslaan…', guardarCambios: 'Wijzigingen opslaan', cancelar: 'Annuleren', eliminar: 'Verwijderen', editar: 'Bewerken',
@@ -156,7 +157,7 @@ export default {
   registro: {
     titulo: 'Maak je account', subtitulo: 'Gratis. Leg je bakken vast en word lid van de community.', nombre: 'Naam', usuario: 'Gebruikersnaam',
     usuarioEj: 'bijv. rif_utrecht', asiTeMencionaran: 'Zo vermelden anderen je: @{usuario}', minimo: 'Minimaal 8 tekens, met hoofdletters, kleine letters en een cijfer.', acepto: 'Ik ga akkoord met de',
-    normas: 'communityregels', yLa: 'en het', privacidad: 'privacybeleid', crear: 'Account maken', creando: 'Account wordt gemaakt…', yaTienes: 'Al een account?',
+    normas: 'communityregels', terminos: 'gebruiksvoorwaarden', yLa: 'en het', privacidad: 'privacybeleid', crear: 'Account maken', creando: 'Account wordt gemaakt…', yaTienes: 'Al een account?',
     entra: 'Inloggen', errorUsuario: 'Gebruikersnamen hebben 3 tot 20 tekens: kleine letters, cijfers, liggende streepjes, punten of koppeltekens (niet aan het begin of eind en niet twee achter elkaar).',
     errorContrasena: 'Het wachtwoord moet minstens 8 tekens hebben, met hoofdletters, kleine letters en een cijfer.', usuarioCogido: 'Deze gebruikersnaam is al in gebruik.',
     emailExiste: 'Er bestaat al een account met dit e-mailadres. Log in of herstel je wachtwoord.', revisaCorreo: 'Bekijk je inbox',

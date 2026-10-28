@@ -6,13 +6,14 @@ import { FORO_CATEGORIAS, TIPOS_TANQUE, slugTipo } from '@/lib/constantes';
 import { rutasPublicas } from '@/lib/paginasPublicas';
 import { IDIOMAS_WIKI, nodoTraducible, titulosTraducidos } from '@/lib/wikiTraduccion';
 import { fichaTraducida } from '@/lib/especiesTraduccion';
+import { DOCS_LEGALES } from '@/lib/legales';
 
 // sitemap.xml: páginas indexables en todos los idiomas (con sus alternativas hreflang), WikiTank (de momento
 // solo en español) y el contenido público de la comunidad (lib/paginasPublicas.js).
 export const dynamic = 'force-static';
 
 const URL_SITIO = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankily.com';
-const LEGALES = ['aviso-legal', 'privacidad', 'cookies', 'normas', 'planes'];
+const LEGALES = DOCS_LEGALES;
 
 const RUTAS = [
   ['/', 1, 'daily'],

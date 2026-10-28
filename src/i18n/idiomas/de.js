@@ -18,8 +18,9 @@ export default {
     ajustes: 'Einstellungen', paraTiendas: 'Tankily für Händler', normas: 'Community-Regeln', entrarOCrear: 'Anmelden oder registrieren',
     masSecciones: 'Weitere Bereiche',
   },
-  pie: { tiendas: 'Für Händler', avisoLegal: 'Impressum', privacidad: 'Datenschutz', cookies: 'Cookies', normas: 'Community-Regeln' },
+  pie: { tiendas: 'Für Händler', avisoLegal: 'Impressum', terminos: 'Nutzungsbedingungen', privacidad: 'Datenschutz', cookies: 'Cookies', normas: 'Community-Regeln' },
   comun: {
+    verFoto: 'Foto vergrößern',
     sinLeer: '{n} ungelesen', cambiarIdioma: 'Zu {idioma} wechseln', idioma: 'Sprache', cerrar: 'Schließen', cuentaEliminada: 'Gelöschtes Konto',
     quitarImagen: 'Bild entfernen', anadirFotos: 'Fotos hinzufügen', subiendo: 'Wird hochgeladen…', necesitasCuenta: 'Dafür brauchst du ein Konto.',
     guardar: 'Speichern', guardando: 'Wird gespeichert…', guardarCambios: 'Änderungen speichern', cancelar: 'Abbrechen', eliminar: 'Löschen',
@@ -169,7 +170,7 @@ export default {
   registro: {
     titulo: 'Konto erstellen', subtitulo: 'Kostenlos. Erfasse deine Becken und werde Teil der Community.', nombre: 'Name', usuario: 'Benutzername',
     usuarioEj: 'z. B. riff_berlin', asiTeMencionaran: 'Man erwähnt dich als @{usuario}', minimo: 'Mindestens 8 Zeichen, mit Groß- und Kleinbuchstaben und einer Zahl.',
-    acepto: 'Ich akzeptiere die', normas: 'Community-Regeln', yLa: 'und die', privacidad: 'Datenschutzerklärung', crear: 'Registrieren',
+    acepto: 'Ich akzeptiere die', normas: 'Community-Regeln', terminos: 'Nutzungsbedingungen', yLa: 'und die', privacidad: 'Datenschutzerklärung', crear: 'Registrieren',
     creando: 'Konto wird erstellt…', yaTienes: 'Schon ein Konto?', entra: 'Anmelden',
     errorUsuario: 'Benutzernamen müssen 3–20 Zeichen haben: Kleinbuchstaben, Zahlen, Unterstriche, Punkte oder Bindestriche (nicht am Anfang oder Ende und nicht zwei hintereinander).',
     errorContrasena: 'Das Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie eine Zahl enthalten.', usuarioCogido: 'Dieser Benutzername ist schon vergeben.',

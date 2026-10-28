@@ -3,10 +3,11 @@ import Link from '@/components/Enlace';
 import { traducir } from '@/i18n/traducir';
 import { alternativas } from '@/lib/seo';
 import { TITULAR } from '@/lib/titular';
+import { DOCS_LEGALES } from '@/lib/legales';
 
 // Contacto de los textos legales: el del titular (src/lib/titular.js)
 const EMAIL = TITULAR.email;
-const DOCS = ['aviso-legal', 'privacidad', 'cookies', 'normas', 'planes'];
+const DOCS = DOCS_LEGALES;
 
 export function generateStaticParams() {
   return DOCS.map((doc) => ({ doc }));

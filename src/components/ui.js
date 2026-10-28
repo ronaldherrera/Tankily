@@ -172,13 +172,14 @@ export function Cargando({ alto = 120, n = 3 }) {
 
 // Con `sinEnlaces` las fotos no se abren aparte: se usa dentro de otro enlace (cita de un eco)
 export function Galeria({ imagenes, alt = '', sinEnlaces = false }) {
+  const { t } = useT();
   if (!imagenes?.length) return null;
   return (
     <div className={`galeria n${Math.min(imagenes.length, 6)}`}>
       {imagenes.map((src) => (sinEnlaces ? (
         <span key={src}><img src={src} alt={alt} loading="lazy" /></span>
       ) : (
-        <a key={src} href={src} target="_blank" rel="noopener noreferrer">
+        <a key={src} href={src} target="_blank" rel="noopener noreferrer" aria-label={alt || t('comun.verFoto')}>
           <img src={src} alt={alt} loading="lazy" />
         </a>
       )))}

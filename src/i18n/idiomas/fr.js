@@ -17,8 +17,9 @@ export default {
     crearCuenta: 'Créer un compte', entrar: 'Se connecter', mas: 'Plus', ajustes: 'Paramètres', paraTiendas: 'Tankily pour les magasins',
     normas: 'Règles de la communauté', entrarOCrear: 'Se connecter ou créer un compte', masSecciones: 'Autres rubriques',
   },
-  pie: { tiendas: 'Pour les magasins', avisoLegal: 'Mentions légales', privacidad: 'Confidentialité', cookies: 'Cookies', normas: 'Règles de la communauté' },
+  pie: { tiendas: 'Pour les magasins', avisoLegal: 'Mentions légales', terminos: 'Conditions d’utilisation', privacidad: 'Confidentialité', cookies: 'Cookies', normas: 'Règles de la communauté' },
   comun: {
+    verFoto: 'Agrandir la photo',
     sinLeer: '{n} non lus', cambiarIdioma: 'Passer en {idioma}', idioma: 'Langue', cerrar: 'Fermer', cuentaEliminada: 'Compte supprimé',
     quitarImagen: 'Retirer l’image', anadirFotos: 'Ajouter des photos', subiendo: 'Envoi…', necesitasCuenta: 'Il te faut un compte pour faire ça.',
     guardar: 'Enregistrer', guardando: 'Enregistrement…', guardarCambios: 'Enregistrer les modifications', cancelar: 'Annuler', eliminar: 'Supprimer',
@@ -162,7 +163,7 @@ export default {
   registro: {
     titulo: 'Crée ton compte', subtitulo: 'Gratuit. Enregistre tes bacs et rejoins la communauté.', nombre: 'Nom', usuario: 'Nom d’utilisateur',
     usuarioEj: 'ex. : recif_lyon', asiTeMencionaran: 'On te mentionnera ainsi : @{usuario}', minimo: '8 caractères minimum, avec majuscules, minuscules et au moins un chiffre.', acepto: 'J’accepte les',
-    normas: 'règles de la communauté', yLa: 'et la', privacidad: 'politique de confidentialité', crear: 'Créer un compte', creando: 'Création du compte…',
+    normas: 'règles de la communauté', terminos: 'conditions d’utilisation', yLa: 'et la', privacidad: 'politique de confidentialité', crear: 'Créer un compte', creando: 'Création du compte…',
     yaTienes: 'Déjà un compte ?', entra: 'Connecte-toi', errorUsuario: 'Le nom d’utilisateur doit faire 3 à 20 caractères : minuscules, chiffres, tiret bas, points ou tirets (ni au début, ni à la fin, ni deux de suite).',
     errorContrasena: 'Le mot de passe doit contenir au moins 8 caractères, avec majuscules, minuscules et au moins un chiffre.', usuarioCogido: 'Ce nom d’utilisateur est déjà pris.',
     emailExiste: 'Un compte existe déjà avec cet e-mail. Connecte-toi ou réinitialise ton mot de passe.', revisaCorreo: 'Vérifie ta boîte mail',

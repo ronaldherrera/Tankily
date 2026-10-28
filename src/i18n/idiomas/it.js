@@ -17,8 +17,9 @@ export default {
     crearCuenta: 'Registrati', entrar: 'Accedi', mas: 'Altro', ajustes: 'Impostazioni', paraTiendas: 'Tankily per i negozi', normas: 'Regole della community',
     entrarOCrear: 'Accedi o registrati', masSecciones: 'Altre sezioni',
   },
-  pie: { tiendas: 'Per i negozi', avisoLegal: 'Note legali', privacidad: 'Privacy', cookies: 'Cookie', normas: 'Regole della community' },
+  pie: { tiendas: 'Per i negozi', avisoLegal: 'Note legali', terminos: 'Condizioni d’uso', privacidad: 'Privacy', cookies: 'Cookie', normas: 'Regole della community' },
   comun: {
+    verFoto: 'Ingrandisci la foto',
     sinLeer: '{n} da leggere', cambiarIdioma: 'Passa a {idioma}', idioma: 'Lingua', cerrar: 'Chiudi', cuentaEliminada: 'Account eliminato',
     quitarImagen: 'Rimuovi immagine', anadirFotos: 'Aggiungi foto', subiendo: 'Caricamento…', necesitasCuenta: 'Ti serve un account per farlo.',
     guardar: 'Salva', guardando: 'Salvataggio…', guardarCambios: 'Salva modifiche', cancelar: 'Annulla', eliminar: 'Elimina', editar: 'Modifica',
@@ -157,7 +158,7 @@ export default {
   registro: {
     titulo: 'Crea il tuo account', subtitulo: 'Gratis. Registra le tue vasche ed entra nella community.', nombre: 'Nome', usuario: 'Nome utente',
     usuarioEj: 'es. reef_milano', asiTeMencionaran: 'Ti menzioneranno così: @{usuario}', minimo: 'Minimo 8 caratteri, con maiuscole, minuscole e almeno un numero.', acepto: 'Accetto le',
-    normas: 'regole della community', yLa: 'e l’', privacidad: 'informativa sulla privacy', crear: 'Registrati', creando: 'Creazione account…',
+    normas: 'regole della community', terminos: 'condizioni d’uso', yLa: 'e l’', privacidad: 'informativa sulla privacy', crear: 'Registrati', creando: 'Creazione account…',
     yaTienes: 'Hai già un account?', entra: 'Accedi', errorUsuario: 'Il nome utente deve avere da 3 a 20 caratteri: lettere minuscole, numeri, trattino basso, punti o trattini (non all’inizio o alla fine, né due di seguito).',
     errorContrasena: 'La password deve avere almeno 8 caratteri, con maiuscole, minuscole e almeno un numero.', usuarioCogido: 'Questo nome utente è già in uso.', emailExiste: 'Esiste già un account con questa email. Accedi o recupera la password.',
     revisaCorreo: 'Controlla la tua email', enlaceEnviado: 'Abbiamo inviato un link a {email}. Aprilo per confermare l’account e iniziare a registrare le tue vasche.',

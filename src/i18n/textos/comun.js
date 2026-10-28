@@ -32,11 +32,13 @@ export const es = {
   pie: {
     tiendas: 'Para tiendas',
     avisoLegal: 'Aviso legal',
+    terminos: 'Condiciones de uso',
     privacidad: 'Privacidad',
     cookies: 'Cookies',
     normas: 'Normas de la comunidad',
   },
   comun: {
+    verFoto: 'Ver la foto en grande',
     sinLeer: '{n} sin leer',
     cambiarIdioma: 'Cambiar a {idioma}',
     idioma: 'Idioma',
@@ -95,7 +97,7 @@ export const es = {
   },
   cookies: {
     aviso: 'Usamos cookies técnicas para que la sesión funcione y, si aceptas, cookies de publicidad para financiar Tankily.',
-    masInfo: 'Más información',
+    masInfo: 'Más sobre las cookies',
     soloNecesarias: 'Solo necesarias',
     aceptarTodas: 'Aceptar todas',
   },
@@ -162,11 +164,13 @@ export const en = {
   pie: {
     tiendas: 'For stores',
     avisoLegal: 'Legal notice',
+    terminos: 'Terms of use',
     privacidad: 'Privacy',
     cookies: 'Cookies',
     normas: 'Community guidelines',
   },
   comun: {
+    verFoto: 'View larger photo',
     sinLeer: '{n} unread',
     cambiarIdioma: 'Switch to {idioma}',
     idioma: 'Language',
@@ -225,7 +229,7 @@ export const en = {
   },
   cookies: {
     aviso: 'We use technical cookies to keep you signed in and, if you agree, advertising cookies that fund Tankily.',
-    masInfo: 'Learn more',
+    masInfo: 'About cookies',
     soloNecesarias: 'Necessary only',
     aceptarTodas: 'Accept all',
   },

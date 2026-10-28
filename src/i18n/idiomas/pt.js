@@ -17,8 +17,9 @@ export default {
     miPerfil: 'Meu perfil', crearCuenta: 'Criar conta', entrar: 'Entrar', mas: 'Mais', ajustes: 'Configurações', paraTiendas: 'Tankily para lojas',
     normas: 'Regras da comunidade', entrarOCrear: 'Entrar ou criar conta', masSecciones: 'Mais seções',
   },
-  pie: { tiendas: 'Para lojas', avisoLegal: 'Aviso legal', privacidad: 'Privacidade', cookies: 'Cookies', normas: 'Regras da comunidade' },
+  pie: { tiendas: 'Para lojas', avisoLegal: 'Aviso legal', terminos: 'Termos de uso', privacidad: 'Privacidade', cookies: 'Cookies', normas: 'Regras da comunidade' },
   comun: {
+    verFoto: 'Ver a foto ampliada',
     sinLeer: '{n} não lidas', cambiarIdioma: 'Mudar para {idioma}', idioma: 'Idioma', cerrar: 'Fechar', cuentaEliminada: 'Conta excluída',
     quitarImagen: 'Remover imagem', anadirFotos: 'Adicionar fotos', subiendo: 'Enviando…', necesitasCuenta: 'Você precisa de uma conta para fazer isso.',
     guardar: 'Salvar', guardando: 'Salvando…', guardarCambios: 'Salvar alterações', cancelar: 'Cancelar', eliminar: 'Excluir', editar: 'Editar',
@@ -161,7 +162,7 @@ export default {
   registro: {
     titulo: 'Crie sua conta', subtitulo: 'Grátis. Registre seus aquários e entre para a comunidade.', nombre: 'Nome', usuario: 'Nome de usuário',
     usuarioEj: 'ex.: reef_saopaulo', asiTeMencionaran: 'Vão mencionar você como @{usuario}', minimo: 'Mínimo de 8 caracteres, com letras maiúsculas, minúsculas e algum número.', acepto: 'Aceito as',
-    normas: 'regras da comunidade', yLa: 'e a', privacidad: 'política de privacidade', crear: 'Criar conta', creando: 'Criando conta…',
+    normas: 'regras da comunidade', terminos: 'condições de uso', yLa: 'e a', privacidad: 'política de privacidade', crear: 'Criar conta', creando: 'Criando conta…',
     yaTienes: 'Já tem conta?', entra: 'Entre', errorUsuario: 'O nome de usuário deve ter de 3 a 20 caracteres: letras minúsculas, números, sublinhado, pontos ou hífens (não no início nem no fim, nem dois seguidos).',
     errorContrasena: 'A senha deve ter pelo menos 8 caracteres, com letras maiúsculas, minúsculas e algum número.', usuarioCogido: 'Esse nome de usuário já está em uso.',
     emailExiste: 'Já existe uma conta com esse e-mail. Entre ou recupere sua senha.', revisaCorreo: 'Confira seu e-mail',

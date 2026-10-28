@@ -89,7 +89,7 @@ export default function RegistroPage() {
       />
       <label className="casilla">
         <input type="checkbox" required checked={acepta} onChange={(e) => setAcepta(e.target.checked)} />
-        <span>{t('registro.acepto')} <Link className="enlace" href="/legal/normas/" target="_blank">{t('registro.normas')}</Link> {t('registro.yLa')} <Link className="enlace" href="/legal/privacidad/" target="_blank">{t('registro.privacidad')}</Link>.</span>
+        <span>{t('registro.acepto')} <Link className="enlace" href="/legal/terminos/" target="_blank">{t('registro.terminos')}</Link> {t('registro.yLa')} <Link className="enlace" href="/legal/privacidad/" target="_blank">{t('registro.privacidad')}</Link>.</span>
       </label>
       {error && <p className="aviso error" role="alert">{error}</p>}
       <button className="btn btn-primario" disabled={cargando || !acepta}>{cargando ? t('registro.creando') : t('registro.crear')}</button>

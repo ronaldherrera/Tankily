@@ -18,8 +18,9 @@ export default {
     crearCuenta: 'Załóż konto', entrar: 'Zaloguj się', mas: 'Więcej', ajustes: 'Ustawienia', paraTiendas: 'Tankily dla sklepów', normas: 'Zasady społeczności',
     entrarOCrear: 'Zaloguj się lub załóż konto', masSecciones: 'Więcej sekcji',
   },
-  pie: { tiendas: 'Dla sklepów', avisoLegal: 'Nota prawna', privacidad: 'Prywatność', cookies: 'Pliki cookie', normas: 'Zasady społeczności' },
+  pie: { tiendas: 'Dla sklepów', avisoLegal: 'Nota prawna', terminos: 'Regulamin', privacidad: 'Prywatność', cookies: 'Pliki cookie', normas: 'Zasady społeczności' },
   comun: {
+    verFoto: 'Powiększ zdjęcie',
     sinLeer: 'Nieprzeczytane: {n}', cambiarIdioma: 'Zmień na {idioma}', idioma: 'Język', cerrar: 'Zamknij', cuentaEliminada: 'Usunięte konto',
     quitarImagen: 'Usuń zdjęcie', anadirFotos: 'Dodaj zdjęcia', subiendo: 'Przesyłanie…', necesitasCuenta: 'Do tego potrzebujesz konta.', guardar: 'Zapisz',
     guardando: 'Zapisywanie…', guardarCambios: 'Zapisz zmiany', cancelar: 'Anuluj', eliminar: 'Usuń', editar: 'Edytuj', compartir: 'Udostępnij', reportar: 'Zgłoś',
@@ -158,7 +159,7 @@ export default {
   registro: {
     titulo: 'Załóż konto', subtitulo: 'Za darmo. Zapisuj swoje zbiorniki i dołącz do społeczności.', nombre: 'Imię', usuario: 'Nazwa użytkownika',
     usuarioEj: 'np. rafa_krakow', asiTeMencionaran: 'Inni oznaczą cię jako @{usuario}', minimo: 'Co najmniej 8 znaków, w tym wielkie i małe litery oraz cyfra.', acepto: 'Akceptuję',
-    normas: 'zasady społeczności', yLa: 'oraz', privacidad: 'politykę prywatności', crear: 'Załóż konto', creando: 'Zakładanie konta…', yaTienes: 'Masz już konto?',
+    normas: 'zasady społeczności', terminos: 'regulamin', yLa: 'oraz', privacidad: 'politykę prywatności', crear: 'Załóż konto', creando: 'Zakładanie konta…', yaTienes: 'Masz już konto?',
     entra: 'Zaloguj się', errorUsuario: 'Nazwa użytkownika musi mieć 3–20 znaków: małe litery, cyfry, podkreślenia, kropki lub myślniki (nie na początku ani na końcu i nie dwie pod rząd).',
     errorContrasena: 'Hasło musi mieć co najmniej 8 znaków, w tym wielkie i małe litery oraz cyfrę.', usuarioCogido: 'Ta nazwa użytkownika jest już zajęta.', emailExiste: 'Istnieje już konto z tym adresem e-mail. Zaloguj się lub odzyskaj hasło.',
     revisaCorreo: 'Sprawdź skrzynkę', enlaceEnviado: 'Wysłaliśmy link na adres {email}. Otwórz go, aby potwierdzić konto i zacząć zapisywać zbiorniki.',

@@ -249,6 +249,9 @@ html.refraccion :is(.modal, .ficha-especie).cristal-refracta {
 .prosa { max-width: 68ch; white-space: pre-wrap; overflow-wrap: anywhere; }
 .prosa a, a.enlace { color: var(--agua-texto); }
 .prosa a:hover, a.enlace:hover { text-decoration: underline; }
+/* Dentro de un texto el enlace no puede distinguirse solo por el color (accesibilidad) */
+.prosa a { text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 2px; }
+.prosa a:hover { text-decoration-color: currentColor; }
 
 /* ---------------------------------------------------------------------
    Estructura de la aplicación
